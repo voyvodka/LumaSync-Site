@@ -27,12 +27,13 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     </div>
 
     <figure class="hero-visual">
-      <div class="hero-placeholder" aria-hidden="true">
-        <span class="placeholder-label">
-          <span class="placeholder-dot"></span>
-          hero-lights-section · 1600 × 1000
-        </span>
-      </div>
+      <img
+        src="/media/hero-lights-section.svg"
+        width="1600"
+        height="1000"
+        alt="LumaSync's full window in Ambilight mode, driving a WS2812B strip and a Hue Entertainment Area from the same screen source."
+        class="hero-visual-img"
+      />
       <figcaption>Full-mode Lights Section with ambilight active. Live screenshot drops in at launch.</figcaption>
     </figure>
   </section>
@@ -87,12 +88,12 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <a class="inline-cta" href="/docs/ambilight/performance">Read about performance →</a>
     </div>
     <figure class="callout-visual">
-      <div class="hero-placeholder tall" aria-hidden="true">
-        <span class="placeholder-label">
-          <span class="placeholder-dot"></span>
-          ambient-mode-preview · 1400 × 900
-        </span>
-      </div>
+      <img
+        src="/media/ambient-mode-preview.svg"
+        width="1400"
+        height="900"
+        alt="LumaSync ambient mode with the edge-signal preview and live telemetry overlay."
+      />
       <div class="telemetry-pill" aria-hidden="true">
         <span class="pill-eyebrow">Live</span>
         <span><strong>Δ</strong> 12 ms</span>
@@ -105,12 +106,12 @@ const repo = 'https://github.com/voyvodka/LumaSync';
   {/* ─── Room map editor ───────────────────────────────────── */}
   <section class="callout reverse">
     <figure class="callout-visual">
-      <div class="hero-placeholder tall" aria-hidden="true">
-        <span class="placeholder-label">
-          <span class="placeholder-dot"></span>
-          room-map-editor · 1400 × 900
-        </span>
-      </div>
+      <img
+        src="/media/room-map-editor.svg"
+        width="1400"
+        height="900"
+        alt="LumaSync's room map editor canvas with a TV anchor, furniture objects, a USB strip, and Hue channel overlays."
+      />
     </figure>
     <div class="callout-copy">
       <p class="section-eyebrow">Room map editor</p>
@@ -137,18 +138,20 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <a class="inline-cta" href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
     </div>
     <figure class="callout-visual dual">
-      <div class="hero-placeholder compact" aria-hidden="true">
-        <span class="placeholder-label">
-          <span class="placeholder-dot"></span>
-          compact-mode · 320 × 480
-        </span>
-      </div>
-      <div class="hero-placeholder full" aria-hidden="true">
-        <span class="placeholder-label">
-          <span class="placeholder-dot"></span>
-          full-mode · 900 × 620
-        </span>
-      </div>
+      <img
+        src="/media/compact-mode.svg"
+        width="320"
+        height="480"
+        alt="LumaSync compact mode — 320 × 480 window with mode tiles and scene picker."
+        class="dual-compact"
+      />
+      <img
+        src="/media/full-mode.svg"
+        width="900"
+        height="620"
+        alt="LumaSync full mode — main window with sidebar and Lights section open."
+        class="dual-full"
+      />
     </figure>
   </section>
 
@@ -367,58 +370,23 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     text-align: center;
   }
 
-  /* ─── Placeholder visuals ─────────────────────────────── */
-  .hero-placeholder {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    background:
-      radial-gradient(
-        60% 90% at 30% 20%,
-        color-mix(in srgb, var(--accent) 16%, transparent),
-        transparent 72%
-      ),
-      linear-gradient(135deg, var(--surface-1) 0%, var(--surface-2) 100%);
+  /* ─── Placeholder / real-image visuals ────────────────── */
+  .hero-visual-img,
+  .callout-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
   }
 
-  .hero-placeholder.tall {
-    aspect-ratio: 14 / 9;
-  }
-
-  .hero-placeholder.compact {
-    aspect-ratio: 320 / 480;
+  .dual-compact {
     max-width: 12rem;
+    flex: 0 0 auto;
   }
 
-  .hero-placeholder.full {
-    aspect-ratio: 900 / 620;
-  }
-
-  .placeholder-label {
-    font-family: var(--font-mono);
-    font-size: var(--fs-xs);
-    letter-spacing: var(--tracking-wide);
-    color: var(--text-muted);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.75rem;
-    background: rgba(10, 11, 14, 0.5);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(6px);
-  }
-
-  .placeholder-dot {
-    width: 0.375rem;
-    height: 0.375rem;
-    border-radius: var(--radius-pill);
-    background: var(--accent);
+  .dual-full {
+    flex: 1 1 auto;
   }
 
   /* ─── Feature grid ────────────────────────────────────── */
