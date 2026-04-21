@@ -2,87 +2,162 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const repo = 'https://github.com/voyvodka/LumaSync';
-const links = [
+
+const forums = [
   {
     title: 'GitHub Discussions',
     href: `${repo}/discussions`,
-    blurb: 'Questions, ideas, showcase. The first stop for anything that is not a bug.',
+    blurb:
+      "First stop for anything that isn't a bug. Questions, ideas, what-you-built showcases. Replies within 72 hours, usually less.",
+    cta: 'Browse discussions →',
   },
   {
     title: 'GitHub Issues',
     href: `${repo}/issues`,
-    blurb: 'Report a bug or request a feature. Please search first — duplicates cost us time.',
+    blurb:
+      "Bug reports and feature requests. Please search first — duplicates cost everyone's time. Include platform, version, and reproduction steps.",
+    cta: 'Open an issue →',
+  },
+  {
+    title: 'Security disclosures',
+    href: `${repo}/blob/main/SECURITY.md`,
+    blurb:
+      "Do not file security issues on public Issues. Follow the process in SECURITY.md — private channel, scoped to the maintainer.",
+    cta: 'See SECURITY.md →',
   },
   {
     title: 'Discord',
     href: '#',
-    blurb: 'Opens once active-user count crosses ~100. Follow Discussions for the announcement.',
+    blurb:
+      'Opens once active-user count crosses ~100. Follow Discussions for the announcement — the invite will go out there first.',
+    cta: 'Coming soon',
     disabled: true,
+  },
+];
+
+const triage = [
+  {
+    q: 'It crashed — where do I file that?',
+    a: '<a href="' + repo + '/issues">GitHub Issues</a>. Attach the OS-generated crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump) and the LumaSync log file. <a href="/docs/reference/telemetry#logs">Log locations</a>.',
+  },
+  {
+    q: "My hardware isn't recognised — is this a bug?",
+    a: 'Probably not a bug, probably an unsupported chip. Check <a href="/docs/usb-leds/controllers">USB controllers</a> first. If it IS a CH340 or FT232 and still fails, open an issue with <code>lsusb</code> / Device Manager output.',
+  },
+  {
+    q: 'I want a feature — will you build it?',
+    a: '<a href="' + repo + '/discussions/categories/ideas">Discussions → Ideas</a>. Explain the use case (what problem, who has it). Popular asks with clear scope make it to issues; vague asks get a polite "not planned".',
+  },
+  {
+    q: 'I have a question about Philips Hue itself.',
+    a: 'That\'s upstream — try the <a href="https://developers.meethue.com/">Hue developer portal</a> or the Hue subreddits. If the question is specifically about how LumaSync uses Hue, come back to Discussions.',
   },
 ];
 ---
 
 <BaseLayout
   title="Community"
-  description="Where LumaSync users hang out — Discussions today, Discord later."
+  description="Where LumaSync users hang out — GitHub Discussions today, Discord once the community outgrows async."
 >
   <section class="community">
     <header>
       <p class="eyebrow">Get involved</p>
       <h1 class="page-title">Community</h1>
-      <p class="sub">
-        Early-stage project. Small community. Responsive maintainer. The best way to help
-        right now is to open a Discussion with what you built.
+      <p class="lede">
+        Early-stage project. Small, responsive maintainer. The best way to help
+        right now is to open a Discussion with what you built — real setups
+        inform the docs more than anything else.
       </p>
     </header>
 
-    <ul role="list">
-      {
-        links.map((link) => (
-          <li>
-            <a
-              href={link.href}
-              aria-disabled={link.disabled ? 'true' : undefined}
-              class={link.disabled ? 'disabled' : ''}
-            >
-              <span class="title">{link.title}</span>
-              <span class="blurb">{link.blurb}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <section class="forums">
+      <p class="section-label">Where to go</p>
+      <ul role="list">
+        {
+          forums.map((f) => (
+            <li>
+              <a
+                href={f.href}
+                class={f.disabled ? 'disabled' : ''}
+                aria-disabled={f.disabled ? 'true' : undefined}
+              >
+                <span class="title">{f.title}</span>
+                <span class="blurb">{f.blurb}</span>
+                <span class="cta">{f.cta}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="triage">
+      <p class="section-label">Quick triage</p>
+      <dl>
+        {
+          triage.map((item) => (
+            <>
+              <dt>{item.q}</dt>
+              <dd set:html={item.a} />
+            </>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="conduct">
+      <p class="section-label">House rules</p>
+      <p>
+        LumaSync follows a standard
+        <a href={`${repo}/blob/main/CODE_OF_CONDUCT.md`}>Code of Conduct</a>.
+        Short version: be helpful, be specific, and don't be a jerk. Disagreement
+        is fine; dismissiveness isn't. Project is MIT-licensed; contribution
+        guidelines live in
+        <a href={`${repo}/blob/main/CONTRIBUTING.md`}>CONTRIBUTING.md</a>.
+      </p>
+    </section>
   </section>
 </BaseLayout>
 
 <style>
   .community {
-    max-width: 44rem;
-    margin: 0 auto;
-    padding: 4rem 1.25rem 6rem;
+    max-width: calc(var(--container-content) + 2.5rem);
+    margin-inline: auto;
+    padding: 3rem 1.25rem 5rem;
   }
 
-  .eyebrow {
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin: 0 0 0.75rem;
+  header {
+    margin-bottom: 2.5rem;
   }
 
   h1 {
     font-size: var(--fs-3xl);
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.75rem;
     color: var(--text-primary);
   }
 
-  .sub {
+  .lede {
     color: var(--text-secondary);
-    margin: 0 0 2rem;
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+    max-width: 36rem;
   }
 
-  ul {
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.875rem;
+  }
+
+  .forums {
+    margin-bottom: 3rem;
+  }
+
+  .forums ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -90,34 +165,119 @@ const links = [
     gap: 0.75rem;
   }
 
-  a {
+  .forums a {
     display: block;
     padding: 1.25rem;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
   }
 
-  a:hover {
+  .forums a:hover:not(.disabled) {
     border-color: var(--border-strong);
+    background: var(--surface-2);
   }
 
-  a.disabled {
-    opacity: 0.5;
+  .forums a.disabled {
+    opacity: 0.55;
     pointer-events: none;
   }
 
-  .title {
+  .forums .title {
     display: block;
     color: var(--text-primary);
     font-weight: 500;
+    margin-bottom: 0.25rem;
   }
 
-  .blurb {
+  .forums .blurb {
     display: block;
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+
+  .forums .cta {
+    display: block;
+    margin-top: 0.625rem;
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+
+  .forums a:hover:not(.disabled) .cta {
+    color: var(--accent);
+  }
+
+  .triage {
+    margin-bottom: 3rem;
+  }
+
+  .triage dl {
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .triage dt {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .triage dd {
+    margin: 0 0 0.5rem;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+
+  .triage dd a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .triage dd a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .triage dd code {
+    background: var(--surface-2);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+  }
+
+  .conduct {
+    padding: 1.25rem 1.5rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .conduct p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+
+  .conduct a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .conduct a:hover {
+    text-decoration-color: var(--accent);
   }
 </style>
