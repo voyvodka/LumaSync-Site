@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Placeholder for the LumaSync full-mode Lights Section screenshot.">
+  <defs>
+    <linearGradient id="surface" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1114"/>
+      <stop offset="100%" stop-color="#1e2229"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="30%" cy="25%" r="70%">
+      <stop offset="0%" stop-color="#ffb020" stop-opacity="0.18"/>
+      <stop offset="70%" stop-color="#ffb020" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#surface)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <rect x="0" y="0" width="12" height="1000" fill="#ffb020"/>
+  <g transform="translate(800, 500)">
+    <rect x="-220" y="-24" width="440" height="48" rx="24" fill="rgba(10,11,14,0.65)" stroke="rgba(231,236,242,0.16)" stroke-width="1"/>
+    <circle cx="-188" cy="0" r="4" fill="#ffb020"/>
+    <text x="0" y="5" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="16" letter-spacing="1.2" fill="#a8b0bc" text-anchor="middle">hero-lights-section · 1600 × 1000</text>
+  </g>
+</svg>
