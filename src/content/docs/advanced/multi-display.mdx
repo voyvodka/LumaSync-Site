@@ -1,97 +1,78 @@
 ---
-title: Multi-display
-description: Pick which display drives the ambilight pipeline, enumerate available screens, and handle hot-plugging in a multi-monitor setup.
+title: Working with multiple displays
+description: Which display LumaSync captures from, how to change it, and the one-capture-source constraint that shapes everything else.
 group: advanced
 order: 30
 updated: 2026-04-21
 draft: true
 ---
 
-## Pick the source display
+## Which display drives the pipeline
+
+LumaSync captures from a **single display at a time**. The output of that
+capture feeds **both** output paths — USB LED strips and the Hue
+Entertainment Area — simultaneously. There is no per-target routing in
+v1.2.0.
+
+### Default
+
+- **Single-display setup**: LumaSync picks that display automatically.
+- **Multi-display setup** (first launch): defaults to the **primary**
+  display — on macOS, the one carrying the menu bar; on Windows, the one
+  marked primary in Display settings.
+
+### Changing the source
 
 Settings → **Ambilight** → **Source display**.
 
-LumaSync enumerates the OS's displays via `list_displays` (Rust command in
-`src-tauri/src/commands/calibration.rs`) and populates a dropdown. Each
-entry shows:
+LumaSync enumerates the OS's displays via its `list_displays` command
+and lists each entry with the OS-provided name, its physical resolution,
+and a "primary" badge where applicable. Pick one; the pipeline rebinds
+immediately without restarting the mode.
 
-- Display name (if the OS provides one) — "Built-in Retina Display",
-  "LG UltraFine 27", etc.
-- Physical resolution
-- Whether it's the **primary** display
+## Hot-plug behaviour
 
-Pick one. The ambilight pipeline rebinds immediately — no restart of the
-mode needed.
+When you plug or unplug an external monitor mid-session:
 
-## Default behaviour
-
-- **Single-display setup**: LumaSync picks that display automatically.
-  Nothing to configure.
-- **Multi-display setup** (first launch): defaults to the **primary**
-  display. On macOS that's the one with the menu bar; on Windows the one
-  marked primary in Display settings.
-- **After a display is unplugged**: if the currently-selected display
-  disappears, the pipeline falls back to primary and logs a warning to
-  the telemetry pill.
-
-## Hot-plug
-
-When you plug or unplug an external monitor:
-
-- **Windows / macOS** emit display-changed events that LumaSync
-  subscribes to. The dropdown updates within ~500 ms.
-- **Linux (X11)** requires an explicit refresh if RandR events don't
-  propagate via the capture backend. Reopening Settings → Display
-  rebuilds the list.
-- **Linux (Wayland)** — portal-based capture doesn't expose a
-  hot-plug event stream. You'll see the new display on the next
-  ambilight session restart.
+- **Windows and macOS** emit display-changed events that LumaSync
+  subscribes to; the dropdown updates within ~500 ms and the current
+  selection falls back to primary if the previously-selected display
+  disappeared.
+- **Linux (X11)** works similarly if the capture backend receives RandR
+  events. If the dropdown looks stale, reopen Settings → Display to
+  trigger a rebuild.
+- **Linux (Wayland)** portals don't expose a hot-plug event stream —
+  you'll see the new display listed on the next ambilight session
+  restart.
 
 ## Calibration overlay
 
-The calibration overlay (test pattern) is always drawn on the selected
-source display, via `open_display_overlay`. Other displays remain
-untouched. If the overlay doesn't cover the full screen on a particular
-display:
+The calibration test pattern (Settings → Calibration → **Test pattern**)
+is drawn via `open_display_overlay` on whichever display you've picked as
+the source. Other displays stay untouched. Fullscreen behaviour:
 
-- macOS requires `macos-private-api` for borderless fullscreen — this is
-  enabled by default in Tauri config, no user action needed.
-- Windows may show it as a foreground window rather than true fullscreen
-  on some compositing driver versions. Functional for calibration but
-  not edge-to-edge.
-- Linux behavior varies by WM. GNOME and KDE Plasma work; tiling window
-  managers may force the overlay into a tile.
+- **macOS** uses `macos-private-api` for borderless fullscreen — enabled
+  in the app's Tauri config, no user action needed.
+- **Windows** may render the overlay as a foreground window rather than
+  true fullscreen on some composition driver versions. Functional for
+  calibration but not edge-to-edge.
+- **Linux** varies by window manager. GNOME and KDE Plasma handle it;
+  tiling WMs may force the overlay into a tile.
 
-## Multiple outputs, one source
+## What is not available in v1.2.0
 
-A common setup: ambilight from Display 1, driving both a USB strip behind
-Display 1 AND a Hue Entertainment Area that fills the room.
+**Per-target display routing — "drive USB from Display 1 and Hue from
+Display 2" — is not a shipped feature.** The pipeline has one capture
+source at a time, and both output targets read from it.
 
-- **USB strip physical position** is controlled by the edge counts /
-  corner ownership in [Calibration](/docs/usb-leds/calibration). Strip
-  positions relative to Display 1's edges — not Display 2's.
-- **Hue Entertainment Area** channel positions are set per the Hue app's
-  room layout — which is agnostic to which LumaSync display you chose.
-  The colours it receives are sampled from Display 1, but the bulbs light
-  wherever they physically sit in the room.
-
-This is almost always what you want: the screen you're watching drives
-the lights that fill the space you're watching from.
-
-## One source, per-target display routing
-
-**[TBD: verify]** Routing each output target (USB vs Hue) to a different
-display source — "drive USB from Display 1, Hue from Display 2" — is not
-a shipped feature in v1.2.0. The pipeline has one capture source at a
-time.
-
-If you need this (e.g. to run ambient Hue fill from a living-room TV
-while gaming on a desktop display), run two LumaSync instances — one per
-display. Not officially supported but technically workable since each
-instance uses its own state file.
+If you genuinely need two different sources, the practical workaround is
+to run **two LumaSync instances** on the same machine — each with its
+own `~/.config/lumasync/app.json` (by setting a custom data directory
+per instance). Not officially supported; expect rough edges around tray
+icons clashing.
 
 ## Related
 
-- [Screen capture](/docs/ambilight/screen-capture)
+- [Screen capture](/docs/ambilight/screen-capture) — what gets sampled
+- [Ambilight performance](/docs/ambilight/performance) — latency varies by display
 - [Calibration](/docs/usb-leds/calibration)
-- [Performance](/docs/ambilight/performance) — latency varies by display
