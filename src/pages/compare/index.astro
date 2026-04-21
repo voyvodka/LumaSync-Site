@@ -8,8 +8,10 @@ const entries = await listCompare();
 // full page does the work. This index is the SEO hub for terms like
 // "ambilight software comparison", "hue sync alternatives", etc.
 const ONE_LINERS: Record<string, string> = {
-  'hue-sync': 'HDMI-first hardware for TV-centric rooms. If your source isn’t a computer, this is the one.',
-  hyperion: 'RPi-first ambilight stack with a deep configuration surface and enormous hardware ceiling.',
+  'hue-sync':
+    'HDMI-first hardware for TV-centric rooms. If your source isn’t a computer, this is the one.',
+  hyperion:
+    'RPi-first ambilight stack with a deep configuration surface and enormous hardware ceiling.',
   prismatik: 'Lightpack-era legacy driver — maintained mostly for Lightpack hardware owners.',
   wled: 'ESP-based LED firmware. Category mismatch with LumaSync; often run alongside a desktop driver.',
 };
@@ -28,9 +30,9 @@ function oneLiner(slug: string): string {
       <p class="eyebrow">Compare</p>
       <h1 class="display">LumaSync vs the alternatives</h1>
       <p class="lede">
-        Four honest side-by-sides. LumaSync wins where it wins and yields where it
-        doesn't. If your source is an HDMI device, if you own Lightpack hardware, if
-        WLED is already in your home — we'll tell you to pick differently.
+        Four honest side-by-sides. LumaSync wins where it wins and yields where it doesn't. If your
+        source is an HDMI device, if you own Lightpack hardware, if WLED is already in your home —
+        we'll tell you to pick differently.
       </p>
     </header>
 
@@ -54,9 +56,7 @@ function oneLiner(slug: string): string {
 
     {
       entries.length === 0 && (
-        <p class="empty">
-          Comparison pages ship with the Week 4 content push per the action plan.
-        </p>
+        <p class="empty">Comparison pages ship with the Week 4 content push per the action plan.</p>
       )
     }
   </section>

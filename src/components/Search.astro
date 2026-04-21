@@ -100,8 +100,7 @@
 
     const renderResults = (hits) => {
       if (hits.length === 0) {
-        resultsEl.innerHTML =
-          '<p class="search-empty">No matches. Try a different phrase.</p>';
+        resultsEl.innerHTML = '<p class="search-empty">No matches. Try a different phrase.</p>';
         entries = [];
         activeIndex = -1;
         return;

@@ -16,12 +16,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <h1 class="display">Your screen, your lights. Locally.</h1>
       <p class="subhead">{description}</p>
       <div class="cta-row">
-        <a class="cta-primary" href="/download" data-os-cta>
-          Download for macOS
-        </a>
-        <a class="cta-secondary" href={repo}>
-          View on GitHub →
-        </a>
+        <a class="cta-primary" href="/download" data-os-cta> Download for macOS </a>
+        <a class="cta-secondary" href={repo}> View on GitHub → </a>
       </div>
       <p class="platform-note">macOS · Windows · Linux (experimental)</p>
     </div>
@@ -34,7 +30,9 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         alt="LumaSync's full window in Ambilight mode, driving a WS2812B strip and a Hue Entertainment Area from the same screen source."
         class="hero-visual-img"
       />
-      <figcaption>Full-mode Lights Section with ambilight active. Live screenshot drops in at launch.</figcaption>
+      <figcaption>
+        Full-mode Lights Section with ambilight active. Live screenshot drops in at launch.
+      </figcaption>
     </figure>
   </section>
 
@@ -47,8 +45,7 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         <div class="feature-icon" aria-hidden="true">USB</div>
         <h3>USB LED strips</h3>
         <p>
-          Adalight-compatible controllers at 115200 baud. CH340 and FT232 supported
-          out of the box.
+          Adalight-compatible controllers at 115200 baud. CH340 and FT232 supported out of the box.
         </p>
         <a href="/docs/usb-leds/controllers">Supported chipsets →</a>
       </article>
@@ -57,8 +54,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         <div class="feature-icon" aria-hidden="true">HUE</div>
         <h3>Philips Hue Entertainment</h3>
         <p>
-          DTLS 1.2 PSK streaming to any configured Entertainment Area. Up to
-          20 Hz — the bridge's real limit.
+          DTLS 1.2 PSK streaming to any configured Entertainment Area. Up to 20 Hz — the bridge's
+          real limit.
         </p>
         <a href="/docs/hue/entertainment-area">How Hue streaming works →</a>
       </article>
@@ -67,8 +64,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         <div class="feature-icon" aria-hidden="true">⌃</div>
         <h3>Both, synchronized</h3>
         <p>
-          Same screen source drives both targets. Pick per mode: USB, Hue, or
-          both — switched from the tray.
+          Same screen source drives both targets. Pick per mode: USB, Hue, or both — switched from
+          the tray.
         </p>
         <a href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
       </article>
@@ -81,9 +78,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <p class="section-eyebrow">Ambient mode</p>
       <h2 class="section-title">Real-time screen capture. 20 Hz update.</h2>
       <p class="callout-body">
-        Tuned for latency, not flash. The telemetry pill shows live capture and
-        send rates so you can see when the pipeline is healthy and when it
-        isn't — no mystery numbers.
+        Tuned for latency, not flash. The telemetry pill shows live capture and send rates so you
+        can see when the pipeline is healthy and when it isn't — no mystery numbers.
       </p>
       <a class="inline-cta" href="/docs/ambilight/performance">Read about performance →</a>
     </div>
@@ -117,9 +113,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <p class="section-eyebrow">Room map editor</p>
       <h2 class="section-title">A canvas, not a config file.</h2>
       <p class="callout-body">
-        Drag your TV, furniture, and USB strips onto a grid. Hue channels
-        project onto normalized coordinates. Undo / redo, snap guides,
-        keyboard shortcuts.
+        Drag your TV, furniture, and USB strips onto a grid. Hue channels project onto normalized
+        coordinates. Undo / redo, snap guides, keyboard shortcuts.
       </p>
       <a class="inline-cta" href="/docs/usb-leds/calibration">Calibration docs →</a>
     </div>
@@ -131,9 +126,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <p class="section-eyebrow">Tray-first</p>
       <h2 class="section-title">Lives where it belongs — out of your way.</h2>
       <p class="callout-body">
-        Single window hides to tray on close. Compact 320×480 mode for quick
-        toggles, full 900×620 mode when you want to configure. Auto-starts on
-        login, if you want it to.
+        Single window hides to tray on close. Compact 320×480 mode for quick toggles, full 900×620
+        mode when you want to configure. Auto-starts on login, if you want it to.
       </p>
       <a class="inline-cta" href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
     </div>
@@ -180,8 +174,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
           <span class="tag tag-warn">Experimental</span>
         </h3>
         <p>
-          AppImage ships today, Flathub submission underway. Tray behavior
-          varies by desktop environment.
+          AppImage ships today, Flathub submission underway. Tray behavior varies by desktop
+          environment.
         </p>
       </article>
     </div>
@@ -199,8 +193,9 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <div>
         <p class="trust-label">Updates signed with minisign</p>
         <p>
-          Every binary is signature-verified before replacing the on-disk
-          version. <a href="/docs/advanced/auto-updater">How updates work</a>.
+          Every binary is signature-verified before replacing the on-disk version. <a
+            href="/docs/advanced/auto-updater">How updates work</a
+          >.
         </p>
       </div>
       <div>
@@ -220,19 +215,20 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     <ul role="list">
       <li>
         <strong>You need HDMI passthrough for a console or Apple TV.</strong>
-        LumaSync reads the OS screen buffer — no HDMI in the signal path.
-        Grab a <a href="/compare/hue-sync">Hue Sync Box</a> instead.
+        LumaSync reads the OS screen buffer — no HDMI in the signal path. Grab a <a
+          href="/compare/hue-sync">Hue Sync Box</a
+        > instead.
       </li>
       <li>
         <strong>You don't have a Hue Bridge or a WS2812B controller.</strong>
-        The app will run, but you won't see anything light up. Start with
-        the <a href="/docs/getting-started/hardware-checklist">hardware checklist</a>.
+        The app will run, but you won't see anything light up. Start with the <a
+          href="/docs/getting-started/hardware-checklist">hardware checklist</a
+        >.
       </li>
       <li>
         <strong>You're on an unusual Linux desktop environment.</strong>
-        Tray behavior varies — GNOME needs an AppIndicator extension, tiling
-        WMs may force windows into tiles. Community-driven support on Linux
-        for now.
+        Tray behavior varies — GNOME needs an AppIndicator extension, tiling WMs may force windows into
+        tiles. Community-driven support on Linux for now.
       </li>
     </ul>
   </section>
@@ -243,11 +239,13 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     const btn = document.querySelector('[data-os-cta]');
     if (!btn) return;
     const ua = navigator.userAgent;
-    const label =
-      /Windows/i.test(ua) ? 'Download for Windows'
-      : /Linux/i.test(ua) || /X11/i.test(ua) ? 'Download for Linux'
-      : /Mac|macOS/i.test(ua) ? 'Download for macOS'
-      : 'Download';
+    const label = /Windows/i.test(ua)
+      ? 'Download for Windows'
+      : /Linux/i.test(ua) || /X11/i.test(ua)
+        ? 'Download for Linux'
+        : /Mac|macOS/i.test(ua)
+          ? 'Download for macOS'
+          : 'Download';
     btn.textContent = label;
   })();
 </script>

@@ -108,8 +108,8 @@ const publishedDate = release?.published_at
       <p class="eyebrow">Install</p>
       <h1 class="page-title">Download LumaSync</h1>
       <p class="lede">
-        Grab the installer for your platform. Binaries are signed with minisign and verified
-        before any update replaces them on disk.
+        Grab the installer for your platform. Binaries are signed with minisign and verified before
+        any update replaces them on disk.
       </p>
       {
         release && (
@@ -131,8 +131,7 @@ const publishedDate = release?.published_at
     {
       fetchError && (
         <div class="banner banner-warn" role="status">
-          <strong>Release metadata unavailable at build time.</strong>{' '}
-          Head to the{' '}
+          <strong>Release metadata unavailable at build time.</strong> Head to the{' '}
           <a href={RELEASES_PAGE}>Releases page</a> on GitHub. (Reason: {fetchError})
         </div>
       )
@@ -141,9 +140,9 @@ const publishedDate = release?.published_at
     {
       release && !anyAsset && (
         <div class="banner" role="status">
-          <strong>{release.tag_name}</strong> is tagged but has no installer assets yet —
-          see the <a href={release.html_url}>release page</a> for source archives, or wait
-          for the signed binaries to land.
+          <strong>{release.tag_name}</strong> is tagged but has no installer assets yet — see the{' '}
+          <a href={release.html_url}>release page</a> for source archives, or wait for the signed
+          binaries to land.
         </div>
       )
     }
@@ -183,13 +182,13 @@ const publishedDate = release?.published_at
     <aside class="verify">
       <h2>Verify before you run</h2>
       <p>
-        Every release is signed with a minisign keypair committed to the app repo. To
-        verify a download:
+        Every release is signed with a minisign keypair committed to the app repo. To verify a
+        download:
       </p>
       <pre><code>minisign -Vm &lt;downloaded-file&gt; -P $(cat minisign.pub)</code></pre>
       <p>
-        The update flow inside the app verifies signatures automatically before replacing
-        any binary on disk.
+        The update flow inside the app verifies signatures automatically before replacing any binary
+        on disk.
       </p>
     </aside>
 

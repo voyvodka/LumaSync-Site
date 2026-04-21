@@ -44,8 +44,9 @@ try {
       <p class="lede">
         Sourced from{' '}
         <a href={`${repo}/blob/main/CHANGELOG.md`}><code>voyvodka/LumaSync</code></a>
-        {' '}at the pinned submodule ref. This page redeploys when the submodule is
-        bumped — see <a href={`${repo}/releases`}>Releases</a> for signed binaries.
+        {' '}at the pinned submodule ref. This page redeploys when the submodule is bumped — see <a
+          href={`${repo}/releases`}>Releases</a
+        > for signed binaries.
       </p>
     </header>
 
@@ -55,10 +56,9 @@ try {
       ) : (
         <div class="missing">
           <p>
-            <strong>Changelog not available at build time.</strong>{' '}
-            The <code>vendor/lumasync/</code> submodule is not initialised in this
-            checkout. Run <code>git submodule update --init --recursive</code> and
-            rebuild.
+            <strong>Changelog not available at build time.</strong> The{' '}
+            <code>vendor/lumasync/</code> submodule is not initialised in this checkout. Run{' '}
+            <code>git submodule update --init --recursive</code> and rebuild.
           </p>
         </div>
       )

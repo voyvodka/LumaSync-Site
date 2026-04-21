@@ -13,10 +13,10 @@ drives a WS2812B strip, and LumaSync streams frames over that serial link at
 
 Two chipsets are supported out of the box:
 
-| Chip | USB VID:PID | Where you'll find it |
-|------|-------------|----------------------|
-| **CH340** | `1A86:7523` | Most cheap Arduino-clone Adalight kits; "ambilight USB kit" on the usual marketplaces |
-| **FTDI FT232** | `0403:6001` | Higher-end kits, DIY boards using genuine FTDI |
+| Chip           | USB VID:PID | Where you'll find it                                                                  |
+| -------------- | ----------- | ------------------------------------------------------------------------------------- |
+| **CH340**      | `1A86:7523` | Most cheap Arduino-clone Adalight kits; "ambilight USB kit" on the usual marketplaces |
+| **FTDI FT232** | `0403:6001` | Higher-end kits, DIY boards using genuine FTDI                                        |
 
 LumaSync scans the OS's serial port list and matches against these IDs. If
 your controller reports a different VID:PID, the **Device** panel flags it

@@ -119,12 +119,12 @@ element in the Astro source with a **one-sentence functional
 description**, not a literal transcription. Examples:
 
 - **Good**: `alt="LumaSync's full window showing Ambilight mode driving
-  a USB LED strip behind the TV, with live telemetry pills."`
+a USB LED strip behind the TV, with live telemetry pills."`
 - **Bad**: `alt="Screenshot of LumaSync"`.
 - **Bad**: `alt="LumaSync showing 'Lights', 'Devices', 'Ambilight',
-  'Telemetry: Δ 12 ms · Σ 60 fps', ..."` (just transcribes UI text).
+'Telemetry: Δ 12 ms · Σ 60 fps', ..."` (just transcribes UI text).
 
-Assistive tech benefits most from the *function* of the image in context.
+Assistive tech benefits most from the _function_ of the image in context.
 
 ---
 
@@ -142,10 +142,10 @@ precedence over the generated `/og/landing.png` per the hybrid rule in
 
 - Adding a new capture slot: commit the placeholder SVG + the row here
   in the same commit.
-- Removing a slot: delete the SVG *and* the row. Don't leave orphan
+- Removing a slot: delete the SVG _and_ the row. Don't leave orphan
   references.
 - Changing dimensions: update the SVG's `viewBox` + `width` / `height`
-  attributes *and* the row. Off-ratio dimensions cause layout shift
+  attributes _and_ the row. Off-ratio dimensions cause layout shift
   when the real image drops in.
 
 Current ratio lock is deliberate — it's the single source of truth so a

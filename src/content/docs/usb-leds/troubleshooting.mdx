@@ -25,8 +25,7 @@ draft: true
 **Symptom**: Port connects, health check returns `DEVICE_MANUAL_REQUIRED` or
 a red error.
 
-- **Wrong baud rate on firmware** — Adalight-compatible firmware must run at
-  115200. Other rates are silently rejected as failed handshakes.
+- **Wrong baud rate on firmware** — Adalight-compatible firmware must run at 115200. Other rates are silently rejected as failed handshakes.
 - **Non-Adalight firmware** — CircuitPython / MicroPython boards with
   custom protocols won't respond to the Adalight magic bytes. Flash Adalight
   firmware, or mark as manual and accept you won't get handshake validation.

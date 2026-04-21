@@ -13,7 +13,7 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: "06:00"
+      time: '06:00'
       timezone: Europe/Istanbul
     open-pull-requests-limit: 10
     commit-message:
@@ -30,7 +30,7 @@ updates:
     # Block pre-release tags per #0 dependency policy.
     # Dependabot does not pull pre-releases by default, but be explicit.
     ignore:
-      - dependency-name: "*"
+      - dependency-name: '*'
         update-types:
           - version-update:semver-prerelease
 
@@ -39,7 +39,7 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: "06:00"
+      time: '06:00'
       timezone: Europe/Istanbul
     open-pull-requests-limit: 5
     commit-message:

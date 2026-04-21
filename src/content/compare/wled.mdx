@@ -9,7 +9,7 @@ draft: true
 **WLED** isn't a desktop app — it's **firmware that runs on an ESP32 or
 ESP8266 microcontroller**. You flash it onto a cheap Wi-Fi board, wire the
 board to a WS2812B strip, and the board exposes a web UI + HTTP/WebSocket
-API on your LAN. Ambilight (screen sync) is a *separate* client app
+API on your LAN. Ambilight (screen sync) is a _separate_ client app
 talking to WLED over Wi-Fi.
 
 **LumaSync** is the desktop-app side of that equation, but today it
@@ -33,20 +33,20 @@ either, and eventually both together.**
 
 ## Feature comparison
 
-| Feature | LumaSync | WLED |
-|---|---|---|
-| Product category | Desktop ambilight app | LED controller firmware |
-| Runs on | macOS, Windows, Linux PC | ESP32 / ESP8266 board |
-| Deployment | Install app on your machine | Flash firmware to microcontroller, wire to strip |
-| Control path to LEDs | USB-serial (Adalight, 115200 baud) | Wi-Fi (HTTP / WebSocket / DDP / ArtNet) |
-| Supports WS2812B | Yes (via USB controller) | Yes (native, many strip types) |
-| Screen sync / ambilight | Yes (built in) | No — separate client app required |
-| Philips Hue Entertainment | Native DTLS 1.2 PSK | No — WLED doesn't talk Hue |
-| HomeAssistant | Not needed | First-class |
-| Standalone operation | Requires computer running | Yes — the board is the server |
-| Mobile control | No dedicated app | Yes — web UI works on mobile, plus third-party apps |
-| LumaSync → WLED bridge | **No — not in v1.2.0.** Roadmap item. | N/A |
-| Open source | MIT | MIT |
+| Feature                   | LumaSync                              | WLED                                                |
+| ------------------------- | ------------------------------------- | --------------------------------------------------- |
+| Product category          | Desktop ambilight app                 | LED controller firmware                             |
+| Runs on                   | macOS, Windows, Linux PC              | ESP32 / ESP8266 board                               |
+| Deployment                | Install app on your machine           | Flash firmware to microcontroller, wire to strip    |
+| Control path to LEDs      | USB-serial (Adalight, 115200 baud)    | Wi-Fi (HTTP / WebSocket / DDP / ArtNet)             |
+| Supports WS2812B          | Yes (via USB controller)              | Yes (native, many strip types)                      |
+| Screen sync / ambilight   | Yes (built in)                        | No — separate client app required                   |
+| Philips Hue Entertainment | Native DTLS 1.2 PSK                   | No — WLED doesn't talk Hue                          |
+| HomeAssistant             | Not needed                            | First-class                                         |
+| Standalone operation      | Requires computer running             | Yes — the board is the server                       |
+| Mobile control            | No dedicated app                      | Yes — web UI works on mobile, plus third-party apps |
+| LumaSync → WLED bridge    | **No — not in v1.2.0.** Roadmap item. | N/A                                                 |
+| Open source               | MIT                                   | MIT                                                 |
 
 ## When to pick LumaSync
 

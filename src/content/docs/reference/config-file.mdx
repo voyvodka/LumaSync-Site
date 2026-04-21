@@ -10,11 +10,11 @@ draft: true
 LumaSync persists all configuration via Tauri's `plugin-store`. On disk
 that lives at:
 
-| OS | Path |
-|----|------|
-| macOS | `~/Library/Application Support/com.lumasync.app/app.json` |
-| Windows | `%APPDATA%\com.lumasync.app\app.json` |
-| Linux | `~/.config/com.lumasync.app/app.json` |
+| OS      | Path                                                      |
+| ------- | --------------------------------------------------------- |
+| macOS   | `~/Library/Application Support/com.lumasync.app/app.json` |
+| Windows | `%APPDATA%\com.lumasync.app\app.json`                     |
+| Linux   | `~/.config/com.lumasync.app/app.json`                     |
 
 The identifier `com.lumasync.app` is set in `src-tauri/tauri.conf.json`
 and is how every OS scopes the app's per-user state.
@@ -28,21 +28,21 @@ above.
 The full shape is typed in `src/shared/contracts/shell.ts` under
 `ShellState`. The top-level fields:
 
-| Field | Type | What it stores |
-|-------|------|----------------|
-| `windowWidth` / `windowHeight` | `number \| null` | Last main-window size in pixels |
-| `windowX` / `windowY` | `number \| null` | Last main-window position; null = OS-centered |
-| `isCompactMode` | `boolean` | Was the app last used in compact mode? |
-| `activeSectionId` | `SectionId` | Which settings section was last open |
-| `lightingMode` | `LightingModeConfig` | Current mode + per-mode parameters |
-| `ledCalibration` | `LedCalibrationConfig` | Edge counts, corner ownership, anchor, direction |
-| `hue.bridge` | `HueBridgeSummary \| null` | Paired bridge (IP, ID) |
-| `hue.onboarding.step` | `HueOnboardingStep` | Last reached step in the flow |
-| `hue.credentialStatus` | `HueCredentialStatus` | Valid / needs-repair / unknown |
-| `hue.runtimeTarget` | `HueRuntimeTarget` | Selected Entertainment Area |
-| `roomMap` | `RoomMapConfig` | Room map editor state (objects, positions, layers) |
-| `autoStartOnLogin` | `boolean` | OS login-items enrolment |
-| `updater.checkOnStartup` | `boolean` | Whether to poll GitHub Releases on launch |
+| Field                          | Type                       | What it stores                                     |
+| ------------------------------ | -------------------------- | -------------------------------------------------- |
+| `windowWidth` / `windowHeight` | `number \| null`           | Last main-window size in pixels                    |
+| `windowX` / `windowY`          | `number \| null`           | Last main-window position; null = OS-centered      |
+| `isCompactMode`                | `boolean`                  | Was the app last used in compact mode?             |
+| `activeSectionId`              | `SectionId`                | Which settings section was last open               |
+| `lightingMode`                 | `LightingModeConfig`       | Current mode + per-mode parameters                 |
+| `ledCalibration`               | `LedCalibrationConfig`     | Edge counts, corner ownership, anchor, direction   |
+| `hue.bridge`                   | `HueBridgeSummary \| null` | Paired bridge (IP, ID)                             |
+| `hue.onboarding.step`          | `HueOnboardingStep`        | Last reached step in the flow                      |
+| `hue.credentialStatus`         | `HueCredentialStatus`      | Valid / needs-repair / unknown                     |
+| `hue.runtimeTarget`            | `HueRuntimeTarget`         | Selected Entertainment Area                        |
+| `roomMap`                      | `RoomMapConfig`            | Room map editor state (objects, positions, layers) |
+| `autoStartOnLogin`             | `boolean`                  | OS login-items enrolment                           |
+| `updater.checkOnStartup`       | `boolean`                  | Whether to poll GitHub Releases on launch          |
 
 Anything not listed above is either computed at runtime (telemetry, stream
 state) or lives in a sub-config — the `LightingModeConfig` for example

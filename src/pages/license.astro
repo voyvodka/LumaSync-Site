@@ -18,14 +18,16 @@ const runtimeDeps = [
 ];
 ---
 
-<BaseLayout title="License" description="LumaSync is released under the MIT License. Site content under CC BY 4.0 unless noted.">
+<BaseLayout
+  title="License"
+  description="LumaSync is released under the MIT License. Site content under CC BY 4.0 unless noted."
+>
   <article class="legal">
     <header>
       <p class="eyebrow">Legal</p>
       <h1 class="page-title">License</h1>
       <p class="lede">
-        LumaSync is open source and free to use, modify, and redistribute under
-        the terms below.
+        LumaSync is open source and free to use, modify, and redistribute under the terms below.
       </p>
     </header>
 
@@ -37,7 +39,8 @@ const runtimeDeps = [
         and to the site code at
         <a href={`${repo}-site`}><code>voyvodka/lumasync-site</code></a>.
       </p>
-      <pre class="mit">Copyright (c) {year} voyvodka
+      <pre
+        class="mit">Copyright (c) {year} voyvodka
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -63,21 +66,19 @@ SOFTWARE.</pre>
       <p>
         Copy, docs, comparison pages, and blog posts on
         <code>lumasync.app</code> are licensed under the
-        <a href="https://creativecommons.org/licenses/by/4.0/">Creative
-        Commons Attribution 4.0 International License</a>. In practice:
-        you can copy, translate, and build on the content — just credit
-        LumaSync with a link back.
+        <a href="https://creativecommons.org/licenses/by/4.0/"
+          >Creative Commons Attribution 4.0 International License</a
+        >. In practice: you can copy, translate, and build on the content — just credit LumaSync
+        with a link back.
       </p>
-      <p>
-        Per-file exceptions (if any) are noted at the top of the file.
-      </p>
+      <p>Per-file exceptions (if any) are noted at the top of the file.</p>
     </section>
 
     <section>
       <h2>Third-party components</h2>
       <p>
-        The app bundles a number of open-source dependencies. Major
-        runtime components and their licenses:
+        The app bundles a number of open-source dependencies. Major runtime components and their
+        licenses:
       </p>
       <ul>
         {
@@ -92,8 +93,8 @@ SOFTWARE.</pre>
         A complete dependency manifest is in the app's
         <a href={`${repo}/blob/main/package.json`}><code>package.json</code></a>
         and
-        <a href={`${repo}/blob/main/src-tauri/Cargo.toml`}><code>Cargo.toml</code></a>.
-        Each package ships its own license file under
+        <a href={`${repo}/blob/main/src-tauri/Cargo.toml`}><code>Cargo.toml</code></a>. Each package
+        ships its own license file under
         <code>node_modules/&lt;package&gt;/LICENSE</code> or the Cargo equivalent.
       </p>
     </section>
@@ -101,13 +102,11 @@ SOFTWARE.</pre>
     <section>
       <h2>Trademarks</h2>
       <p>
-        <strong>LumaSync</strong> and the brand mark are project
-        identifiers. No trademark is registered. You may refer to the
-        project by name in reviews, comparisons, and documentation.
-        Please don't imply endorsement or official affiliation.
-        <strong>Philips Hue</strong> and <strong>Hue Sync</strong> are
-        trademarks of Signify — referenced here only for
-        interoperability and comparison.
+        <strong>LumaSync</strong> and the brand mark are project identifiers. No trademark is registered.
+        You may refer to the project by name in reviews, comparisons, and documentation. Please don't
+        imply endorsement or official affiliation.
+        <strong>Philips Hue</strong> and <strong>Hue Sync</strong> are trademarks of Signify — referenced
+        here only for interoperability and comparison.
       </p>
     </section>
   </article>

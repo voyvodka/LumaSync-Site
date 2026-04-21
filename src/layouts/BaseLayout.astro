@@ -33,11 +33,7 @@ const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
       ogImage={ogImage}
       noindex={noindex}
     />
-    {
-      umamiSiteId && umamiSrc && (
-        <script defer data-website-id={umamiSiteId} src={umamiSrc} />
-      )
-    }
+    {umamiSiteId && umamiSrc && <script defer data-website-id={umamiSiteId} src={umamiSrc} />}
   </head>
   <body>
     <SkipLink />

@@ -32,20 +32,20 @@ anything where your computer is already the media machine.**
 
 ## Feature comparison
 
-| Feature | LumaSync | Hue Sync Box |
-|---|---|---|
-| Screen source | OS screen buffer (macOS / Windows / Linux) | HDMI input (up to 4 devices, passthrough) |
-| Supported platforms | macOS, Windows, Linux | HDMI 2.1 inputs (4-in / 1-out) on the current 8K revision |
-| Philips Hue Entertainment | Yes — DTLS 1.2 PSK, 20 Hz | Yes — same Bridge, same areas |
-| USB LED strips (WS2812B) | Yes — CH340 / FT232 Adalight at 115200 baud | No |
-| HDMI passthrough | No | Yes — native feature |
-| HDR passthrough | N/A | HDR10 / HDR10+ / Dolby Vision passthrough on the 8K revision |
-| Setup | Install app, pair Bridge, pick area | Wire HDMI inputs, provision via Hue Sync mobile app |
-| Extra hardware | None (runs on computer you own) | The Box itself — regional pricing varies, [see the Philips product page](https://www.philips-hue.com/en-us/explore-hue/blog/sync-with-tv) for current retail |
-| Open source | Yes — MIT | No |
-| Auto-updates | minisign-signed, GitHub Releases | Firmware push via Philips |
-| Cloud dependency | None — LAN only | Requires Hue account; some features cloud-gated |
-| Last update | [v1.2.0, 2026-04-10](/changelog) | Firmware pushed by Philips on their own schedule (no public cadence commitment) |
+| Feature                   | LumaSync                                    | Hue Sync Box                                                                                                                                                 |
+| ------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Screen source             | OS screen buffer (macOS / Windows / Linux)  | HDMI input (up to 4 devices, passthrough)                                                                                                                    |
+| Supported platforms       | macOS, Windows, Linux                       | HDMI 2.1 inputs (4-in / 1-out) on the current 8K revision                                                                                                    |
+| Philips Hue Entertainment | Yes — DTLS 1.2 PSK, 20 Hz                   | Yes — same Bridge, same areas                                                                                                                                |
+| USB LED strips (WS2812B)  | Yes — CH340 / FT232 Adalight at 115200 baud | No                                                                                                                                                           |
+| HDMI passthrough          | No                                          | Yes — native feature                                                                                                                                         |
+| HDR passthrough           | N/A                                         | HDR10 / HDR10+ / Dolby Vision passthrough on the 8K revision                                                                                                 |
+| Setup                     | Install app, pair Bridge, pick area         | Wire HDMI inputs, provision via Hue Sync mobile app                                                                                                          |
+| Extra hardware            | None (runs on computer you own)             | The Box itself — regional pricing varies, [see the Philips product page](https://www.philips-hue.com/en-us/explore-hue/blog/sync-with-tv) for current retail |
+| Open source               | Yes — MIT                                   | No                                                                                                                                                           |
+| Auto-updates              | minisign-signed, GitHub Releases            | Firmware push via Philips                                                                                                                                    |
+| Cloud dependency          | None — LAN only                             | Requires Hue account; some features cloud-gated                                                                                                              |
+| Last update               | [v1.2.0, 2026-04-10](/changelog)            | Firmware pushed by Philips on their own schedule (no public cadence commitment)                                                                              |
 
 ## When to pick LumaSync
 
@@ -53,7 +53,7 @@ anything where your computer is already the media machine.**
   computer; LumaSync samples it directly. Zero hardware to rewire. One app
   to install.
 - **You want USB LED strips behind your screen**, not just Hue bulbs. The
-  Sync Box can't drive WS2812B strips — LumaSync can drive them *and* Hue at
+  Sync Box can't drive WS2812B strips — LumaSync can drive them _and_ Hue at
   the same time from the same source.
 - **You care about the Hue Sync Mac/PC app being discontinued.** LumaSync
   speaks the same Entertainment API; if you were a Hue Sync desktop user,
