@@ -1,0 +1,50 @@
+# Dependabot configuration aligned with
+# .thinking/02-website.md § Stack Decisions > #0 Dependency policy:
+# default to latest stable, no pre-releases, weekly sweep cadence.
+#
+# Note: the `vendor/lumasync` git submodule is intentionally NOT tracked
+# by Dependabot. Submodule refs are bumped manually on every app release
+# after a human review pass (per .thinking/02-website.md § #3).
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Istanbul
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+      - npm
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    # Block pre-release tags per #0 dependency policy.
+    # Dependabot does not pull pre-releases by default, but be explicit.
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-prerelease
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Istanbul
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+      - ci
