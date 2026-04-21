@@ -124,12 +124,31 @@ kbd {
   max-width: calc(var(--container-full) + 2.5rem);
 }
 
-/* ─── Display heading helper ───────────────────── */
+/* ─── Heading helpers ─────────────────────────────
+ *
+ * .display — Instrument Serif, reserved for true editorial moments
+ *   (landing hero, /compare/* main h1). Thin 400 stroke only reads
+ *   well at hero sizes on dark backgrounds.
+ *
+ * .page-title — IBM Plex Sans 600, tight tracking. Every other page
+ *   h1 (docs, changelog, download, community, legal, 404, docs index,
+ *   /compare listing). Reads as "title of this page" rather than
+ *   "editorial statement."
+ *
+ * .eyebrow — mono-caps accent kicker above h1s.
+ * ───────────────────────────────────────────────── */
 .display {
   font-family: var(--font-display);
   letter-spacing: var(--tracking-tight);
   line-height: var(--lh-tight);
   font-weight: 400;
+}
+
+.page-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
 }
 
 .eyebrow {
