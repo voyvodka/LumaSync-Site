@@ -1,0 +1,100 @@
+---
+title: Hardware checklist
+description: Parts list for an ambilight-ready setup, with minimum specs and caveats for both the USB LED path and the Philips Hue path.
+group: getting-started
+order: 30
+updated: 2026-04-21
+draft: true
+---
+
+LumaSync is a controller, not a store. You bring the lights; we drive them. This
+page lists what actually works with v1.2.0 — the checklist is short on purpose.
+
+## For the USB LED path
+
+### 1 · WS2812B addressable strip
+
+- **Protocol**: WS2812B (aka SK6812 in most drop-in forms). Non-addressable
+  RGB strips will **not** work — LumaSync needs per-pixel control.
+- **Density**: 30 LEDs/m works for most TV behind-screen setups. 60 LEDs/m
+  looks smoother but draws ~twice the current and costs more.
+- **Length**: measure your screen perimeter plus ~10 cm slack at each corner.
+  A 55" TV is roughly 3.8 m; a 65" is roughly 4.6 m.
+
+### 2 · USB-to-serial controller
+
+One of the supported chipsets:
+
+| Chip | USB VID:PID | Notes |
+|------|-------------|-------|
+| **CH340** | `1A86:7523` | Cheap and ubiquitous. Most Arduino-clone Adalight kits use this. |
+| **FTDI FT232** | `0403:6001` | More expensive, fewer driver headaches on macOS. |
+
+The controller must run **Adalight-compatible firmware at 115200 baud**. Most
+"ambilight USB kit" products on the usual marketplaces ship flashed; if you
+build your own, flash
+[Adalight firmware](https://github.com/patrickodacre/Adalight) or the
+[Prismatik fork](https://github.com/psieg/Lightpack/tree/master/Firmware)
+and leave the baud rate at 115200.
+
+### 3 · 5 V power supply
+
+Budget **0.3 A per 60 LEDs at moderate brightness**, or `LEDs × 60 mA` at full
+white. A 4 m × 30 LED/m strip (120 LEDs) needs ~2.5 A at max brightness; a
+5 V 5 A supply gives headroom. Don't power via USB only — the PC can't
+deliver enough current.
+
+## For the Hue path
+
+### 1 · Hue Bridge (gen 2 or newer)
+
+The **square** bridge, not the old round one. Gen 2+ supports the
+Entertainment streaming API that LumaSync uses. Firmware should be current
+(the Hue app auto-updates).
+
+### 2 · At least one Entertainment Area
+
+LumaSync streams to an **Entertainment Area**, not individual bulbs. Create
+one in the Hue app: **Settings → Entertainment areas → Create new**. Add the
+bulbs you want driven and position them on the room layout.
+
+Why: LumaSync needs to know each bulb's physical position to pick the right
+screen region to sample. The Hue app stores those coordinates; we read
+them back through the CLIP v2 API.
+
+### 3 · Hue-compatible bulbs, Play bars, or Lightstrip
+
+Any bulb or lightstrip that appears in the Hue app's Entertainment Area
+picker will work. Performance note: **the bridge caps streaming at 20 Hz** —
+that's the real Hue-side limit, not a LumaSync throttle. Don't expect
+gaming-rig latency from Hue.
+
+## Optional
+
+- **Surge-protected power strip** for the 5 V supply. Cheap insurance.
+- **Diffusion channel** behind the TV if you can see the dots through the
+  back panel.
+- **IR remote bridging** (e.g. via Home Assistant) if you want to toggle
+  modes from the couch without touching a keyboard.
+
+## Not needed
+
+- A dedicated **HDMI capture box** — LumaSync samples the screen via the
+  OS screen-capture APIs. No extra hardware in the video signal path.
+- A **Hue Sync Box** — that's a different architecture (HDMI passthrough,
+  console/Apple TV focused). See the [Hue Sync comparison](/compare/hue-sync)
+  for how the two differ.
+- An **always-on server** — the app runs on whatever machine does the
+  screen capture. No Pi or NUC required.
+
+## Order-of-priority shopping
+
+If you're starting from zero and have budget in mind:
+
+1. Start with **just the Hue bridge path** if you already own any Hue
+   bulbs. Zero soldering, one app dialog, you're ambilighting the room
+   corners.
+2. Add a **USB + WS2812B kit behind the TV** for the edge-of-screen effect.
+   This is the higher-impact visual but also more setup.
+3. Scale up density (30 → 60 LEDs/m) or add a secondary strip only after
+   you're happy with the basic setup.

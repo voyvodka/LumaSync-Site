@@ -6,13 +6,14 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  noindex?: boolean;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, noindex } = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
 
-<BaseLayout title={title} description={description} ogImage={ogImage}>
+<BaseLayout title={title} description={description} ogImage={ogImage} noindex={noindex}>
   <div class="docs-shell">
     <DocsSidebar currentPath={currentPath} />
     <div class="docs-main" data-pagefind-body>
