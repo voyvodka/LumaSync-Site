@@ -97,9 +97,38 @@ them.
 
 ## Anonymous metrics?
 
-The site itself uses **Umami** analytics (first-party, self-hosted,
-cookie-free). That captures page views and referrer for the website only,
-not the desktop app. The app ignores the site entirely.
+The **app** collects nothing online. The **website** you are reading
+uses [Umami](https://umami.is/) — self-hosted on our own server,
+cookie-free, and GDPR-compatible without a consent banner.
+
+What Umami records for each page view:
+
+- URL path + HTTP referrer (where the visitor came from)
+- Country (derived from a daily-rotating salted IP hash; no raw IP
+  ever persists and there is no city-level geolocation)
+- Browser, OS, and device type — bucketed from the User-Agent string
+- A small, explicit list of custom events: `download` (per OS),
+  `outbound` (leaving to GitHub / Releases / Discussions / Discord),
+  and `compare-cta` (comparison page call-to-action click). The
+  full taxonomy lives in the site's action-plan document.
+
+What Umami does **not** record — by deliberate design, not by
+accident:
+
+- No cookies. No cross-site tracking. No device fingerprinting.
+- No raw IP address beyond the daily hash above.
+- No city-level or finer geolocation.
+- **No search queries.** The Cmd+K search modal is Pagefind and
+  runs entirely in your browser; the string you type there never
+  leaves your machine.
+- No heatmap, session replay, scroll tracking, or mouse-movement
+  capture (no Hotjar / Clarity / FullStory / LogRocket / equivalent).
+- No email, name, or account identifier — the site has no accounts.
+
+The tracking script is served from our own `umami.lumasync.app`
+subdomain. It is not loaded from any third-party CDN. The desktop app
+(the thing you install) ignores the website entirely and does not
+talk to Umami.
 
 See [Privacy](/privacy) for the short-form site privacy statement.
 
