@@ -1,0 +1,69 @@
+---
+title: Keyboard shortcuts
+description: All keyboard shortcuts available across the main window, room map editor, and system tray.
+group: reference
+order: 10
+updated: 2026-04-21
+draft: true
+---
+
+## Global (app-wide)
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd/Ctrl + ,` | Open Settings |
+| `Cmd/Ctrl + /` | Toggle compact ↔ full mode |
+| `Cmd/Ctrl + W` | Hide window to tray (window stays running) |
+| `Cmd/Ctrl + Q` | Quit LumaSync (kills the tray) |
+
+On macOS the `Cmd` modifier; on Windows / Linux `Ctrl`.
+
+## Lights section (compact + full)
+
+| Shortcut | Action |
+|----------|--------|
+| `1` | Off mode |
+| `2` | Ambilight mode |
+| `3` | Solid mode |
+| `↑` / `↓` (Solid mode only) | Brightness ± 5% |
+
+## Room map editor
+
+From v1.2.0 the room map editor ships with a full shortcut set:
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd/Ctrl + Z` | Undo (50 steps back) |
+| `Cmd/Ctrl + Shift + Z` | Redo |
+| `Cmd/Ctrl + D` | Duplicate selected object |
+| `Delete` / `Backspace` | Delete selected object |
+| `Arrow keys` | Nudge 1 px |
+| `Shift + Arrow` | Nudge 10 px |
+| `L` | Toggle lock on selection |
+| `[` | Send object backward in z-order |
+| `]` | Bring object forward in z-order |
+| `Cmd/Ctrl + 0` | Fit canvas to view |
+| `Space + drag` | Pan canvas |
+| Middle-mouse drag | Pan canvas |
+| Scroll wheel | Zoom (0.5×–3×, mouse-centered) |
+| Right-click on object | Context menu (duplicate / delete / lock / z-order / rename / rotate) |
+
+## Tray menu
+
+Right-click the tray icon for a context menu with these entries (all
+keyboard-accessible once the menu is open):
+
+- **Open Settings** — brings the main window forward
+- **Lights off** — switches mode to Off
+- **Resume last mode** — restores the mode that was active before Off
+- **Solid color** — jumps straight to Solid mode picker
+- **Quit** — kills the tray and all pipeline threads
+
+The IDs of these entries are defined in
+`src/shared/contracts/shell.ts` under `TRAY_MENU_IDS` if you're
+scripting anything against them externally.
+
+## Related
+
+- [Config file](/docs/reference/config-file) — where shortcut customisations would persist (none configurable in v1.2.0)
+- [Tray-first UX](/docs/getting-started/first-setup) — why the tray exists
