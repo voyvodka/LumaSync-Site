@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 130" role="img" aria-label="LumaSync — Your screen, your lights. Locally.">
+  <rect width="360" height="130" fill="#0a0b0e"/>
+  <g transform="translate(20, 0)">
+    <text x="135" y="54" text-anchor="end" font-family="'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="500" font-size="48" letter-spacing="-0.5" fill="#e7ecf2">Luma</text>
+    <path d="M163.64 13.70 L171.63 16.30 L156.36 63.30 L148.37 60.70 Z" fill="#ffb020"/>
+    <text x="185" y="54" text-anchor="start" font-family="'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="500" font-size="48" letter-spacing="-0.5" fill="#e7ecf2">Sync</text>
+  </g>
+  <text x="180" y="108" text-anchor="middle" font-family="'Instrument Serif', Georgia, 'Times New Roman', serif" font-style="italic" font-size="20" fill="#8a93a0">Your screen, your lights. Locally.</text>
+</svg>

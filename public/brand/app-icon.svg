@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="LumaSync app icon">
+  <defs>
+    <linearGradient id="tile-depth" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#13161a"/>
+      <stop offset="100%" stop-color="#0a0b0e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="180" ry="180" fill="url(#tile-depth)"/>
+  <g transform="translate(80, 80) scale(13.5)">
+    <path d="M35 9.85 L42.6 12.31 L29 54.15 L21.4 51.69 Z" fill="#ffb020"/>
+  </g>
+</svg>

@@ -46,7 +46,9 @@ const columns: Array<{ label: string; links: FooterLink[] }> = [
     <div class="grid">
       <div class="brand-block">
         <p class="brand">
-          <span class="brand-dot" aria-hidden="true"></span>
+          <svg class="brand-mark" viewBox="0 0 64 64" width="16" height="16" aria-hidden="true">
+            <path d="M35 9.85 L42.6 12.31 L29 54.15 L21.4 51.69 Z" fill="#ffb020"></path>
+          </svg>
           <span class="brand-name">LumaSync</span>
         </p>
         <p class="tagline">
@@ -111,12 +113,9 @@ const columns: Array<{ label: string; links: FooterLink[] }> = [
     margin: 0 0 0.5rem;
   }
 
-  .brand-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: var(--radius-pill);
-    background: var(--accent);
-    box-shadow: var(--shadow-ring);
+  .brand-mark {
+    flex-shrink: 0;
+    display: block;
   }
 
   .tagline {
