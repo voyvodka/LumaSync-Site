@@ -1,20 +1,21 @@
-name: deploy
+name: ci
 
-# Manual-only trigger until Hetzner secrets are configured.
-# Once DEPLOY_HOST / DEPLOY_USER / DEPLOY_SSH_KEY are set in repo secrets
-# and Hetzner is provisioned, re-enable the `push: branches: [main]` trigger
-# so every merged commit ships automatically.
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build:
+    name: build + lhci
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Lint (prettier --check)
+        run: pnpm lint
+
       - name: Build
         run: pnpm build
 
@@ -39,13 +43,3 @@ jobs:
         run: pnpm dlx @lhci/cli@latest autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-      - name: Deploy to Hetzner
-        uses: burnett01/rsync-deployments@7.0.2
-        with:
-          switches: -avzr --delete
-          path: dist/
-          remote_path: /var/www/lumasync.app/
-          remote_host: ${{ secrets.DEPLOY_HOST }}
-          remote_user: ${{ secrets.DEPLOY_USER }}
-          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
