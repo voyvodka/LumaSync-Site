@@ -78,6 +78,11 @@
       }
     });
 
+    dialog.addEventListener('close', () => {
+      input.value = '';
+      renderEmpty();
+    });
+
     document
       .querySelectorAll('[data-search-open]')
       .forEach((btn) => btn.addEventListener('click', openDialog));
@@ -159,6 +164,9 @@
       } else if (e.key === 'Enter' && activeIndex >= 0 && entries[activeIndex]) {
         e.preventDefault();
         entries[activeIndex].click();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeDialog();
       }
     });
   })();
@@ -238,20 +246,20 @@
     padding: 0.5rem;
   }
 
-  .search-hint,
-  .search-empty {
+  :global(.search-hint),
+  :global(.search-empty) {
     margin: 0;
     padding: 1rem 0.75rem;
     color: var(--text-muted);
     font-size: var(--fs-sm);
   }
 
-  .search-hint kbd {
+  :global(.search-hint kbd) {
     margin-inline: 0.0625rem;
     font-size: 0.7rem;
   }
 
-  .search-result {
+  :global(.search-result) {
     display: grid;
     gap: 0.2rem;
     padding: 0.625rem 0.75rem;
@@ -261,16 +269,16 @@
     transition: background-color var(--duration-fast) var(--ease-out);
   }
 
-  .search-result:hover,
-  .search-result[data-active] {
+  :global(.search-result:hover),
+  :global(.search-result[data-active]) {
     background: var(--surface-2);
   }
 
-  .search-result[data-active] {
+  :global(.search-result[data-active]) {
     box-shadow: inset 2px 0 0 var(--accent);
   }
 
-  .result-kicker {
+  :global(.result-kicker) {
     font-family: var(--font-mono);
     font-size: var(--fs-xs);
     letter-spacing: var(--tracking-wide);
@@ -278,22 +286,22 @@
     color: var(--accent);
   }
 
-  .result-kicker:empty {
+  :global(.result-kicker:empty) {
     display: none;
   }
 
-  .result-title {
+  :global(.result-title) {
     font-weight: 500;
     color: var(--text-primary);
   }
 
-  .result-excerpt {
+  :global(.result-excerpt) {
     color: var(--text-secondary);
     font-size: var(--fs-sm);
     line-height: var(--lh-relaxed);
   }
 
-  .result-excerpt :global(mark) {
+  :global(.result-excerpt mark) {
     background: var(--accent-soft);
     color: var(--accent);
     padding: 0 0.125rem;
