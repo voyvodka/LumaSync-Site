@@ -48,22 +48,26 @@ try {
 }
 
 type OS = 'macos' | 'windows' | 'linux';
+type UmamiOS = 'mac' | 'win' | 'linux';
 
-const osDefs: Array<{ os: OS; label: string; note: string; matchers: RegExp[] }> = [
+const osDefs: Array<{ os: OS; umami: UmamiOS; label: string; note: string; matchers: RegExp[] }> = [
   {
     os: 'macos',
+    umami: 'mac',
     label: 'macOS',
     note: 'Universal — Apple Silicon + Intel',
     matchers: [/\.dmg$/i, /darwin/i, /macos/i, /mac\.app\.tar/i, /\.pkg$/i],
   },
   {
     os: 'windows',
+    umami: 'win',
     label: 'Windows',
     note: 'x64',
     matchers: [/\.msi$/i, /-setup\.exe$/i, /\.exe$/i, /windows/i, /win64/i, /win32/i],
   },
   {
     os: 'linux',
+    umami: 'linux',
     label: 'Linux',
     note: 'AppImage · experimental',
     matchers: [/\.AppImage$/i, /\.deb$/i, /\.rpm$/i, /linux/i, /amd64/i],
@@ -149,7 +153,7 @@ const publishedDate = release?.published_at
 
     <div class="grid">
       {
-        osAssets.map(({ os, label, note, asset }) => {
+        osAssets.map(({ os, umami, label, note, asset }) => {
           const href = asset?.browser_download_url ?? RELEASES_PAGE;
           const size = asset ? formatBytes(asset.size) : null;
           const disabled = !asset;
@@ -158,6 +162,8 @@ const publishedDate = release?.published_at
               class:list={['card', `card-${os}`, disabled && 'card-disabled']}
               href={href}
               data-os={os}
+              data-umami-event="download"
+              data-umami-event-os={umami}
               aria-disabled={disabled ? 'true' : undefined}
             >
               <span class="detected-pill" aria-hidden="true">

@@ -4,7 +4,15 @@ import Container from './Container.astro';
 const year = new Date().getFullYear();
 const repo = import.meta.env.PUBLIC_GITHUB_REPO ?? 'https://github.com/voyvodka/LumaSync';
 
-const columns = [
+type UmamiTarget = 'github' | 'releases' | 'discussions' | 'discord';
+
+interface FooterLink {
+  href: string;
+  label: string;
+  umamiTarget?: UmamiTarget;
+}
+
+const columns: Array<{ label: string; links: FooterLink[] }> = [
   {
     label: 'Product',
     links: [
@@ -17,9 +25,9 @@ const columns = [
   {
     label: 'Community',
     links: [
-      { href: repo, label: 'GitHub' },
-      { href: `${repo}/releases`, label: 'Releases' },
-      { href: `${repo}/discussions`, label: 'Discussions' },
+      { href: repo, label: 'GitHub', umamiTarget: 'github' },
+      { href: `${repo}/releases`, label: 'Releases', umamiTarget: 'releases' },
+      { href: `${repo}/discussions`, label: 'Discussions', umamiTarget: 'discussions' },
     ],
   },
   {
@@ -53,7 +61,13 @@ const columns = [
             <ul role="list">
               {col.links.map((link) => (
                 <li>
-                  <a href={link.href}>{link.label}</a>
+                  <a
+                    href={link.href}
+                    data-umami-event={link.umamiTarget ? 'outbound' : undefined}
+                    data-umami-event-target={link.umamiTarget}
+                  >
+                    {link.label}
+                  </a>
                 </li>
               ))}
             </ul>
