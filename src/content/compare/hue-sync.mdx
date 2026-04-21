@@ -6,9 +6,10 @@ updated: 2026-04-21
 draft: true
 ---
 
-The **Philips Hue Sync Box** is a $229-class HDMI passthrough device (4 HDMI
-inputs, one HDMI output) that reads the video signal going to your TV and
-syncs your Hue lights to it. **LumaSync** is an open-source desktop app that
+The **Philips Hue Sync Box** is a retail-priced HDMI passthrough device
+(~$200–250 depending on region and availability) with 4 HDMI inputs and one
+HDMI output, which reads the video signal going to your TV and syncs your
+Hue lights to it. **LumaSync** is an open-source desktop app that
 reads the OS-level screen buffer on your Mac, Windows, or Linux machine and
 drives the same Hue Entertainment Areas plus USB LED strips.
 
@@ -22,9 +23,10 @@ anything where your computer is already the media machine.**
   player, or any HDMI source that isn't a computer.
 - **LumaSync wins** if you watch video, work, or game on a Mac / Windows /
   Linux machine — no extra hardware, no HDMI wiring, free.
-- The **Philips Hue Sync app for PC and Mac was discontinued in April
-  2023**. If that's what you were looking for, LumaSync is the direct
-  replacement — same Hue Entertainment streaming, same Bridge, same areas.
+- The **Philips Hue Sync app for PC and Mac was officially discontinued
+  by Signify** (**[TBD: verify exact EOL date]**). If that's what you were
+  looking for, LumaSync is the direct replacement — same Hue Entertainment
+  streaming, same Bridge, same areas.
 
 ## Feature comparison
 
@@ -37,7 +39,7 @@ anything where your computer is already the media machine.**
 | HDMI passthrough | No | Yes — native feature |
 | HDR passthrough | N/A | **[TBD: verify]** HDR10 / Dolby Vision support per revision |
 | Setup | Install app, pair Bridge, pick area | Wire HDMI inputs, provision via Hue Sync mobile app |
-| Extra hardware | None (runs on computer you own) | The Box itself (~$229) |
+| Extra hardware | None (runs on computer you own) | The Box itself (**[TBD: verify]** current retail — roughly $200–250) |
 | Open source | Yes — MIT | No |
 | Auto-updates | minisign-signed, GitHub Releases | Firmware push via Philips |
 | Cloud dependency | None — LAN only | Requires Hue account; some features cloud-gated |
@@ -71,7 +73,8 @@ anything where your computer is already the media machine.**
 
 ## Migration notes
 
-Coming from the **Hue Sync app for PC/Mac** (discontinued April 2023):
+Coming from the **Hue Sync app for PC/Mac** (officially discontinued —
+**[TBD: verify exact EOL date]**):
 
 - Your **Entertainment Area** is on the Bridge, not the app. LumaSync reads
   it unchanged. Install LumaSync, pair the same Bridge (see
@@ -84,13 +87,18 @@ Coming from the **Hue Sync app for PC/Mac** (discontinued April 2023):
 
 Coming from the **Hue Sync Box**:
 
-- If the Box stays in place on your TV, LumaSync can run **on your
-  computer simultaneously**. Pair both, put them in **different
-  Entertainment Areas** on the Bridge — the Bridge only streams to one
-  area at a time per client, not per-client total, so two distinct areas
-  means both work in parallel.
-- If you're swapping the Box out entirely, keep the Entertainment Area but
-  switch LumaSync to drive it. Nothing else changes on the Hue side.
+- **Only one tool can stream to your Bridge at a time.** The Hue Bridge
+  supports a single active Entertainment streaming session per bridge,
+  total — it is not a per-area limit. LumaSync's own readiness check
+  surfaces this as `HUE_STREAM_NOT_READY` with an
+  `active_streamer` hint when another client holds the stream. In
+  practice: starting LumaSync takes over; the Sync Box stops receiving
+  signal until you switch back (and vice versa).
+- **To run both in parallel you need two Hue Bridges.** Separate bridges,
+  separate Entertainment Areas, one client per bridge. Viable for a
+  multi-bridge home; most setups pick one tool at a time.
+- **Retiring the Box entirely**: keep the Entertainment Area as-is and
+  point LumaSync at it. Nothing else changes on the Hue side.
 
 ## Further reading
 
