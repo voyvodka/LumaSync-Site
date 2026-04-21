@@ -1,0 +1,100 @@
+---
+title: LumaSync vs WLED
+competitor: WLED
+description: WLED is ESP32/ESP8266 firmware for addressable LED strips — standalone Wi-Fi controller, not a PC ambilight app. LumaSync and WLED solve different parts of the problem.
+updated: 2026-04-21
+draft: true
+---
+
+**WLED** isn't a desktop app — it's **firmware that runs on an ESP32 or
+ESP8266 microcontroller**. You flash it onto a cheap Wi-Fi board, wire the
+board to a WS2812B strip, and the board exposes a web UI + HTTP/WebSocket
+API on your LAN. Ambilight (screen sync) is a *separate* client app
+talking to WLED over Wi-Fi.
+
+**LumaSync** is the desktop-app side of that equation, but today it
+**does not speak WLED natively** — it drives LEDs via USB-serial Adalight,
+not over Wi-Fi. This page exists because WLED is the biggest name in the
+DIY LED world and many visitors arrive asking which to pick.
+
+Short version: **WLED and LumaSync aren't the same category. You can use
+either, and eventually both together.**
+
+## TL;DR
+
+- **WLED wins** if you want standalone Wi-Fi LED control with a huge
+  feature set (100+ built-in effects, audio-reactive via add-ons, Home
+  Assistant integration, room-scale installations).
+- **LumaSync wins** for desktop-driven ambilight with native Philips Hue
+  Entertainment, tray-first UX, and zero soldering.
+- **LumaSync does not currently speak WLED.** If your rig is ESP32 +
+  WS2812B running WLED firmware, LumaSync v1.2.0 can't drive it. An
+  ESP32 / WLED bridge is on the planned roadmap but is not shipped.
+
+## Feature comparison
+
+| Feature | LumaSync | WLED |
+|---|---|---|
+| Product category | Desktop ambilight app | LED controller firmware |
+| Runs on | macOS, Windows, Linux PC | ESP32 / ESP8266 board |
+| Deployment | Install app on your machine | Flash firmware to microcontroller, wire to strip |
+| Control path to LEDs | USB-serial (Adalight, 115200 baud) | Wi-Fi (HTTP / WebSocket / DDP / ArtNet) |
+| Supports WS2812B | Yes (via USB controller) | Yes (native, many strip types) |
+| Screen sync / ambilight | Yes (built in) | No — separate client app required |
+| Philips Hue Entertainment | Native DTLS 1.2 PSK | No — WLED doesn't talk Hue |
+| HomeAssistant | Not needed | First-class |
+| Standalone operation | Requires computer running | Yes — the board is the server |
+| Mobile control | No dedicated app | Yes — web UI works on mobile, plus third-party apps |
+| LumaSync → WLED bridge | **No — not in v1.2.0.** Roadmap item. | N/A |
+| Open source | MIT | MIT |
+
+## When to pick LumaSync
+
+- **You have a CH340 or FT232 USB-serial kit** behind your TV and a
+  computer nearby. The wire is already USB; LumaSync picks up and runs.
+- **Philips Hue is central to your setup.** WLED can't drive Hue. If
+  your room is mostly Hue bulbs with a small LED strip accent, LumaSync
+  owns both paths from one app.
+- **You don't want to solder or flash firmware.** The CH340/FT232 kits
+  ship pre-flashed with Adalight; LumaSync handles the rest.
+
+## When to pick WLED
+
+- **You want Wi-Fi LED control** with no computer dependency. LEDs work
+  when the computer is asleep; the ESP is the source of truth.
+- **You're doing large-scale installations** — room accent lighting,
+  closet LEDs, outdoor strips controlled from HomeAssistant. WLED's
+  reach here is unmatched.
+- **You specifically need WLED's effect library** — ones, beat-reactive
+  add-ons, preset syncing across multiple controllers.
+
+## Using both
+
+Many setups keep WLED for room lighting and a separate USB-serial
+ambilight kit behind the screen. LumaSync drives the ambilight; WLED
+handles the rest of the house. Because the two don't overlap physically,
+there's no conflict.
+
+## The roadmap note
+
+An ESP32-based bridge path — LumaSync driving WLED directly over the LAN
+— is a **future direction** acknowledged in the project's strategy
+notes (see the [`/7.md`](https://github.com/voyvodka/LumaSync) Wi-Fi
+bridge track). It's not in v1.2.0 and doesn't have a ship date. If it
+matters to your decision now, treat it as "not shipped."
+
+## Migration notes
+
+- **From WLED to LumaSync**: not really a migration — they don't serve
+  the same thing. If you want the screen-sync that WLED isn't giving
+  you, pair a USB-serial Adalight kit with LumaSync and leave WLED in
+  place for whatever it's already handling.
+- **From LumaSync to WLED**: also not a migration. You'd be giving up
+  Hue and screen sync to gain Wi-Fi standalone control. Different
+  trade-off, different problem.
+
+## Further reading
+
+- [Hardware checklist](/docs/getting-started/hardware-checklist)
+- [USB controllers](/docs/usb-leds/controllers) — what LumaSync recognises today
+- [WLED project](https://kno.wled.ge/) (external)
