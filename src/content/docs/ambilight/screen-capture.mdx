@@ -1,0 +1,115 @@
+---
+title: Screen capture
+description: How LumaSync reads your screen, the OS permissions each platform asks for, and why the macOS prompt arrives on first launch.
+group: ambilight
+order: 10
+updated: 2026-04-21
+draft: true
+---
+
+The ambilight pipeline samples your screen every frame, reduces it to a
+small colour grid, and pushes that grid to USB LEDs and Hue Entertainment
+Areas. This page covers the **capture** step — what OS permissions are
+required, and what to do when they're missing.
+
+## macOS — Screen Recording permission
+
+On first launch, macOS prompts:
+
+> **"LumaSync" would like to record this computer's screen.**
+> LumaSync needs screen recording permission to capture screen colors for
+> ambient lighting synchronization.
+
+Click **Open System Settings** and toggle LumaSync on in **Privacy & Security
+→ Screen Recording**. You'll need to quit and reopen LumaSync for the
+permission to take effect — macOS doesn't re-read the flag while the app is
+running.
+
+No permission means no ambilight: capture returns a blank frame, LEDs stay
+at the last state. The Ambilight mode tile turns amber with a "Screen
+recording required" badge in that case.
+
+### Why macOS-private-api
+
+LumaSync enables Tauri's `macos-private-api` flag, which gives the app
+low-latency access to screen content for the **calibration overlay** (the
+fullscreen test pattern). The capture API itself is public — nothing
+private gets bypassed. The flag shows up in Tauri config:
+
+```json
+"app": {
+  "macOSPrivateApi": true
+}
+```
+
+and is only relevant during calibration, not normal ambilight runtime.
+
+## Windows — no permission prompt
+
+Windows 10/11 does not require explicit screen capture permission for
+desktop apps. LumaSync uses the DXGI desktop duplication API, which is
+available by default. If capture fails, it's usually a GPU driver issue:
+
+- NVIDIA: update via GeForce Experience
+- AMD: update via Adrenalin
+- Intel: update via Intel Arc & Graphics driver
+
+The capture pipeline reports which display it's sampling in the ambilight
+telemetry. If Windows has hot-switched to a different GPU (common on laptops
+with hybrid graphics), stop and restart ambilight — capture re-binds to
+the correct adapter.
+
+## Linux — Wayland vs X11
+
+LumaSync uses Tauri's GTK/WebKit screen capture under the hood, which
+behaves differently based on your display server:
+
+- **X11**: full-screen capture works without prompts. Good.
+- **Wayland**: screen capture goes through `xdg-desktop-portal-screenshot`
+  or PipeWire's portal interface. Each capture triggers a portal dialog
+  asking which screen to share, once per session. This is by design —
+  Wayland doesn't allow background apps to grab the screen without user
+  consent.
+
+On Wayland, expect the portal dialog on startup of every ambilight session.
+We don't control the dialog — it's the OS-side guardrail.
+
+## Multiple displays
+
+If you have more than one monitor, open **Settings → Ambilight → Display**
+to pick which one drives the LEDs. Defaults to the primary. For more
+complex "this strip from display 1, that Hue area from display 2" setups,
+see [Multi-display](/docs/advanced/multi-display).
+
+## What gets captured
+
+LumaSync samples the **final composed frame** of whichever display you've
+selected — wallpaper, windows, fullscreen media, everything the user sees.
+It does **not**:
+
+- Capture individual windows (no "only react to YouTube")
+- Capture behind minimised windows (what you can't see, the LEDs don't see)
+- Capture DRM-protected content separately — Netflix, Apple TV, etc. will
+  typically black-frame or return a plain colour depending on platform
+  policy. This is the OS-level protection at work; LumaSync has no
+  workaround and wouldn't ship one if it did.
+
+## Frame pipeline
+
+After capture, frames go through:
+
+1. **Downscale** to the edge-signal grid (roughly 16×9 per edge).
+2. **Per-edge reduction** to a colour per LED (for the USB path) or per
+   channel (for the Hue path).
+3. **Temporal smoothing** (see [Tuning](/docs/ambilight/tuning) for how to
+   tweak this).
+4. **Output** via Adalight serial and DTLS streams in parallel.
+
+If you're debugging what LumaSync "sees", the edge-signal preview (compact
+mode) shows the grid in real time.
+
+## Related
+
+- [Performance](/docs/ambilight/performance) — Δ/Σ telemetry explained
+- [Tuning](/docs/ambilight/tuning) — saturation, smoothing, caps
+- [Multi-display](/docs/advanced/multi-display)
