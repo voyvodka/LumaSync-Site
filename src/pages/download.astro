@@ -1,128 +1,453 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Week 2 deliverable: read latest-release manifest from GitHub at build
-// time, generate platform-detected CTAs with checksums. Tracked in
-// .thinking/07-action-plan.md § Week 2. Scaffold ships a static fallback.
-const repo = 'https://github.com/voyvodka/LumaSync';
-const releases = `${repo}/releases/latest`;
+// Fetch the latest release from GitHub at build time. No runtime network —
+// every visitor gets a pre-rendered page. Rebuild (or run CI) to refresh.
+//
+// Rate-limit note: GitHub API allows 60 requests/hour per IP without auth.
+// If this ever rate-limits in CI, add a GITHUB_TOKEN env var and pass it as
+// `Authorization: Bearer ${token}` in the fetch headers.
+
+const REPO = 'voyvodka/LumaSync';
+const GITHUB_API = `https://api.github.com/repos/${REPO}/releases/latest`;
+const RELEASES_PAGE = `https://github.com/${REPO}/releases/latest`;
+
+interface GhAsset {
+  name: string;
+  browser_download_url: string;
+  size: number;
+  content_type: string;
+}
+
+interface GhRelease {
+  tag_name: string;
+  name: string;
+  html_url: string;
+  published_at: string;
+  body: string;
+  assets: GhAsset[];
+}
+
+let release: GhRelease | null = null;
+let fetchError: string | null = null;
+
+try {
+  const res = await fetch(GITHUB_API, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'lumasync-site-build',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`GitHub API returned ${res.status} ${res.statusText}`);
+  }
+  release = (await res.json()) as GhRelease;
+} catch (err) {
+  fetchError = err instanceof Error ? err.message : 'unknown error';
+}
+
+type OS = 'macos' | 'windows' | 'linux';
+
+const osDefs: Array<{ os: OS; label: string; note: string; matchers: RegExp[] }> = [
+  {
+    os: 'macos',
+    label: 'macOS',
+    note: 'Universal — Apple Silicon + Intel',
+    matchers: [/\.dmg$/i, /darwin/i, /macos/i, /mac\.app\.tar/i, /\.pkg$/i],
+  },
+  {
+    os: 'windows',
+    label: 'Windows',
+    note: 'x64',
+    matchers: [/\.msi$/i, /-setup\.exe$/i, /\.exe$/i, /windows/i, /win64/i, /win32/i],
+  },
+  {
+    os: 'linux',
+    label: 'Linux',
+    note: 'AppImage · experimental',
+    matchers: [/\.AppImage$/i, /\.deb$/i, /\.rpm$/i, /linux/i, /amd64/i],
+  },
+];
+
+function pickAsset(assets: GhAsset[], matchers: RegExp[]): GhAsset | null {
+  for (const rx of matchers) {
+    const hit = assets.find((a) => rx.test(a.name));
+    if (hit) return hit;
+  }
+  return null;
+}
+
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
+  return `${(n / 1024 / 1024).toFixed(1)} MB`;
+}
+
+const assets = release?.assets ?? [];
+const osAssets = osDefs.map((def) => ({ ...def, asset: pickAsset(assets, def.matchers) }));
+const anyAsset = osAssets.some((o) => o.asset);
+
+const checksumAsset = assets.find((a) => /\.sha256$/i.test(a.name) || /checksum/i.test(a.name));
+
+const publishedDate = release?.published_at
+  ? new Date(release.published_at).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  : null;
 ---
 
 <BaseLayout
   title="Download"
-  description="Download LumaSync for macOS, Windows, or Linux. Binaries signed with minisign."
+  description="Download LumaSync for macOS, Windows, or Linux. Binaries signed with minisign and verified before any update replaces them on disk."
 >
   <section class="download">
     <header>
       <p class="eyebrow">Install</p>
-      <h1>Download LumaSync</h1>
-      <p class="sub">
+      <h1 class="display">Download LumaSync</h1>
+      <p class="lede">
         Grab the installer for your platform. Binaries are signed with minisign and verified
         before any update replaces them on disk.
       </p>
+      {
+        release && (
+          <div class="release-meta">
+            <a href={release.html_url} class="version-pill">
+              {release.tag_name}
+            </a>
+            {publishedDate && <span class="meta">Released {publishedDate}</span>}
+            {checksumAsset && (
+              <a href={checksumAsset.browser_download_url} class="meta link">
+                Checksums
+              </a>
+            )}
+          </div>
+        )
+      }
     </header>
 
+    {
+      fetchError && (
+        <div class="banner banner-warn" role="status">
+          <strong>Release metadata unavailable at build time.</strong>{' '}
+          Head to the{' '}
+          <a href={RELEASES_PAGE}>Releases page</a> on GitHub. (Reason: {fetchError})
+        </div>
+      )
+    }
+
+    {
+      release && !anyAsset && (
+        <div class="banner" role="status">
+          <strong>{release.tag_name}</strong> is tagged but has no installer assets yet —
+          see the <a href={release.html_url}>release page</a> for source archives, or wait
+          for the signed binaries to land.
+        </div>
+      )
+    }
+
     <div class="grid">
-      <a class="card" href={releases}>
-        <h2>macOS</h2>
-        <p>Universal <code>.dmg</code> · Apple Silicon + Intel</p>
-      </a>
-      <a class="card" href={releases}>
-        <h2>Windows</h2>
-        <p><code>.msi</code> · x64</p>
-      </a>
-      <a class="card" href={releases}>
-        <h2>Linux <span class="tag">experimental</span></h2>
-        <p><code>.AppImage</code> · Flathub in progress</p>
-      </a>
+      {
+        osAssets.map(({ os, label, note, asset }) => {
+          const href = asset?.browser_download_url ?? RELEASES_PAGE;
+          const size = asset ? formatBytes(asset.size) : null;
+          const disabled = !asset;
+          return (
+            <a
+              class:list={['card', `card-${os}`, disabled && 'card-disabled']}
+              href={href}
+              data-os={os}
+              aria-disabled={disabled ? 'true' : undefined}
+            >
+              <span class="detected-pill" aria-hidden="true">
+                Detected
+              </span>
+              <h2>{label}</h2>
+              <p class="note">{note}</p>
+              {asset ? (
+                <p class="filename">
+                  <code>{asset.name}</code>
+                  <span class="size">{size}</span>
+                </p>
+              ) : (
+                <p class="filename pending">Pending — track on GitHub</p>
+              )}
+            </a>
+          );
+        })
+      }
     </div>
 
-    <p class="note">
-      Full checksums and signature verification steps land with the Week 2 MVP. Until then,
-      use the <a href={releases}>GitHub Releases page</a> directly.
+    <aside class="verify">
+      <h2>Verify before you run</h2>
+      <p>
+        Every release is signed with a minisign keypair committed to the app repo. To
+        verify a download:
+      </p>
+      <pre><code>minisign -Vm &lt;downloaded-file&gt; -P $(cat minisign.pub)</code></pre>
+      <p>
+        The update flow inside the app verifies signatures automatically before replacing
+        any binary on disk.
+      </p>
+    </aside>
+
+    <p class="all-releases">
+      Need an older version or a specific asset?{' '}
+      <a href={`https://github.com/${REPO}/releases`}>Browse all releases on GitHub</a>.
     </p>
   </section>
 </BaseLayout>
 
+<script is:inline>
+  (() => {
+    const ua = navigator.userAgent;
+    let os = null;
+    if (/Mac|macOS/i.test(ua)) os = 'macos';
+    else if (/Windows/i.test(ua)) os = 'windows';
+    else if (/Linux/i.test(ua) || /X11/i.test(ua)) os = 'linux';
+    if (os) document.documentElement.setAttribute('data-detected-os', os);
+  })();
+</script>
+
 <style>
   .download {
-    max-width: 48rem;
-    margin: 0 auto;
-    padding: 4rem 1.25rem 6rem;
+    max-width: calc(var(--container-content) + 2.5rem);
+    margin-inline: auto;
+    padding: 3rem 1.25rem 5rem;
   }
 
-  .eyebrow {
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin: 0 0 0.75rem;
+  header {
+    margin-bottom: 2.5rem;
   }
 
   h1 {
-    font-family: var(--font-serif);
-    font-size: 2.5rem;
-    margin: 0 0 0.5rem;
+    font-size: var(--fs-3xl);
+    margin: 0 0 0.75rem;
+  }
+
+  .lede {
+    color: var(--text-secondary);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 1.5rem;
+    max-width: 36rem;
+  }
+
+  .release-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .version-pill {
+    padding: 0.25rem 0.625rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    border: 1px solid var(--border-accent);
+  }
+
+  .meta {
+    color: var(--text-muted);
+  }
+
+  .link {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .link:hover {
+    color: var(--text-primary);
+    text-decoration-color: var(--accent);
+  }
+
+  .banner {
+    padding: 0.875rem 1.125rem;
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+
+  .banner strong {
     color: var(--text-primary);
   }
 
-  .sub {
-    color: var(--text-secondary);
-    margin: 0 0 3rem;
+  .banner a {
+    color: var(--text-primary);
+  }
+
+  .banner-warn {
+    border-color: var(--border-accent);
+    background: var(--accent-soft);
   }
 
   .grid {
     display: grid;
-    gap: 0.75rem;
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 0.75rem;
   }
 
   .card {
+    position: relative;
     display: block;
-    padding: 1.25rem;
+    padding: 1.25rem 1.375rem;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
-  .card:hover {
-    border-color: var(--accent);
+  .card:hover:not(.card-disabled) {
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .card-disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+
+  /* OS detection → highlight matching card */
+  .detected-pill {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 0.0625rem 0.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--text-inverse);
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  :global([data-detected-os='macos']) .card-macos,
+  :global([data-detected-os='windows']) .card-windows,
+  :global([data-detected-os='linux']) .card-linux {
+    border-color: var(--border-accent);
+    background: color-mix(in srgb, var(--surface-2) 100%, var(--accent-soft));
+  }
+
+  :global([data-detected-os='macos']) .card-macos .detected-pill,
+  :global([data-detected-os='windows']) .card-windows .detected-pill,
+  :global([data-detected-os='linux']) .card-linux .detected-pill {
+    opacity: 1;
   }
 
   .card h2 {
     margin: 0 0 0.25rem;
-    font-size: 1.05rem;
+    font-size: var(--fs-lg);
     color: var(--text-primary);
-  }
-
-  .card p {
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    margin-left: 0.25rem;
-    vertical-align: middle;
-  }
-
-  code {
-    font-size: 0.85em;
   }
 
   .note {
-    margin-top: 2rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    margin: 0 0 0.875rem;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
   }
 
-  .note a {
+  .filename {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: var(--fs-xs);
+  }
+
+  .filename code {
+    background: none;
+    padding: 0;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .filename .size {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+  }
+
+  .filename.pending {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .verify {
+    margin: 3rem 0 0;
+    padding: 1.5rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .verify h2 {
+    margin: 0 0 0.5rem;
+    font-size: var(--fs-lg);
     color: var(--text-primary);
+  }
+
+  .verify p {
+    margin: 0 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+
+  .verify p:last-child {
+    margin-bottom: 0;
+  }
+
+  .verify pre {
+    background: var(--surface-0);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1rem;
+    margin: 0 0 0.75rem;
+    overflow-x: auto;
+    font-size: 0.8rem;
+  }
+
+  .all-releases {
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .all-releases a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .all-releases a:hover {
+    color: var(--text-primary);
+    text-decoration-color: var(--accent);
   }
 </style>
