@@ -11,9 +11,20 @@ const { title, description, canonical, ogImage, noindex } = Astro.props;
 
 const siteTitle = title === 'LumaSync' ? title : `${title} · LumaSync`;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+
+// Derive the OG path from the current URL. Matches the keys in
+// src/pages/og/[...route].ts — root becomes "landing", trailing
+// slashes are stripped. Pages can override via the ogImage prop
+// (used for 404 / future hand-crafted hero).
+function derivedOgPath(pathname: string): string {
+  const trimmed = pathname.replace(/\/$/, '').replace(/^\//, '');
+  if (!trimmed) return '/og/landing.png';
+  return `/og/${trimmed}.png`;
+}
+
 const ogImageUrl = ogImage
   ? new URL(ogImage, Astro.site).toString()
-  : new URL('/og/landing.png', Astro.site).toString();
+  : new URL(derivedOgPath(Astro.url.pathname), Astro.site).toString();
 ---
 
 <title>{siteTitle}</title>
