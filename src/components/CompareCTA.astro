@@ -1,0 +1,119 @@
+---
+interface Props {
+  competitor: string;
+}
+
+const { competitor } = Astro.props;
+const repo = import.meta.env.PUBLIC_GITHUB_REPO ?? 'https://github.com/voyvodka/LumaSync';
+---
+
+<aside class="compare-cta" aria-label="Try LumaSync">
+  <div class="inner">
+    <p class="eyebrow">Try LumaSync</p>
+    <h2>See it on your own setup.</h2>
+    <p class="body">
+      Free, open source, installs in under a minute. Use your existing Hue bridge or a USB LED
+      controller — no hardware to buy.
+    </p>
+    <div class="cta-row">
+      <a
+        class="cta-primary"
+        href="/download"
+        data-umami-event="compare-cta"
+        data-umami-event-from={competitor}
+        data-umami-event-to="download"
+      >
+        Download
+      </a>
+      <a
+        class="cta-secondary"
+        href={repo}
+        data-umami-event="compare-cta"
+        data-umami-event-from={competitor}
+        data-umami-event-to="github"
+      >
+        View on GitHub →
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .compare-cta {
+    margin-top: 3rem;
+    padding: 2rem 1.75rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .inner {
+    max-width: 36rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+
+  h2 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--fs-2xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+  }
+
+  .body {
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 1.25rem;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    align-items: center;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: var(--fs-sm);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    color: var(--text-inverse);
+  }
+
+  .cta-primary:hover {
+    background: var(--accent-strong);
+  }
+
+  .cta-secondary {
+    border: 1px solid var(--border-strong);
+    background: var(--surface-2);
+    color: var(--text-primary);
+  }
+
+  .cta-secondary:hover {
+    background: var(--surface-1);
+  }
+</style>

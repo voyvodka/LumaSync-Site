@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CompareCTA from '../../components/CompareCTA.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('compare');
@@ -11,6 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+const { slug } = Astro.params;
 const { Content } = await render(entry);
 ---
 
@@ -28,6 +30,7 @@ const { Content } = await render(entry);
     <div class="prose">
       <Content />
     </div>
+    <CompareCTA competitor={slug} />
   </article>
 </BaseLayout>
 
