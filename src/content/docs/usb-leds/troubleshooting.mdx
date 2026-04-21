@@ -1,0 +1,115 @@
+---
+title: USB troubleshooting
+description: Common USB LED failure modes — port missing, health check fails, LEDs flicker, colours wrong, strip partially lit — and the fix for each.
+group: usb-leds
+order: 40
+updated: 2026-04-21
+draft: true
+---
+
+## Port doesn't show up
+
+**Symptom**: Plug in the controller, Settings → Device → dropdown is empty.
+
+1. **Driver not installed** — CH340 on Windows sometimes needs a manual
+   driver from WCH's website. Install, reboot, check again.
+2. **Linux permissions** — your user may not be in the `dialout` group:
+   `sudo usermod -aG dialout $USER`, log out, log back in.
+3. **Cable is charge-only** — cheap USB-A cables without data lines enumerate
+   no device. Try a known-good data cable.
+4. **Unsupported chipset** — if the device enumerates but LumaSync doesn't
+   recognise it, see [USB controllers → "My controller isn't on the list"](/docs/usb-leds/controllers#my-controller-isnt-on-the-list).
+
+## Health check fails
+
+**Symptom**: Port connects, health check returns `DEVICE_MANUAL_REQUIRED` or
+a red error.
+
+- **Wrong baud rate on firmware** — Adalight-compatible firmware must run at
+  115200. Other rates are silently rejected as failed handshakes.
+- **Non-Adalight firmware** — CircuitPython / MicroPython boards with
+  custom protocols won't respond to the Adalight magic bytes. Flash Adalight
+  firmware, or mark as manual and accept you won't get handshake validation.
+- **Serial port already owned** by another process — close other serial
+  monitors (Arduino IDE, screen, minicom, vendor utilities).
+
+You can continue in `MANUAL_REQUIRED` state; LumaSync streams frames and
+assumes the firmware cooperates. If the strip lights up, you're fine.
+
+## LEDs flicker or freeze
+
+**Symptom**: Strip reacts but drops frames visibly every few seconds.
+
+- **USB bandwidth shared with other high-speed devices** (external SSD,
+  webcam, audio interface). Move the controller to a dedicated USB port
+  or hub.
+- **Power supply under-spec** — cheap 1–2 A wall-warts brown out under
+  all-white peak draw. LEDs flicker at brightness spikes. Use a 5 A+
+  supply for anything over 120 LEDs.
+- **Back-EMF corruption** — long signal wires between controller and strip
+  pick up noise. Keep the wire short (< 30 cm ideal), and put a small
+  470 Ω resistor inline with the data line if you see persistent
+  corruption.
+
+## Wrong colours
+
+**Symptom**: LEDs light up but colours are clearly wrong — red shows as
+blue, or everything is slightly off-hue.
+
+- **RGB vs GRB ordering mismatch**. WS2812B is actually GRB internally;
+  LumaSync handles the conversion, but some firmware does it too, resulting
+  in a double-conversion. Flash vanilla Adalight firmware, or configure
+  your firmware to pass RGB through unmodified.
+- **White balance on the strip doesn't match your content**. Warm-white
+  WS2812B strips have a red-tinted LED that bleeds into warm greys. There's
+  no fix at the protocol level — this is a strip choice. Swap to a
+  cool-white strip or accept the tint.
+
+## Only part of the strip lights up
+
+**Symptom**: You have 120 LEDs, but only the first 90 respond.
+
+- **Power injection missing**. WS2812B signal attenuates along the strip.
+  Past ~120 LEDs, inject 5 V from a second tap — solder or wire-nut extra
+  power in the middle of the strip. Doesn't change the LumaSync side.
+- **Edge counts wrong**. Check calibration — your edge counts add up to
+  90 instead of 120? Fix the count and the rest will light.
+- **Strip has a dead pixel breaking the chain**. If you have a segment that
+  lights fine up to a point then nothing beyond, the first non-lit LED is
+  likely the dead one. WS2812B strips are chain-broken by a single failure.
+  Replace the dead LED, or cut past it and solder a short jumper wire.
+
+## Colours lag behind the screen
+
+**Symptom**: Ambilight responds, but the lighting clearly trails the video
+by a visible amount.
+
+- **Capture rate too low on the source side**. Check Settings → Ambilight
+  → Update rate. 30 Hz is the default; 20 Hz will feel laggy. The 60 Hz
+  target is for gaming setups only.
+- **macOS screen recording throttles in Low Power Mode**. Plug in the
+  charger.
+- **Target is a rendered fullscreen app that bypasses composition**
+  (some games, fullscreen video). macOS screen capture APIs capture the
+  pre-composition frame; you'll get the right pixels but with the rendering
+  engine's latency added. Runs better in windowed mode.
+
+## Strip goes dim or off mid-session
+
+**Symptom**: Works for 5 minutes, dims, eventually stops.
+
+- **Thermal throttling at max brightness**. At 100% all-white, WS2812B
+  strips shed ~60 mA per LED — a 200-LED strip dissipates ~12 W of heat.
+  Adhesive-mounted strips on the back of a TV can hit thermal cutoff. Lower
+  the max brightness (Settings → Ambilight → Tuning → Cap brightness at
+  0.6 instead of 1.0).
+- **Power supply overcurrent trip**. 5 V supplies with foldback protection
+  shut off under sustained load. Upgrade to a higher-amp supply, or cap
+  brightness.
+
+## Related
+
+- [USB controllers](/docs/usb-leds/controllers)
+- [Calibration](/docs/usb-leds/calibration)
+- [Adalight protocol](/docs/usb-leds/adalight-protocol)
+- [Ambilight performance](/docs/ambilight/performance)
