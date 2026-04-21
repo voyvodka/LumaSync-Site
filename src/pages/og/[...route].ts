@@ -149,21 +149,27 @@ function template(entry: OgEntry) {
             },
           },
         },
-        // Amber dot, top-right
+        // Beam monogram, top-right
         {
-          type: 'div',
+          type: 'svg',
           props: {
+            width: 56,
+            height: 56,
+            viewBox: '0 0 64 64',
             style: {
               position: 'absolute',
-              top: '56px',
-              right: '64px',
-              width: '16px',
-              height: '16px',
-              borderRadius: '999px',
-              background: '#ffb020',
-              boxShadow: '0 0 0 10px rgba(255, 176, 32, 0.16)',
-              display: 'flex',
+              top: '48px',
+              right: '56px',
             },
+            children: [
+              {
+                type: 'path',
+                props: {
+                  d: 'M35 9.85 L42.6 12.31 L29 54.15 L21.4 51.69 Z',
+                  fill: '#ffb020',
+                },
+              },
+            ],
           },
         },
         // Content column
