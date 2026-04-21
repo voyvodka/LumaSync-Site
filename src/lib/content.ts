@@ -20,13 +20,16 @@ export const DOC_GROUP_LABELS: Record<DocGroup, string> = {
   reference: 'Reference',
 };
 
-// In production, drafts are excluded. In dev the sidebar shows everything
-// so the docs tree is navigable while content is being written.
-const shouldShow = (entry: { data: { draft?: boolean } }) =>
-  import.meta.env.PROD ? !entry.data.draft : true;
+// Drafts are built into every environment so the owner can review on a
+// deployed preview before flipping them public. Each draft entry:
+//   - renders a "draft" pill in the sidebar + a banner on the page
+//   - is marked `<meta name="robots" content="noindex,nofollow">`
+//   - is excluded from the Pagefind search index (no data-pagefind-body
+//     on draft pages — see docs/compare route files)
+// Flip draft: false (or drop the flag) once copy passes review.
 
 export async function listDocs(): Promise<CollectionEntry<'docs'>[]> {
-  const entries = await getCollection('docs', shouldShow);
+  const entries = await getCollection('docs');
   return entries.sort((a, b) => {
     const ag = DOC_GROUPS.indexOf(a.data.group);
     const bg = DOC_GROUPS.indexOf(b.data.group);
@@ -55,7 +58,7 @@ export function docHref(entry: CollectionEntry<'docs'>): string {
 }
 
 export async function listCompare(): Promise<CollectionEntry<'compare'>[]> {
-  const entries = await getCollection('compare', shouldShow);
+  const entries = await getCollection('compare');
   return entries.sort((a, b) => a.data.competitor.localeCompare(b.data.competitor));
 }
 

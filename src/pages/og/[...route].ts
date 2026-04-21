@@ -53,9 +53,7 @@ const docs = (await listDocs()).map((e) => ({
   },
 }));
 
-const compareEntries = await getCollection('compare', (e) =>
-  import.meta.env.PROD ? !e.data.draft : true,
-);
+const compareEntries = await getCollection('compare');
 const compare = compareEntries.map((e) => ({
   id: `compare/${e.id.replace(/\.mdx$/, '')}`,
   entry: {

@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('compare', ({ data }) => !data.draft);
+  const entries = await getCollection('compare');
   return entries.map((entry) => ({
     params: { slug: entry.id.replace(/\.mdx$/, '') },
     props: { entry },
@@ -14,7 +14,11 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  noindex={entry.data.draft}
+>
   <article class="compare" data-pagefind-body>
     <header>
       <p class="eyebrow">LumaSync vs {entry.data.competitor}</p>
