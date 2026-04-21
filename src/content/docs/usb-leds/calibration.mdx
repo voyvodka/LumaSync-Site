@@ -1,0 +1,105 @@
+---
+title: LED calibration
+description: Tell LumaSync how many LEDs are on each edge of your TV, where they start, and which direction they run — the layout editor and room map walkthrough.
+group: usb-leds
+order: 30
+updated: 2026-04-21
+draft: true
+---
+
+Once the USB controller is connected and the health check passes, LumaSync
+needs to know **how your LED strip physically relates to your screen** before
+ambilight colours line up with what's on-screen.
+
+## Settings → Calibration
+
+Open **Settings → Calibration** to access the layout editor.
+
+### Edge counts
+
+Tell LumaSync how many LEDs are on each edge of your screen:
+
+- **Top**
+- **Right**
+- **Bottom**
+- **Left**
+
+Counts are exclusive — a corner LED belongs to exactly one edge per the
+"corner ownership" setting below.
+
+### Corner ownership
+
+For a single strip running around the TV, each corner has a single LED that
+could belong to either of the two meeting edges. Pick which edge "owns" each
+corner:
+
+- **Top-right**: top or right
+- **Bottom-right**: bottom or right
+- **Bottom-left**: bottom or left
+- **Top-left**: top or left
+
+Most kits follow a clockwise default: **top owns TR and TL, bottom owns BR
+and BL**. If your strip was cut differently, set accordingly.
+
+### Start anchor and direction
+
+Where does LED #0 of the strip physically sit, and which way do subsequent
+LEDs travel?
+
+- **Anchor**: one of TL / TR / BL / BR corners, or midway on an edge
+- **Direction**: clockwise or counter-clockwise
+
+The test pattern (below) makes this trivially checkable.
+
+### Gap
+
+Sometimes a few LEDs at the start of the strip run into a control box and
+aren't visible. Set the **gap** to skip them — LumaSync feeds zeros (black)
+to those indices, and your visible LEDs start from `gap + 1`.
+
+## The test pattern
+
+Toggle **Test pattern** in the calibration panel to drive a known sequence:
+a single red LED that walks the strip one position per second. Match what
+you see to what you expect:
+
+- Walk starts at anchor? ✓ start anchor is correct.
+- Walk goes the right way? ✓ direction is correct.
+- Corner LEDs are counted once? ✓ corner ownership is correct.
+- Total count matches your physical strip? ✓ edge counts are correct.
+
+If any of those fails, tweak the setting and check again. The test pattern
+streams in real-time — no restart needed.
+
+## Room map editor
+
+For richer setups — multiple USB strips, furniture blocking parts of the
+TV, or projecting Hue channels onto the physical space — LumaSync ships a
+**Room map editor** (Settings → Calibration → Open room map).
+
+Drag a **TV anchor** into position, add **USB strip** objects with your
+calibrated edge counts, and drop furniture (table, couch, bookshelf) for
+reference. Hue channel positions from your Entertainment Area project onto
+the same canvas, and you can fine-tune them per-bulb without touching the
+Hue app.
+
+Shortcuts (v1.2.0):
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd+Z` / `Cmd+Shift+Z` | Undo / redo (50 steps) |
+| `Cmd+D` | Duplicate object |
+| `Shift+Arrow` | 10× nudge |
+| `L` | Toggle lock |
+| `[` / `]` | Send back / bring forward |
+| `Cmd+0` | Fit to view |
+| `Space+drag` / middle-mouse | Pan |
+
+The editor persists state via Tauri plugin-store (`~/.config/lumasync/app.json`)
+so it survives across launches.
+
+## Related
+
+- [USB controllers](/docs/usb-leds/controllers)
+- [Adalight protocol](/docs/usb-leds/adalight-protocol)
+- [USB troubleshooting](/docs/usb-leds/troubleshooting)
