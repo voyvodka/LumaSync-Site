@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Week 2 deliverable: read latest-release manifest from GitHub at build
+// time, generate platform-detected CTAs with checksums. Tracked in
+// .thinking/07-action-plan.md § Week 2. Scaffold ships a static fallback.
+const repo = 'https://github.com/voyvodka/LumaSync';
+const releases = `${repo}/releases/latest`;
+---
+
+<BaseLayout
+  title="Download"
+  description="Download LumaSync for macOS, Windows, or Linux. Binaries signed with minisign."
+>
+  <section class="download">
+    <header>
+      <p class="eyebrow">Install</p>
+      <h1>Download LumaSync</h1>
+      <p class="sub">
+        Grab the installer for your platform. Binaries are signed with minisign and verified
+        before any update replaces them on disk.
+      </p>
+    </header>
+
+    <div class="grid">
+      <a class="card" href={releases}>
+        <h2>macOS</h2>
+        <p>Universal <code>.dmg</code> · Apple Silicon + Intel</p>
+      </a>
+      <a class="card" href={releases}>
+        <h2>Windows</h2>
+        <p><code>.msi</code> · x64</p>
+      </a>
+      <a class="card" href={releases}>
+        <h2>Linux <span class="tag">experimental</span></h2>
+        <p><code>.AppImage</code> · Flathub in progress</p>
+      </a>
+    </div>
+
+    <p class="note">
+      Full checksums and signature verification steps land with the Week 2 MVP. Until then,
+      use the <a href={releases}>GitHub Releases page</a> directly.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .download {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 4rem 1.25rem 6rem;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .sub {
+    color: var(--text-secondary);
+    margin: 0 0 3rem;
+  }
+
+  .grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+
+  .card {
+    display: block;
+    padding: 1.25rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+  }
+
+  .card:hover {
+    border-color: var(--accent);
+  }
+
+  .card h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-left: 0.25rem;
+    vertical-align: middle;
+  }
+
+  code {
+    font-size: 0.85em;
+  }
+
+  .note {
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .note a {
+    color: var(--text-primary);
+  }
+</style>

@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'LumaSync';
+const description =
+  'LumaSync drives WS2812B LED strips over USB and Philips Hue Entertainment areas from the same tray-first desktop app. Open source. No cloud. No HDMI box.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Open source · Tauri 2 · MIT</p>
+      <h1>Your screen, your lights. Locally.</h1>
+      <p class="subhead">{description}</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="/download">Download for macOS</a>
+        <a class="cta-secondary" href="https://github.com/voyvodka/LumaSync">View on GitHub</a>
+      </div>
+      <p class="platform-note">macOS · Windows · Linux (experimental)</p>
+    </div>
+  </section>
+
+  <section class="features">
+    <article>
+      <h2>USB LED strips</h2>
+      <p>
+        Adalight-compatible controllers at 115200 baud. CH340 and FT232 supported out of the
+        box.
+      </p>
+    </article>
+    <article>
+      <h2>Philips Hue Entertainment</h2>
+      <p>
+        DTLS 1.2 PSK streaming to any configured Entertainment Area. Up to 20 Hz — the
+        bridge's real limit.
+      </p>
+    </article>
+    <article>
+      <h2>Both, synchronized</h2>
+      <p>
+        Same screen source drives both targets. Pick per mode: USB, Hue, or both.
+      </p>
+    </article>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 6rem 1.25rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-inner {
+    max-width: 48rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 1.5rem;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.25rem, 6vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem;
+    color: var(--text-primary);
+  }
+
+  .subhead {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    max-width: 38rem;
+    margin: 0 auto 2rem;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 120ms ease, background 120ms ease;
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    color: var(--surface-0);
+  }
+
+  .cta-primary:hover {
+    background: var(--accent-strong);
+  }
+
+  .cta-secondary {
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+    background: var(--surface-1);
+  }
+
+  .cta-secondary:hover {
+    background: var(--surface-2);
+  }
+
+  .platform-note {
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .features {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 4rem 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .features article {
+    padding: 1.5rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .features h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+
+  .features p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+</style>

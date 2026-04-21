@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Sourced from the `voyvodka/LumaSync` git submodule at `vendor/lumasync/`,
+// pinned to a release tag. Per .thinking/02-website.md § #3 (Submodule as
+// single source), this is the ONLY mechanism by which changelog content
+// reaches the site — no parallel fetch-at-build pipeline.
+//
+// Phase 1 scaffold: file read at build, rendered as a <pre> block. A
+// proper Markdown → HTML renderer (remark/rehype pipeline) lands before
+// Week 2 launch. Tracked in .thinking/07-action-plan.md § Week 2.
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const changelogPath = resolve(here, '../../vendor/lumasync/CHANGELOG.md');
+
+let raw = '';
+let submoduleReady = false;
+
+try {
+  raw = await readFile(changelogPath, 'utf-8');
+  submoduleReady = true;
+} catch {
+  submoduleReady = false;
+}
+---
+
+<BaseLayout
+  title="Changelog"
+  description="Release history for LumaSync, sourced from the app repo."
+>
+  <article class="changelog">
+    <header>
+      <p class="eyebrow">Release history</p>
+      <h1>Changelog</h1>
+      <p class="sub">
+        Synced from <code>voyvodka/LumaSync</code> at the pinned release tag.
+      </p>
+    </header>
+
+    {
+      submoduleReady ? (
+        <pre class="raw">{raw}</pre>
+      ) : (
+        <div class="missing">
+          <p>
+            <strong>Submodule not initialised.</strong> Run
+            <code>git submodule update --init --recursive</code> to populate
+            <code>vendor/lumasync/</code>, then rebuild.
+          </p>
+        </div>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .changelog {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 4rem 1.25rem 6rem;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .sub {
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+  }
+
+  .raw {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  .missing {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  code {
+    background: var(--surface-2);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+  }
+</style>

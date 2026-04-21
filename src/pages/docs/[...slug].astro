@@ -1,0 +1,83 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('docs', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.mdx$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <article class="doc">
+    <header>
+      <p class="crumb">Docs · {entry.data.group}</p>
+      <h1>{entry.data.title}</h1>
+      <p class="desc">{entry.data.description}</p>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .doc {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 4rem 1.25rem 6rem;
+  }
+
+  .crumb {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin: 0 0 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .desc {
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+    font-size: 1.05rem;
+  }
+
+  .prose :global(h2) {
+    margin-top: 2.5rem;
+    color: var(--text-primary);
+  }
+
+  .prose :global(p) {
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  .prose :global(code) {
+    background: var(--surface-2);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+  }
+
+  .prose :global(pre) {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    overflow-x: auto;
+  }
+</style>

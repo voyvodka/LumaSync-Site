@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.astro/
+.output/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Local notes (mirrors LumaSync convention)
+*.local
+.planning/
+.thinking-local/
+
+# Vercel / Netlify (in case of temporary previews)
+.vercel/
+.netlify/
+
+# Generated at build — checked in only as outputs of the build pipeline
+public/pagefind/
+public/og/
+
+# Lighthouse CI artifacts
+.lighthouseci/

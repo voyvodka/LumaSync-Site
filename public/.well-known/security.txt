@@ -1,0 +1,6 @@
+# Placeholder — update with real contact before going public.
+# See .thinking/02-website.md § #9.
+Contact: mailto:security@lumasync.app
+Preferred-Languages: en
+Canonical: https://lumasync.app/.well-known/security.txt
+Expires: 2027-04-21T00:00:00.000Z

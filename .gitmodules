@@ -1,0 +1,3 @@
+[submodule "vendor/lumasync"]
+	path = vendor/lumasync
+	url = https://github.com/voyvodka/LumaSync.git

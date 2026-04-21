@@ -1,0 +1,23 @@
+---
+title: LumaSync vs Hyperion
+competitor: Hyperion
+description: How LumaSync compares to Hyperion for ambilight — tray-first desktop app vs headless service.
+updated: 2026-04-21
+---
+
+## Preview
+
+This is a Phase 1 scaffold stub so the comparison surface exists for Lighthouse CI
+(per `.thinking/02-website.md § #14`). Full content ships in Week 4 per
+`.thinking/07-action-plan.md § Week 4`.
+
+## At a glance
+
+| | LumaSync | Hyperion |
+|---|---|---|
+| Platform | macOS (primary), Windows, Linux | Linux (primary), macOS / Windows community ports |
+| Deployment | Desktop app with tray UI | Headless service + separate UI |
+| Hue bridge | Native DTLS 1.2 PSK | Via forwarder plugin |
+| USB LEDs | Adalight (CH340, FT232) | Adalight + many others |
+| Setup | Install and pair | Compile, configure, run as service |
+

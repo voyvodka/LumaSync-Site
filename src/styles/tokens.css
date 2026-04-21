@@ -1,0 +1,31 @@
+:root {
+  --surface-0: #0a0b0e;
+  --surface-1: #0f1114;
+  --surface-2: #1e2229;
+  --surface-3: #2a2f38;
+
+  --text-primary: #e7ecf2;
+  --text-secondary: #a8b0bc;
+  --text-muted: #6b7280;
+
+  --accent: #ffb020;
+  --accent-soft: rgba(255, 176, 32, 0.12);
+  --accent-strong: #ffc04a;
+
+  --border: rgba(231, 236, 242, 0.08);
+  --border-strong: rgba(231, 236, 242, 0.16);
+
+  --focus-ring: #ffb020;
+
+  /* Instrument Serif is not installed in Phase 1 (not shipped by the app).
+     Fallback chain keeps serif headings readable until the font is added. */
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-card: 0 1px 0 var(--border), 0 8px 24px rgba(0, 0, 0, 0.25);
+}

@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const repo = 'https://github.com/voyvodka/LumaSync';
+const links = [
+  {
+    title: 'GitHub Discussions',
+    href: `${repo}/discussions`,
+    blurb: 'Questions, ideas, showcase. The first stop for anything that is not a bug.',
+  },
+  {
+    title: 'GitHub Issues',
+    href: `${repo}/issues`,
+    blurb: 'Report a bug or request a feature. Please search first — duplicates cost us time.',
+  },
+  {
+    title: 'Discord',
+    href: '#',
+    blurb: 'Opens once active-user count crosses ~100. Follow Discussions for the announcement.',
+    disabled: true,
+  },
+];
+---
+
+<BaseLayout
+  title="Community"
+  description="Where LumaSync users hang out — Discussions today, Discord later."
+>
+  <section class="community">
+    <header>
+      <p class="eyebrow">Get involved</p>
+      <h1>Community</h1>
+      <p class="sub">
+        Early-stage project. Small community. Responsive maintainer. The best way to help
+        right now is to open a Discussion with what you built.
+      </p>
+    </header>
+
+    <ul role="list">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-disabled={link.disabled ? 'true' : undefined}
+              class={link.disabled ? 'disabled' : ''}
+            >
+              <span class="title">{link.title}</span>
+              <span class="blurb">{link.blurb}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .community {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 4rem 1.25rem 6rem;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .sub {
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  a {
+    display: block;
+    padding: 1.25rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-color: var(--border-strong);
+  }
+
+  a.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .title {
+    display: block;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .blurb {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+const year = new Date().getFullYear();
+const repo = import.meta.env.PUBLIC_GITHUB_REPO ?? 'https://github.com/voyvodka/LumaSync';
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="left">
+      <p>
+        <span class="brand-mark">LumaSync</span>
+        <span class="dim">· Open source · MIT</span>
+      </p>
+      <p class="dim small">Built with Tauri 2 + React 19.</p>
+    </div>
+    <nav aria-label="Footer">
+      <ul role="list">
+        <li><a href={repo}>GitHub</a></li>
+        <li><a href={`${repo}/releases`}>Releases</a></li>
+        <li><a href="/docs">Docs</a></li>
+        <li><a href="/changelog">Changelog</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/license">License</a></li>
+      </ul>
+    </nav>
+    <p class="dim small copyright">© {year} voyvodka</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 6rem;
+    padding: 2.5rem 1.25rem 3.5rem;
+    color: var(--text-secondary);
+  }
+
+  .inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem 3rem;
+    align-items: start;
+  }
+
+  .left p {
+    margin: 0;
+  }
+
+  .brand-mark {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .dim {
+    color: var(--text-muted);
+  }
+
+  .small {
+    font-size: 0.85rem;
+  }
+
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 2rem;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  nav a:hover {
+    color: var(--text-primary);
+  }
+
+  .copyright {
+    grid-column: 1 / -1;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

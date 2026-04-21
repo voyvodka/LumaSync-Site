@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Not found"
+  description="This page does not exist on lumasync.app."
+  noindex
+>
+  <section class="notfound">
+    <p class="code">404</p>
+    <h1>Not found</h1>
+    <p class="sub">
+      That page does not exist — or it moved. The links below go somewhere useful.
+    </p>
+    <ul role="list" class="links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/docs">Docs</a></li>
+      <li><a href="/download">Download</a></li>
+      <li><a href="/changelog">Changelog</a></li>
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    max-width: 32rem;
+    margin: 0 auto;
+    padding: 8rem 1.25rem 6rem;
+    text-align: center;
+  }
+
+  .code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    margin: 0 0 1.5rem;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin: 0 0 1rem;
+    color: var(--text-primary);
+  }
+
+  .sub {
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+  }
+
+  .links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 0.125rem;
+  }
+
+  .links a:hover {
+    border-color: var(--accent);
+  }
+</style>
