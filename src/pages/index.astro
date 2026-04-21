@@ -4,106 +4,336 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const title = 'LumaSync';
 const description =
   'LumaSync drives WS2812B LED strips over USB and Philips Hue Entertainment areas from the same tray-first desktop app. Open source. No cloud. No HDMI box.';
+
+const repo = 'https://github.com/voyvodka/LumaSync';
 ---
 
 <BaseLayout title={title} description={description}>
+  {/* ─── Hero ───────────────────────────────────────────────── */}
   <section class="hero">
     <div class="hero-inner">
       <p class="eyebrow">Open source · Tauri 2 · MIT</p>
-      <h1>Your screen, your lights. Locally.</h1>
+      <h1 class="display">Your screen, your lights. Locally.</h1>
       <p class="subhead">{description}</p>
       <div class="cta-row">
-        <a class="cta-primary" href="/download">Download for macOS</a>
-        <a class="cta-secondary" href="https://github.com/voyvodka/LumaSync">View on GitHub</a>
+        <a class="cta-primary" href="/download" data-os-cta>
+          Download for macOS
+        </a>
+        <a class="cta-secondary" href={repo}>
+          View on GitHub →
+        </a>
       </div>
       <p class="platform-note">macOS · Windows · Linux (experimental)</p>
     </div>
+
+    <figure class="hero-visual">
+      <div class="hero-placeholder" aria-hidden="true">
+        <span class="placeholder-label">
+          <span class="placeholder-dot"></span>
+          hero-lights-section · 1600 × 1000
+        </span>
+      </div>
+      <figcaption>Full-mode Lights Section with ambilight active. Live screenshot drops in at launch.</figcaption>
+    </figure>
   </section>
 
+  {/* ─── "Both, at once" feature grid ───────────────────────── */}
   <section class="features">
-    <article>
-      <h2>USB LED strips</h2>
-      <p>
-        Adalight-compatible controllers at 115200 baud. CH340 and FT232 supported out of the
-        box.
+    <p class="section-eyebrow">Both, at once</p>
+    <h2 class="section-title">One pipeline. Two targets.</h2>
+    <div class="feature-grid">
+      <article>
+        <div class="feature-icon" aria-hidden="true">USB</div>
+        <h3>USB LED strips</h3>
+        <p>
+          Adalight-compatible controllers at 115200 baud. CH340 and FT232 supported
+          out of the box.
+        </p>
+        <a href="/docs/usb-leds/controllers">Supported chipsets →</a>
+      </article>
+
+      <article>
+        <div class="feature-icon" aria-hidden="true">HUE</div>
+        <h3>Philips Hue Entertainment</h3>
+        <p>
+          DTLS 1.2 PSK streaming to any configured Entertainment Area. Up to
+          20 Hz — the bridge's real limit.
+        </p>
+        <a href="/docs/hue/entertainment-area">How Hue streaming works →</a>
+      </article>
+
+      <article>
+        <div class="feature-icon" aria-hidden="true">⌃</div>
+        <h3>Both, synchronized</h3>
+        <p>
+          Same screen source drives both targets. Pick per mode: USB, Hue, or
+          both — switched from the tray.
+        </p>
+        <a href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
+      </article>
+    </div>
+  </section>
+
+  {/* ─── Ambient mode preview ──────────────────────────────── */}
+  <section class="callout">
+    <div class="callout-copy">
+      <p class="section-eyebrow">Ambient mode</p>
+      <h2 class="section-title">Real-time screen capture. 20 Hz update.</h2>
+      <p class="callout-body">
+        Tuned for latency, not flash. The telemetry pill shows live capture and
+        send rates so you can see when the pipeline is healthy and when it
+        isn't — no mystery numbers.
       </p>
-    </article>
-    <article>
-      <h2>Philips Hue Entertainment</h2>
-      <p>
-        DTLS 1.2 PSK streaming to any configured Entertainment Area. Up to 20 Hz — the
-        bridge's real limit.
+      <a class="inline-cta" href="/docs/ambilight/performance">Read about performance →</a>
+    </div>
+    <figure class="callout-visual">
+      <div class="hero-placeholder tall" aria-hidden="true">
+        <span class="placeholder-label">
+          <span class="placeholder-dot"></span>
+          ambient-mode-preview · 1400 × 900
+        </span>
+      </div>
+      <div class="telemetry-pill" aria-hidden="true">
+        <span class="pill-eyebrow">Live</span>
+        <span><strong>Δ</strong> 12 ms</span>
+        <span class="pill-sep"></span>
+        <span><strong>Σ</strong> 60 fps</span>
+      </div>
+    </figure>
+  </section>
+
+  {/* ─── Room map editor ───────────────────────────────────── */}
+  <section class="callout reverse">
+    <figure class="callout-visual">
+      <div class="hero-placeholder tall" aria-hidden="true">
+        <span class="placeholder-label">
+          <span class="placeholder-dot"></span>
+          room-map-editor · 1400 × 900
+        </span>
+      </div>
+    </figure>
+    <div class="callout-copy">
+      <p class="section-eyebrow">Room map editor</p>
+      <h2 class="section-title">A canvas, not a config file.</h2>
+      <p class="callout-body">
+        Drag your TV, furniture, and USB strips onto a grid. Hue channels
+        project onto normalized coordinates. Undo / redo, snap guides,
+        keyboard shortcuts.
       </p>
-    </article>
-    <article>
-      <h2>Both, synchronized</h2>
-      <p>
-        Same screen source drives both targets. Pick per mode: USB, Hue, or both.
+      <a class="inline-cta" href="/docs/usb-leds/calibration">Calibration docs →</a>
+    </div>
+  </section>
+
+  {/* ─── Tray-first UX ─────────────────────────────────────── */}
+  <section class="callout">
+    <div class="callout-copy">
+      <p class="section-eyebrow">Tray-first</p>
+      <h2 class="section-title">Lives where it belongs — out of your way.</h2>
+      <p class="callout-body">
+        Single window hides to tray on close. Compact 320×480 mode for quick
+        toggles, full 900×620 mode when you want to configure. Auto-starts on
+        login, if you want it to.
       </p>
-    </article>
+      <a class="inline-cta" href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
+    </div>
+    <figure class="callout-visual dual">
+      <div class="hero-placeholder compact" aria-hidden="true">
+        <span class="placeholder-label">
+          <span class="placeholder-dot"></span>
+          compact-mode · 320 × 480
+        </span>
+      </div>
+      <div class="hero-placeholder full" aria-hidden="true">
+        <span class="placeholder-label">
+          <span class="placeholder-dot"></span>
+          full-mode · 900 × 620
+        </span>
+      </div>
+    </figure>
+  </section>
+
+  {/* ─── Platform support ──────────────────────────────────── */}
+  <section class="platforms">
+    <p class="section-eyebrow">Platform support</p>
+    <h2 class="section-title">Installs anywhere you already work.</h2>
+    <div class="platform-grid">
+      <article>
+        <h3>
+          macOS
+          <span class="tag tag-ok">Full support</span>
+        </h3>
+        <p>Primary development target. Universal binary (Apple Silicon + Intel).</p>
+      </article>
+      <article>
+        <h3>
+          Windows
+          <span class="tag tag-ok">Supported</span>
+        </h3>
+        <p>MSI installer, winget in progress. USB + Hue paths fully functional.</p>
+      </article>
+      <article>
+        <h3>
+          Linux
+          <span class="tag tag-warn">Experimental</span>
+        </h3>
+        <p>
+          AppImage ships today, Flathub submission underway. Tray behavior
+          varies by desktop environment.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  {/* ─── Open, signed, auditable ───────────────────────────── */}
+  <section class="trust">
+    <p class="section-eyebrow">Open · signed · auditable</p>
+    <h2 class="section-title">No accounts. No telemetry. No cloud.</h2>
+    <div class="trust-grid">
+      <div>
+        <p class="trust-label">MIT licensed</p>
+        <p>Source at <a href={repo}>voyvodka/LumaSync</a>. Fork it, ship it, read it.</p>
+      </div>
+      <div>
+        <p class="trust-label">Updates signed with minisign</p>
+        <p>
+          Every binary is signature-verified before replacing the on-disk
+          version. <a href="/docs/advanced/auto-updater">How updates work</a>.
+        </p>
+      </div>
+      <div>
+        <p class="trust-label">Credentials stay local</p>
+        <p>
+          Hue bridge pairing and everything else lives in
+          <code>~/.config/lumasync/app.json</code> on your machine.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ─── Not for you if… ───────────────────────────────────── */}
+  <section class="filter">
+    <p class="section-eyebrow">Honest filter</p>
+    <h2 class="section-title">Not for you if…</h2>
+    <ul role="list">
+      <li>
+        <strong>You need HDMI passthrough for a console or Apple TV.</strong>
+        LumaSync reads the OS screen buffer — no HDMI in the signal path.
+        Grab a <a href="/compare/hue-sync">Hue Sync Box</a> instead.
+      </li>
+      <li>
+        <strong>You don't have a Hue Bridge or a WS2812B controller.</strong>
+        The app will run, but you won't see anything light up. Start with
+        the <a href="/docs/getting-started/hardware-checklist">hardware checklist</a>.
+      </li>
+      <li>
+        <strong>You're on an unusual Linux desktop environment.</strong>
+        Tray behavior varies — GNOME needs an AppIndicator extension, tiling
+        WMs may force windows into tiles. Community-driven support on Linux
+        for now.
+      </li>
+    </ul>
   </section>
 </BaseLayout>
 
+<script is:inline>
+  (() => {
+    const btn = document.querySelector('[data-os-cta]');
+    if (!btn) return;
+    const ua = navigator.userAgent;
+    const label =
+      /Windows/i.test(ua) ? 'Download for Windows'
+      : /Linux/i.test(ua) || /X11/i.test(ua) ? 'Download for Linux'
+      : /Mac|macOS/i.test(ua) ? 'Download for macOS'
+      : 'Download';
+    btn.textContent = label;
+  })();
+</script>
+
 <style>
-  .hero {
-    padding: 6rem 1.25rem 4rem;
-    border-bottom: 1px solid var(--border);
+  /* ─── Shared ────────────────────────────────────────────── */
+  .hero,
+  .features,
+  .callout,
+  .platforms,
+  .trust,
+  .filter {
+    max-width: calc(var(--container-wide) + 2.5rem);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
   }
 
-  .hero-inner {
-    max-width: 48rem;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .eyebrow {
-    color: var(--accent);
+  .section-eyebrow {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    margin: 0 0 1.5rem;
+    color: var(--accent);
+    margin: 0 0 0.75rem;
   }
 
-  h1 {
-    font-family: var(--font-serif);
-    font-size: clamp(2.25rem, 6vw, 4rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin: 0 0 1rem;
+  .section-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--fs-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
     color: var(--text-primary);
+    margin: 0 0 1.5rem;
+    max-width: 28ch;
+  }
+
+  /* ─── Hero ────────────────────────────────────────────── */
+  .hero {
+    padding-block: 5rem 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero-inner .eyebrow {
+    margin: 0 0 1.25rem;
+  }
+
+  .hero h1.display {
+    font-size: var(--fs-hero);
+    color: var(--text-primary);
+    margin: 0 0 1.125rem;
+    max-width: 16ch;
   }
 
   .subhead {
     color: var(--text-secondary);
-    font-size: 1.05rem;
-    line-height: 1.5;
-    max-width: 38rem;
-    margin: 0 auto 2rem;
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 2rem;
+    max-width: 34rem;
   }
 
   .cta-row {
     display: flex;
-    gap: 0.75rem;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
   }
 
   .cta-primary,
   .cta-secondary {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 1.125rem;
     border-radius: var(--radius-md);
     font-weight: 500;
     text-decoration: none;
-    transition: transform 120ms ease, background 120ms ease;
+    font-size: var(--fs-sm);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
   }
 
   .cta-primary {
     background: var(--accent);
-    color: var(--surface-0);
+    color: var(--text-inverse);
   }
 
   .cta-primary:hover {
@@ -112,8 +342,8 @@ const description =
 
   .cta-secondary {
     border: 1px solid var(--border-strong);
-    color: var(--text-primary);
     background: var(--surface-1);
+    color: var(--text-primary);
   }
 
   .cta-secondary:hover {
@@ -121,38 +351,389 @@ const description =
   }
 
   .platform-note {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     color: var(--text-muted);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
   }
 
+  .hero-visual figcaption {
+    margin-top: 0.625rem;
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    font-family: var(--font-mono);
+    letter-spacing: var(--tracking-wide);
+    text-align: center;
+  }
+
+  /* ─── Placeholder visuals ─────────────────────────────── */
+  .hero-placeholder {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background:
+      radial-gradient(
+        60% 90% at 30% 20%,
+        color-mix(in srgb, var(--accent) 16%, transparent),
+        transparent 72%
+      ),
+      linear-gradient(135deg, var(--surface-1) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-placeholder.tall {
+    aspect-ratio: 14 / 9;
+  }
+
+  .hero-placeholder.compact {
+    aspect-ratio: 320 / 480;
+    max-width: 12rem;
+  }
+
+  .hero-placeholder.full {
+    aspect-ratio: 900 / 620;
+  }
+
+  .placeholder-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: rgba(10, 11, 14, 0.5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    backdrop-filter: blur(6px);
+  }
+
+  .placeholder-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+  }
+
+  /* ─── Feature grid ────────────────────────────────────── */
   .features {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 4rem 1.25rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 1.25rem;
+    padding-block: 4rem;
   }
 
-  .features article {
-    padding: 1.5rem;
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 0.875rem;
+    margin-top: 1rem;
+  }
+
+  .feature-grid article {
+    padding: 1.75rem;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
   }
 
-  .features h2 {
+  .feature-icon {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: var(--tracking-wide);
+    padding: 0.25rem 0.5rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: inline-block;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+  }
+
+  .feature-grid h3 {
+    font-size: var(--fs-lg);
+    color: var(--text-primary);
     margin: 0 0 0.5rem;
-    font-size: 1rem;
+  }
+
+  .feature-grid p {
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 0.875rem;
+  }
+
+  .feature-grid a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .feature-grid a:hover {
+    color: var(--accent);
+  }
+
+  /* ─── Callout (ambient, room map, tray-first) ─────────── */
+  .callout {
+    padding-block: 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .callout.reverse {
+    /* same grid; child order visually reversed on desktop */
+  }
+
+  .callout-copy {
+    max-width: 28rem;
+  }
+
+  .callout-body {
+    color: var(--text-secondary);
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 1rem;
+  }
+
+  .inline-cta {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .inline-cta:hover {
+    color: var(--accent);
+  }
+
+  .callout-visual {
+    position: relative;
+    margin: 0;
+  }
+
+  .callout-visual.dual {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .callout-visual.dual .hero-placeholder.full {
+    flex: 1;
+  }
+
+  .telemetry-pill {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: rgba(10, 11, 14, 0.7);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+    backdrop-filter: blur(8px);
+  }
+
+  .telemetry-pill strong {
+    color: var(--accent);
+    font-weight: 500;
+    margin-right: 0.125rem;
+  }
+
+  .telemetry-pill .pill-eyebrow {
+    padding: 0.0625rem 0.375rem;
+    background: var(--accent);
+    color: var(--text-inverse);
+    border-radius: var(--radius-sm);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .pill-sep {
+    width: 1px;
+    height: 0.75rem;
+    background: var(--border-strong);
+  }
+
+  /* ─── Platforms ───────────────────────────────────────── */
+  .platforms {
+    padding-block: 4rem;
+  }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .platform-grid article {
+    padding: 1.25rem 1.375rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .platform-grid h3 {
+    font-size: var(--fs-base);
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .platform-grid p {
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 0.0625rem 0.4rem;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+  }
+
+  .tag-ok {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .tag-warn {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ─── Trust ──────────────────────────────────────────── */
+  .trust {
+    padding-block: 4rem;
+  }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2rem 2.5rem;
+  }
+
+  .trust-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+
+  .trust-grid p {
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+  }
+
+  .trust-grid a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .trust-grid a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .trust-grid code {
+    background: var(--surface-2);
+    padding: 0.0625rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85em;
     color: var(--text-primary);
   }
 
-  .features p {
+  /* ─── Filter (not-for-you) ───────────────────────────── */
+  .filter {
+    padding-block: 4rem 6rem;
+  }
+
+  .filter ul {
+    list-style: none;
     margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.875rem;
+    max-width: 44rem;
+  }
+
+  .filter li {
+    padding: 1.125rem 1.375rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-md);
     color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+
+  .filter li strong {
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+
+  .filter li a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .filter li a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  /* ─── Responsive ─────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero,
+    .callout {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .callout.reverse .callout-visual {
+      order: -1;
+    }
+
+    .hero-visual .hero-placeholder {
+      max-width: 100%;
+    }
+
+    .callout-visual.dual {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>
