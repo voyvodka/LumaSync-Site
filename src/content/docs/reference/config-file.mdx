@@ -1,0 +1,96 @@
+---
+title: Config file
+description: Where LumaSync stores its state, what shape the file has, which fields are safe to edit by hand, and how to reset to defaults.
+group: reference
+order: 20
+updated: 2026-04-21
+draft: true
+---
+
+LumaSync persists all configuration via Tauri's `plugin-store`. On disk
+that lives at:
+
+| OS | Path |
+|----|------|
+| macOS | `~/Library/Application Support/com.lumasync.app/app.json` |
+| Windows | `%APPDATA%\com.lumasync.app\app.json` |
+| Linux | `~/.config/com.lumasync.app/app.json` |
+
+The identifier `com.lumasync.app` is set in `src-tauri/tauri.conf.json`
+and is how every OS scopes the app's per-user state.
+
+Common shorthand on this site is `~/.config/lumasync/app.json` — that's
+the Linux convention we use in copy, but the real path varies per OS as
+above.
+
+## Shape
+
+The full shape is typed in `src/shared/contracts/shell.ts` under
+`ShellState`. The top-level fields:
+
+| Field | Type | What it stores |
+|-------|------|----------------|
+| `windowWidth` / `windowHeight` | `number \| null` | Last main-window size in pixels |
+| `windowX` / `windowY` | `number \| null` | Last main-window position; null = OS-centered |
+| `isCompactMode` | `boolean` | Was the app last used in compact mode? |
+| `activeSectionId` | `SectionId` | Which settings section was last open |
+| `lightingMode` | `LightingModeConfig` | Current mode + per-mode parameters |
+| `ledCalibration` | `LedCalibrationConfig` | Edge counts, corner ownership, anchor, direction |
+| `hue.bridge` | `HueBridgeSummary \| null` | Paired bridge (IP, ID) |
+| `hue.onboarding.step` | `HueOnboardingStep` | Last reached step in the flow |
+| `hue.credentialStatus` | `HueCredentialStatus` | Valid / needs-repair / unknown |
+| `hue.runtimeTarget` | `HueRuntimeTarget` | Selected Entertainment Area |
+| `roomMap` | `RoomMapConfig` | Room map editor state (objects, positions, layers) |
+| `autoStartOnLogin` | `boolean` | OS login-items enrolment |
+| `updater.checkOnStartup` | `boolean` | Whether to poll GitHub Releases on launch |
+
+Anything not listed above is either computed at runtime (telemetry, stream
+state) or lives in a sub-config — the `LightingModeConfig` for example
+has nested saturation / smoothing / brightness cap fields.
+
+## Safe to edit by hand
+
+**Low-risk**: `windowWidth`, `windowHeight`, `isCompactMode`,
+`autoStartOnLogin`, `updater.checkOnStartup`. Wrong values just get
+clamped or ignored.
+
+**Moderate-risk**: `ledCalibration.counts` / `cornerOwnership` /
+`startAnchor` / `direction`. The app re-validates on load, but an
+unreasonable combo (e.g., zero total LEDs) will render the strip inert
+until fixed.
+
+**High-risk**: `hue.bridge`, `hue.credentialStatus`. Editing these by
+hand puts pairing into an inconsistent state — you're better off clicking
+**Forget bridge** in Settings → Hue and re-pairing.
+
+**Do not touch**: anything under `roomMap` unless you know what you're
+doing. The coordinate space + layer ordering has subtle invariants; the
+editor maintains them for you.
+
+## Format
+
+Plain JSON, written compactly. No comments allowed (JSON standard).
+Versioning: no explicit schema version yet — migrations happen in-code by
+checking field presence and filling defaults.
+
+Back up the file if you want to preserve a working configuration across
+machines. Copy to the matching path on the new machine before first
+launch.
+
+## Reset to defaults
+
+If the app is stuck (startup crash, UI blank, pairing confused):
+
+1. Quit LumaSync (tray → Quit, or kill process).
+2. Delete `app.json` (or rename it to `app.json.bak` for safekeeping).
+3. Relaunch. LumaSync starts with factory defaults: single window,
+   Off mode, no paired Hue bridge, no calibration.
+
+You'll lose the pairing, calibration, and room map — re-pair and
+recalibrate from scratch. Takes ~5 minutes.
+
+## Related
+
+- [First setup](/docs/getting-started/first-setup) — the first time these values get written
+- [Auto-updater](/docs/advanced/auto-updater) — how updates preserve config
+- [Telemetry](/docs/reference/telemetry) — what the app does and doesn't transmit

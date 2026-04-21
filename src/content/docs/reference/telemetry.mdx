@@ -1,0 +1,110 @@
+---
+title: Telemetry
+description: What LumaSync measures, where those numbers live, and why none of them leave your machine.
+group: reference
+order: 30
+updated: 2026-04-21
+draft: true
+---
+
+## Zero network telemetry
+
+LumaSync does not send any usage, crash, or analytics data to the
+internet. No telemetry beacon, no error reporting to a third-party
+service, no "help us improve the product" toggle.
+
+The only network calls the app makes at runtime are:
+
+| Call | When | Why |
+|------|------|-----|
+| `https://api.github.com/repos/voyvodka/LumaSync/releases/latest/download/latest.json` | App startup (once) | Auto-updater check |
+| `https://discovery.meethue.com/` | Hue onboarding "Discover" step | List local Hue bridges |
+| Local bridge IP (port 80 + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment stream |
+| Serial `/dev/ttyUSB*` or COM port | USB mode active | Adalight frame push |
+| macOS/Windows/Linux screen capture APIs | Ambilight mode active | Pixel sampling (local OS, no network) |
+
+That's it. Nothing else outbound.
+
+## On-device telemetry
+
+The app collects runtime metrics locally to display in the telemetry pill:
+
+- **Capture fps** (`captureFps`) — how fast frames are pulled from the
+  OS screen capture API
+- **Send fps** (`sendFps`) — how fast frames are pushed to outputs
+  (USB serial + Hue stream)
+- **Queue health** (`queueHealth`) — `healthy` / `warning` / `critical`
+  based on the internal frame queue depth
+
+These live in
+`src-tauri/src/commands/runtime_telemetry.rs` and are updated on a
+1-second window. They're exposed to the frontend via the
+`get_runtime_telemetry` command and rendered in the telemetry pill.
+
+None of these values are ever written to disk (other than the current
+session's in-memory snapshot) or sent off-device.
+
+## Logs
+
+Tauri writes a rotating log file for debugging. Location:
+
+| OS | Path |
+|----|------|
+| macOS | `~/Library/Logs/com.lumasync.app/` |
+| Windows | `%LOCALAPPDATA%\com.lumasync.app\logs\` |
+| Linux | `~/.local/share/com.lumasync.app/logs/` |
+
+Logs contain:
+
+- Session start / stop timestamps
+- Hue pairing attempts and outcomes (no credentials in plaintext)
+- USB port connection events and handshake results
+- Error stack traces if the pipeline crashed
+
+The log rotates at a small size cap (a few MB) and old logs are deleted
+on the next rotation. No remote log collection — the file exists for
+self-service debugging and is never transmitted.
+
+If you're filing a bug on GitHub, attach the most recent log. Review it
+first — logs contain your bridge IP and local paths.
+
+## Hue bridge credentials
+
+Pairing with a Hue bridge gives LumaSync a **username token**, written to
+`~/.config/lumasync/app.json` under `hue.bridge.username`. This token:
+
+- Is scoped to the bridge (not a Hue cloud account)
+- Does not contain your email, name, or any account identifier
+- Can be revoked any time in the Hue app (Settings → My Hue system →
+  paired apps)
+- Lives only on your machine
+
+LumaSync never sees your Hue cloud account.
+
+## Crash reports
+
+No automatic crash reporting. If the app hard-crashes:
+
+- On macOS the OS writes a `.crash` report to
+  `~/Library/Logs/DiagnosticReports/` — not collected or transmitted by
+  LumaSync.
+- On Windows Event Viewer logs it similarly.
+- On Linux you may get a coredump depending on your `ulimit` settings.
+
+These are OS-level artifacts. To help debug a crash, attach the relevant
+file to a GitHub issue manually. LumaSync will never scrape or upload
+them.
+
+## Anonymous metrics?
+
+The site itself uses **Umami** analytics (first-party, self-hosted,
+cookie-free). That captures page views and referrer for the website only,
+not the desktop app. The app ignores the site entirely.
+
+See [Privacy](/privacy) for the short-form site privacy statement.
+
+## Related
+
+- [Config file](/docs/reference/config-file)
+- [Auto-updater](/docs/advanced/auto-updater)
+- [Privacy page](/privacy)
