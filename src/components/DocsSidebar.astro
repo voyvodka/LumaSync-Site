@@ -10,7 +10,7 @@ const groups = await groupDocs();
 const normalized = currentPath.replace(/\/$/, '');
 ---
 
-<aside class="docs-sidebar" aria-label="Documentation navigation">
+<aside class="docs-sidebar" aria-label="Documentation navigation" data-pagefind-ignore>
   <nav>
     {
       groups.length === 0 && (

@@ -14,7 +14,7 @@ const isActive = (href: string) =>
   href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
-<header class="site-header">
+<header class="site-header" data-pagefind-ignore>
   <Container size="wide">
     <nav aria-label="Primary">
       <a href="/" class="brand" aria-label="LumaSync home">
@@ -32,6 +32,16 @@ const isActive = (href: string) =>
           ))
         }
       </ul>
+      <button type="button" class="search-trigger" data-search-open aria-label="Open search">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path
+            d="M11 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-.7 3.3a5.5 5.5 0 1 1 1-1l2.7 2.7-1 1-2.7-2.7Z"
+            fill="currentColor"></path>
+        </svg>
+        <span class="search-kbd">
+          <kbd>⌘</kbd><kbd>K</kbd>
+        </span>
+      </button>
     </nav>
   </Container>
 </header>
@@ -106,6 +116,39 @@ const isActive = (href: string) =>
     border-bottom-color: var(--accent);
   }
 
+  .search-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3125rem 0.5rem 0.3125rem 0.625rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .search-trigger:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  .search-trigger .search-kbd {
+    display: inline-flex;
+    gap: 0.125rem;
+  }
+
+  .search-trigger kbd {
+    font-size: 0.65rem;
+    padding: 0.0625rem 0.3rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
   @media (max-width: 640px) {
     ul {
       gap: 1rem;
@@ -119,6 +162,10 @@ const isActive = (href: string) =>
     /* Drop the least-essential link first on narrow viewports */
     li:nth-child(5) {
       display: none;
+    }
+
+    .search-trigger {
+      padding: 0.3125rem 0.5rem;
     }
   }
 

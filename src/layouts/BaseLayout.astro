@@ -4,6 +4,7 @@ import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SkipLink from '../components/SkipLink.astro';
+import Search from '../components/Search.astro';
 
 interface Props {
   title: string;
@@ -45,5 +46,6 @@ const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
       <slot />
     </main>
     <Footer />
+    <Search />
   </body>
 </html>
