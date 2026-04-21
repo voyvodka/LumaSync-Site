@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { listCompare, compareHref } from '../../lib/content';
+
+const entries = await listCompare();
+
+// Canonical one-liners per comparison. Kept short on purpose — the
+// full page does the work. This index is the SEO hub for terms like
+// "ambilight software comparison", "hue sync alternatives", etc.
+const ONE_LINERS: Record<string, string> = {
+  'hue-sync': 'HDMI-first hardware for TV-centric rooms. If your source isn’t a computer, this is the one.',
+  hyperion: 'RPi-first ambilight stack with a deep configuration surface and enormous hardware ceiling.',
+  prismatik: 'Lightpack-era legacy driver — maintained mostly for Lightpack hardware owners.',
+  wled: 'ESP-based LED firmware. Category mismatch with LumaSync; often run alongside a desktop driver.',
+};
+
+function oneLiner(slug: string): string {
+  return ONE_LINERS[slug] ?? 'Comparison page.';
+}
+---
+
+<BaseLayout
+  title="Compare"
+  description="LumaSync vs the alternatives — Philips Hue Sync, Hyperion, Prismatik, WLED. Honest side-by-side positioning, no fabricated wins."
+>
+  <section class="compare-index" data-pagefind-body>
+    <header>
+      <p class="eyebrow">Compare</p>
+      <h1 class="display">LumaSync vs the alternatives</h1>
+      <p class="lede">
+        Four honest side-by-sides. LumaSync wins where it wins and yields where it
+        doesn't. If your source is an HDMI device, if you own Lightpack hardware, if
+        WLED is already in your home — we'll tell you to pick differently.
+      </p>
+    </header>
+
+    <ul role="list" class="grid">
+      {
+        entries.map((entry) => {
+          const slug = entry.id.replace(/\.mdx$/, '');
+          return (
+            <li>
+              <a href={compareHref(entry)}>
+                <p class="kicker">LumaSync vs {entry.data.competitor}</p>
+                <h2 class="title">{entry.data.title}</h2>
+                <p class="oneliner">{oneLiner(slug)}</p>
+                <p class="read-more">Read comparison →</p>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    {
+      entries.length === 0 && (
+        <p class="empty">
+          Comparison pages ship with the Week 4 content push per the action plan.
+        </p>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .compare-index {
+    max-width: calc(var(--container-wide) + 2.5rem);
+    margin-inline: auto;
+    padding: 3rem 1.25rem 5rem;
+  }
+
+  header {
+    max-width: 42rem;
+    margin-bottom: 2.75rem;
+  }
+
+  h1 {
+    font-size: var(--fs-3xl);
+    margin: 0 0 0.75rem;
+  }
+
+  .lede {
+    color: var(--text-secondary);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+  }
+
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .grid a {
+    display: block;
+    padding: 1.5rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    height: 100%;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .grid a:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.625rem;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--fs-xl);
+    line-height: var(--lh-snug);
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+  }
+
+  .oneliner {
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 1rem;
+  }
+
+  .read-more {
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    margin: 0;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .grid a:hover .read-more {
+    color: var(--accent);
+  }
+
+  .empty {
+    color: var(--text-muted);
+  }
+</style>
