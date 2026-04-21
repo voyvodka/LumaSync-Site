@@ -1,0 +1,90 @@
+---
+title: LumaSync vs Prismatik
+competitor: Prismatik
+description: Prismatik was the Lightpack driver and remains a dormant desktop ambilight tool. LumaSync is actively maintained and adds native Philips Hue support.
+updated: 2026-04-21
+draft: true
+---
+
+**Prismatik** started life as the driver for the **Lightpack** USB ambilight
+hardware (a Kickstarter-era six-LED behind-TV kit). The original project
+went quiet in the mid-2010s after Lightpack wound down; the
+community-maintained **psieg fork** kept it limping along on modern OSes
+with mixed compatibility. **LumaSync** is built from scratch for 2025+:
+Tauri 2 shell, native Hue Entertainment, actively shipped binaries, and a
+room map editor that pairs USB LEDs with Hue channels.
+
+Short version: **Prismatik is the right answer only if you physically own
+Lightpack hardware and want it to keep working. LumaSync is the right
+answer for everyone else.**
+
+## TL;DR
+
+- **Prismatik wins** if you own a Lightpack device and need the original
+  driver to talk to it. Niche, historical audience.
+- **LumaSync wins** on active maintenance, native Hue Entertainment,
+  minisign-signed auto-updates, macOS polish, and the room map editor.
+- Both speak Adalight over USB, so **a WS2812B + CH340/FT232 kit works
+  under either** — the app is the differentiator, not the strip.
+
+## Feature comparison
+
+| Feature | LumaSync | Prismatik (psieg fork) |
+|---|---|---|
+| Maintenance status | Active — v1.2.0 shipped 2026-04-10 | **[TBD: verify]** dormant; last significant release in the psieg fork |
+| Target platform | macOS, Windows, Linux (experimental) | Windows (primary), macOS / Linux community builds |
+| USB LED strips (WS2812B) | Yes — CH340 / FT232 Adalight at 115200 baud | Yes — same Adalight protocol |
+| Lightpack hardware | No — original hardware discontinued | Yes — the reason this project exists |
+| Philips Hue Entertainment | Native DTLS 1.2 PSK | No — no native Hue support |
+| Effects engine | Ambilight + solid; closed enum | Plugin-based effects |
+| Configuration UI | Native desktop window, tray-first | Legacy Qt app |
+| Auto-updates | minisign-signed, GitHub Releases | **[TBD: verify]** updater status |
+| Open source | MIT | GPLv3 |
+| Apple Silicon | Universal binary | **[TBD: verify]** x86_64 only / Rosetta |
+| Last update | [v1.2.0, 2026-04-10](/changelog) | **[TBD: verify]** last release date |
+
+## When to pick LumaSync
+
+- **You don't own Lightpack hardware.** There's no reason to choose a
+  driver-for-discontinued-hardware project if you're not running that
+  hardware. LumaSync supports the same generic Adalight kits at 115200
+  baud without the legacy baggage.
+- **You want Hue Entertainment support.** Prismatik never integrated with
+  the Hue Entertainment API; if Hue is in your setup, LumaSync is the
+  simpler path.
+- **You're on Apple Silicon.** LumaSync ships a universal macOS binary.
+  Prismatik's macOS story has historically trailed.
+
+## When to pick Prismatik
+
+- **You own a Lightpack** and want it to keep working. Original hardware
+  support is the project's reason to exist.
+- **You specifically need Prismatik's plugin effects.** LumaSync's effect
+  model is deliberately closed (off / ambilight / solid). If you're
+  attached to a plugin chain in Prismatik, you can't port it.
+
+## Migration notes
+
+Coming from **Prismatik to LumaSync**:
+
+- If you're using a generic Adalight USB kit (CH340 / FT232), the strip
+  itself is drop-in. Stop Prismatik, disconnect its USB port, start
+  LumaSync, run the device health check. See [USB controllers](/docs/usb-leds/controllers).
+- If you're using actual **Lightpack hardware**: LumaSync does not
+  recognise the Lightpack VID:PID. The device would have to be manually
+  connected via the custom port path, and even then LumaSync assumes
+  standard Adalight framing — results unverified. Keep Prismatik for
+  Lightpack.
+- Your edge counts and calibration settings don't auto-import. Re-enter
+  them in [Calibration](/docs/usb-leds/calibration).
+
+Coming from **LumaSync to Prismatik**:
+
+- Not a common path. If you're doing it to get Lightpack hardware
+  working, that's valid. Otherwise, pass.
+
+## Further reading
+
+- [Hardware checklist](/docs/getting-started/hardware-checklist) — what LumaSync recognises
+- [USB controllers](/docs/usb-leds/controllers) — supported VID:PIDs
+- [Prismatik psieg fork](https://github.com/psieg/Lightpack) (external)
