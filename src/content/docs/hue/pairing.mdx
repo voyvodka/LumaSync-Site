@@ -49,8 +49,8 @@ If the list stays empty:
 ## Step 2 · Pair
 
 LumaSync hits the bridge's pairing endpoint once a second. Bridges respond
-with `PAIRING_PENDING_LINK_BUTTON` until the physical link button is pressed,
-then immediately issue a credential in response to the next request.
+with `HUE_PAIRING_PENDING_LINK_BUTTON` until the physical link button is
+pressed, then immediately issue a credential in response to the next request.
 
 **What you do**:
 
@@ -59,13 +59,15 @@ then immediately issue a credential in response to the next request.
 3. Within 30 seconds, the UI flips to **Pairing successful** — no extra
    interaction needed.
 
-If you miss the window: the pairing call returns `PAIRING_FAILED` with a
+If you miss the window: the pairing call returns `HUE_PAIRING_FAILED` with a
 "link button not pressed" message. Click **Try again** — no penalty for
 retries.
 
-Credentials land encrypted-at-rest in `~/.config/lumasync/app.json` and are
-scoped to your LumaSync install. The Hue app still sees them as a regular
-third-party client; you can revoke from the Hue app at any time.
+Credentials land in `~/.config/lumasync/app.json` protected by OS user-level
+file permissions. LumaSync performs no network calls outside your LAN — the
+Hue bridge's cloud account is never touched. To invalidate a credential,
+revoke from the Hue app at any time (Settings → My Hue system → paired
+apps); the bridge treats LumaSync as a regular third-party client.
 
 ## Step 3 · Area select
 
@@ -73,7 +75,7 @@ LumaSync calls the CLIP v2 Entertainment Configuration endpoint and lists
 every Entertainment Area on the bridge. Pick one. Each area becomes a
 distinct LumaSync **channel map** — switch areas anytime without re-pairing.
 
-If the list is empty (`AREA_LIST_EMPTY`), you haven't created one in the Hue
+If the list is empty (`HUE_AREA_LIST_EMPTY`), you haven't created one in the Hue
 app. Open Hue app → Settings → Entertainment areas → Create. Drop the bulbs
 you want LumaSync to drive into it, position them on the room diagram, and
 save. Return to LumaSync and click **Refresh list**.
