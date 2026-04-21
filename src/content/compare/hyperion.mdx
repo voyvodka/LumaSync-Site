@@ -31,7 +31,7 @@ you want that to be your existing computer.**
 
 | Feature | LumaSync | Hyperion.NG |
 |---|---|---|
-| Target platform | Desktop app (macOS, Windows, Linux) | Headless daemon (Linux primary, Windows **[TBD: verify]** stability, macOS **[TBD: verify]** via community port) |
+| Target platform | Desktop app (macOS, Windows, Linux) | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
 | Deployment | Install + run | Provision RPi / server, install package, configure via web UI |
 | USB LED strips (WS2812B) | Yes — CH340 / FT232 Adalight at 115200 baud | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others |
 | Philips Hue Entertainment | Native DTLS 1.2 PSK streaming | Via forwarder / plugin — functional, not native |
@@ -42,16 +42,17 @@ you want that to be your existing computer.**
 | Room map editor | Yes — drag-drop canvas for positioning | Layout via numerical zones in web UI |
 | Auto-updates | minisign-signed, GitHub Releases | Package-manager / manual download |
 | Dedicated hardware | None | Typically a Raspberry Pi 3/4 |
-| Last update | [v1.2.0, 2026-04-10](/changelog) | **[TBD: verify]** latest Hyperion.NG release |
+| Last update | [v1.2.0, 2026-04-10](/changelog) | Hyperion 2.2.1 (2026-04-06) — ~6-month release cadence |
 
 ## When to pick LumaSync
 
 - **You watch video or game on a Mac, Windows, or Linux desktop.** The
   pixels are already on that machine — screen-buffer capture is orders of
   magnitude simpler than standing up an HDMI grabber on a Pi.
-- **You're macOS-primary.** Hyperion's macOS support exists via community
-  ports and hasn't caught up with Apple Silicon cleanly. LumaSync ships
-  universal Mac binaries signed with minisign.
+- **You want a tray-first desktop app instead of a headless daemon.**
+  Hyperion 2.2.1 does ship signed Apple Silicon and Intel Mac installers
+  now, but it's still a daemon + web-UI on a local port, not a tray
+  app. LumaSync lives in the menu bar with compact + full windows.
 - **Philips Hue Entertainment is your main target.** LumaSync speaks the
   native DTLS 1.2 PSK API; Hyperion proxies via a forwarder layer that
   works but isn't the canonical path.
