@@ -1,0 +1,14 @@
+---
+type Size = 'narrow' | 'content' | 'wide' | 'full';
+
+interface Props {
+  size?: Size;
+  class?: string;
+}
+
+const { size = 'wide', class: className = '' } = Astro.props;
+---
+
+<div class:list={[`container-${size}`, className]}>
+  <slot />
+</div>

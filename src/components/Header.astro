@@ -1,73 +1,80 @@
 ---
+import Container from './Container.astro';
+
 const links = [
   { href: '/docs', label: 'Docs' },
   { href: '/download', label: 'Download' },
   { href: '/changelog', label: 'Changelog' },
   { href: '/compare/hue-sync', label: 'Compare' },
+  { href: '/community', label: 'Community' },
 ];
 
 const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
 <header class="site-header">
-  <nav aria-label="Primary">
-    <a href="/" class="brand" aria-label="LumaSync home">
-      <span class="brand-dot" aria-hidden="true"></span>
-      LumaSync
-    </a>
-    <ul role="list">
-      {
-        links.map(({ href, label }) => (
-          <li>
-            <a
-              href={href}
-              aria-current={pathname.startsWith(href) ? 'page' : undefined}
-            >
-              {label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
+  <Container size="wide">
+    <nav aria-label="Primary">
+      <a href="/" class="brand" aria-label="LumaSync home">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-name">LumaSync</span>
+      </a>
+      <ul role="list">
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </Container>
 </header>
 
 <style>
   .site-header {
-    border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface-0) 85%, transparent);
-    backdrop-filter: saturate(140%) blur(8px);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 50;
+    background: var(--surface-overlay);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid var(--border);
   }
 
   nav {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 0.875rem 1.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
+    padding-block: 0.875rem;
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
     color: var(--text-primary);
     text-decoration: none;
+    font-weight: 500;
+    letter-spacing: var(--tracking-snug);
   }
 
   .brand-dot {
     width: 0.5rem;
     height: 0.5rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-soft);
+    box-shadow: var(--shadow-ring);
+  }
+
+  .brand-name {
+    font-size: var(--fs-base);
   }
 
   ul {
@@ -75,20 +82,49 @@ const pathname = Astro.url.pathname;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 1.25rem;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   li a {
     color: var(--text-secondary);
     text-decoration: none;
-    font-size: 0.925rem;
-  }
-
-  li a[aria-current='page'] {
-    color: var(--text-primary);
+    font-size: var(--fs-sm);
+    padding: 0.25rem 0;
+    border-bottom: 1px solid transparent;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
   }
 
   li a:hover {
     color: var(--text-primary);
+  }
+
+  li a[aria-current='page'] {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    ul {
+      gap: 1rem;
+      font-size: 0.8rem;
+    }
+
+    li a {
+      font-size: 0.8rem;
+    }
+
+    /* Drop the least-essential link first on narrow viewports */
+    li:nth-child(5) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 460px) {
+    li:nth-child(4) {
+      display: none;
+    }
   }
 </style>

@@ -2,26 +2,22 @@
 
 <style>
   .skip-link {
-    position: absolute;
-    left: -10000px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+    padding: 0.5rem 0.875rem;
     background: var(--accent);
-    color: var(--surface-0);
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
+    color: var(--text-inverse);
+    font-weight: 500;
+    font-size: var(--fs-sm);
     text-decoration: none;
+    border-radius: var(--radius-sm);
+    transform: translateY(-200%);
+    transition: transform var(--duration-base) var(--ease-out);
   }
 
-  .skip-link:focus {
-    position: fixed;
-    left: 1rem;
-    top: 1rem;
-    width: auto;
-    height: auto;
-    z-index: 1000;
+  .skip-link:focus-visible {
+    transform: translateY(0);
   }
 </style>
