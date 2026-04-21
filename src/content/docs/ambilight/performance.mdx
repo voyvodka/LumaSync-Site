@@ -23,14 +23,14 @@ animated content; a sustained drift means something is off.
 
 ## What "good" looks like
 
-| Platform | Typical Δ | Typical Σ | Notes |
-|----------|-----------|-----------|-------|
-| macOS (M-series, native display) | 10–20 ms | 60 fps | Best case |
-| macOS (Intel, external 4K) | 15–30 ms | 30–60 fps | GPU-bound on 4K |
-| Windows (recent GPU) | 10–25 ms | 60 fps | DXGI duplication is fast |
-| Windows (iGPU) | 20–50 ms | 30 fps | iGPU bandwidth limits |
-| Linux X11 | 15–30 ms | 60 fps | GLX path |
-| Linux Wayland | 30–80 ms | 20–30 fps | Portal-based; slower by design |
+| Platform                         | Typical Δ | Typical Σ | Notes                          |
+| -------------------------------- | --------- | --------- | ------------------------------ |
+| macOS (M-series, native display) | 10–20 ms  | 60 fps    | Best case                      |
+| macOS (Intel, external 4K)       | 15–30 ms  | 30–60 fps | GPU-bound on 4K                |
+| Windows (recent GPU)             | 10–25 ms  | 60 fps    | DXGI duplication is fast       |
+| Windows (iGPU)                   | 20–50 ms  | 30 fps    | iGPU bandwidth limits          |
+| Linux X11                        | 15–30 ms  | 60 fps    | GLX path                       |
+| Linux Wayland                    | 30–80 ms  | 20–30 fps | Portal-based; slower by design |
 
 For the Hue path specifically, **Σ caps at 20 fps** regardless of what your
 capture pipeline delivers. The bridge is the bottleneck. USB LEDs can go
@@ -75,7 +75,7 @@ runtime on a modern machine. If you're seeing more:
 
 ## What the numbers don't catch
 
-- **Gamma curves**. The LEDs might drive the right *numbers* within the
+- **Gamma curves**. The LEDs might drive the right _numbers_ within the
   measured latency but look visually wrong because the strip's gamma isn't
   calibrated. Telemetry says "fast"; eyes say "off".
 - **Colour banding**. LumaSync pushes 8-bit-per-channel values. If your

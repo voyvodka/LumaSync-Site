@@ -15,13 +15,13 @@ service, no "help us improve the product" toggle.
 
 The only network calls the app makes at runtime are:
 
-| Call | When | Why |
-|------|------|-----|
-| `https://api.github.com/repos/voyvodka/LumaSync/releases/latest/download/latest.json` | App startup (once) | Auto-updater check |
-| `https://discovery.meethue.com/` | Hue onboarding "Discover" step | List local Hue bridges |
-| Local bridge IP (port 80 + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment stream |
-| Serial `/dev/ttyUSB*` or COM port | USB mode active | Adalight frame push |
-| macOS/Windows/Linux screen capture APIs | Ambilight mode active | Pixel sampling (local OS, no network) |
+| Call                                                                                  | When                           | Why                                   |
+| ------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------- |
+| `https://api.github.com/repos/voyvodka/LumaSync/releases/latest/download/latest.json` | App startup (once)             | Auto-updater check                    |
+| `https://discovery.meethue.com/`                                                      | Hue onboarding "Discover" step | List local Hue bridges                |
+| Local bridge IP (port 80 + UDP 2100)                                                  | Hue pairing + streaming        | Bridge API + Entertainment stream     |
+| Serial `/dev/ttyUSB*` or COM port                                                     | USB mode active                | Adalight frame push                   |
+| macOS/Windows/Linux screen capture APIs                                               | Ambilight mode active          | Pixel sampling (local OS, no network) |
 
 That's it. Nothing else outbound.
 
@@ -48,11 +48,11 @@ session's in-memory snapshot) or sent off-device.
 
 Tauri writes a rotating log file for debugging. Location:
 
-| OS | Path |
-|----|------|
-| macOS | `~/Library/Logs/com.lumasync.app/` |
+| OS      | Path                                    |
+| ------- | --------------------------------------- |
+| macOS   | `~/Library/Logs/com.lumasync.app/`      |
 | Windows | `%LOCALAPPDATA%\com.lumasync.app\logs\` |
-| Linux | `~/.local/share/com.lumasync.app/logs/` |
+| Linux   | `~/.local/share/com.lumasync.app/logs/` |
 
 Logs contain:
 

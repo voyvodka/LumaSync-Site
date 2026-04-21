@@ -85,8 +85,7 @@ const statics: Array<{ id: string; entry: OgEntry }> = [
     id: 'download',
     entry: {
       title: 'Download LumaSync',
-      description:
-        'Install on macOS, Windows, or Linux. Signed binaries, checksums published.',
+      description: 'Install on macOS, Windows, or Linux. Signed binaries, checksums published.',
       category: 'Install',
     },
   },

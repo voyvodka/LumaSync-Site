@@ -13,10 +13,7 @@ export default defineConfig({
   redirects: {
     '/docs/advanced/scenes-and-presets': '/docs/advanced/scenes',
   },
-  integrations: [
-    mdx(),
-    sitemap(),
-  ],
+  integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

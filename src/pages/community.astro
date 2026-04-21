@@ -22,7 +22,7 @@ const forums = [
     title: 'Security disclosures',
     href: `${repo}/blob/main/SECURITY.md`,
     blurb:
-      "Do not file security issues on public Issues. Follow the process in SECURITY.md — private channel, scoped to the maintainer.",
+      'Do not file security issues on public Issues. Follow the process in SECURITY.md — private channel, scoped to the maintainer.',
     cta: 'See SECURITY.md →',
   },
   {
@@ -38,7 +38,10 @@ const forums = [
 const triage = [
   {
     q: 'It crashed — where do I file that?',
-    a: '<a href="' + repo + '/issues">GitHub Issues</a>. Attach the OS-generated crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump) and the LumaSync log file. <a href="/docs/reference/telemetry#logs">Log locations</a>.',
+    a:
+      '<a href="' +
+      repo +
+      '/issues">GitHub Issues</a>. Attach the OS-generated crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump) and the LumaSync log file. <a href="/docs/reference/telemetry#logs">Log locations</a>.',
   },
   {
     q: "My hardware isn't recognised — is this a bug?",
@@ -46,7 +49,10 @@ const triage = [
   },
   {
     q: 'I want a feature — will you build it?',
-    a: '<a href="' + repo + '/discussions/categories/ideas">Discussions → Ideas</a>. Explain the use case (what problem, who has it). Popular asks with clear scope make it to issues; vague asks get a polite "not planned".',
+    a:
+      '<a href="' +
+      repo +
+      '/discussions/categories/ideas">Discussions → Ideas</a>. Explain the use case (what problem, who has it). Popular asks with clear scope make it to issues; vague asks get a polite "not planned".',
   },
   {
     q: 'I have a question about Philips Hue itself.',
@@ -64,9 +70,8 @@ const triage = [
       <p class="eyebrow">Get involved</p>
       <h1 class="page-title">Community</h1>
       <p class="lede">
-        Early-stage project. Small, responsive maintainer. The best way to help
-        right now is to open a Discussion with what you built — real setups
-        inform the docs more than anything else.
+        Early-stage project. Small, responsive maintainer. The best way to help right now is to open
+        a Discussion with what you built — real setups inform the docs more than anything else.
       </p>
     </header>
 
@@ -109,10 +114,9 @@ const triage = [
       <p class="section-label">House rules</p>
       <p>
         LumaSync follows a standard
-        <a href={`${repo}/blob/main/CODE_OF_CONDUCT.md`}>Code of Conduct</a>.
-        Short version: be helpful, be specific, and don't be a jerk. Disagreement
-        is fine; dismissiveness isn't. Project is MIT-licensed; contribution
-        guidelines live in
+        <a href={`${repo}/blob/main/CODE_OF_CONDUCT.md`}>Code of Conduct</a>. Short version: be
+        helpful, be specific, and don't be a jerk. Disagreement is fine; dismissiveness isn't.
+        Project is MIT-licensed; contribution guidelines live in
         <a href={`${repo}/blob/main/CONTRIBUTING.md`}>CONTRIBUTING.md</a>.
       </p>
     </section>

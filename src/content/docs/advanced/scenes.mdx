@@ -14,13 +14,13 @@ per-target override on scenes.
 
 ## The catalog
 
-| Scene | RGB | Brightness | Typical use |
-|---|---|---|---|
-| **movie** | `217, 82, 30` (warm amber) | `0.85` | Film watching, ambient fill |
-| **game** | `102, 180, 255` (cool blue) | `0.90` | FPS / competitive sessions — the brightest default |
-| **music** | `255, 106, 136` (pink) | `0.90` | Listening sessions, saturated |
-| **chill** | `255, 200, 96` (gold) | `0.75` | Work / reading light |
-| **read** | `76, 173, 112` (green) | `0.75` | Low-strain reading |
+| Scene     | RGB                         | Brightness | Typical use                                        |
+| --------- | --------------------------- | ---------- | -------------------------------------------------- |
+| **movie** | `217, 82, 30` (warm amber)  | `0.85`     | Film watching, ambient fill                        |
+| **game**  | `102, 180, 255` (cool blue) | `0.90`     | FPS / competitive sessions — the brightest default |
+| **music** | `255, 106, 136` (pink)      | `0.90`     | Listening sessions, saturated                      |
+| **chill** | `255, 200, 96` (gold)       | `0.75`     | Work / reading light                               |
+| **read**  | `76, 173, 112` (green)      | `0.75`     | Low-strain reading                                 |
 
 The tiles live under the mode switcher in both compact and full windows.
 Picking a scene doesn't change what "Ambilight" does — it's a
@@ -32,10 +32,10 @@ LumaSync's mode contract is a closed enum with three values:
 
 ```ts
 LIGHTING_MODE_KIND = {
-  OFF: "off",
-  AMBILIGHT: "ambilight",
-  SOLID: "solid",
-} as const
+  OFF: 'off',
+  AMBILIGHT: 'ambilight',
+  SOLID: 'solid',
+} as const;
 ```
 
 Scenes are **presets on top of SOLID**. Clicking a scene tile:

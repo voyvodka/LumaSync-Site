@@ -9,7 +9,10 @@ if (!entry) {
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={entry.data.title} description="How LumaSync handles data — short answer: it does not.">
+<BaseLayout
+  title={entry.data.title}
+  description="How LumaSync handles data — short answer: it does not."
+>
   <article class="legal">
     <header>
       <h1 class="page-title">{entry.data.title}</h1>

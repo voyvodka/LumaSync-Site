@@ -6,14 +6,7 @@ const docs = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    group: z.enum([
-      'getting-started',
-      'hue',
-      'usb-leds',
-      'ambilight',
-      'advanced',
-      'reference',
-    ]),
+    group: z.enum(['getting-started', 'hue', 'usb-leds', 'ambilight', 'advanced', 'reference']),
     order: z.number().int(),
     updated: z.coerce.date(),
     draft: z.boolean().default(false),

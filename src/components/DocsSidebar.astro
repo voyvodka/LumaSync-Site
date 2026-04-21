@@ -12,11 +12,7 @@ const normalized = currentPath.replace(/\/$/, '');
 
 <aside class="docs-sidebar" aria-label="Documentation navigation" data-pagefind-ignore>
   <nav>
-    {
-      groups.length === 0 && (
-        <p class="empty">No docs yet. Published pages will appear here.</p>
-      )
-    }
+    {groups.length === 0 && <p class="empty">No docs yet. Published pages will appear here.</p>}
     {
       groups.map((group) => (
         <section>

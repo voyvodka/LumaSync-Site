@@ -18,12 +18,12 @@ error reporter, no "help us improve the product" toggle.
 
 The only network calls the app makes during normal runtime are:
 
-| Destination | Purpose | Data sent |
-|---|---|---|
-| `api.github.com` (once at launch) | Auto-updater check | User-Agent + repo path in the URL |
+| Destination                                   | Purpose                | Data sent                               |
+| --------------------------------------------- | ---------------------- | --------------------------------------- |
+| `api.github.com` (once at launch)             | Auto-updater check     | User-Agent + repo path in the URL       |
 | `discovery.meethue.com` (Hue onboarding only) | List local Hue bridges | Nothing beyond the HTTPS request itself |
-| Your local Hue bridge (LAN) | Pairing + streaming | Hue pairing + DTLS Entertainment stream |
-| Your USB-connected controller | LED frame data | Adalight frames over USB-serial |
+| Your local Hue bridge (LAN)                   | Pairing + streaming    | Hue pairing + DTLS Entertainment stream |
+| Your USB-connected controller                 | LED frame data         | Adalight frames over USB-serial         |
 
 Screen capture happens via OS APIs — no network round-trip.
 
