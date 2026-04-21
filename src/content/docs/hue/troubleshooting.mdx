@@ -1,0 +1,108 @@
+---
+title: Hue troubleshooting
+description: Common Philips Hue failure modes and how to fix them — discovery, pairing, streaming latency, credentials expiry, bulbs not responding.
+group: hue
+order: 30
+updated: 2026-04-21
+draft: true
+---
+
+Most Hue issues fall into one of five buckets. This page is organised
+stage-by-stage so you can jump to where you are stuck.
+
+## Bridge isn't discovered
+
+**Symptom**: Discover step returns `HUE_DISCOVERY_EMPTY` or the bridge never
+appears in the list.
+
+Common causes:
+
+1. **VLAN / guest network isolation** — bridge and LumaSync are on different
+   subnets. Fix: put them on the same LAN, or use the **Manual IP** path.
+2. **mDNS blocked** on corporate / hotel Wi-Fi. Same fix: manual IP.
+3. **Bridge powered off or offline** — check the LED indicators on the bridge
+   itself. All three should be solid.
+4. **Firewall rules** blocking outbound HTTPS to `discovery.meethue.com`.
+   LumaSync falls back to LAN mDNS automatically; still works but only if
+   mDNS isn't blocked.
+
+## Pairing keeps failing
+
+**Symptom**: Status cycles through `PAIRING_PENDING_LINK_BUTTON` but never
+reaches `PAIRING_OK`.
+
+- You pressed the link button but the call had already timed out. The link
+  button grace window is ~30 seconds. Click **Try again** and press the
+  button within that window.
+- Multiple apps are trying to pair at once. Only one pairing at a time is
+  supported by the bridge — close the Hue app's pairing screen, any other
+  Hue clients in a pairing state, retry.
+- Pairing over VPN. Bridges reject pairing from non-LAN origins as a
+  security measure. Disconnect the VPN, pair on local network, then reconnect
+  VPN afterwards — runtime streaming works over the VPN once paired.
+
+## `AREA_LIST_EMPTY`
+
+**Symptom**: Pairing succeeds but the Entertainment Area dropdown is empty.
+
+Cause: no area has been created in the Hue app yet. Follow
+[Entertainment Area creation](/docs/hue/entertainment-area#how-to-create-one)
+and click **Refresh list**.
+
+## Stream doesn't start / status stuck on "Starting"
+
+**Symptom**: Selected an area, turned on Ambilight mode, Hue status stays
+`Starting` or falls into `Failed`.
+
+- **UDP 2100 blocked**. Hue Entertainment uses DTLS over UDP 2100 from
+  client to bridge. Some routers / firewalls block outbound UDP. Fix: open
+  UDP 2100 outbound on the machine running LumaSync.
+- **Entertainment Area conflict**. Another app is already streaming to the
+  same area. The bridge only allows one streamer per area at a time. Fix:
+  close the other app (Hue Sync Box apps are the usual culprit).
+- **Credentials rotated**. The bridge occasionally cycles credentials after
+  firmware updates. LumaSync surfaces a **Repair Hue credentials** banner;
+  click it and re-run steps 2–4 of pairing.
+
+## Bulbs respond but look "laggy"
+
+**Symptom**: Lights update but feel delayed compared to the screen.
+
+- **Network hop count high**. Check Wi-Fi signal between the machine and the
+  bridge. Hop-to-hop latency shows up as visual lag. Pulling the bridge
+  closer — or wiring it to Ethernet — tightens response.
+- **Zigbee mesh is stressed**. Bulbs far from the bridge relay through
+  neighbours. Add a bulb in between, or move the bridge. Hue's app can show
+  you the mesh diagnostics (Settings → Bridge → Advanced).
+- **Expecting gaming latency**. The 20 Hz bridge cap is the real ceiling.
+  If 50 ms visual lag is unacceptable for your use case, USB LED strips are
+  a better primary target with Hue as secondary room fill.
+
+## Some bulbs in the area don't respond
+
+**Symptom**: Entertainment Area has 5 bulbs but only 3 are reacting.
+
+- **Unreachable bulb**. Open the Hue app → tap the bulb in the room view —
+  if it shows "Unreachable", fix power or re-pair the bulb with the bridge
+  first. LumaSync can't stream to a bulb the bridge itself can't see.
+- **Bulb doesn't support Entertainment**. Warm-white-only bulbs respond only
+  to brightness, not colour, and may appear "stuck" at whatever colour the
+  area last saw before they joined. Remove them from the area via the Hue
+  app if that isn't what you want.
+
+## When to just repair
+
+Not every failure is worth diagnosing. If all else fails and you have five
+minutes:
+
+1. Hue app → Settings → Entertainment areas → delete the broken area.
+2. LumaSync → Settings → Hue → **Forget bridge**.
+3. Recreate the area in the Hue app with your current bulb lineup.
+4. Walk back through pairing from step 1.
+
+Almost always faster than debugging.
+
+## Related
+
+- [Pair your Hue bridge](/docs/hue/pairing)
+- [Entertainment Area](/docs/hue/entertainment-area)
