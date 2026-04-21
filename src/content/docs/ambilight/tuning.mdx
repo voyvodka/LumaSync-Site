@@ -13,18 +13,23 @@ like — where to find them and what they trade off.
 
 ## Saturation
 
-**Settings → Ambilight → Saturation** · default `1.0` · range `0.0–2.0`
+**Settings → Ambilight → Saturation** · default `1.0` · range `0.5–2.0`
 
 Scales the colour intensity of every frame before it reaches the LEDs.
+Implementation is **Rec.601 luminance-preserving** — as you pull
+saturation down, total brightness stays constant so the LEDs don't dim
+along with the colour drop.
 
-- **`1.0`**: pixel colours pass through unchanged. What you see on screen
-  is what the LEDs try to match.
+- **`1.0`** (identity): pixel colours pass through unchanged. What you
+  see on screen is what the LEDs try to match.
 - **`1.4–1.6`**: "pop" mode. Desaturated scenes still produce noticeable
   lighting. Good for TV in a room with warm bias lighting where the LEDs
   would otherwise blend in.
 - **`0.6–0.8`**: muted. The lighting is present but doesn't compete with
   the on-screen content. Good for productivity / text-heavy windows.
-- **`0.0`**: grayscale. Only brightness variation reaches the LEDs.
+- **`0.5`** (floor): heavily muted, but never fully grayscale — the
+  range stops above zero on purpose, so the lighting always carries
+  at least some colour signal.
 
 ## Smoothing
 
@@ -75,17 +80,14 @@ How often the capture pipeline samples the screen and pushes to the LEDs.
   caps at 20 Hz internally, so setting 60 Hz while outputting to Hue just
   wastes CPU.
 
-## Presets
+## One global state, no profiles
 
-**[TBD: verify]** A named preset system — save the current knob combo and
-switch between them — is on the roadmap but **not shipped** in v1.2.0.
-Current settings persist globally to `~/.config/lumasync/app.json` via
-`shellStore`; there's no UI to save and switch between multiple named
-configurations.
-
-See [Scenes and presets](/docs/advanced/scenes-and-presets) for the current
-mode model (Off / Ambilight / Solid) and what the preset system will look
-like when it ships.
+Ambilight tuning is a **single global state** today — there are no
+named profiles. Whatever values the four knobs hold persist to
+`~/.config/lumasync/app.json` via `shellStore` and apply to every
+Ambilight session. If you want a "movie mode" colour fill instead of
+Ambilight capture, see [Scenes](/docs/advanced/scenes) — those are the
+shipped tiles for pre-set colour + brightness in SOLID mode.
 
 ## When not to tune
 
@@ -99,4 +101,4 @@ like when it ships.
 
 - [Screen capture](/docs/ambilight/screen-capture)
 - [Performance](/docs/ambilight/performance)
-- [Scenes and presets](/docs/advanced/scenes-and-presets)
+- [Scenes](/docs/advanced/scenes)
