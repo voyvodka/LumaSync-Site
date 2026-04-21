@@ -20,6 +20,7 @@
     "@astrojs/sitemap": "^3.7.2",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/instrument-serif": "^5.2.8",
     "@tailwindcss/vite": "^4.2.3",
     "astro": "^6.1.8",
     "pagefind": "^1.5.2",
