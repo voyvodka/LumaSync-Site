@@ -1,0 +1,110 @@
+---
+title: Auto-updater
+description: How LumaSync checks for new releases, verifies them with minisign, and replaces the binary without you thinking about it.
+group: advanced
+order: 20
+updated: 2026-04-21
+draft: true
+---
+
+LumaSync checks for a newer release when the app starts. If one's
+available, you see a non-blocking modal with the release notes and a
+**Install & restart** button. If not, you see nothing — no nag, no
+tray-icon badge.
+
+## How it works
+
+Under the hood, LumaSync uses `tauri-plugin-updater` against a GitHub
+Releases-based feed. Each release includes a `latest.json` manifest:
+
+```
+https://github.com/voyvodka/LumaSync/releases/latest/download/latest.json
+```
+
+The manifest lists the new version, download URLs per platform, and the
+**minisign signatures** for each artifact. The updater:
+
+1. Downloads `latest.json` on startup (once, then cached for the session).
+2. Compares the version string to the running app.
+3. If newer, fetches the matching platform artifact **and** its `.sig`
+   signature file.
+4. Verifies the signature against the minisign public key bundled in the
+   app's Tauri config.
+5. Only if the signature verifies does it replace the on-disk binary.
+6. Prompts the user to restart.
+
+No intermediate server, no version-pinning mechanism — `latest.json` is
+the source of truth.
+
+## The public key
+
+Embedded in `src-tauri/tauri.conf.json`:
+
+```json
+"updater": {
+  "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXkgOiBCODhB...",
+  "endpoints": [
+    "https://github.com/voyvodka/LumaSync/releases/latest/download/latest.json"
+  ]
+}
+```
+
+The base64 value decodes to a standard minisign public key. If someone
+replaced the binary at the download endpoint without access to the
+corresponding private key, verification fails and the updater refuses to
+install anything.
+
+## Verify a download manually
+
+If you prefer to install from a fresh download rather than through the
+in-app updater:
+
+1. Grab both the artifact and its matching `.sig` file from the
+   [Releases page](https://github.com/voyvodka/LumaSync/releases/latest).
+2. Extract the public key from the app (or use the `minisign.pub` committed
+   to the app repo).
+3. Run:
+
+```bash
+minisign -Vm LumaSync_1.2.0_universal.dmg -P "$(cat minisign.pub)"
+```
+
+Exit code 0 means the signature verifies. Anything else, don't install.
+
+## When the updater skips
+
+- **Corporate / restricted networks** that block `github.com` or
+  `releases.githubusercontent.com`. The updater fails the check and stays
+  silent — no blocking modal, no error toast. You'll need to install
+  manually from another network.
+- **Running from a read-only mount** (SIP-protected locations on macOS, for
+  example). The updater skips the replacement step and logs a warning.
+- **User disabled it** in Settings → Updates → Automatic update checks.
+
+## What it does NOT do
+
+- **Does not silently install**. Every update is confirmed by the user via
+  the modal before the binary swap happens.
+- **Does not phone home with telemetry**. The only network call is the
+  `latest.json` fetch and the subsequent artifact / signature downloads.
+- **Does not check between sessions**. The check fires exactly once per
+  app launch.
+
+## Rolling back
+
+If a release turns out bad:
+
+1. Download the previous version's artifact manually from the
+   [Releases page](https://github.com/voyvodka/LumaSync/releases).
+2. Verify with minisign.
+3. Install over the current version. Config in
+   `~/.config/lumasync/app.json` is preserved — no data loss.
+
+Future: a "pin current version" toggle in Settings → Updates is tracked as
+an enhancement. Not shipped in v1.2.0.
+
+## Related
+
+- [Download page](/download) — manual installers
+- [Config file](/docs/reference/config-file) — what persists across updates
+- [Telemetry](/docs/reference/telemetry) — what the app does and doesn't send

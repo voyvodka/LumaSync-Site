@@ -77,19 +77,15 @@ How often the capture pipeline samples the screen and pushes to the LEDs.
 
 ## Presets
 
-If fiddling four knobs sounds like a lot, the scene picker below the mode
-tiles bundles pre-tuned combos:
+**[TBD: verify]** A named preset system — save the current knob combo and
+switch between them — is on the roadmap but **not shipped** in v1.2.0.
+Current settings persist globally to `~/.config/lumasync/app.json` via
+`shellStore`; there's no UI to save and switch between multiple named
+configurations.
 
-- **Cinema** — saturation `1.1`, smoothing `high`, brightness `0.7`,
-  30 Hz
-- **Gaming** — saturation `1.0`, smoothing `off`, brightness `0.9`, 60 Hz
-- **Ambient** — saturation `0.7`, smoothing `high`, brightness `0.5`,
-  30 Hz
-- **Reading** — saturation `0.0`, smoothing `medium`, brightness `0.3`,
-  20 Hz
-
-Scene settings persist across launches; switching scenes is instant (no
-stream restart).
+See [Scenes and presets](/docs/advanced/scenes-and-presets) for the current
+mode model (Off / Ambilight / Solid) and what the preset system will look
+like when it ships.
 
 ## When not to tune
 
