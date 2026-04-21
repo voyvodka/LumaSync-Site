@@ -1,0 +1,106 @@
+---
+title: Ambilight tuning
+description: Saturation, smoothing, brightness cap, and update rate — the four knobs that shape the ambilight feel once the pipeline is running.
+group: ambilight
+order: 30
+updated: 2026-04-21
+draft: true
+---
+
+Ambilight is already usable with default settings. This page covers the
+four knobs you'll likely want to tweak once you know what the defaults look
+like — where to find them and what they trade off.
+
+## Saturation
+
+**Settings → Ambilight → Saturation** · default `1.0` · range `0.0–2.0`
+
+Scales the colour intensity of every frame before it reaches the LEDs.
+
+- **`1.0`**: pixel colours pass through unchanged. What you see on screen
+  is what the LEDs try to match.
+- **`1.4–1.6`**: "pop" mode. Desaturated scenes still produce noticeable
+  lighting. Good for TV in a room with warm bias lighting where the LEDs
+  would otherwise blend in.
+- **`0.6–0.8`**: muted. The lighting is present but doesn't compete with
+  the on-screen content. Good for productivity / text-heavy windows.
+- **`0.0`**: grayscale. Only brightness variation reaches the LEDs.
+
+## Smoothing
+
+**Settings → Ambilight → Smoothing** · default `medium` · `off / low / medium / high`
+
+Temporal smoothing blends each new frame with the previous one to reduce
+visual jitter on noisy content.
+
+- **`off`**: raw frames, maximum responsiveness. Best for fast content
+  (sports, action games) where you want strict 1:1 pixel-to-LED mapping.
+- **`low`**: ~20 ms time constant. Slight softening, barely perceptible
+  lag.
+- **`medium`** (default): ~80 ms time constant. Noticeable on hard cuts
+  (scene changes lag by one beat) but kills jitter on low-light video.
+- **`high`**: ~200 ms time constant. Very smooth but clearly laggy on
+  game/sports content. Best for ambient movie watching.
+
+Smoothing is target-aware: the USB path smooths less aggressively than the
+Hue path because Hue's 20 Hz cap already introduces damping.
+
+## Brightness cap
+
+**Settings → Ambilight → Brightness cap** · default `0.85` · range `0.0–1.0`
+
+Scales the maximum output brightness. Two reasons you'll touch this:
+
+1. **Power draw** — at `1.0`, a long WS2812B strip draws a lot. Capping at
+   `0.7` roughly halves the peak current while dropping perceived
+   brightness by only ~15%.
+2. **Heat / thermal protection** — strips adhesive-mounted to the back of
+   a TV can overheat at sustained full white. Cap at `0.6` for kits where
+   airflow is poor.
+
+Doesn't affect low-brightness content at all — scenes that never hit full
+white look identical at `1.0` and `0.7`. Only the bright ceiling moves.
+
+## Update rate
+
+**Settings → Ambilight → Update rate** · default `30 Hz` · `20 / 30 / 60`
+
+How often the capture pipeline samples the screen and pushes to the LEDs.
+
+- **`20 Hz`**: lowest CPU use. Matches the Hue bridge's ceiling exactly.
+  Feels slightly laggy on fast content.
+- **`30 Hz`** (default): good balance. Cinematic content (24 fps films)
+  upsamples fine; sports / gaming content shows visible stepping.
+- **`60 Hz`**: gaming / sports optimised. USB LED path only — Hue still
+  caps at 20 Hz internally, so setting 60 Hz while outputting to Hue just
+  wastes CPU.
+
+## Presets
+
+If fiddling four knobs sounds like a lot, the scene picker below the mode
+tiles bundles pre-tuned combos:
+
+- **Cinema** — saturation `1.1`, smoothing `high`, brightness `0.7`,
+  30 Hz
+- **Gaming** — saturation `1.0`, smoothing `off`, brightness `0.9`, 60 Hz
+- **Ambient** — saturation `0.7`, smoothing `high`, brightness `0.5`,
+  30 Hz
+- **Reading** — saturation `0.0`, smoothing `medium`, brightness `0.3`,
+  20 Hz
+
+Scene settings persist across launches; switching scenes is instant (no
+stream restart).
+
+## When not to tune
+
+- If Δ latency is bad (see [Performance](/docs/ambilight/performance)),
+  tuning won't help. Fix the capture-side issue first, then come back.
+- If colours are persistently wrong (red on screen → green on LEDs), it's
+  a firmware / wiring issue, not a tuning one. See
+  [USB troubleshooting](/docs/usb-leds/troubleshooting#wrong-colours).
+
+## Related
+
+- [Screen capture](/docs/ambilight/screen-capture)
+- [Performance](/docs/ambilight/performance)
+- [Scenes and presets](/docs/advanced/scenes-and-presets)

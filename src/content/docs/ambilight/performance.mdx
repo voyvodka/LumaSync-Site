@@ -1,0 +1,89 @@
+---
+title: Performance
+description: Read the Δ/Σ telemetry pill, know what "good" looks like on each platform, and where to look when something is off.
+group: ambilight
+order: 20
+updated: 2026-04-21
+draft: true
+---
+
+LumaSync displays a small **telemetry pill** when Ambilight mode is running:
+
+```
+Δ 12 ms · Σ 60 fps
+```
+
+- **Δ (delta)** — end-to-end latency: time from the screen pixel changing
+  to the LED pushing the corresponding colour
+- **Σ (sigma)** — update rate: frames per second actually reaching the
+  outputs
+
+Both numbers are averaged over the last 10 seconds. Spikes are expected on
+animated content; a sustained drift means something is off.
+
+## What "good" looks like
+
+| Platform | Typical Δ | Typical Σ | Notes |
+|----------|-----------|-----------|-------|
+| macOS (M-series, native display) | 10–20 ms | 60 fps | Best case |
+| macOS (Intel, external 4K) | 15–30 ms | 30–60 fps | GPU-bound on 4K |
+| Windows (recent GPU) | 10–25 ms | 60 fps | DXGI duplication is fast |
+| Windows (iGPU) | 20–50 ms | 30 fps | iGPU bandwidth limits |
+| Linux X11 | 15–30 ms | 60 fps | GLX path |
+| Linux Wayland | 30–80 ms | 20–30 fps | Portal-based; slower by design |
+
+For the Hue path specifically, **Σ caps at 20 fps** regardless of what your
+capture pipeline delivers. The bridge is the bottleneck. USB LEDs can go
+up to 60 fps.
+
+## Symptoms vs fixes
+
+### High Δ (latency) — "LEDs feel laggy"
+
+- **Δ > 100 ms sustained**: capture pipeline is stalling. Most common cause
+  on macOS is Low Power Mode throttling the GPU — plug in the charger.
+- **Δ spikes on fullscreen games**: rendering engines holding the frame
+  longer than composition. Windowed / borderless-windowed modes are
+  faster than exclusive fullscreen.
+- **Linux Wayland consistently 50+ ms**: portal-based capture is slower
+  than X11. Not fixable without switching session type.
+
+### Low Σ (frame rate)
+
+- **Σ < 20 fps**: capture is dropping frames. Check CPU usage — LumaSync
+  should sit at 3–8% during ambilight. Anything higher means something is
+  competing (antivirus real-time scan, background compilation).
+- **Σ oscillates widely**: display hot-plug, or GPU power state changing.
+  Restart ambilight (Off → Ambilight) to rebind.
+
+### Both high and unstable
+
+- **Thermal throttling on the host machine**. Check CPU/GPU temps. If the
+  machine is hot-running, LumaSync is a small contributor but still one.
+- **Background sync / indexing** — Time Machine, Spotlight reindexing,
+  OneDrive heavy upload, etc. Pause them and check again.
+
+## CPU budget
+
+LumaSync's target is **under 10% single-core** during normal ambilight
+runtime on a modern machine. If you're seeing more:
+
+- Lower the update rate (Settings → Ambilight → Update rate → 30 Hz)
+- Lower the edge signal resolution (Settings → Ambilight → Tuning →
+  Sample density → Low)
+- Disable USB or Hue output if you don't actually need both
+
+## What the numbers don't catch
+
+- **Gamma curves**. The LEDs might drive the right *numbers* within the
+  measured latency but look visually wrong because the strip's gamma isn't
+  calibrated. Telemetry says "fast"; eyes say "off".
+- **Colour banding**. LumaSync pushes 8-bit-per-channel values. If your
+  monitor is HDR content with deep banding, the capture → LED path clips.
+  Not a bug, but a source-side reality.
+
+## Related
+
+- [Screen capture](/docs/ambilight/screen-capture) — where frames come from
+- [Tuning](/docs/ambilight/tuning) — saturation, smoothing, brightness caps
+- [USB troubleshooting](/docs/usb-leds/troubleshooting) — LED-side issues that manifest as latency
