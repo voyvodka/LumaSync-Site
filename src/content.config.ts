@@ -51,4 +51,9 @@ const legal = defineCollection({
   }),
 });
 
+// The upstream CHANGELOG lives outside src/ (in vendor/lumasync/ via
+// submodule). Astro's glob loader resists picking it up from outside
+// the project's content root, so the changelog page reads the file
+// directly with fs + marked — see src/pages/changelog.astro.
+
 export const collections = { docs, compare, blog, legal };
