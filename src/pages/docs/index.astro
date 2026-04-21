@@ -1,60 +1,46 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { groupDocs, docHref } from '../../lib/content';
 
-const groupLabels: Record<string, string> = {
-  'getting-started': 'Getting Started',
-  hue: 'Philips Hue',
-  'usb-leds': 'USB LEDs',
-  ambilight: 'Ambilight',
-  advanced: 'Advanced',
-  reference: 'Reference',
-};
-
-const groupOrder = [
-  'getting-started',
-  'hue',
-  'usb-leds',
-  'ambilight',
-  'advanced',
-  'reference',
-];
-
-const entries = await getCollection('docs', ({ data }) => !data.draft);
-
-const grouped = groupOrder
-  .map((group) => ({
-    group,
-    label: groupLabels[group],
-    items: entries
-      .filter((entry) => entry.data.group === group)
-      .sort((a, b) => a.data.order - b.data.order),
-  }))
-  .filter((g) => g.items.length > 0);
+const groups = await groupDocs();
+const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0);
 ---
 
-<BaseLayout
+<DocsLayout
   title="Docs"
-  description="LumaSync documentation — setup, hardware, Philips Hue, troubleshooting, and reference."
+  description="LumaSync documentation — setup, hardware, Philips Hue, troubleshooting, reference."
 >
   <section class="docs-index">
     <header>
       <p class="eyebrow">Documentation</p>
-      <h1>LumaSync Docs</h1>
-      <p class="sub">
+      <h1 class="display">LumaSync Docs</h1>
+      <p class="lede">
         Everything needed to go from fresh install to a calibrated ambilight setup.
+        Start with <a href="/docs/getting-started/install">Install</a>, then work
+        through the group that matches your hardware.
       </p>
     </header>
 
     {
-      grouped.map(({ group, label, items }) => (
+      totalCount === 0 && (
+        <p class="empty">
+          No docs published yet. The Phase 1 MVP ships in Week 2 per the action plan.
+        </p>
+      )
+    }
+
+    {
+      groups.map(({ label, items }) => (
         <section class="group">
           <h2>{label}</h2>
           <ul role="list">
             {items.map((item) => (
               <li>
-                <a href={`/docs/${item.id.replace(/\.mdx$/, '')}`}>
-                  <span class="title">{item.data.title}</span>
+                <a href={docHref(item)}>
+                  <span class="title-row">
+                    <span class="title">{item.data.title}</span>
+                    {item.data.draft && <span class="pill">draft</span>}
+                  </span>
                   <span class="desc">{item.data.description}</span>
                 </a>
               </li>
@@ -63,53 +49,50 @@ const grouped = groupOrder
         </section>
       ))
     }
-
-    {
-      grouped.length === 0 && (
-        <p class="empty">No docs published yet. Phase 1 MVP ships in Week 2.</p>
-      )
-    }
   </section>
-</BaseLayout>
+</DocsLayout>
 
 <style>
-  .docs-index {
-    max-width: 48rem;
-    margin: 0 auto;
-    padding: 4rem 1.25rem 6rem;
-  }
-
-  .eyebrow {
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin: 0 0 0.75rem;
-  }
-
-  h1 {
-    font-family: var(--font-serif);
-    font-size: 2.5rem;
-    margin: 0 0 0.5rem;
-    color: var(--text-primary);
-  }
-
-  .sub {
-    color: var(--text-secondary);
-    margin: 0 0 3rem;
-  }
-
-  .group {
+  .docs-index > header {
     margin-bottom: 2.5rem;
   }
 
+  h1 {
+    font-size: var(--fs-3xl);
+    margin: 0 0 0.75rem;
+  }
+
+  .lede {
+    color: var(--text-secondary);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  .lede a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+
+  .lede a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .group {
+    margin-top: 2.5rem;
+  }
+
   .group h2 {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     color: var(--text-muted);
     margin: 0 0 0.75rem;
+    font-weight: 500;
   }
 
   ul {
@@ -120,29 +103,49 @@ const grouped = groupOrder
     gap: 0.5rem;
   }
 
-  a {
+  li a {
     display: block;
-    padding: 1rem;
+    padding: 1rem 1.125rem;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
   }
 
-  a:hover {
+  li a:hover {
     border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
   }
 
   .title {
-    display: block;
     color: var(--text-primary);
     font-weight: 500;
+  }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 0.0625rem 0.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    color: var(--accent);
   }
 
   .desc {
     display: block;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: var(--fs-sm);
     margin-top: 0.25rem;
   }
 

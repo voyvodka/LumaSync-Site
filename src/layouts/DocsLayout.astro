@@ -1,0 +1,48 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import DocsSidebar from '../components/DocsSidebar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <div class="docs-shell">
+    <DocsSidebar currentPath={currentPath} />
+    <div class="docs-main">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .docs-shell {
+    max-width: calc(var(--container-wide) + 2.5rem);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    padding-block: 3rem 4rem;
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .docs-main {
+    min-width: 0;
+    max-width: calc(var(--container-content) + 2.5rem);
+  }
+
+  @media (max-width: 900px) {
+    .docs-shell {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-block: 2rem 3rem;
+    }
+  }
+</style>
