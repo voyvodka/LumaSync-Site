@@ -1,14 +1,23 @@
 ---
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { groupDocs, docHref } from '../../lib/content';
+import { breadcrumbSchema } from '../../lib/seo';
 
 const groups = await groupDocs();
 const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0);
+
+const schemas = [
+  breadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Docs', url: '/docs' },
+  ]),
+];
 ---
 
 <DocsLayout
   title="Docs"
   description="LumaSync documentation — setup, hardware, Philips Hue, troubleshooting, reference."
+  schemas={schemas}
 >
   <section class="docs-index">
     <header>

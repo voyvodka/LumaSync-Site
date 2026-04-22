@@ -1,0 +1,15 @@
+---
+// Emits one or more schema.org JSON-LD blocks. Accepts an array so pages
+// can stack Organization + WebSite + page-specific schemas without
+// collapsing into an @graph wrapper (cleaner for validators).
+//
+// JSON.stringify is safe here — schema fields are built from build-time
+// data we control; no user-supplied strings pass through.
+interface Props {
+  schemas: unknown[];
+}
+
+const { schemas } = Astro.props;
+---
+
+{schemas.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}

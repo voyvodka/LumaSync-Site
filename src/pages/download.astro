@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { softwareAppSchema, breadcrumbSchema } from '../lib/seo';
 
 // Fetch the latest release from GitHub at build time. No runtime network —
 // every visitor gets a pre-rendered page. Rebuild (or run CI) to refresh.
@@ -101,12 +102,27 @@ const publishedDate = release?.published_at
       day: 'numeric',
     })
   : null;
+
+const downloadDescription =
+  'Download LumaSync for macOS, Windows, or Linux. Binaries signed with minisign and verified before any update replaces them on disk.';
+
+const schemas = [
+  breadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Download', url: '/download' },
+  ]),
+  softwareAppSchema({
+    name: 'LumaSync',
+    description: downloadDescription,
+    version: release?.tag_name,
+    operatingSystems: ['macOS', 'Windows', 'Linux'],
+    downloadUrl: release?.html_url ?? RELEASES_PAGE,
+    datePublished: release?.published_at,
+  }),
+];
 ---
 
-<BaseLayout
-  title="Download"
-  description="Download LumaSync for macOS, Windows, or Linux. Binaries signed with minisign and verified before any update replaces them on disk."
->
+<BaseLayout title="Download" description={downloadDescription} schemas={schemas}>
   <section class="download">
     <header>
       <p class="eyebrow">Install</p>

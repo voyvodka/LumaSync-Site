@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { listDocs, DOC_GROUP_LABELS } from '../../lib/content';
+import { breadcrumbSchema, techArticleSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const entries = await listDocs();
@@ -14,12 +15,33 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const groupLabel = DOC_GROUP_LABELS[entry.data.group];
+const slug = entry.id.replace(/\.mdx$/, '');
+const docPath = `/docs/${slug}`;
+
+const schemas = entry.data.draft
+  ? []
+  : [
+      breadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Docs', url: '/docs' },
+        { name: groupLabel, url: '/docs' },
+        { name: entry.data.title, url: docPath },
+      ]),
+      techArticleSchema({
+        title: entry.data.title,
+        description: entry.data.description,
+        url: docPath,
+        dateModified: entry.data.updated.toISOString(),
+        section: groupLabel,
+      }),
+    ];
 ---
 
 <DocsLayout
   title={entry.data.title}
   description={entry.data.description}
   noindex={entry.data.draft}
+  schemas={schemas}
 >
   <article class="doc">
     <header>
