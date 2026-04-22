@@ -43,7 +43,7 @@ jobs:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: Deploy to Hetzner
-        uses: burnett01/rsync-deployments@fcf16a05b8650e3704a3871139dce6dde00aa472 # v7.0.2
+        uses: burnett01/rsync-deployments@66257cad6bfeb2171d3b6bfa6c9a22279dd9c3a1 # v8.0.5
         with:
           switches: -avzr --delete
           path: dist/
