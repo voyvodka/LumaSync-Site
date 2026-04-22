@@ -1,4 +1,61 @@
+# Default: allow everything, point to the sitemap.
 User-agent: *
 Allow: /
+
+# Content-Signal (Cloudflare 2025 proposal): let crawlers know how this
+# content may be used. search=yes opts into retrieval/indexing; ai-train=no
+# blocks training corpora; ai-input=yes permits retrieval-augmented answer
+# generation (RAG / answer engines) since pages are already public docs.
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+# Retrieval-for-answer bots — allowed. These fetch pages at query time to
+# ground a cited answer; that's indistinguishable from organic discovery.
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Training-corpus bots — disallowed. Flip to Allow: / if the policy ever
+# opens up to training use; the Content-Signal above is the canonical
+# machine-readable declaration.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
 
 Sitemap: https://lumasync.app/sitemap-index.xml
