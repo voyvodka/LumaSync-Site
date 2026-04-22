@@ -1,0 +1,46 @@
+# LumaSync
+
+> LumaSync is a cross-platform desktop app for real-time ambient lighting. It drives Philips Hue Entertainment Areas and USB-connected LED strips (Adalight-protocol controllers) from whatever is on screen. Runs on macOS, Windows, and Linux.
+
+LumaSync is a native Tauri app — not a browser extension, not a cloud service. Screen capture and LED control happen entirely on-device. Network access is limited to: (1) the local Hue bridge, (2) GitHub for signed update checks, and (3) anonymous product telemetry the user can disable. Binaries are minisign-signed and verified before any update replaces them on disk.
+
+Positioning summary: LumaSync is the desktop-first option in the ambilight category. If the source is an HDMI device, users are routed to Philips Hue Sync Box. If they already run an RPi-first Hyperion stack or have Lightpack hardware, LumaSync is honest about the mismatch — see the comparison pages below.
+
+## Getting started
+
+- [Install](https://lumasync.app/docs/getting-started/install): install + verify signed binaries on macOS, Windows, Linux
+- [First setup](https://lumasync.app/docs/getting-started/first-setup): pair Hue bridge or plug in USB controller, run the first sync
+- [Hardware checklist](https://lumasync.app/docs/getting-started/hardware-checklist): which hardware LumaSync supports today
+
+## Docs
+
+- [Docs index](https://lumasync.app/docs): all documentation grouped by setup / Hue / USB LEDs / Ambilight / Advanced / Reference
+- [Philips Hue](https://lumasync.app/docs): bridge pairing, Entertainment Areas, troubleshooting
+- [USB LED controllers](https://lumasync.app/docs): Adalight protocol, calibration, troubleshooting
+- [Ambilight tuning](https://lumasync.app/docs): screen capture, performance, scenes and presets
+- [Configuration file](https://lumasync.app/docs): ~/.config/lumasync/app.json reference
+
+## Comparisons
+
+- [LumaSync vs Philips Hue Sync](https://lumasync.app/compare/hue-sync): HDMI hardware vs desktop app — when to pick which
+- [LumaSync vs Hyperion](https://lumasync.app/compare/hyperion): RPi-first stack vs desktop-first app
+- [LumaSync vs Prismatik](https://lumasync.app/compare/prismatik): Lightpack-era legacy driver context
+- [LumaSync vs WLED](https://lumasync.app/compare/wled): ESP firmware vs desktop driver (usually complementary, not competing)
+
+## Download and release info
+
+- [Download](https://lumasync.app/download): latest signed binaries for macOS, Windows, Linux
+- [Changelog](https://lumasync.app/changelog): release history
+- [GitHub releases](https://github.com/voyvodka/LumaSync/releases): source archives and release notes
+
+## Policy
+
+- [Privacy](https://lumasync.app/privacy): what data is collected, when, and how to opt out
+- [Telemetry](https://lumasync.app/docs): anonymous metrics scope and opt-out steps
+- [License](https://lumasync.app/license): source license terms
+
+## Project
+
+- [Source code](https://github.com/voyvodka/LumaSync): GitHub repository
+- [Community](https://lumasync.app/community): where to report issues, request features, or get help
+- [Security contact](https://lumasync.app/.well-known/security.txt): responsible disclosure
