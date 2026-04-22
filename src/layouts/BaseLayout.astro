@@ -5,6 +5,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SkipLink from '../components/SkipLink.astro';
 import Search from '../components/Search.astro';
+import Schema from '../components/Schema.astro';
+import { organizationSchema, webSiteSchema } from '../lib/seo';
 
 interface Props {
   title: string;
@@ -12,11 +14,17 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   noindex?: boolean;
+  schemas?: unknown[];
 }
 
-const { title, description, canonical, ogImage, noindex } = Astro.props;
+const { title, description, canonical, ogImage, noindex, schemas = [] } = Astro.props;
 const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
 const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
+
+// Organization + WebSite are emitted on every page. noindex pages opt out
+// so draft content isn't published into the entity graph before review.
+const baseSchemas = noindex ? [] : [organizationSchema(), webSiteSchema()];
+const allSchemas = [...baseSchemas, ...schemas];
 ---
 
 <!doctype html>
@@ -26,6 +34,14 @@ const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/brand/monogram.svg" color="#ffb020" />
+    <meta name="theme-color" content="#0a0b0e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffb020" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="application-name" content="LumaSync" />
+    <meta name="apple-mobile-web-app-title" content="LumaSync" />
+    <meta name="format-detection" content="telephone=no" />
     <SEO
       title={title}
       description={description}
@@ -33,6 +49,7 @@ const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
       ogImage={ogImage}
       noindex={noindex}
     />
+    <Schema schemas={allSchemas} />
     {umamiSiteId && umamiSrc && <script defer data-website-id={umamiSiteId} src={umamiSrc} />}
   </head>
   <body>

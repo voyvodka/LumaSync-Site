@@ -1,8 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { listCompare, compareHref } from '../../lib/content';
+import { breadcrumbSchema } from '../../lib/seo';
 
 const entries = await listCompare();
+
+const schemas = [
+  breadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Compare', url: '/compare' },
+  ]),
+];
 
 // Canonical one-liners per comparison. Kept short on purpose — the
 // full page does the work. This index is the SEO hub for terms like
@@ -24,6 +32,7 @@ function oneLiner(slug: string): string {
 <BaseLayout
   title="Compare"
   description="LumaSync vs the alternatives — Philips Hue Sync, Hyperion, Prismatik, WLED. Honest side-by-side positioning, no fabricated wins."
+  schemas={schemas}
 >
   <section class="compare-index" data-pagefind-body>
     <header>

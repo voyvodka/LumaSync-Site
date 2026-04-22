@@ -10,6 +10,7 @@ interface Props {
 const { title, description, canonical, ogImage, noindex } = Astro.props;
 
 const siteTitle = title === 'LumaSync' ? title : `${title} · LumaSync`;
+const ogAltText = title === 'LumaSync' ? 'LumaSync' : `${title} — LumaSync`;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 
 // Derive the OG path from the current URL. Matches the keys in
@@ -37,9 +38,14 @@ const ogImageUrl = ogImage
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogAltText} />
 <meta property="og:site_name" content="LumaSync" />
+<meta property="og:locale" content="en_US" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={siteTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={ogAltText} />
