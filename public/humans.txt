@@ -1,0 +1,21 @@
+/* TEAM */
+  Maintainer: voyvodka
+  GitHub:     https://github.com/voyvodka
+  Source:     https://github.com/voyvodka/LumaSync
+
+/* SITE */
+  Last update: 2026-04-22
+  Language:    English
+  Doctype:     HTML5
+  IDE:         VS Code
+
+/* TECHNOLOGY */
+  Framework:   Astro
+  Search:      Pagefind
+  Fonts:       IBM Plex Sans, IBM Plex Mono, Instrument Serif
+  OG images:   Satori + resvg
+  Deploy:      Hetzner (static rsync)
+
+/* THANKS */
+  Tauri, Philips Hue SDK, Adalight protocol, and everyone who reported
+  issues against LumaSync's early alphas.

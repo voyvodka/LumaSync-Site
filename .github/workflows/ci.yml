@@ -36,6 +36,11 @@ jobs:
       - name: Lint (prettier --check)
         run: pnpm lint
 
+      # Astro + TypeScript + zod content schema check. Runs before build
+      # so type regressions fail fast without waiting for the full bundle.
+      - name: Type check (astro check)
+        run: pnpm check
+
       - name: Build
         run: pnpm build
 

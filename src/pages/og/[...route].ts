@@ -319,7 +319,9 @@ export const GET: APIRoute = async ({ props }) => {
 
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
 
-  return new Response(png, {
+  // Buffer → Uint8Array keeps strict TS (astrojs/check) happy; Buffer
+  // does not structurally satisfy BodyInit under lib.dom.
+  return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',
       'Cache-Control': 'public, max-age=31536000, immutable',
