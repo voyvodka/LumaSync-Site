@@ -22,12 +22,12 @@
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/instrument-serif": "^5.2.8",
     "@resvg/resvg-js": "^2.6.2",
-    "@tailwindcss/vite": "^4.2.3",
+    "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.1.8",
     "marked": "^18.0.2",
     "pagefind": "^1.5.2",
     "satori": "^0.26.0",
-    "tailwindcss": "^4.2.3"
+    "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
