@@ -5,6 +5,12 @@
 # Note: the `vendor/lumasync` git submodule is intentionally NOT tracked
 # by Dependabot. Submodule refs are bumped manually on every app release
 # after a human review pass (per .thinking/02-website.md § #3).
+#
+# Pre-release handling: Dependabot does not open PRs for pre-release
+# versions unless the package is already on a pre-release track, so the
+# "latest stable, no pre-releases" policy is satisfied by the default
+# behaviour — no explicit ignore rule is required (and `semver-prerelease`
+# is not a valid `update-types` value anyway).
 
 version: 2
 updates:
@@ -27,12 +33,6 @@ updates:
         update-types:
           - minor
           - patch
-    # Block pre-release tags per #0 dependency policy.
-    # Dependabot does not pull pre-releases by default, but be explicit.
-    ignore:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-prerelease
 
   - package-ecosystem: github-actions
     directory: /
