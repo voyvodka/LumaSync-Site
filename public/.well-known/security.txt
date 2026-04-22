@@ -1,6 +1,14 @@
-# Placeholder — update with real contact before going public.
-# See .thinking/02-website.md § #9.
-Contact: mailto:security@lumasync.app
+# Responsible disclosure endpoint per RFC 9116.
+#
+# Primary channel: GitHub Private Vulnerability Reporting — creates a
+# private advisory thread visible only to repo maintainers. Requires
+# GitHub PVR to be enabled in the repo's Security settings.
+#
+# The mailto: below is a placeholder. Before publishing a second
+# Contact: line for email, confirm the address accepts mail (lumasync.app
+# has no MX record at the time this file was written). A bouncing
+# security contact is worse than none — it misleads the reporter.
+Contact: https://github.com/voyvodka/LumaSync/security/advisories/new
 Preferred-Languages: en
 Canonical: https://lumasync.app/.well-known/security.txt
 Expires: 2027-04-21T00:00:00.000Z

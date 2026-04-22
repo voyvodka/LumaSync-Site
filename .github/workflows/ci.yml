@@ -21,7 +21,9 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: pnpm/action-setup@v4
+      # Third-party Actions pinned to commit SHAs to defeat tag repointing
+      # (supply-chain). Dependabot keeps the version comments current.
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - uses: actions/setup-node@v4
         with:
@@ -43,3 +45,30 @@ jobs:
         run: pnpm dlx @lhci/cli@latest autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+  secret-scan:
+    name: secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so gitleaks can scan every commit, not just HEAD.
+          # Without fetch-depth: 0 the scan misses credentials introduced
+          # in older commits that were never reverted.
+          fetch-depth: 0
+
+      # Pinned release binary instead of an Action to avoid a third-party
+      # Action in the trust boundary for something this privilege-sensitive.
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.30.1
+        run: |
+          curl -sSfL -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tar -xzf gitleaks.tar.gz gitleaks
+          chmod +x gitleaks
+          sudo mv gitleaks /usr/local/bin/
+
+      - name: Run gitleaks
+        run: gitleaks detect --no-banner --redact --verbose
