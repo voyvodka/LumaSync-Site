@@ -1,0 +1,29 @@
+{
+  "name": "LumaSync",
+  "short_name": "LumaSync",
+  "description": "Cross-platform desktop app for real-time ambient lighting — drives Philips Hue Entertainment Areas and USB LED strips from whatever is on screen.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "theme_color": "#0a0b0e",
+  "background_color": "#0a0b0e",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
