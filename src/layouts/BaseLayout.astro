@@ -8,6 +8,17 @@ import Search from '../components/Search.astro';
 import Schema from '../components/Schema.astro';
 import { organizationSchema, webSiteSchema } from '../lib/seo';
 
+// Preload the three most-used font weights so @fontsource's font-face
+// declarations don't block on a round-trip at first paint. Covers ~90%
+// of above-the-fold glyphs (body 400, headings 600, mono eyebrows /
+// kbd 400). Heavier weights (500) and Instrument Serif (hero h1 only)
+// load lazily via the CSS @import in global.css. Vite's ?url import
+// returns the hashed asset path after Astro's build, so the browser
+// reuses the same file that @font-face points at — no double fetch.
+import sans400 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
+import sans600 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2?url';
+import mono400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
+
 interface Props {
   title: string;
   description: string;
@@ -45,6 +56,9 @@ const allSchemas = [...baseSchemas, ...schemas];
     <link rel="mask-icon" href="/brand/monogram.svg" color="#ffb020" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="author" href="/humans.txt" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={sans400} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={sans600} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={mono400} />
     <meta name="theme-color" content="#0a0b0e" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#ffb020" media="(prefers-color-scheme: light)" />
     <meta name="color-scheme" content="dark light" />
