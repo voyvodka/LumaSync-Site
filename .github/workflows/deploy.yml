@@ -11,7 +11,7 @@ name: deploy
 #
 # Required repo secrets:
 #   - CLOUDFLARE_API_TOKEN  (Pages:Edit on the account + Zone:Read on lumasync.app)
-#   - CLOUDFLARE_ACCOUNT_ID (— [REDACTED])
+#   - CLOUDFLARE_ACCOUNT_ID (Cloudflare account ID that owns the lumasync-site-beta project)
 
 on:
   push:

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: App bug or feature request (desktop app)
+    url: https://github.com/voyvodka/LumaSync/issues/new/choose
+    about: For LumaSync desktop-app bugs (firmware, USB, Hue streaming, UI), file against the app repo instead of the site repo.
+  - name: Questions and discussion
+    url: https://github.com/voyvodka/LumaSync/discussions
+    about: Open-ended questions, setup help, hardware compatibility reports.
+  - name: Security vulnerability
+    url: https://github.com/voyvodka/LumaSync-Site/security/advisories/new
+    about: Report privately through GitHub Private Vulnerability Reporting. Do not open a public issue.
