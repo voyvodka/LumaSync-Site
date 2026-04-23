@@ -78,10 +78,18 @@ main:focus {
   outline: none;
 }
 
+/* Dual-layer focus ring: 2px amber outline + 2px dark halo (surface-0)
+ * inside the offset. Without the halo, focus on amber CTA backgrounds
+ * (.cta-primary, .tag-shipped, .detected-pill, .skip-link) blends into
+ * the button itself. The halo guarantees a contrasting edge on any bg.
+ * box-shadow follows the element's border-radius automatically, so we
+ * don't force a global radius override the way the previous version did. */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  box-shadow:
+    0 0 0 2px var(--surface-0),
+    0 0 0 4px var(--focus-ring);
 }
 
 code,
@@ -296,5 +304,47 @@ kbd {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Forced-colors (Windows high-contrast / macOS increase contrast) ──
+ *
+ * When the OS paints with a forced palette (Windows High Contrast,
+ * macOS "Increase contrast" on some versions), amber accents, subtle
+ * borders, and decorative gradients disappear or turn into solid blocks
+ * that lose meaning. Remap interactive surfaces to the system keyword
+ * palette so structure survives. See
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors
+ * for the keyword list. */
+@media (forced-colors: active) {
+  :focus-visible {
+    /* System Highlight is the forced-colors equivalent of our accent.
+     * Box-shadow halo loses its dark layer to ForcedColorAdjust, so we
+     * rely on the plain system outline — still WCAG AA in every MS
+     * high-contrast theme. */
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  /* Restore system borders on interactive elements whose visible edge
+   * comes from background-color alone (our CTAs and tag pills). Without
+   * these, amber-on-amber pills flatten into single blocks in HC mode. */
+  a,
+  button,
+  [role='button'],
+  input,
+  select,
+  textarea,
+  kbd {
+    forced-color-adjust: auto;
+  }
+
+  /* Decorative gradients and backdrop-blur chrome that carry no
+   * information — let the system repaint them as solid Canvas. */
+  .hero-visual-img,
+  .callout-visual img,
+  .mobile-nav-backdrop {
+    background: Canvas;
   }
 }
