@@ -5,21 +5,14 @@ name: codeql
 # newly-disclosed rules catch regressions even without code churn.
 # Results land in the repo's Security → Code scanning tab.
 
-# Push, PR, and weekly-schedule triggers are commented out until the
-# repo's "Code scanning" feature is enabled in
-# Settings → Security → Code security and analysis. Without that toggle
-# CodeQL's analyze step succeeds but the SARIF upload returns HTTP 403
-# ("Code scanning is not enabled"), failing the run on every push and
-# polluting commit-status checks. Once the toggle is on, restore the
-# triggers below to resume automatic scans.
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  # pull_request:
-  #   branches: [main]
-  # schedule:
-  #   - cron: '0 3 * * 1'  # Mondays 03:00 UTC = 06:00 Europe/Istanbul
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * 1' # Mondays 03:00 UTC = 06:00 Europe/Istanbul
 
 concurrency:
   group: codeql-${{ github.ref }}
