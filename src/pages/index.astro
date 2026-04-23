@@ -1467,9 +1467,17 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       max-width: 100%;
     }
 
+    /* Stacked on mobile; stretch (not flex-start) so the full-mode img
+     * respects container width instead of hugging its 900px intrinsic
+     * size — that was the horizontal-scroll source on narrow screens.
+     * Compact stays capped at 12rem and centers under the full image. */
     .callout-visual.dual {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+    }
+
+    .callout-visual.dual .dual-compact {
+      align-self: center;
     }
   }
 </style>
