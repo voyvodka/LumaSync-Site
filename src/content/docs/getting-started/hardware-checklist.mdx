@@ -6,6 +6,7 @@ order: 30
 updated: 2026-04-21
 draft: true
 ---
+
 import { LATEST_VERSION } from '../../../lib/version';
 
 LumaSync is a controller, not a store. You bring the lights; we drive them. This
@@ -26,10 +27,10 @@ page lists what actually works with {LATEST_VERSION} — the checklist is short 
 
 One of the supported chipsets:
 
-| Chip           | USB VID:PID | Notes                                                            |
-| -------------- | ----------- | ---------------------------------------------------------------- |
+| Chip           | USB VID:PID | Notes                                                             |
+| -------------- | ----------- | ----------------------------------------------------------------- |
 | **CH340**      | `1A86:7523` | Cheap and ubiquitous. Most Arduino-clone ambilight kits use this. |
-| **FTDI FT232** | `0403:6001` | More expensive, fewer driver headaches on macOS.                 |
+| **FTDI FT232** | `0403:6001` | More expensive, fewer driver headaches on macOS.                  |
 
 The controller must run **LumaSync v1 firmware at 115200 baud** — see the
 [Serial protocol](/docs/usb-leds/serial-protocol) page for the wire spec.

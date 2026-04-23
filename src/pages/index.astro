@@ -23,7 +23,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     </div>
 
     <figure class="hero-visual">
-      {/*
+      {
+        /*
          Static recreation of LumaSync's Lights section in full mode
          (900×620). Uses the app's Rev 07 amber palette tokens
          (--lm-*), IBM Plex Mono for chrome text, and element shapes
@@ -31,9 +32,13 @@ const repo = 'https://github.com/voyvodka/LumaSync';
          preview + status bar. Not interactive — decorative only —
          so aria-hidden plus a descriptive caption keep screen
          readers on the real story.
-       */}
-      <div class="app-mock" role="img" aria-label="LumaSync full-mode Lights section — Ambilight running, scene presets visible, edge-signal preview and Δ/Σ telemetry pill live."
->
+       */
+      }
+      <div
+        class="app-mock"
+        role="img"
+        aria-label="LumaSync full-mode Lights section — Ambilight running, scene presets visible, edge-signal preview and Δ/Σ telemetry pill live."
+      >
         <div class="app-chrome">
           <div class="app-chrome-brand">
             <span class="mono-mark" aria-hidden="true"></span>
@@ -100,20 +105,30 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         </div>
 
         <div class="app-status">
-          <span class="app-status-pair"><span class="k">mode</span><span class="v">
-            <span class="pip pip-ok" aria-hidden="true"></span> ambilight</span></span>
-          <span class="app-status-pair"><span class="k">usb</span><span class="v">
-            <span class="pip pip-ok" aria-hidden="true"></span> ch340</span></span>
-          <span class="app-status-pair"><span class="k">hue</span><span class="v">
-            <span class="pip pip-ok" aria-hidden="true"></span> stream</span></span>
+          <span class="app-status-pair"
+            ><span class="k">mode</span><span class="v">
+              <span class="pip pip-ok" aria-hidden="true"></span> ambilight</span
+            ></span
+          >
+          <span class="app-status-pair"
+            ><span class="k">usb</span><span class="v">
+              <span class="pip pip-ok" aria-hidden="true"></span> ch340</span
+            ></span
+          >
+          <span class="app-status-pair"
+            ><span class="k">hue</span><span class="v">
+              <span class="pip pip-ok" aria-hidden="true"></span> stream</span
+            ></span
+          >
           <span class="app-status-tele" aria-hidden="true">
-            <b>Δ</b> 12 ms <span class="tele-sep"></span> <b>Σ</b> 60 fps
+            <b>Δ</b> 12 ms <span class="tele-sep"></span>
+            <b>Σ</b> 60 fps
           </span>
         </div>
       </div>
       <figcaption>
-        Full-mode Lights section with Ambilight active — static recreation using the app's
-        Rev 07 amber tokens.
+        Full-mode Lights section with Ambilight active — static recreation using the app's Rev 07
+        amber tokens.
       </figcaption>
     </figure>
   </section>
@@ -128,8 +143,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         <h3>USB LED strips</h3>
         <p>
           CH340 and FT232 controllers at 115200 baud, running the
-          <a href="/docs/usb-leds/serial-protocol">LumaSync v1 serial frame</a>. Opt-in
-          Adalight profile on the v1.4 roadmap.
+          <a href="/docs/usb-leds/serial-protocol">LumaSync v1 serial frame</a>. Opt-in Adalight
+          profile on the v1.4 roadmap.
         </p>
         <a href="/docs/usb-leds/controllers">Supported chipsets →</a>
       </article>
@@ -859,13 +874,7 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     left: 0;
     right: 0;
     height: 14%;
-    background: linear-gradient(
-      90deg,
-      #d9521e 0%,
-      #ffc860 35%,
-      #66b4ff 65%,
-      #4cad70 100%
-    );
+    background: linear-gradient(90deg, #d9521e 0%, #ffc860 35%, #66b4ff 65%, #4cad70 100%);
     opacity: 0.75;
   }
 
@@ -874,13 +883,7 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     left: 0;
     right: 0;
     height: 14%;
-    background: linear-gradient(
-      90deg,
-      #4cad70 0%,
-      #66b4ff 30%,
-      #ff6a88 65%,
-      #d9521e 100%
-    );
+    background: linear-gradient(90deg, #4cad70 0%, #66b4ff 30%, #ff6a88 65%, #d9521e 100%);
     opacity: 0.75;
   }
 
@@ -908,11 +911,7 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     bottom: 20%;
     left: 10%;
     right: 10%;
-    background: linear-gradient(
-      135deg,
-      rgba(217, 82, 30, 0.35),
-      rgba(76, 173, 112, 0.3) 70%
-    );
+    background: linear-gradient(135deg, rgba(217, 82, 30, 0.35), rgba(76, 173, 112, 0.3) 70%);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 3px;
   }
