@@ -48,8 +48,8 @@ Use the `.AppImage` from the [Download page](/download). Mark it executable and
 run:
 
 ```bash
-chmod +x LumaSync_1.2.0_amd64.AppImage
-./LumaSync_1.2.0_amd64.AppImage
+chmod +x LumaSync_1.3.1_amd64.AppImage
+./LumaSync_1.3.1_amd64.AppImage
 ```
 
 Tray behavior varies by desktop environment — GNOME requires a third-party
@@ -64,7 +64,7 @@ app and the updater verifies every binary before replacing anything on disk.
 To verify a download manually:
 
 ```bash
-minisign -Vm LumaSync_1.2.0_universal.dmg -P "$(cat minisign.pub)"
+minisign -Vm LumaSync_1.3.1_universal.dmg -P "$(cat minisign.pub)"
 ```
 
 `minisign.pub` is committed to the app repo. See [Auto-updater](/docs/advanced/auto-updater)

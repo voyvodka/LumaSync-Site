@@ -5,6 +5,7 @@ description: WLED is ESP32/ESP8266 firmware for addressable LED strips — stand
 updated: 2026-04-21
 draft: true
 ---
+import { LATEST_VERSION } from '../../lib/version';
 
 **WLED** isn't a desktop app — it's **firmware that runs on an ESP32 or
 ESP8266 microcontroller**. You flash it onto a cheap Wi-Fi board, wire the
@@ -29,7 +30,7 @@ either, and eventually both together.**
 - **LumaSync wins** for desktop-driven ambilight with native Philips Hue
   Entertainment, tray-first UX, and zero soldering.
 - **LumaSync does not currently speak WLED.** If your rig is ESP32 +
-  WS2812B running WLED firmware, LumaSync v1.2.0 can't drive it. An
+  WS2812B running WLED firmware, LumaSync {LATEST_VERSION} can't drive it. An
   ESP32 / WLED bridge is on the planned roadmap but is not shipped.
 
 ## Feature comparison
@@ -46,7 +47,7 @@ either, and eventually both together.**
 | HomeAssistant             | Not needed                            | First-class                                         |
 | Standalone operation      | Requires computer running             | Yes — the board is the server                       |
 | Mobile control            | No dedicated app                      | Yes — web UI works on mobile, plus third-party apps |
-| LumaSync → WLED bridge    | **No — not in v1.2.0.** Roadmap item. | N/A                                                 |
+| LumaSync → WLED bridge    | **No — not in {LATEST_VERSION}.** Roadmap item. | N/A                                                 |
 | Open source               | MIT                                   | MIT                                                 |
 
 ## When to pick LumaSync
@@ -83,7 +84,7 @@ there's no conflict.
 An ESP32-based bridge path — LumaSync driving WLED directly over the LAN
 — is a **future direction** acknowledged in the project's strategy
 notes (see the [`/7.md`](https://github.com/voyvodka/LumaSync) Wi-Fi
-bridge track). It's not in v1.2.0 and doesn't have a ship date. If it
+bridge track). It's not in {LATEST_VERSION} and doesn't have a ship date. If it
 matters to your decision now, treat it as "not shipped."
 
 ## Migration notes

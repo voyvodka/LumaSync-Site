@@ -5,6 +5,7 @@ description: Prismatik was the Lightpack driver and remains a dormant desktop am
 updated: 2026-04-21
 draft: true
 ---
+import { LATEST_VERSION, LATEST_VERSION_DATE } from '../../lib/version';
 
 **Prismatik** started life as the driver for the **Lightpack** USB ambilight
 hardware (a Kickstarter-era six-LED behind-TV kit). The original project
@@ -33,7 +34,7 @@ answer for everyone else.**
 
 | Feature                   | LumaSync                                    | Prismatik (psieg fork)                                                                                                                       |
 | ------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Maintenance status        | Active — v1.2.0 shipped 2026-04-10          | Dormant — last release 5.11.2.31 on 2022-01-08 (~4 years ago)                                                                                |
+| Maintenance status        | Active — {LATEST_VERSION} shipped {LATEST_VERSION_DATE}          | Dormant — last release 5.11.2.31 on 2022-01-08 (~4 years ago)                                                                                |
 | Target platform           | macOS, Windows, Linux (experimental)        | Windows (primary), macOS / Linux community builds                                                                                            |
 | USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap) | Yes — Adalight protocol                                                                                                                      |
 | Lightpack hardware        | No — original hardware discontinued         | Yes — the reason this project exists                                                                                                         |
@@ -43,7 +44,7 @@ answer for everyone else.**
 | Auto-updates              | minisign-signed, GitHub Releases            | Built-in updater with signed artifacts (`.updater_signature` ships alongside installers), but the updater points at a dormant release stream |
 | Open source               | MIT                                         | GPLv3                                                                                                                                        |
 | Apple Silicon             | Universal binary                            | x86_64 only (Rosetta on Apple Silicon) — psieg fork's 5.11.2.31 dmg predates Apple Silicon support                                           |
-| Last update               | [v1.2.0, 2026-04-10](/changelog)            | 5.11.2.31 on 2022-01-08                                                                                                                      |
+| Last update               | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog)            | 5.11.2.31 on 2022-01-08                                                                                                                      |
 
 ## When to pick LumaSync
 
