@@ -23,7 +23,9 @@ const isActive = (href: string) =>
         </svg>
         <span class="brand-name">LumaSync</span>
       </a>
-      <ul role="list">
+
+      {/* Desktop link row — hidden below 720px */}
+      <ul class="nav-links" role="list">
         {
           links.map(({ href, label }) => (
             <li>
@@ -34,19 +36,152 @@ const isActive = (href: string) =>
           ))
         }
       </ul>
-      <button type="button" class="search-trigger" data-search-open aria-label="Open search">
-        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-          <path
-            d="M11 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-.7 3.3a5.5 5.5 0 1 1 1-1l2.7 2.7-1 1-2.7-2.7Z"
-            fill="currentColor"></path>
-        </svg>
-        <span class="search-kbd">
-          <kbd>⌘</kbd><kbd>K</kbd>
-        </span>
-      </button>
+
+      <div class="nav-controls">
+        <button type="button" class="search-trigger" data-search-open aria-label="Open search">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <path
+              d="M11 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-.7 3.3a5.5 5.5 0 1 1 1-1l2.7 2.7-1 1-2.7-2.7Z"
+              fill="currentColor"></path>
+          </svg>
+          <span class="search-kbd">
+            <kbd>⌘</kbd><kbd>K</kbd>
+          </span>
+        </button>
+
+        {/* Hamburger — hidden on desktop via media query */}
+        <button
+          type="button"
+          class="nav-toggle"
+          data-nav-toggle
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+        >
+          <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+            <path
+              d="M3 5h14M3 10h14M3 15h14"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              fill="none"></path>
+          </svg>
+        </button>
+      </div>
     </nav>
   </Container>
 </header>
+
+{/* Mobile drawer — slide in from right, dimmed backdrop */}
+<div
+  id="mobile-nav"
+  class="mobile-nav"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site navigation"
+  aria-hidden="true"
+  data-mobile-nav
+>
+  <div class="mobile-nav-backdrop" data-nav-close aria-hidden="true"></div>
+  <div class="mobile-nav-panel" data-nav-panel>
+    <div class="mobile-nav-header">
+      <span class="mobile-nav-title">Menu</span>
+      <button
+        type="button"
+        class="mobile-nav-close"
+        data-nav-close
+        aria-label="Close menu"
+      >
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+          <path
+            d="M5 5l10 10M15 5L5 15"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            fill="none"></path>
+        </svg>
+      </button>
+    </div>
+    <ul class="mobile-nav-links" role="list">
+      {
+        links.map(({ href, label }) => (
+          <li>
+            <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const toggle = document.querySelector('[data-nav-toggle]');
+    const nav = document.querySelector('[data-mobile-nav]');
+    if (!toggle || !nav) return;
+
+    const closers = document.querySelectorAll('[data-nav-close]');
+    const panel = document.querySelector('[data-nav-panel]');
+    const focusableSelector =
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    let lastFocused = null;
+
+    const openNav = () => {
+      lastFocused = document.activeElement;
+      nav.setAttribute('data-open', 'true');
+      nav.setAttribute('aria-hidden', 'false');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      const first = panel.querySelector(focusableSelector);
+      first && first.focus();
+    };
+
+    const closeNav = () => {
+      nav.removeAttribute('data-open');
+      nav.setAttribute('aria-hidden', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      lastFocused && lastFocused.focus && lastFocused.focus();
+    };
+
+    toggle.addEventListener('click', () => {
+      nav.hasAttribute('data-open') ? closeNav() : openNav();
+    });
+    closers.forEach((el) => el.addEventListener('click', closeNav));
+
+    // Esc to close + focus trap while open
+    document.addEventListener('keydown', (e) => {
+      if (!nav.hasAttribute('data-open')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeNav();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusable = panel.querySelectorAll(focusableSelector);
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Close when navigating (SPA-less but covers back/forward + link clicks)
+    panel.addEventListener('click', (e) => {
+      const target = e.target instanceof Element ? e.target.closest('a') : null;
+      if (target) closeNav();
+    });
+  })();
+</script>
 
 <style>
   .site-header {
@@ -64,7 +199,7 @@ const isActive = (href: string) =>
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding-block: 0.875rem;
+    padding-block: 0.75rem;
   }
 
   .brand {
@@ -75,6 +210,7 @@ const isActive = (href: string) =>
     text-decoration: none;
     font-weight: 500;
     letter-spacing: var(--tracking-snug);
+    min-height: 32px;
   }
 
   .brand-mark {
@@ -86,7 +222,7 @@ const isActive = (href: string) =>
     font-size: var(--fs-base);
   }
 
-  ul {
+  .nav-links {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -95,31 +231,38 @@ const isActive = (href: string) =>
     gap: 1.5rem;
   }
 
-  li a {
+  .nav-links li a {
     color: var(--text-secondary);
     text-decoration: none;
     font-size: var(--fs-sm);
-    padding: 0.25rem 0;
+    padding: 0.375rem 0;
     border-bottom: 2px solid transparent;
     transition:
       color var(--duration-fast) var(--ease-out),
       border-color var(--duration-fast) var(--ease-out);
   }
 
-  li a:hover {
+  .nav-links li a:hover {
     color: var(--text-primary);
   }
 
-  li a[aria-current='page'] {
+  .nav-links li a[aria-current='page'] {
     color: var(--text-primary);
     border-bottom-color: var(--accent);
+  }
+
+  .nav-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .search-trigger {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.3125rem 0.5rem 0.3125rem 0.625rem;
+    padding: 0 0.75rem;
+    min-height: 32px;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
@@ -135,6 +278,11 @@ const isActive = (href: string) =>
     color: var(--text-primary);
   }
 
+  .search-trigger:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
   .search-trigger .search-kbd {
     display: inline-flex;
     gap: 0.125rem;
@@ -148,29 +296,183 @@ const isActive = (href: string) =>
     color: var(--text-muted);
   }
 
-  @media (max-width: 640px) {
-    ul {
-      gap: 1rem;
-      font-size: 0.8rem;
+  .nav-toggle {
+    display: none;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-toggle:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .nav-toggle:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* ─── Mobile drawer ─────────────────────────────── */
+  .mobile-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .mobile-nav[data-open] {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mobile-nav-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 6, 9, 0.65);
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out);
+  }
+
+  .mobile-nav[data-open] .mobile-nav-backdrop {
+    opacity: 1;
+  }
+
+  .mobile-nav-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(20rem, 88vw);
+    background: var(--surface-1);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform var(--duration-base) var(--ease-out);
+    padding: 1rem 1rem 1.5rem;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav[data-open] .mobile-nav-panel {
+    transform: translateX(0);
+  }
+
+  .mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0.25rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-nav-title {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .mobile-nav-close {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .mobile-nav-close:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .mobile-nav-close:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .mobile-nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobile-nav-links li a {
+    display: block;
+    padding: 0.75rem 0.5rem;
+    min-height: 44px;
+    color: var(--text-primary);
+    font-size: var(--fs-md);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .mobile-nav-links li:last-child a {
+    border-bottom: none;
+  }
+
+  .mobile-nav-links li a:hover {
+    color: var(--accent);
+  }
+
+  .mobile-nav-links li a[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  .mobile-nav-links li a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+  }
+
+  /* ─── Responsive thresholds ──────────────────────── */
+  @media (max-width: 720px) {
+    nav {
+      gap: 0.75rem;
     }
 
-    li a {
-      font-size: 0.8rem;
-    }
-
-    /* Drop the least-essential link first on narrow viewports */
-    li:nth-child(5) {
+    .nav-links {
       display: none;
+    }
+
+    .nav-toggle {
+      display: inline-flex;
     }
 
     .search-trigger {
-      padding: 0.3125rem 0.5rem;
+      padding: 0 0.5rem;
+    }
+
+    .search-trigger .search-kbd {
+      display: none;
     }
   }
 
-  @media (max-width: 460px) {
-    li:nth-child(4) {
-      display: none;
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-nav-backdrop,
+    .mobile-nav-panel {
+      transition: none;
     }
   }
 </style>
