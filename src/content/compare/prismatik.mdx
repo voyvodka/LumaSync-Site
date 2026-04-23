@@ -24,8 +24,10 @@ answer for everyone else.**
   driver to talk to it. Niche, historical audience.
 - **LumaSync wins** on active maintenance, native Hue Entertainment,
   minisign-signed auto-updates, macOS polish, and the room map editor.
-- Both speak Adalight over USB, so **a WS2812B + CH340/FT232 kit works
-  under either** — the app is the differentiator, not the strip.
+- The USB hardware overlaps (WS2812B + CH340/FT232 kits are reusable),
+  but LumaSync v1.3 ships a **LumaSync v1 serial frame** — not
+  wire-compatible with Prismatik's Adalight output. Reflash the
+  controller, or wait for the v1.4 Adalight-profile toggle.
 
 ## Feature comparison
 
@@ -33,7 +35,7 @@ answer for everyone else.**
 | ------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Maintenance status        | Active — v1.2.0 shipped 2026-04-10          | Dormant — last release 5.11.2.31 on 2022-01-08 (~4 years ago)                                                                                |
 | Target platform           | macOS, Windows, Linux (experimental)        | Windows (primary), macOS / Linux community builds                                                                                            |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 Adalight at 115200 baud | Yes — same Adalight protocol                                                                                                                 |
+| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap) | Yes — Adalight protocol                                                                                                                      |
 | Lightpack hardware        | No — original hardware discontinued         | Yes — the reason this project exists                                                                                                         |
 | Philips Hue Entertainment | Native DTLS 1.2 PSK                         | No — no native Hue support                                                                                                                   |
 | Effects engine            | Ambilight + solid; closed enum              | Plugin-based effects                                                                                                                         |
@@ -47,8 +49,9 @@ answer for everyone else.**
 
 - **You don't own Lightpack hardware.** There's no reason to choose a
   driver-for-discontinued-hardware project if you're not running that
-  hardware. LumaSync supports the same generic Adalight kits at 115200
-  baud without the legacy baggage.
+  hardware. LumaSync supports the same generic CH340/FT232 kits at
+  115200 baud (LumaSync v1 frame today; opt-in Adalight profile on the
+  v1.4 roadmap) without the legacy baggage.
 - **You want Hue Entertainment support.** Prismatik never integrated with
   the Hue Entertainment API; if Hue is in your setup, LumaSync is the
   simpler path.
@@ -68,14 +71,19 @@ answer for everyone else.**
 
 Coming from **Prismatik to LumaSync**:
 
-- If you're using a generic Adalight USB kit (CH340 / FT232), the strip
-  itself is drop-in. Stop Prismatik, disconnect its USB port, start
-  LumaSync, run the device health check. See [USB controllers](/docs/usb-leds/controllers).
+- If you're using a generic CH340/FT232 USB kit, the **strip and
+  controller board are reusable**, but the microcontroller firmware
+  needs to switch from Adalight to the
+  [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol). Reflash
+  with LumaSync v1 firmware, or wait for the v1.4 Adalight-profile
+  toggle (opt-in). Then stop Prismatik, disconnect its USB port, start
+  LumaSync, run the device health check. See
+  [USB controllers](/docs/usb-leds/controllers).
 - If you're using actual **Lightpack hardware**: LumaSync does not
   recognise the Lightpack VID:PID. The device would have to be manually
-  connected via the custom port path, and even then LumaSync assumes
-  standard Adalight framing — results unverified. Keep Prismatik for
-  Lightpack.
+  connected via the custom port path, and even then LumaSync v1.3 only
+  emits its own frame format (not Prismatik's). Keep Prismatik for
+  Lightpack until the v1.4 Adalight-profile toggle ships.
 - Your edge counts and calibration settings don't auto-import. Re-enter
   them in [Calibration](/docs/usb-leds/calibration).
 

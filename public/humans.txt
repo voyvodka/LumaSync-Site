@@ -17,5 +17,5 @@
   Deploy:      Hetzner (static rsync)
 
 /* THANKS */
-  Tauri, Philips Hue SDK, Adalight protocol, and everyone who reported
-  issues against LumaSync's early alphas.
+  Tauri, Philips Hue SDK, and everyone who reported issues against
+  LumaSync's early alphas.
