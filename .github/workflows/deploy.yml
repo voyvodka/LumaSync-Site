@@ -1,10 +1,21 @@
 name: deploy
 
-# Manual-only trigger until Hetzner secrets are configured.
-# Once DEPLOY_HOST / DEPLOY_USER / DEPLOY_SSH_KEY are set in repo secrets
-# and Hetzner is provisioned, re-enable the `push: branches: [main]` trigger
-# so every merged commit ships automatically.
+# Deploys the built Astro site to the Cloudflare Pages project
+# `lumasync-site-beta` (custom domain: beta.lumasync.app). On every push
+# to main the site rebuilds in beta stage (PUBLIC_SITE_STAGE=beta →
+# global noindex) and the new deployment becomes the production alias
+# for the beta project. Manual dispatch available for forcing a redeploy
+# from any commit. Production apex (lumasync.app / www.lumasync.app) is
+# still served by the separate coming-soon Worker and gets cut over via
+# a Dashboard step when the content review wraps up.
+#
+# Required repo secrets:
+#   - CLOUDFLARE_API_TOKEN  (Pages:Edit on the account + Zone:Read on lumasync.app)
+#   - CLOUDFLARE_ACCOUNT_ID (— [REDACTED])
+
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -12,16 +23,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  deploy-beta:
+    name: Deploy beta.lumasync.app
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - uses: actions/checkout@v6
         with:
           submodules: recursive
+          # Full history so vendor/lumasync CHANGELOG parsing picks up
+          # the right dated release tag for LATEST_VERSION interpolation.
+          fetch-depth: 0
 
-      # Third-party Actions pinned to commit SHAs to defeat tag repointing
-      # (supply-chain). Dependabot keeps the version comments current.
+      # Third-party Actions pinned to commit SHAs to defeat tag-repointing
+      # supply-chain attacks. Dependabot keeps the version comments current.
       - uses: pnpm/action-setup@903f9c1a6ebcba6cf41d87230be49611ac97822e # v6.0.3
 
       - uses: actions/setup-node@v6
@@ -32,22 +50,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
+      - name: Lint (prettier --check)
+        run: pnpm lint
+
+      - name: Type check (astro check)
+        run: pnpm check
+
+      - name: Build (beta stage — global noindex)
+        env:
+          PUBLIC_SITE_STAGE: beta
         run: pnpm build
 
-      # Enforces the a11y budget from .thinking/02-website.md § #14.
-      # accessibility >= 0.95 is hard-fail; perf/best-practices/seo are warn.
-      - name: Lighthouse CI
-        run: pnpm dlx @lhci/cli@latest autorun
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-      - name: Deploy to Hetzner
-        uses: burnett01/rsync-deployments@66257cad6bfeb2171d3b6bfa6c9a22279dd9c3a1 # v8.0.5
+      # wrangler-action uses the repo secrets for auth; commit SHA +
+      # message are attached to the Pages deployment so the Cloudflare
+      # Dashboard's deployment history matches the git history.
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.0
         with:
-          switches: -avzr --delete
-          path: dist/
-          remote_path: /var/www/lumasync.app/
-          remote_host: ${{ secrets.DEPLOY_HOST }}
-          remote_user: ${{ secrets.DEPLOY_USER }}
-          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=lumasync-site-beta --branch=main --commit-hash=${{ github.sha }} --commit-message=${{ github.event.head_commit.message != null && github.event.head_commit.message || 'manual dispatch' }}
