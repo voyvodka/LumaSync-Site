@@ -61,12 +61,18 @@ jobs:
           PUBLIC_SITE_STAGE: beta
         run: pnpm build
 
-      # wrangler-action uses the repo secrets for auth; commit SHA +
-      # message are attached to the Pages deployment so the Cloudflare
-      # Dashboard's deployment history matches the git history.
+      # wrangler-action uses the repo secrets for auth; commit SHA is
+      # attached so the Cloudflare Dashboard's deployment history links
+      # to the matching git commit. --commit-message is intentionally
+      # omitted — the action's `command` input is split on whitespace
+      # (not shell-escaped), and any commit message that contains dashes
+      # (like a `--write` flag substring) gets parsed as extra wrangler
+      # arguments. The hash alone is enough; Dashboard resolves the
+      # message from GitHub via the commit link.
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=lumasync-site-beta --branch=main --commit-hash=${{ github.sha }} --commit-message=${{ github.event.head_commit.message != null && github.event.head_commit.message || 'manual dispatch' }}
+          wranglerVersion: '4'
+          command: pages deploy dist --project-name=lumasync-site-beta --branch=main --commit-hash=${{ github.sha }}
