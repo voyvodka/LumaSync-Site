@@ -33,6 +33,10 @@ Positioning summary: LumaSync is the desktop-first option in the ambilight categ
 - [Changelog](https://lumasync.app/changelog): release history
 - [GitHub releases](https://github.com/voyvodka/LumaSync/releases): source archives and release notes
 
+## Full content
+
+- [llms-full.txt](https://lumasync.app/llms-full.txt): complete body text of every published docs / compare / legal page, concatenated in a single plain-text file for retrieval and grounding. Regenerated on every site build.
+
 ## Policy
 
 - [Privacy](https://lumasync.app/privacy): what data is collected, when, and how to opt out
