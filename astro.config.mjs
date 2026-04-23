@@ -18,6 +18,11 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  // Dev toolbar is disabled because its runtime entry requests a
+  // source-map file that Astro's dev server doesn't emit, producing
+  // a 404 per page load in the dev terminal. Re-enable if/when the
+  // upstream fix lands (astro issue tracker).
+  devToolbar: { enabled: false },
   build: {
     inlineStylesheets: 'auto',
   },
