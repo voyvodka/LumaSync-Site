@@ -1,63 +1,58 @@
-# lumasync-site
+# LumaSync-Site
 
-Marketing site, documentation, and (later) blog for **LumaSync** — the
-open-source tray-first Tauri 2 + React 19 desktop app at
-[`voyvodka/lumasync`](https://github.com/voyvodka/lumasync).
+Marketing site, docs, and blog for [**LumaSync**](https://github.com/voyvodka/LumaSync) —
+the tray-first open-source ambilight + Philips Hue desktop app.
 
-This repository is intentionally separate from the app repository so that
-site iteration, content drafts, and deploys do not touch the app's release
-cadence or CHANGELOG.
+- **Production**: https://lumasync.app
+- **Staging**: https://beta.lumasync.app (`PUBLIC_SITE_STAGE=beta`, global `noindex`)
+- **App repo**: https://github.com/voyvodka/LumaSync
 
-## Target stack
+## Stack
 
-- **Framework**: Astro (static, MDX-enabled), pnpm package manager.
-- **Deploy**: Hetzner CX22 (EU) via rsync to Caddy-served static root.
-- **Domain**: `lumasync.app` (primary). `www.lumasync.app` → 308 → apex.
-- **Analytics**: Umami, self-hosted on the same box.
+- Astro 6 + MDX content collections (`docs`, `compare`, `legal`, `blog`)
+- Pagefind for offline in-browser search; Umami for cookie-free analytics
+- Cloudflare Pages (direct-upload via `wrangler`) + Cloudflare DNS
+- IBM Plex Sans / Mono (self-hosted WOFF2, preloaded)
+- No secrets bundled; the site never talks to the desktop app
 
-Not scaffolded yet. Scaffolding happens in a fresh session — see the
-strategy docs below for the exact plan.
+## Develop
 
-## Source of truth for strategy
+Requires Node 22+ and pnpm (pinned via `packageManager` in `package.json`).
 
-Every major decision (site IA, landing brief, comparison pages, launch
-plan, infra config) is pre-written at:
-
+```bash
+pnpm install
+pnpm dev        # http://localhost:4321
+pnpm lint       # prettier --check
+pnpm check      # astro check (type-check + content schema)
+pnpm build      # astro build + pagefind index
 ```
-../.thinking/
-```
 
-Read `../.thinking/README.md` first. It indexes 7 numbered docs covering
-positioning, website architecture, content/SEO strategy,
-community/distribution, infrastructure, monetization, and the
-30/60/90-day action plan.
+## Deploy
 
-**Before making changes here, align with the relevant `.thinking/` doc. If
-reality diverges from the plan, update the plan doc — don't let them drift.**
+Every push to `main` triggers `.github/workflows/deploy.yml`, which lint-
+and type-checks, builds with `PUBLIC_SITE_STAGE=beta`, and ships `dist/`
+to the `lumasync-site-beta` Cloudflare Pages project. The production apex
+(`lumasync.app` / `www.lumasync.app`) is served by a separate
+coming-soon Worker until the content review wraps up.
 
-## Scope
+Required repo secrets for CI: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
-In-scope for this repo:
+## License
 
-- Astro source: `src/`, `public/`, `astro.config.mjs`, etc.
-- MDX content for `/docs/*`, `/compare/*`, `/blog/*` (later),
-  `/changelog`, `/community`, `/privacy`.
-- Site-specific assets (hero video, screenshots, OG images).
-- GitHub Actions deploy workflow for Hetzner.
+- **Code** (Astro components, layouts, CI, styling) — [MIT](./LICENSE)
+- **Content** (MDX under `src/content/`, docs, comparisons, blog) — CC BY 4.0
 
-Out of scope:
+See [`/license`](https://lumasync.app/license) for the public-facing summary
+and [`LICENSE`](./LICENSE) for the full text.
 
-- App source code (lives in `voyvodka/lumasync`).
-- Server provisioning (Caddyfile, Umami compose) — tracked in a private
-  dotfiles-style repo per `../.thinking/05-infrastructure.md`.
+## Contributing
 
-## Visibility
+Issues and PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for
+scope, local preview, and commit conventions. For app-level bugs
+(firmware, USB pipeline, Hue streaming), file against the
+[LumaSync app repo](https://github.com/voyvodka/LumaSync/issues) instead.
 
-Starts **private**. Flipped to **public** before launch week (target:
-Week 2 of `../.thinking/07-action-plan.md`). Rationale in the parent
-session notes.
+## Security
 
-## License (when public)
-
-MIT for code. Content (copy, docs, comparison pages, blog posts): CC BY 4.0
-unless otherwise noted per-file.
+Report vulnerabilities through GitHub's Private Vulnerability Reporting —
+see [`SECURITY.md`](./SECURITY.md) or [`/.well-known/security.txt`](https://lumasync.app/.well-known/security.txt).

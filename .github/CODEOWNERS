@@ -1,0 +1,3 @@
+# Global owner — every PR gets @voyvodka as a default reviewer.
+# Add path-specific owners below once the team grows.
+*   @voyvodka
