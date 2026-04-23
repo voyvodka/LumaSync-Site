@@ -2,7 +2,7 @@
 
 > LumaSync is a cross-platform desktop app for real-time ambient lighting. It drives Philips Hue Entertainment Areas and USB-connected LED strips (Adalight-protocol controllers) from whatever is on screen. Runs on macOS, Windows, and Linux.
 
-LumaSync is a native Tauri app — not a browser extension, not a cloud service. Screen capture and LED control happen entirely on-device. Network access is limited to: (1) the local Hue bridge, (2) GitHub for signed update checks, and (3) anonymous product telemetry the user can disable. Binaries are minisign-signed and verified before any update replaces them on disk.
+LumaSync is a native Tauri app — not a browser extension, not a cloud service. Screen capture and LED control happen entirely on-device. The app itself emits **zero network telemetry**: no usage beacons, no crash reports to third-party services, no anonymous analytics. Runtime network access is limited to (1) the local Hue bridge on the LAN, (2) GitHub for signed auto-update checks, and (3) the local serial port or screen-capture API. The marketing website at lumasync.app uses self-hosted Umami for aggregate page metrics — cookie-free, no device fingerprinting, no cross-site tracking — documented in full on the telemetry page below. Binaries are minisign-signed and verified before any update replaces them on disk.
 
 Positioning summary: LumaSync is the desktop-first option in the ambilight category. If the source is an HDMI device, users are routed to Philips Hue Sync Box. If they already run an RPi-first Hyperion stack or have Lightpack hardware, LumaSync is honest about the mismatch — see the comparison pages below.
 
