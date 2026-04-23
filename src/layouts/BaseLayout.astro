@@ -21,9 +21,16 @@ const { title, description, canonical, ogImage, noindex, schemas = [] } = Astro.
 const umamiSiteId = import.meta.env.PUBLIC_UMAMI_SITE_ID;
 const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
 
+// Beta stage forces noindex globally so staging deploys
+// (beta.lumasync.app, *.pages.dev previews) don't leak into search +
+// AI indexes. Set PUBLIC_SITE_STAGE=beta at build time on the beta
+// Pages project; unset → production behaviour.
+const isBetaStage = import.meta.env.PUBLIC_SITE_STAGE === 'beta';
+const effectiveNoindex = noindex || isBetaStage;
+
 // Organization + WebSite are emitted on every page. noindex pages opt out
 // so draft content isn't published into the entity graph before review.
-const baseSchemas = noindex ? [] : [organizationSchema(), webSiteSchema()];
+const baseSchemas = effectiveNoindex ? [] : [organizationSchema(), webSiteSchema()];
 const allSchemas = [...baseSchemas, ...schemas];
 ---
 
@@ -49,7 +56,7 @@ const allSchemas = [...baseSchemas, ...schemas];
       description={description}
       canonical={canonical}
       ogImage={ogImage}
-      noindex={noindex}
+      noindex={effectiveNoindex}
     />
     <Schema schemas={allSchemas} />
     {
