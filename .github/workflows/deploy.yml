@@ -1,17 +1,11 @@
 name: deploy
 
-# Deploys the built Astro site to the Cloudflare Pages project
-# `lumasync-site-beta` (custom domain: beta.lumasync.app). On every push
-# to main the site rebuilds in beta stage (PUBLIC_SITE_STAGE=beta →
-# global noindex) and the new deployment becomes the production alias
-# for the beta project. Manual dispatch available for forcing a redeploy
-# from any commit. Production apex (lumasync.app / www.lumasync.app) is
-# still served by the separate coming-soon Worker and gets cut over via
-# a Dashboard step when the content review wraps up.
+# Deploys the built Astro site to Cloudflare Pages on every push to
+# main. Manual dispatch available for forcing a redeploy from any commit.
 #
 # Required repo secrets:
-#   - CLOUDFLARE_API_TOKEN  (Pages:Edit on the account + Zone:Read on lumasync.app)
-#   - CLOUDFLARE_ACCOUNT_ID (Cloudflare account ID that owns the lumasync-site-beta project)
+#   - CLOUDFLARE_API_TOKEN  (Pages:Edit + Zone:Read)
+#   - CLOUDFLARE_ACCOUNT_ID
 
 on:
   push:
@@ -23,8 +17,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-beta:
-    name: Deploy beta.lumasync.app
+  deploy:
+    name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -56,9 +50,9 @@ jobs:
       - name: Type check (astro check)
         run: pnpm check
 
-      - name: Build (beta stage — global noindex)
+      - name: Build
         env:
-          PUBLIC_SITE_STAGE: beta
+          PUBLIC_SITE_STAGE: ${{ vars.PUBLIC_SITE_STAGE || 'beta' }}
         run: pnpm build
 
       # wrangler-action uses the repo secrets for auth; commit SHA is
