@@ -3,8 +3,7 @@
 Marketing site, docs, and blog for [**LumaSync**](https://github.com/voyvodka/LumaSync) —
 the tray-first open-source ambilight + Philips Hue desktop app.
 
-- **Production**: https://lumasync.app
-- **Staging**: https://beta.lumasync.app (`PUBLIC_SITE_STAGE=beta`, global `noindex`)
+- **Site**: https://lumasync.app
 - **App repo**: https://github.com/voyvodka/LumaSync
 
 ## Stack
@@ -29,11 +28,8 @@ pnpm build      # astro build + pagefind index
 
 ## Deploy
 
-Every push to `main` triggers `.github/workflows/deploy.yml`, which lint-
-and type-checks, builds with `PUBLIC_SITE_STAGE=beta`, and ships `dist/`
-to the `lumasync-site-beta` Cloudflare Pages project. The production apex
-(`lumasync.app` / `www.lumasync.app`) is served by a separate
-coming-soon Worker until the content review wraps up.
+Every push to `main` triggers `.github/workflows/deploy.yml`, which
+lint- and type-checks, builds, and ships `dist/` to Cloudflare Pages.
 
 Required repo secrets for CI: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 

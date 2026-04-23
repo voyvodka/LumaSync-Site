@@ -40,8 +40,7 @@ pnpm build      # full production build + pagefind index
   imports from `src/lib/version`, never hard-code. They resolve at build
   time from the vendored LumaSync changelog.
 - Drafts: set `draft: true` in frontmatter. Drafts are excluded from
-  production builds (`PUBLIC_SITE_STAGE` unset) but included in beta
-  (`PUBLIC_SITE_STAGE=beta`) so you can preview them on beta.lumasync.app.
+  production builds; preview them locally via `pnpm dev`.
 - Don't claim features that aren't shipped. Cross-check
   [`vendor/lumasync/CHANGELOG.md`](vendor/lumasync/CHANGELOG.md).
 
