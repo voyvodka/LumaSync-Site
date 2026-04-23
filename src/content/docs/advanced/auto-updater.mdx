@@ -6,6 +6,7 @@ order: 20
 updated: 2026-04-21
 draft: true
 ---
+import { LATEST_VERSION } from '../../../lib/version';
 
 LumaSync checks for a newer release when the app starts. If one's
 available, you see a non-blocking modal with the release notes and a
@@ -66,7 +67,7 @@ in-app updater:
 3. Run:
 
 ```bash
-minisign -Vm LumaSync_1.2.0_universal.dmg -P "$(cat minisign.pub)"
+minisign -Vm LumaSync_1.3.1_universal.dmg -P "$(cat minisign.pub)"
 ```
 
 Exit code 0 means the signature verifies. Anything else, don't install.
@@ -101,7 +102,7 @@ If a release turns out bad:
    `~/.config/lumasync/app.json` is preserved — no data loss.
 
 Future: a "pin current version" toggle in Settings → Updates is tracked as
-an enhancement. Not shipped in v1.2.0.
+an enhancement. Not shipped as of {LATEST_VERSION}.
 
 ## Related
 
