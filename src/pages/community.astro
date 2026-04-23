@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { breadcrumbSchema, faqPageSchema } from '../lib/seo';
 
 const repo = 'https://github.com/voyvodka/LumaSync';
 
@@ -35,6 +36,8 @@ const forums = [
   },
 ];
 
+// Keep this array as the single source for both the rendered <dl> and
+// the FAQPage schema below — question/answer strings stay in sync.
 const triage = [
   {
     q: 'It crashed — where do I file that?',
@@ -59,11 +62,20 @@ const triage = [
     a: 'That\'s upstream — try the <a href="https://developers.meethue.com/">Hue developer portal</a> or the Hue subreddits. If the question is specifically about how LumaSync uses Hue, come back to Discussions.',
   },
 ];
+
+const schemas = [
+  breadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Community', url: '/community' },
+  ]),
+  faqPageSchema(triage.map(({ q, a }) => ({ question: q, answer: a }))),
+];
 ---
 
 <BaseLayout
   title="Community"
   description="Where LumaSync users hang out — GitHub Discussions today, Discord once the community outgrows async."
+  schemas={schemas}
 >
   <section class="community">
     <header>
