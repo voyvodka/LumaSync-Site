@@ -45,18 +45,16 @@ export const GET: APIRoute = async () => {
   const allCompare = await getCollection('compare');
   const legal = await getCollection('legal');
 
-  const docs = (INCLUDES_DRAFTS ? allDocs : allDocs.filter((e) => !e.data.draft)).sort(
-    (a, b) => {
-      const ag = DOC_GROUPS.indexOf(a.data.group);
-      const bg = DOC_GROUPS.indexOf(b.data.group);
-      if (ag !== bg) return ag - bg;
-      return a.data.order - b.data.order;
-    },
-  );
+  const docs = (INCLUDES_DRAFTS ? allDocs : allDocs.filter((e) => !e.data.draft)).sort((a, b) => {
+    const ag = DOC_GROUPS.indexOf(a.data.group);
+    const bg = DOC_GROUPS.indexOf(b.data.group);
+    if (ag !== bg) return ag - bg;
+    return a.data.order - b.data.order;
+  });
 
-  const compare = (
-    INCLUDES_DRAFTS ? allCompare : allCompare.filter((e) => !e.data.draft)
-  ).sort((a, b) => a.data.competitor.localeCompare(b.data.competitor));
+  const compare = (INCLUDES_DRAFTS ? allCompare : allCompare.filter((e) => !e.data.draft)).sort(
+    (a, b) => a.data.competitor.localeCompare(b.data.competitor),
+  );
 
   const chunks: string[] = [];
 

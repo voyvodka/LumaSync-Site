@@ -5,6 +5,7 @@ description: Hyperion is a RPi-first headless ambilight service with enormous fl
 updated: 2026-04-21
 draft: true
 ---
+
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../../lib/version';
 
 **Hyperion.NG** is the actively maintained open-source ambilight server —
@@ -30,20 +31,20 @@ you want that to be your existing computer.**
 
 ## Feature comparison
 
-| Feature                   | LumaSync                                        | Hyperion.NG                                                                                                                 |
-| ------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Target platform           | Desktop app (macOS, Windows, Linux)             | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
-| Deployment                | Install + run                                   | Provision RPi / server, install package, configure via web UI                                                               |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap)     | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
-| Philips Hue Entertainment | Native DTLS 1.2 PSK streaming                   | Via forwarder / plugin — functional, not native                                                                             |
-| HDMI capture              | No — OS screen buffer only                      | Yes — via USB HDMI grabber on RPi                                                                                           |
-| LED count ceiling         | Comfortable up to ~300 over USB-serial          | Multi-thousand LEDs via SPI not uncommon                                                                                    |
-| Effects engine            | Ambilight + solid; mode contract is closed enum | Scripted effects (Python), large community library                                                                          |
-| Configuration             | Native desktop UI                               | Browser-based web UI on the daemon's IP                                                                                     |
-| Room map editor           | Yes — drag-drop canvas for positioning          | Layout via numerical zones in web UI                                                                                        |
-| Auto-updates              | minisign-signed, GitHub Releases                | Package-manager / manual download                                                                                           |
-| Dedicated hardware        | None                                            | Typically a Raspberry Pi 3/4                                                                                                |
-| Last update               | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog)                | Hyperion 2.2.1 (2026-04-06) — ~6-month release cadence                                                                      |
+| Feature                   | LumaSync                                                                                 | Hyperion.NG                                                                                                                 |
+| ------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Target platform           | Desktop app (macOS, Windows, Linux)                                                      | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
+| Deployment                | Install + run                                                                            | Provision RPi / server, install package, configure via web UI                                                               |
+| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap) | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
+| Philips Hue Entertainment | Native DTLS 1.2 PSK streaming                                                            | Via forwarder / plugin — functional, not native                                                                             |
+| HDMI capture              | No — OS screen buffer only                                                               | Yes — via USB HDMI grabber on RPi                                                                                           |
+| LED count ceiling         | Comfortable up to ~300 over USB-serial                                                   | Multi-thousand LEDs via SPI not uncommon                                                                                    |
+| Effects engine            | Ambilight + solid; mode contract is closed enum                                          | Scripted effects (Python), large community library                                                                          |
+| Configuration             | Native desktop UI                                                                        | Browser-based web UI on the daemon's IP                                                                                     |
+| Room map editor           | Yes — drag-drop canvas for positioning                                                   | Layout via numerical zones in web UI                                                                                        |
+| Auto-updates              | minisign-signed, GitHub Releases                                                         | Package-manager / manual download                                                                                           |
+| Dedicated hardware        | None                                                                                     | Typically a Raspberry Pi 3/4                                                                                                |
+| Last update               | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog)                                    | Hyperion 2.2.1 (2026-04-06) — ~6-month release cadence                                                                      |
 
 ## When to pick LumaSync
 

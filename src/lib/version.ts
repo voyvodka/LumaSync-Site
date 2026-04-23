@@ -20,9 +20,7 @@ const changelog = readFileSync(changelogPath, 'utf-8');
 
 // First dated ## [X.Y.Z] — YYYY-MM-DD block wins. [Unreleased] has no
 // date so the regex skips it naturally.
-const match = changelog.match(
-  /^## \[(\d+\.\d+\.\d+)\]\s*[—-]\s*(\d{4}-\d{2}-\d{2})/m,
-);
+const match = changelog.match(/^## \[(\d+\.\d+\.\d+)\]\s*[—-]\s*(\d{4}-\d{2}-\d{2})/m);
 if (!match) {
   throw new Error(
     'src/lib/version.ts: failed to parse latest dated release from ' +

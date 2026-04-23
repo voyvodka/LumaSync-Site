@@ -86,12 +86,7 @@ const isActive = (href: string) =>
   <div class="mobile-nav-panel" data-nav-panel>
     <div class="mobile-nav-header">
       <span class="mobile-nav-title">Menu</span>
-      <button
-        type="button"
-        class="mobile-nav-close"
-        data-nav-close
-        aria-label="Close menu"
-      >
+      <button type="button" class="mobile-nav-close" data-nav-close aria-label="Close menu">
         <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
           <path
             d="M5 5l10 10M15 5L5 15"
@@ -124,8 +119,7 @@ const isActive = (href: string) =>
 
     const closers = document.querySelectorAll('[data-nav-close]');
     const panel = document.querySelector('[data-nav-panel]');
-    const focusableSelector =
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     let lastFocused = null;
 
