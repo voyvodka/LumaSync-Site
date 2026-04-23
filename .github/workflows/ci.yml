@@ -33,6 +33,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: License audit (fail on strict copyleft in prod deps)
+        # MIT-licensed project can't ship strict copyleft in its
+        # redistributed dependency tree. Blocks GPL* / AGPL* / SSPL /
+        # unknown-or-missing licenses. LGPL* is permitted — it's
+        # weak-copyleft and the LGPL deps we have (sharp's libvips
+        # prebuilt binary) run at build time only, they don't ship in
+        # the final static bundle, so LGPL's linking clause is
+        # satisfied. WTFPL is permissive despite the name and is also
+        # allowed. Dev deps are excluded — tooling copyleft is fine.
+        run: |
+          LICENSES=$(pnpm licenses list --prod --long --json 2>&1)
+          echo "$LICENSES" | grep -oE '"license":\s*"[^"]*"' | sort -u | head -30
+          if echo "$LICENSES" | grep -iE '"license":\s*"(A?GPL-[^"]*|SSPL[^"]*|UNKNOWN|UNLICENSED)"'; then
+            echo "::error::Strict copyleft or unknown license found in production dependencies."
+            exit 1
+          fi
+
       - name: Lint (prettier --check)
         run: pnpm lint
 
