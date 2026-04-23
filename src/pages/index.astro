@@ -1453,9 +1453,14 @@ const repo = 'https://github.com/voyvodka/LumaSync';
 
   /* ─── Responsive ─────────────────────────────────────── */
   @media (max-width: 900px) {
+    /* minmax(0, 1fr) (not 1fr) is critical: 1fr resolves to
+     * minmax(auto, 1fr), which content-sizes the column min — any
+     * child carrying an intrinsic width attribute (the ambient +
+     * room-map preview SVGs declare width="1400") then forces the
+     * grid column to 1400px and overflows the viewport. */
     .hero,
     .callout {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
     }
 
