@@ -1007,8 +1007,14 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     flex: 0 0 auto;
   }
 
+  /* flex items default to min-width:auto (= min-content); for replaced
+   * elements like <img> with an intrinsic width attribute that resolves
+   * to the natural 900px dimension and blocks flex-shrink from
+   * squeezing the element into the grid column. min-width:0 lets the
+   * shrink actually apply. */
   .dual-full {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   /* ─── Feature grid ────────────────────────────────────── */
