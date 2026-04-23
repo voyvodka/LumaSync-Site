@@ -25,10 +25,13 @@ draft: true
 **Symptom**: Port connects, health check returns `DEVICE_MANUAL_REQUIRED` or
 a red error.
 
-- **Wrong baud rate on firmware** — Adalight-compatible firmware must run at 115200. Other rates are silently rejected as failed handshakes.
-- **Non-Adalight firmware** — CircuitPython / MicroPython boards with
-  custom protocols won't respond to the Adalight magic bytes. Flash Adalight
-  firmware, or mark as manual and accept you won't get handshake validation.
+- **Wrong baud rate on firmware** — LumaSync v1 firmware must run at 115200. Other rates are silently rejected as failed handshakes.
+- **Wrong firmware** — Adalight firmware, CircuitPython/MicroPython boards
+  with custom protocols, or anything else that doesn't speak the
+  [LumaSync v1 frame](/docs/usb-leds/serial-protocol) won't respond to the
+  `0xAA 0x55` magic bytes. Reflash with LumaSync v1 firmware, wait for the
+  v1.4 Adalight-profile toggle, or mark the device as manual and accept
+  you won't get handshake validation.
 - **Serial port already owned** by another process — close other serial
   monitors (Arduino IDE, screen, minicom, vendor utilities).
 
@@ -57,8 +60,9 @@ blue, or everything is slightly off-hue.
 
 - **RGB vs GRB ordering mismatch**. WS2812B is actually GRB internally;
   LumaSync handles the conversion, but some firmware does it too, resulting
-  in a double-conversion. Flash vanilla Adalight firmware, or configure
-  your firmware to pass RGB through unmodified.
+  in a double-conversion. Configure your firmware to pass RGB through
+  unmodified, or reflash with LumaSync v1 firmware (which expects
+  pre-gamma-corrected RGB from the host).
 - **White balance on the strip doesn't match your content**. Warm-white
   WS2812B strips have a red-tinted LED that bleeds into warm greys. There's
   no fix at the protocol level — this is a strip choice. Swap to a
@@ -110,5 +114,5 @@ by a visible amount.
 
 - [USB controllers](/docs/usb-leds/controllers)
 - [Calibration](/docs/usb-leds/calibration)
-- [Adalight protocol](/docs/usb-leds/adalight-protocol)
+- [Serial protocol](/docs/usb-leds/serial-protocol)
 - [Ambilight performance](/docs/ambilight/performance)

@@ -33,7 +33,7 @@ you want that to be your existing computer.**
 | ------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | Target platform           | Desktop app (macOS, Windows, Linux)             | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
 | Deployment                | Install + run                                   | Provision RPi / server, install package, configure via web UI                                                               |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 Adalight at 115200 baud     | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
+| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap)     | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
 | Philips Hue Entertainment | Native DTLS 1.2 PSK streaming                   | Via forwarder / plugin — functional, not native                                                                             |
 | HDMI capture              | No — OS screen buffer only                      | Yes — via USB HDMI grabber on RPi                                                                                           |
 | LED count ceiling         | Comfortable up to ~300 over USB-serial          | Multi-thousand LEDs via SPI not uncommon                                                                                    |
@@ -65,7 +65,8 @@ you want that to be your existing computer.**
   capture. LumaSync cannot help — the source isn't on a computer. Hyperion
   - a USB HDMI grabber on a Pi is the standard recipe.
 - **You have very long LED strips** (1000+ LEDs, multi-strip rooms).
-  SPI/APA102 via direct GPIO scales much better than USB-serial Adalight.
+  SPI/APA102 via direct GPIO scales much better than a single USB-serial
+  line at 115200 baud.
 - **You want scripted effects** — rainbow sweeps, beat-reactive pulses,
   custom patterns. Hyperion has a mature effect engine and a large
   community library. LumaSync's mode model is intentionally closed.
@@ -76,9 +77,13 @@ you want that to be your existing computer.**
 
 Coming from **Hyperion to LumaSync**:
 
-- Your LED strip works as-is if the controller is CH340 or FT232 based.
-  Hyperion's `adalight` output driver is wire-compatible with LumaSync's
-  input. See [USB controllers](/docs/usb-leds/controllers).
+- Your USB hardware (CH340/FT232 + WS2812B) is reusable, but the
+  controller firmware needs to speak the
+  [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol) — Hyperion's
+  `adalight` output driver is **not** wire-compatible. Reflash the
+  microcontroller with LumaSync v1 firmware, or wait for the v1.4
+  Adalight-profile toggle (opt-in) and reuse the existing Adalight
+  firmware then. See [USB controllers](/docs/usb-leds/controllers).
 - Your Hue setup moves cleanly — the Hue Bridge is stateful, so your
   Entertainment Area and bulb positions remain. Pair LumaSync, pick the
   area. [Pairing walkthrough](/docs/hue/pairing).

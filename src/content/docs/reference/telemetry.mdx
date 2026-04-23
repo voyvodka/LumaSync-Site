@@ -20,7 +20,7 @@ The only network calls the app makes at runtime are:
 | `https://api.github.com/repos/voyvodka/LumaSync/releases/latest/download/latest.json` | App startup (once)             | Auto-updater check                    |
 | `https://discovery.meethue.com/`                                                      | Hue onboarding "Discover" step | List local Hue bridges                |
 | Local bridge IP (port 80 + UDP 2100)                                                  | Hue pairing + streaming        | Bridge API + Entertainment stream     |
-| Serial `/dev/ttyUSB*` or COM port                                                     | USB mode active                | Adalight frame push                   |
+| Serial `/dev/ttyUSB*` or COM port                                                     | USB mode active                | LumaSync v1 frame push                |
 | macOS/Windows/Linux screen capture APIs                                               | Ambilight mode active          | Pixel sampling (local OS, no network) |
 
 That's it. Nothing else outbound.

@@ -12,6 +12,7 @@ export default defineConfig({
   // rename. Astro emits a small meta-refresh HTML at the old path.
   redirects: {
     '/docs/advanced/scenes-and-presets': '/docs/advanced/scenes',
+    '/docs/usb-leds/adalight-protocol': '/docs/usb-leds/serial-protocol',
   },
   integrations: [mdx(), sitemap()],
   vite: {
