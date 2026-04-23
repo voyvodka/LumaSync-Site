@@ -6,13 +6,14 @@ order: 30
 updated: 2026-04-21
 draft: true
 ---
+import { LATEST_VERSION } from '../../../lib/version';
 
 ## Which display drives the pipeline
 
 LumaSync captures from a **single display at a time**. The output of that
 capture feeds **both** output paths — USB LED strips and the Hue
 Entertainment Area — simultaneously. There is no per-target routing in
-v1.2.0.
+{LATEST_VERSION}.
 
 ### Default
 
@@ -59,7 +60,7 @@ the source. Other displays stay untouched. Fullscreen behaviour:
 - **Linux** varies by window manager. GNOME and KDE Plasma handle it;
   tiling WMs may force the overlay into a tile.
 
-## What is not available in v1.2.0
+## What is not available in {LATEST_VERSION}
 
 **Per-target display routing — "drive USB from Display 1 and Hue from
 Display 2" — is not a shipped feature.** The pipeline has one capture
