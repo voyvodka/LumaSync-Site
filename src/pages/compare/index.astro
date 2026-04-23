@@ -1,15 +1,28 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { listCompare, compareHref } from '../../lib/content';
-import { breadcrumbSchema } from '../../lib/seo';
+import { breadcrumbSchema, collectionPageSchema } from '../../lib/seo';
 
 const entries = await listCompare();
+
+const publishedEntries = entries.filter((entry) => !entry.data.draft);
 
 const schemas = [
   breadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Compare', url: '/compare' },
   ]),
+  collectionPageSchema({
+    name: 'LumaSync vs the alternatives',
+    description:
+      'Side-by-side comparisons of LumaSync against Philips Hue Sync, Hyperion, Prismatik, and WLED.',
+    url: '/compare',
+    items: publishedEntries.map((entry) => ({
+      name: `LumaSync vs ${entry.data.competitor}`,
+      url: compareHref(entry),
+      description: entry.data.description,
+    })),
+  }),
 ];
 
 // Canonical one-liners per comparison. Kept short on purpose — the

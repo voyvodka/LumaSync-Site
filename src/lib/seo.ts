@@ -147,3 +147,71 @@ export function techArticleSchema(input: TechArticleInput) {
     author: { '@id': `${SITE_URL}/#organization` },
   };
 }
+
+export interface FAQItem {
+  question: string;
+  /** HTML-safe answer body. Accepts inline tags (<a>, <code>). */
+  answer: string;
+}
+
+/**
+ * Emit an FAQPage schema for pages that structure content as
+ * question / answer pairs (e.g. /community triage, future /support).
+ * Google treats this as rich-result eligible when each answer is
+ * self-contained and doesn't require page context — keep answers
+ * tight for best results.
+ */
+export function faqPageSchema(items: FAQItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export interface CollectionItem {
+  name: string;
+  url: string;
+  description?: string;
+}
+
+/**
+ * Emit a CollectionPage + embedded ItemList for index pages that
+ * enumerate child content (/docs, /compare). Signals to crawlers
+ * and AI answer engines that the page is an entry point into a
+ * hierarchy rather than an article; helps "related pages" surfaces
+ * like Google's people-also-ask clusters.
+ */
+export function collectionPageSchema(input: {
+  name: string;
+  description: string;
+  url: string;
+  items: CollectionItem[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': abs(input.url),
+    name: input.name,
+    description: input.description,
+    url: abs(input.url),
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: input.items.map((item, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        name: item.name,
+        url: abs(item.url),
+        ...(item.description && { description: item.description }),
+      })),
+    },
+  };
+}

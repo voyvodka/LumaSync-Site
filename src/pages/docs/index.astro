@@ -1,16 +1,36 @@
 ---
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { groupDocs, docHref } from '../../lib/content';
-import { breadcrumbSchema } from '../../lib/seo';
+import { breadcrumbSchema, collectionPageSchema } from '../../lib/seo';
 
 const groups = await groupDocs();
 const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0);
+
+// Flatten non-draft entries across groups for the CollectionPage
+// ItemList. Drafts stay out of the schema so crawlers don't surface
+// half-baked pages as part of the docs hub.
+const publishedItems = groups.flatMap(({ items }) =>
+  items
+    .filter((item) => !item.data.draft)
+    .map((item) => ({
+      name: item.data.title,
+      url: docHref(item),
+      description: item.data.description,
+    })),
+);
 
 const schemas = [
   breadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Docs', url: '/docs' },
   ]),
+  collectionPageSchema({
+    name: 'LumaSync Docs',
+    description:
+      'LumaSync documentation — setup, hardware, Philips Hue, troubleshooting, reference.',
+    url: '/docs',
+    items: publishedItems,
+  }),
 ];
 ---
 
