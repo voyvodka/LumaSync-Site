@@ -12,19 +12,19 @@ LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a
 flashing firmware onto a microcontroller, writing your own controller, or
 debugging why a kit isn't lighting up.
 
-## LumaSync v1, not Adalight
+## LumaSync v1 frame, with an Adalight fallback
 
-Earlier drafts of these docs described the USB path as
-"Adalight-compatible." **That was incorrect.** LumaSync v1.3 ships its own
-serial frame format: different magic bytes, different length encoding,
-different checksum. A controller running unmodified
-[Adalight firmware](https://learn.adafruit.com/adalight-diy-ambient-tv-lighting)
-will **not** respond to LumaSync's frames.
+LumaSync's default USB framing is **not** Adalight-compatible: different
+magic bytes, different length encoding, different checksum. A controller
+running unmodified [Adalight firmware](https://learn.adafruit.com/adalight-diy-ambient-tv-lighting)
+will **not** respond to an unconfigured LumaSync install.
 
-An opt-in **Adalight encoder profile** is scheduled for **v1.4**: pick
-"Firmware profile: LumaSync v1 | Adalight" in the Device panel, and
-LumaSync will emit the legacy Adalight framing instead. Until then, the
-controller has to speak LumaSync v1.
+From **v1.4**, the Device panel exposes a **Firmware profile** toggle
+(LumaSync v1 · Adalight). Switch to **Adalight** and LumaSync emits the
+legacy `Ada` header framing byte-for-byte; the setting persists per
+device so you don't need to reconfigure it on every session. Keep the
+default **LumaSync v1** profile for controllers running the reference
+firmware below.
 
 ## Wire format (v1)
 
@@ -96,18 +96,30 @@ panel shows the actual push rate.
   the magic bytes (`Ada` → `0xAA 0x55`), the length encoding (BE `n−1` →
   LE `n`), the handshake ack, and dropping any brightness-byte or RGBW
   extensions Adalight variants may have added.
-- **Adalight profile (v1.4, opt-in)** — if you already have Adalight
+- **Adalight profile (v1.4+, opt-in)** — if you already have Adalight
   firmware flashed (common on "ambilight USB kit" marketplace purchases),
-  you can wait for the v1.4 profile toggle rather than reflash.
+  enable the Adalight profile under Settings → Device instead of
+  reflashing. LumaSync emits Adalight framing byte-for-byte; the rest of
+  the pipeline is unchanged.
 
-## USB output: what's single-zone today
+## USB output: per-LED sampling
 
-Through v1.3, the USB path samples **one pixel per frame** and the
-firmware extends that single RGB triplet across the whole strip.
-Per-edge sampling — driven by `LedCalibrationConfig` (edge counts, start
-anchor, direction, bottom gap) — is planned for **v1.4**. The
-calibration UI already records the full layout so the Hue channel path
-and future USB wiring stay consistent.
+From **v1.4**, each LED samples its own edge region of the screen,
+anchored to your room map's `LedCalibrationConfig` (edge counts, start
+anchor, direction, bottom gap). The strip's colour is no longer a single
+RGB triplet extended across every LED — every pixel is computed from
+the matching screen zone.
+
+The 115200 baud ceiling constrains the frame rate, and LumaSync adapts
+dynamically:
+
+- **60 LEDs** → ~60 FPS
+- **120 LEDs** → ~30 FPS
+- **200 LEDs** → ~19 FPS
+
+No configuration is needed; LumaSync picks the rate that fits inside the
+baud budget given your LED count. The telemetry pill on the Device panel
+reports the actual push rate.
 
 ## Why not raw APA102 / SPI?
 

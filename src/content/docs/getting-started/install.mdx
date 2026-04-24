@@ -7,6 +7,8 @@ updated: 2026-04-23
 draft: true
 ---
 
+import { LATEST_VERSION_BARE } from '../../../lib/version';
+
 ## Prerequisites
 
 - **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE). For
@@ -48,8 +50,8 @@ Use the `.AppImage` from the [Download page](/download). Mark it executable and
 run:
 
 ```bash
-chmod +x LumaSync_1.3.1_amd64.AppImage
-./LumaSync_1.3.1_amd64.AppImage
+chmod +x LumaSync_{LATEST_VERSION_BARE}_amd64.AppImage
+./LumaSync_{LATEST_VERSION_BARE}_amd64.AppImage
 ```
 
 Tray behavior varies by desktop environment — GNOME requires a third-party
@@ -64,7 +66,7 @@ app and the updater verifies every binary before replacing anything on disk.
 To verify a download manually:
 
 ```bash
-minisign -Vm LumaSync_1.3.1_universal.dmg -P "$(cat minisign.pub)"
+minisign -Vm LumaSync_{LATEST_VERSION_BARE}_universal.dmg -P "$(cat minisign.pub)"
 ```
 
 `minisign.pub` is committed to the app repo. See [Auto-updater](/docs/advanced/auto-updater)

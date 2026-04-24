@@ -72,9 +72,11 @@ The controller needs to run **LumaSync v1 firmware at 115200 baud** — see
   companion repo; until then, the serial-protocol page has the byte-level
   format so you can port or write your own (~40 lines of Arduino code).
 - Most "ambilight USB kit" marketplace products ship pre-flashed with
-  **Adalight firmware**, which LumaSync v1.3 does **not** speak. Either
-  reflash with LumaSync v1 firmware today, or wait for the v1.4
-  Adalight-profile toggle (opt-in).
+  **Adalight firmware**. From v1.4, LumaSync includes an **opt-in
+  Adalight encoder profile** — pick "Firmware profile: LumaSync v1 |
+  Adalight" in Settings → Device, and LumaSync emits the legacy Adalight
+  framing instead of its native v1 frame. Alternatively, reflash the
+  controller with LumaSync v1 firmware.
 - Don't change the baud rate from 115200. LumaSync hard-codes it for the
   handshake, and most firmware ships at 115200 by default.
 
