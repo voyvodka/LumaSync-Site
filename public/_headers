@@ -1,0 +1,21 @@
+# Cloudflare Pages Headers file — long-lived immutable caching for
+# fingerprinted build output.
+#
+# Every asset under /_astro/ has a content hash in its filename (e.g.
+# BaseLayout.CHhRdPdo.css, ibm-plex-sans-latin-400-normal.CDDApCn2.woff2).
+# A byte change bumps the hash, which bumps the URL — so the browser
+# can safely cache the current URL forever and never revalidate.
+#
+# Without this, Cloudflare Pages defaults to `max-age=14400,
+# must-revalidate`, forcing a conditional round-trip per asset on every
+# reload. For self-hosted webfonts that round-trip is visible as a
+# brief font-swap flicker (FOUT) on page reload.
+#
+# Same treatment for the Satori-generated OG images under /og/, which
+# are build-time-immutable per page slug.
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/og/*
+  Cache-Control: public, max-age=31536000, immutable
