@@ -47,8 +47,11 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 
 // Copy the response through but ensure `Vary: Accept` is set so
 // downstream caches don't hand a markdown body to a browser (or vice
-// versa).
-function passThrough(response: Response): Response {
+// versa). For markdown responses, also attach `X-Markdown-Tokens` —
+// Cloudflare's static asset pipeline strips custom headers set at build
+// time, so we recompute the estimate here on the edge and inject it
+// into the outgoing response.
+async function passThrough(response: Response): Promise<Response> {
   const headers = new Headers(response.headers);
   const vary = headers.get('Vary');
   if (!vary) {
@@ -56,6 +59,23 @@ function passThrough(response: Response): Response {
   } else if (!/\baccept\b/i.test(vary)) {
     headers.set('Vary', `${vary}, Accept`);
   }
+
+  const contentType = headers.get('Content-Type') ?? '';
+  const isMarkdown = contentType.toLowerCase().includes('text/markdown');
+
+  if (isMarkdown && !headers.has('X-Markdown-Tokens')) {
+    // Read the body so we can count. The .md payloads are ≤ ~20 KB each
+    // so buffering them on the edge is a non-issue.
+    const body = await response.text();
+    // Rough heuristic: ~4 chars per token for English-dominant prose.
+    headers.set('X-Markdown-Tokens', String(Math.ceil(body.length / 4)));
+    return new Response(body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  }
+
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
