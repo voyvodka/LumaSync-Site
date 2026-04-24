@@ -38,6 +38,25 @@ The manifest lists the new version, download URLs per platform, and the
 No intermediate server, no version-pinning mechanism — `latest.json` is
 the source of truth.
 
+## The update modal (four states)
+
+From v1.3, the updater surfaces a single modal that walks through four
+named states, each with localised labels (TR + EN ship today) and
+contextual actions:
+
+| State         | What it shows                                     | Actions                         |
+| ------------- | ------------------------------------------------- | ------------------------------- |
+| `available`   | Version, release-notes preview, download size     | **Install & restart** · Later   |
+| `downloading` | Progress bar + bytes-transferred counter          | Cancel                          |
+| `installing`  | Spinner + minisign verification status            | —                               |
+| `error`       | Error code, short message, full detail in the log | **Show logs** · Dismiss · Retry |
+
+The `error` surface covers the common failure modes — network timeout,
+signature verification mismatch, disk full, write-protected install
+path — each with a distinct code so the log entry maps back to the
+right fix. **Show logs** opens the platform log directory via the
+`open_log_dir` command (see [Notifications](/docs/reference/notifications#the-open_log_dir-command)).
+
 ## The public key
 
 Embedded in `src-tauri/tauri.conf.json`:

@@ -56,6 +56,35 @@ The old persisted keys (`smoothingAlpha`, `hueIntensityPreset`) still
 read through a fallback chain on upgrade, so your previous setting
 survives the migration without manual re-selection.
 
+## Color correction (per-channel)
+
+**Settings → Ambilight → Color correction** · `R / G / B gamma` · `Kelvin` · `Saturation trim`
+
+From v1.4, LumaSync applies a **per-channel color correction** pipeline
+on the hot path before smoothing, so every sink (USB strip, Hue bulbs,
+the edge-signal preview) sees the same corrected frame. The USB encoder
+and the Hue serializer share the exact byte-for-byte chain, so a strip
+tuned to match bulbs stays matched across modes. Three knobs:
+
+- **R / G / B gamma** · independent per channel, range `0.5–3.0`, default
+  `2.2`. Compensates for LEDs whose red or blue channel responds
+  non-linearly. Bluish strips often need `R ≈ 2.0` to pull perceptual
+  neutral back to grey.
+- **Kelvin white balance** · `2000–10000 K`, default `6500 K`. Per-strip
+  white-balance multiplier. Warm-white stock (`~3000 K` LEDs) usually
+  needs `4500–5000 K` to stop pulling everything red; cool-white stock
+  sits at `6500–7500 K`.
+- **Saturation trim** · BT.601-luminance preserving, applied after gamma
+  and Kelvin. Different from the top-level **Saturation** knob at the
+  top of this page — this one is a per-strip calibration trim
+  (compensating for a strip that natively over- or under-saturates),
+  not a per-session mood control.
+
+**Order matters**: gamma first (raw LED response), Kelvin second (strip
+white balance), saturation trim last (final appearance match). Tune
+once per strip; values persist to `~/.config/lumasync/app.json` under
+`ambilight.colorCorrection` and survive upgrades.
+
 ## Brightness cap
 
 **Settings → Ambilight → Brightness cap** · default `0.85` · range `0.0–1.0`
