@@ -37,10 +37,17 @@
   /* Focus */
   --focus-ring: #ffb020;
 
-  /* Typography families */
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  --font-display: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+  /* Typography families. Each stack puts the real webfont first, then
+   * a metric-matched synthetic fallback (declared in global.css) so the
+   * pre-swap paint lands at the same pixel metrics as the real font —
+   * swap becomes invisible. Plain system fonts come after as deeper
+   * fallback for browsers that ignore size-adjust / ascent-override. */
+  --font-sans:
+    'IBM Plex Sans', 'IBM Plex Sans Fallback', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:
+    'IBM Plex Mono', 'IBM Plex Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-display:
+    'Instrument Serif', 'Instrument Serif Fallback', ui-serif, Georgia, 'Times New Roman', serif;
 
   /* Type scale */
   --fs-xs: 0.78rem;

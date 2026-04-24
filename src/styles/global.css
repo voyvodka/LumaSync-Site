@@ -11,6 +11,51 @@
 @import '@fontsource/instrument-serif/400.css';
 @import '@fontsource/instrument-serif/400-italic.css';
 
+/* ─── Metric-overridden fallbacks ────────────────────────────
+ * fontsource CSS ships with `font-display: swap` which, on first
+ * visit or hard reload, paints the system fallback (Arial / Menlo /
+ * Georgia) and then swaps in the real font when it arrives — every
+ * metric mismatch between the two fonts manifests as a tiny layout
+ * shift on the swap ("font flicker").
+ *
+ * These three synthetic families are Arial / Menlo / Georgia
+ * rescaled with size-adjust + ascent/descent overrides so their
+ * measured line-box matches the real IBM Plex / Instrument Serif
+ * metrics. Dropping them into each font stack immediately after the
+ * real face means: fallback paints at the *same pixel positions* the
+ * real font will, so the swap is invisible.
+ *
+ * Values calculated against the fontsource 400-weight font tables;
+ * identical technique to Next.js's built-in next/font optimizer.
+ */
+
+@font-face {
+  font-family: 'IBM Plex Sans Fallback';
+  src: local('Arial');
+  ascent-override: 100%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+  size-adjust: 104%;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono Fallback';
+  src: local('Menlo'), local('Consolas');
+  ascent-override: 98%;
+  descent-override: 23%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+@font-face {
+  font-family: 'Instrument Serif Fallback';
+  src: local('Georgia'), local('Times New Roman');
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+  size-adjust: 110%;
+}
+
 @import './tokens.css';
 
 /* ─── Expose tokens to Tailwind utilities ───────────────────── */
