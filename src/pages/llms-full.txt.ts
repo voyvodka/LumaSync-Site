@@ -12,33 +12,12 @@
 
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
 import { DOC_GROUPS, DOC_GROUP_LABELS } from '../lib/content';
+import { mdxBody } from '../lib/mdx-body';
 
 const SITE_URL = 'https://lumasync.app';
 const INCLUDES_DRAFTS = import.meta.env.PUBLIC_SITE_STAGE === 'beta';
-
-async function mdxBody(collection: string, id: string): Promise<string> {
-  // Astro 6 glob loader strips the .mdx extension from entry.id, so
-  // reattach it when constructing the on-disk path.
-  const filename = id.endsWith('.mdx') ? id : `${id}.mdx`;
-  const filePath = resolve(process.cwd(), 'src/content', collection, filename);
-  const raw = await readFile(filePath, 'utf-8');
-  // 1. Strip YAML frontmatter.
-  let body = raw.replace(/^---[\s\S]*?---\s*/m, '');
-  // 2. Strip MDX import statements (left over from version.ts imports
-  //    in scenes.mdx, hyperion.mdx, etc. — they compile out for HTML
-  //    render but would appear as literal lines in a plain-text dump).
-  body = body.replace(/^import\s+[^;]*?;?\s*$/gm, '');
-  // 3. Substitute the two MDX expressions we inject site-wide.
-  body = body.replace(/\{LATEST_VERSION\}/g, LATEST_VERSION);
-  body = body.replace(/\{LATEST_VERSION_DATE\}/g, LATEST_VERSION_DATE);
-  // 4. Collapse runs of blank lines introduced by the strips above.
-  body = body.replace(/\n{3,}/g, '\n\n');
-  return body.trim();
-}
 
 export const GET: APIRoute = async () => {
   const allDocs = await getCollection('docs');
