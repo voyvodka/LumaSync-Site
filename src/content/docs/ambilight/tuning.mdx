@@ -31,24 +31,30 @@ along with the colour drop.
   range stops above zero on purpose, so the lighting always carries
   at least some colour signal.
 
-## Smoothing
+## Responsiveness (smoothing + intensity)
 
-**Settings → Ambilight → Smoothing** · default `medium` · `off / low / medium / high`
+**Settings → Ambilight → Responsiveness** · default `Moderate` ·
+`Subtle / Moderate / Intense`
 
-Temporal smoothing blends each new frame with the previous one to reduce
-visual jitter on noisy content.
+From v1.4, the old continuous smoothing slider and the separate Hue-only
+intensity preset are merged into a single **three-step responsiveness
+control** that drives both USB and Hue EWMA paths at once. One dial, both
+targets, no mismatched feel between strip and bulbs.
 
-- **`off`**: raw frames, maximum responsiveness. Best for fast content
-  (sports, action games) where you want strict 1:1 pixel-to-LED mapping.
-- **`low`**: ~20 ms time constant. Slight softening, barely perceptible
-  lag.
-- **`medium`** (default): ~80 ms time constant. Noticeable on hard cuts
-  (scene changes lag by one beat) but kills jitter on low-light video.
-- **`high`**: ~200 ms time constant. Very smooth but clearly laggy on
-  game/sports content. Best for ambient movie watching.
+The coefficients behind the tiles are:
 
-Smoothing is target-aware: the USB path smooths less aggressively than the
-Hue path because Hue's 20 Hz cap already introduces damping.
+- **Subtle** — EWMA `0.15`. Heavy smoothing, cinematic damping. Scene
+  changes lag by ~200 ms, jitter on noisy low-light content disappears.
+  Best for ambient movie watching in a dim room.
+- **Moderate** (default) — EWMA `0.35`. Balanced. Visible but not
+  distracting lag on hard cuts, enough damping to kill frame noise.
+- **Intense** — EWMA `0.60`. Light smoothing, maximum responsiveness.
+  Best for sports, action gaming, or anything where you want strict
+  pixel-to-LED mapping.
+
+The old persisted keys (`smoothingAlpha`, `hueIntensityPreset`) still
+read through a fallback chain on upgrade, so your previous setting
+survives the migration without manual re-selection.
 
 ## Brightness cap
 

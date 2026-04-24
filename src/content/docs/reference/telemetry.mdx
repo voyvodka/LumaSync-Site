@@ -44,6 +44,21 @@ These live in
 None of these values are ever written to disk (other than the current
 session's in-memory snapshot) or sent off-device.
 
+### StatusBar FPS/latency pill (v1.4+)
+
+From v1.4, the StatusBar carries a **fourth pill** — always visible while
+Ambilight is active — that shows live end-to-end latency (`Δ`) and frame
+rate (`Σ`) with coloured thresholds:
+
+| Σ (FPS) | Colour | Meaning                                           |
+| ------- | ------ | ------------------------------------------------- |
+| `≥ 45`  | Green  | Healthy — pipeline keeps up with the display      |
+| `25–44` | Amber  | Degraded — capture or send path is under pressure |
+| `< 25`  | Red    | Failing — visible lag; see the Performance page   |
+
+The thresholds are tuned for ambient lighting specifically, not gaming.
+Amber is still watchable; red is where you'd start debugging.
+
 ## Logs
 
 Tauri writes a rotating log file for debugging. Location:

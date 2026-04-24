@@ -22,20 +22,38 @@ draft: true
 
 ## Health check fails
 
-**Symptom**: Port connects, health check returns `DEVICE_MANUAL_REQUIRED` or
-a red error.
+**Symptom**: Port connects, health check returns a non-healthy
+`SerialHealthCode` or `DEVICE_MANUAL_REQUIRED`.
 
-- **Wrong baud rate on firmware** — LumaSync v1 firmware must run at 115200. Other rates are silently rejected as failed handshakes.
-- **Wrong firmware** — Adalight firmware, CircuitPython/MicroPython boards
-  with custom protocols, or anything else that doesn't speak the
-  [LumaSync v1 frame](/docs/usb-leds/serial-protocol) won't respond to the
-  `0xAA 0x55` magic bytes. Reflash with LumaSync v1 firmware, wait for the
-  v1.4 Adalight-profile toggle, or mark the device as manual and accept
-  you won't get handshake validation.
-- **Serial port already owned** by another process — close other serial
+From v1.4, LumaSync sends a **PING/PONG opcode exchange** during the
+handshake and reports a structured `SerialHealthReport` back to the UI.
+The coded statuses you may see:
+
+| `SerialHealthCode`       | What it means                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| `HEALTHY`                | PING acknowledged, frame acks arriving — green pill, streaming armed               |
+| `HANDSHAKE_TIMEOUT`      | Controller didn't reply to the zero-LED frame within ~2 s — wrong firmware/profile |
+| `PING_TIMEOUT`           | Handshake passed but runtime PING never acked — likely a flaky cable or USB hub    |
+| `BAUD_MISMATCH`          | Reply arrived but bytes were garbage — baud rate not 115200                        |
+| `DEVICE_BUSY`            | Port opened by another process (Arduino IDE, screen, vendor utility)               |
+| `DEVICE_MANUAL_REQUIRED` | Unrecognised firmware but the port is writable — opt in and LumaSync streams blind |
+
+Common causes and what to do:
+
+- **Wrong baud rate** (→ `BAUD_MISMATCH`) — LumaSync v1 firmware must run
+  at 115200. Other rates are rejected.
+- **Wrong firmware / wrong profile** (→ `HANDSHAKE_TIMEOUT`) — a
+  controller flashed with Adalight firmware won't answer a LumaSync v1
+  handshake. Either flip the **Firmware profile** toggle to **Adalight**
+  in Settings → Device (v1.4+), or reflash with LumaSync v1 firmware.
+  CircuitPython / MicroPython boards with custom protocols stay on
+  `DEVICE_MANUAL_REQUIRED`.
+- **Serial port already owned** (→ `DEVICE_BUSY`) — close other serial
   monitors (Arduino IDE, screen, minicom, vendor utilities).
+- **Flaky cable or USB hub** (→ `PING_TIMEOUT`) — swap the cable, try a
+  powered hub, or plug straight into a back-panel USB port.
 
-You can continue in `MANUAL_REQUIRED` state; LumaSync streams frames and
+You can continue in `DEVICE_MANUAL_REQUIRED`; LumaSync streams frames and
 assumes the firmware cooperates. If the strip lights up, you're fine.
 
 ## LEDs flicker or freeze
