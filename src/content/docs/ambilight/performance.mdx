@@ -34,7 +34,22 @@ animated content; a sustained drift means something is off.
 
 For the Hue path specifically, **Σ caps at 20 fps** regardless of what your
 capture pipeline delivers. The bridge is the bottleneck. USB LEDs can go
-up to 60 fps.
+up to 60 fps — but only on short strips.
+
+### USB frame rate vs LED count
+
+From v1.4, LumaSync adapts the USB frame rate to your LED count so every
+frame fits inside the 115200-baud budget. You don't configure this — it's
+computed automatically — but the ceiling is worth knowing:
+
+| LEDs | Typical Σ | Notes                                        |
+| ---- | --------- | -------------------------------------------- |
+| 60   | ~60 fps   | Full 60 Hz headroom, matches the capture cap |
+| 120  | ~30 fps   | Still smooth for film content                |
+| 200  | ~19 fps   | Near the baud ceiling — more LEDs reduce Σ   |
+
+Beyond 200 LEDs the serial link becomes the bottleneck. Split the strip
+across two controllers if you need higher frame rate at that scale.
 
 ## Symptoms vs fixes
 

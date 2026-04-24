@@ -59,9 +59,21 @@ pressed, then immediately issue a credential in response to the next request.
 3. Within 30 seconds, the UI flips to **Pairing successful** — no extra
    interaction needed.
 
-If you miss the window: the pairing call returns `HUE_PAIRING_FAILED` with a
-"link button not pressed" message. Click **Try again** — no penalty for
-retries.
+### Error codes (v1.4+)
+
+From v1.4, the CLIP API's `error.type` is split into four distinct codes,
+each with its own localized message instead of the generic
+`HUE_PAIRING_FAILED`:
+
+| Code                      | What it means                                                      | What to do                                             |
+| ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
+| `LINK_BUTTON_NOT_PRESSED` | The 30-second pairing window elapsed before the button was pressed | Click **Try again**, press the button faster           |
+| `DEVICETYPE_INVALID`      | The bridge rejected the client identity LumaSync sent              | Rare — reboot the bridge, then retry                   |
+| `BRIDGE_BUSY`             | Another app is already mid-pairing with the same bridge            | Close the other Hue client (Hue app, Hue Sync Box app) |
+| `RATE_LIMITED`            | Too many pairing attempts in quick succession                      | Wait 60 seconds, then retry                            |
+
+Retries are free — the bridge has no lockout once the underlying cause is
+cleared.
 
 Credentials land in `~/.config/lumasync/app.json` protected by OS user-level
 file permissions. LumaSync performs no network calls outside your LAN — the

@@ -29,17 +29,26 @@ Common causes:
 ## Pairing keeps failing
 
 **Symptom**: Status cycles through `HUE_PAIRING_PENDING_LINK_BUTTON` but
-never reaches `HUE_PAIRING_OK`.
+never reaches `HUE_PAIRING_OK`, or you get one of the coded errors below.
 
-- You pressed the link button but the call had already timed out. The link
-  button grace window is ~30 seconds. Click **Try again** and press the
-  button within that window.
-- Multiple apps are trying to pair at once. Only one pairing at a time is
-  supported by the bridge — close the Hue app's pairing screen, any other
-  Hue clients in a pairing state, retry.
-- Pairing over VPN. Bridges reject pairing from non-LAN origins as a
-  security measure. Disconnect the VPN, pair on local network, then reconnect
-  VPN afterwards — runtime streaming works over the VPN once paired.
+From v1.4, LumaSync surfaces a specific error code for each failure mode
+(see [pairing errors](/docs/hue/pairing#error-codes-v14)). The mapping
+from code to root cause:
+
+- **`LINK_BUTTON_NOT_PRESSED`** — you missed the ~30-second window. Click
+  **Try again** and walk to the bridge faster.
+- **`DEVICETYPE_INVALID`** — bridge refused the client identity string.
+  Rare; reboot the bridge and retry. If it persists, file an issue with
+  the bridge firmware version.
+- **`BRIDGE_BUSY`** — another app is mid-pairing. Close the Hue app's
+  pairing screen (or any Hue Sync Box / third-party client stuck in
+  pairing) and retry. Only one concurrent pairing per bridge.
+- **`RATE_LIMITED`** — too many pairing attempts in a short window. Wait
+  ~60 seconds, then retry. Bridges back off aggressive clients.
+- **Pairing over VPN** — bridges reject pairing from non-LAN origins as a
+  security measure. Disconnect the VPN, pair on the local network, then
+  reconnect VPN afterwards. Runtime streaming works over the VPN once
+  paired; only the pairing handshake is origin-checked.
 
 ## `HUE_AREA_LIST_EMPTY`
 

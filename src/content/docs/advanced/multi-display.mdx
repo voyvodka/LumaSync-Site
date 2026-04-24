@@ -32,6 +32,18 @@ and lists each entry with the OS-provided name, its physical resolution,
 and a "primary" badge where applicable. Pick one; the pipeline rebinds
 immediately without restarting the mode.
 
+From v1.4, LumaSync keys each display by a **stable identifier** —
+`SCDisplay.displayID` on macOS and the adapter `device_name` on Windows —
+rather than the hot-reassigned index. Two consequences:
+
+- **Your selection persists across restarts.** If you picked the
+  external 4K last session, it's still picked when the app relaunches.
+- **Unplug is handled automatically.** If the previously-selected
+  display disappears (dock disconnected, monitor powered off), LumaSync
+  falls back to the primary display without error. Plug it back in and
+  the original selection isn't auto-restored — switch it manually if
+  that's what you want.
+
 ## Hot-plug behaviour
 
 When you plug or unplug an external monitor mid-session:
