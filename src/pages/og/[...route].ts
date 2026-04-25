@@ -69,7 +69,7 @@ const statics: Array<{ id: string; entry: OgEntry }> = [
     entry: {
       title: 'LumaSync',
       description:
-        'Tray-first ambilight + Philips Hue Entertainment. Open source, no cloud, no HDMI box.',
+        'Mirror your screen to WS2812B LED strips and Philips Hue Entertainment areas in real time. Local-only, brand-agnostic, MIT.',
       category: 'Open source · MIT',
     },
   },

@@ -1,14 +1,94 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { articleSchema, faqPageSchema, itemListSchema } from '../lib/seo';
+import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
 
 const title = 'LumaSync';
 const description =
-  'LumaSync drives WS2812B LED strips over USB and Philips Hue Entertainment areas from the same tray-first desktop app, at the same time, from one screen source. Open source. No cloud. No HDMI box.';
+  'LumaSync mirrors your screen to WS2812B LED strips over USB and Philips Hue Entertainment areas at the same time, from one source. Local-only, brand-agnostic, MIT-licensed.';
 
 const repo = 'https://github.com/voyvodka/LumaSync';
+
+// Triple-stacked GEO schemas (Article + ItemList + FAQPage) — all
+// reflect content that's actually rendered on the page below, so the
+// markup adds context without spamming. dateModified ties to the
+// pinned submodule's latest dated release, which is the freshest
+// "site updated" signal we can quote without lying.
+const schemas = [
+  articleSchema({
+    title: 'LumaSync — your screen, your lights. Locally.',
+    description,
+    url: '/',
+    dateModified: LATEST_VERSION_DATE,
+    image: '/og/landing.png',
+  }),
+  itemListSchema({
+    name: 'LumaSync features',
+    url: '/',
+    items: [
+      {
+        name: 'USB LED strips',
+        url: '/docs/usb-leds/serial-protocol',
+        description:
+          'Drives WS2812B strips through CH340 / FT232 USB-serial controllers running the LumaSync v1 serial frame at 115200 baud.',
+      },
+      {
+        name: 'Philips Hue Entertainment streaming',
+        url: '/docs/hue/entertainment-area',
+        description:
+          'DTLS 1.2 PSK streaming to any configured Entertainment Area at up to 20 Hz — the bridge ceiling.',
+      },
+      {
+        name: 'Synchronized USB + Hue',
+        url: '/docs/getting-started/first-setup',
+        description:
+          'A single screen-capture pipeline drives both targets simultaneously, switched per-mode from the system tray.',
+      },
+      {
+        name: 'Room map editor',
+        url: '/docs/usb-leds/calibration',
+        description:
+          'Drag-and-drop canvas for placing the TV anchor, furniture, USB strips, and Hue channels on a normalized grid.',
+      },
+      {
+        name: 'Live Δ/Σ telemetry',
+        url: '/docs/ambilight/performance',
+        description:
+          'Realtime frame-latency and FPS pill so you can see when the pipeline is healthy or stalling.',
+      },
+    ],
+  }),
+  faqPageSchema([
+    {
+      question: 'Does LumaSync need a cloud account?',
+      answer:
+        "No. LumaSync runs entirely on-device — no accounts, no telemetry, no cloud. Hue bridge pairing and configuration live in ~/.config/lumasync/app.json on your machine.",
+    },
+    {
+      question: 'Can I use LumaSync with a console or Apple TV via HDMI?',
+      answer:
+        'No. LumaSync reads the OS screen buffer, so it cannot capture HDMI input from external devices. For HDMI sources the Philips Hue Sync Box is the right tool.',
+    },
+    {
+      question: 'What hardware do I need?',
+      answer:
+        'Either a Philips Hue Bridge (gen 2 or newer) with at least one Entertainment Area configured, or a WS2812B LED strip driven by a CH340 / FT232 USB-serial controller running LumaSync firmware. Either path on its own is enough.',
+    },
+    {
+      question: 'Is LumaSync free and open source?',
+      answer:
+        'Yes. LumaSync is MIT licensed. Source is at github.com/voyvodka/LumaSync — fork it, ship it, audit the screen-capture and streaming pipelines yourself.',
+    },
+    {
+      question: 'Does LumaSync work on Linux?',
+      answer:
+        'Yes, experimentally. AppImage ships today and a Flathub submission is underway. Tray behaviour varies by desktop environment — GNOME needs an AppIndicator extension, and tiling window managers may force the window into a tile.',
+    },
+  ]),
+];
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} schemas={schemas}>
   {/* ─── Hero ───────────────────────────────────────────────── */}
   <section class="hero">
     <div class="hero-inner">
@@ -49,7 +129,7 @@ const repo = 'https://github.com/voyvodka/LumaSync';
         <p>
           CH340 and FT232 controllers at 115200 baud, running the
           <a href="/docs/usb-leds/serial-protocol">LumaSync v1 serial frame</a>. Opt-in Adalight
-          profile on the v1.4 roadmap.
+          profile shipped in v1.4.
         </p>
         <a href="/docs/usb-leds/controllers">Supported chipsets →</a>
       </article>
@@ -139,11 +219,11 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     </div>
   </section>
 
-  {/* ─── Tray-first UX ─────────────────────────────────────── */}
+  {/* ─── Menu-bar UX ─────────────────────────────────────── */}
   <section class="callout">
     <div class="callout-copy">
-      <p class="section-eyebrow">Tray-first</p>
-      <h2 class="section-title">Lives where it belongs — out of your way.</h2>
+      <p class="section-eyebrow">Lives in the menu bar</p>
+      <h2 class="section-title">Out of your way until you need it.</h2>
       <p class="callout-body">
         Single window hides to tray on close. Compact 320×480 mode for quick toggles, full 900×620
         mode when you want to configure. Auto-starts on login, if you want it to.
@@ -247,15 +327,17 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <article class="roadmap-col roadmap-shipped">
         <header>
           <span class="roadmap-tag tag-shipped">Shipped</span>
-          <h3>Current release</h3>
+          <h3>{LATEST_VERSION} — {LATEST_VERSION_DATE}</h3>
         </header>
         <ul role="list">
-          <li>Compact 320×480 mode alongside the 900×620 full window</li>
-          <li>Live edge-signal preview (top / bottom / left / right RGB gradients)</li>
-          <li>Runtime Δ / Σ telemetry pill — frame latency + FPS in the status bar</li>
-          <li>Luminance-preserving saturation control (50–200%)</li>
-          <li>Unified scene preset catalog with a brightness field</li>
-          <li>EN + TR i18n parity with an automatic 1:1 verifier</li>
+          <li>USB per-LED sampling — each LED maps to its own edge region (replaces the v1.3 single-zone path)</li>
+          <li>Opt-in Adalight firmware profile — reuse existing Adalight controllers without reflashing</li>
+          <li>Per-channel color correction — R/G/B gamma, Kelvin white-balance, BT.601 saturation; same chain on USB and Hue</li>
+          <li>Multi-monitor capture with stable display IDs and primary-display fallback on unplug</li>
+          <li>StatusBar FPS / latency pill — green/amber/red thresholds, always visible while Ambilight is on</li>
+          <li>Native OS notifications via <code>tauri-plugin-notification</code> + global ErrorBoundary fallback</li>
+          <li>Keyboard shortcuts: ⌥1 / ⌥2 / ⌥3 to switch modes, ⌘, for Settings (TR-layout safe)</li>
+          <li>Hue: richer pairing error codes, CLIP v2 room archetypes, three-step intensity presets</li>
         </ul>
         <a class="inline-cta" href="/changelog">Full changelog →</a>
       </article>
@@ -263,17 +345,15 @@ const repo = 'https://github.com/voyvodka/LumaSync';
       <article class="roadmap-col roadmap-next">
         <header>
           <span class="roadmap-tag tag-next">Next</span>
-          <h3>v1.4 — queued, not shipped</h3>
+          <h3>v1.5 — in flight</h3>
         </header>
         <ul role="list">
-          <li>USB per-LED sampling (the strip runs on one pixel today)</li>
-          <li>Adalight firmware profile — opt-in compatibility toggle</li>
-          <li>Wired keyboard shortcuts (⌥1 / ⌥2 / ⌥3 + ⌘,)</li>
-          <li>Native OS notifications via <code>tauri-plugin-notification</code></li>
-          <li>Multi-monitor capture honouring user display selection</li>
+          <li>WLED sink — drive ESP32/ESP8266 boards over the LAN, on top of the v1.4 <code>LedSink</code> trait</li>
+          <li>Companion firmware repo — reference sketch + PING/PONG handshake for v1 controllers</li>
+          <li>OpenRGB sink (v2.0 track) — peripherals, motherboards, fans on the same pipeline</li>
         </ul>
         <p class="roadmap-caveat">
-          Dates are estimates. Source of truth is the project's internal roadmap.
+          No dates promised. The <code>LedSink</code> abstraction landed in v1.4 to make these tracks tractable.
         </p>
       </article>
 
@@ -790,7 +870,8 @@ const repo = 'https://github.com/voyvodka/LumaSync';
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.5rem;
     font-size: var(--fs-sm);
     line-height: var(--lh-relaxed);
