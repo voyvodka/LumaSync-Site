@@ -62,7 +62,7 @@ const schemas = [
     {
       question: 'Does LumaSync need a cloud account?',
       answer:
-        "No. LumaSync runs entirely on-device — no accounts, no telemetry, no cloud. Hue bridge pairing and configuration live in ~/.config/lumasync/app.json on your machine.",
+        'No. LumaSync runs entirely on-device — no accounts, no telemetry, no cloud. Hue bridge pairing and configuration live in ~/.config/lumasync/app.json on your machine.',
     },
     {
       question: 'Can I use LumaSync with a console or Apple TV via HDMI?',
@@ -330,14 +330,35 @@ const schemas = [
           <h3>{LATEST_VERSION} — {LATEST_VERSION_DATE}</h3>
         </header>
         <ul role="list">
-          <li>USB per-LED sampling — each LED maps to its own edge region (replaces the v1.3 single-zone path)</li>
-          <li>Opt-in Adalight firmware profile — reuse existing Adalight controllers without reflashing</li>
-          <li>Per-channel color correction — R/G/B gamma, Kelvin white-balance, BT.601 saturation; same chain on USB and Hue</li>
-          <li>Multi-monitor capture with stable display IDs and primary-display fallback on unplug</li>
-          <li>StatusBar FPS / latency pill — green/amber/red thresholds, always visible while Ambilight is on</li>
-          <li>Native OS notifications via <code>tauri-plugin-notification</code> + global ErrorBoundary fallback</li>
-          <li>Keyboard shortcuts: ⌥1 / ⌥2 / ⌥3 to switch modes, ⌘, for Settings (TR-layout safe)</li>
-          <li>Hue: richer pairing error codes, CLIP v2 room archetypes, three-step intensity presets</li>
+          <li>
+            USB per-LED sampling — each LED maps to its own edge region (replaces the v1.3
+            single-zone path)
+          </li>
+          <li>
+            Opt-in Adalight firmware profile — reuse existing Adalight controllers without
+            reflashing
+          </li>
+          <li>
+            Per-channel color correction — R/G/B gamma, Kelvin white-balance, BT.601 saturation;
+            same chain on USB and Hue
+          </li>
+          <li>
+            Multi-monitor capture with stable display IDs and primary-display fallback on unplug
+          </li>
+          <li>
+            StatusBar FPS / latency pill — green/amber/red thresholds, always visible while
+            Ambilight is on
+          </li>
+          <li>
+            Native OS notifications via <code>tauri-plugin-notification</code> + global ErrorBoundary
+            fallback
+          </li>
+          <li>
+            Keyboard shortcuts: ⌥1 / ⌥2 / ⌥3 to switch modes, ⌘, for Settings (TR-layout safe)
+          </li>
+          <li>
+            Hue: richer pairing error codes, CLIP v2 room archetypes, three-step intensity presets
+          </li>
         </ul>
         <a class="inline-cta" href="/changelog">Full changelog →</a>
       </article>
@@ -348,12 +369,19 @@ const schemas = [
           <h3>v1.5 — in flight</h3>
         </header>
         <ul role="list">
-          <li>WLED sink — drive ESP32/ESP8266 boards over the LAN, on top of the v1.4 <code>LedSink</code> trait</li>
-          <li>Companion firmware repo — reference sketch + PING/PONG handshake for v1 controllers</li>
+          <li>
+            WLED sink — drive ESP32/ESP8266 boards over the LAN, on top of the v1.4 <code
+              >LedSink</code
+            > trait
+          </li>
+          <li>
+            Companion firmware repo — reference sketch + PING/PONG handshake for v1 controllers
+          </li>
           <li>OpenRGB sink (v2.0 track) — peripherals, motherboards, fans on the same pipeline</li>
         </ul>
         <p class="roadmap-caveat">
-          No dates promised. The <code>LedSink</code> abstraction landed in v1.4 to make these tracks tractable.
+          No dates promised. The <code>LedSink</code> abstraction landed in v1.4 to make these tracks
+          tractable.
         </p>
       </article>
 

@@ -35,20 +35,20 @@ either, and eventually both together.**
 
 ## Feature comparison
 
-| Feature                   | LumaSync                                                                        | WLED                                                |
-| ------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| Product category          | Desktop ambilight app                                                           | LED controller firmware                             |
-| Runs on                   | macOS, Windows, Linux PC                                                        | ESP32 / ESP8266 board                               |
-| Deployment                | Install app on your machine                                                     | Flash firmware to microcontroller, wire to strip    |
+| Feature                   | LumaSync                                                                         | WLED                                                |
+| ------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Product category          | Desktop ambilight app                                                            | LED controller firmware                             |
+| Runs on                   | macOS, Windows, Linux PC                                                         | ESP32 / ESP8266 board                               |
+| Deployment                | Install app on your machine                                                      | Flash firmware to microcontroller, wire to strip    |
 | Control path to LEDs      | USB-serial at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | Wi-Fi (HTTP / WebSocket / DDP / ArtNet)             |
-| Supports WS2812B          | Yes (via USB controller)                                                        | Yes (native, many strip types)                      |
-| Screen sync / ambilight   | Yes (built in)                                                                  | No — separate client app required                   |
-| Philips Hue Entertainment | Native DTLS 1.2 PSK                                                             | No — WLED doesn't talk Hue                          |
-| HomeAssistant             | Not needed                                                                      | First-class                                         |
-| Standalone operation      | Requires computer running                                                       | Yes — the board is the server                       |
-| Mobile control            | No dedicated app                                                                | Yes — web UI works on mobile, plus third-party apps |
-| LumaSync → WLED bridge    | **No — not in {LATEST_VERSION}.** Roadmap item.                                 | N/A                                                 |
-| Open source               | MIT                                                                             | MIT                                                 |
+| Supports WS2812B          | Yes (via USB controller)                                                         | Yes (native, many strip types)                      |
+| Screen sync / ambilight   | Yes (built in)                                                                   | No — separate client app required                   |
+| Philips Hue Entertainment | Native DTLS 1.2 PSK                                                              | No — WLED doesn't talk Hue                          |
+| HomeAssistant             | Not needed                                                                       | First-class                                         |
+| Standalone operation      | Requires computer running                                                        | Yes — the board is the server                       |
+| Mobile control            | No dedicated app                                                                 | Yes — web UI works on mobile, plus third-party apps |
+| LumaSync → WLED bridge    | **No — not in {LATEST_VERSION}.** Roadmap item.                                  | N/A                                                 |
+| Open source               | MIT                                                                              | MIT                                                 |
 
 ## When to pick LumaSync
 
