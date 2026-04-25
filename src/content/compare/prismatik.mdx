@@ -2,8 +2,7 @@
 title: LumaSync vs Prismatik
 competitor: Prismatik
 description: Prismatik was the Lightpack driver and remains a dormant desktop ambilight tool. LumaSync is actively maintained and adds native Philips Hue support.
-updated: 2026-04-23
-draft: true
+updated: 2026-04-25
 ---
 
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../../lib/version';
@@ -38,7 +37,7 @@ answer for everyone else.**
 | ------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Maintenance status        | Active — {LATEST_VERSION} shipped {LATEST_VERSION_DATE}                                  | Dormant — last release 5.11.2.31 on 2022-01-08 (~4 years ago)                                                                                |
 | Target platform           | macOS, Windows, Linux (experimental)                                                     | Windows (primary), macOS / Linux community builds                                                                                            |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap) | Yes — Adalight protocol                                                                                                                      |
+| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | Yes — Adalight protocol                                                                                                                      |
 | Lightpack hardware        | No — original hardware discontinued                                                      | Yes — the reason this project exists                                                                                                         |
 | Philips Hue Entertainment | Native DTLS 1.2 PSK                                                                      | No — no native Hue support                                                                                                                   |
 | Effects engine            | Ambilight + solid; closed enum                                                           | Plugin-based effects                                                                                                                         |
@@ -53,8 +52,8 @@ answer for everyone else.**
 - **You don't own Lightpack hardware.** There's no reason to choose a
   driver-for-discontinued-hardware project if you're not running that
   hardware. LumaSync supports the same generic CH340/FT232 kits at
-  115200 baud (LumaSync v1 frame today; opt-in Adalight profile on the
-  v1.4 roadmap) without the legacy baggage.
+  115200 baud (LumaSync v1 frame, plus an opt-in Adalight profile from
+  v1.4) without the legacy baggage.
 - **You want Hue Entertainment support.** Prismatik never integrated with
   the Hue Entertainment API; if Hue is in your setup, LumaSync is the
   simpler path.
@@ -75,12 +74,11 @@ answer for everyone else.**
 Coming from **Prismatik to LumaSync**:
 
 - If you're using a generic CH340/FT232 USB kit, the **strip and
-  controller board are reusable**, but the microcontroller firmware
-  needs to switch from Adalight to the
-  [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol). Reflash
-  with LumaSync v1 firmware, or wait for the v1.4 Adalight-profile
-  toggle (opt-in). Then stop Prismatik, disconnect its USB port, start
-  LumaSync, run the device health check. See
+  controller board are reusable**. Either reflash the microcontroller to
+  the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol), or
+  enable the v1.4+ **Adalight profile** in Settings → Device and keep
+  the existing Adalight firmware. Then stop Prismatik, disconnect its
+  USB port, start LumaSync, run the device health check. See
   [USB controllers](/docs/usb-leds/controllers).
 - If you're using actual **Lightpack hardware**: LumaSync does not
   recognise the Lightpack VID:PID, so it has to be connected via the

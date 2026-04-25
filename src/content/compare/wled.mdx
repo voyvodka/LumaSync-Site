@@ -2,8 +2,7 @@
 title: LumaSync vs WLED
 competitor: WLED
 description: WLED is ESP32/ESP8266 firmware for addressable LED strips — a standalone Wi-Fi controller. Different category than LumaSync; often run alongside it, not instead.
-updated: 2026-04-23
-draft: true
+updated: 2026-04-25
 ---
 
 import { LATEST_VERSION } from '../../lib/version';
@@ -41,7 +40,7 @@ either, and eventually both together.**
 | Product category          | Desktop ambilight app                                                           | LED controller firmware                             |
 | Runs on                   | macOS, Windows, Linux PC                                                        | ESP32 / ESP8266 board                               |
 | Deployment                | Install app on your machine                                                     | Flash firmware to microcontroller, wire to strip    |
-| Control path to LEDs      | USB-serial at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap) | Wi-Fi (HTTP / WebSocket / DDP / ArtNet)             |
+| Control path to LEDs      | USB-serial at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | Wi-Fi (HTTP / WebSocket / DDP / ArtNet)             |
 | Supports WS2812B          | Yes (via USB controller)                                                        | Yes (native, many strip types)                      |
 | Screen sync / ambilight   | Yes (built in)                                                                  | No — separate client app required                   |
 | Philips Hue Entertainment | Native DTLS 1.2 PSK                                                             | No — WLED doesn't talk Hue                          |
@@ -59,9 +58,10 @@ either, and eventually both together.**
   your room is mostly Hue bulbs with a small LED strip accent, LumaSync
   owns both paths from one app.
 - **You don't want to solder.** Off-the-shelf CH340/FT232 kits need a
-  one-time firmware reflash to the LumaSync v1 frame (or wait for the
-  v1.4 Adalight-profile toggle, which reuses existing Adalight firmware
-  unchanged). After that, LumaSync handles the rest.
+  one-time firmware reflash to the LumaSync v1 frame, or just enable the
+  v1.4+ Adalight-profile toggle in Settings → Device — that reuses
+  existing Adalight firmware unchanged. After that, LumaSync handles the
+  rest.
 
 ## When to pick WLED
 

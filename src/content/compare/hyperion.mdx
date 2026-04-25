@@ -2,8 +2,7 @@
 title: LumaSync vs Hyperion
 competitor: Hyperion
 description: Hyperion is a RPi-first headless ambilight service with enormous flexibility. LumaSync is a desktop app. The trade-off is setup friction vs hardware ceiling.
-updated: 2026-04-23
-draft: true
+updated: 2026-04-25
 ---
 
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../../lib/version';
@@ -35,7 +34,7 @@ you want that to be your existing computer.**
 | ------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | Target platform           | Desktop app (macOS, Windows, Linux)                                                      | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
 | Deployment                | Install + run                                                                            | Provision RPi / server, install package, configure via web UI                                                               |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; Adalight profile on v1.4 roadmap) | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
+| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
 | Philips Hue Entertainment | Native DTLS 1.2 PSK streaming                                                            | Via forwarder / plugin — functional, not native                                                                             |
 | HDMI capture              | No — OS screen buffer only                                                               | Yes — via USB HDMI grabber on RPi                                                                                           |
 | LED count ceiling         | Comfortable up to ~300 over USB-serial                                                   | Multi-thousand LEDs via SPI not uncommon                                                                                    |
@@ -81,11 +80,12 @@ Coming from **Hyperion to LumaSync**:
 
 - Your USB hardware (CH340/FT232 + WS2812B) is reusable, but the
   controller firmware needs to speak the
-  [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol) — Hyperion's
-  `adalight` output driver is **not** wire-compatible. Reflash the
-  microcontroller with LumaSync v1 firmware, or wait for the v1.4
-  Adalight-profile toggle (opt-in) and reuse the existing Adalight
-  firmware then. See [USB controllers](/docs/usb-leds/controllers).
+  [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol) by default —
+  Hyperion's `adalight` output driver is **not** wire-compatible with v1.
+  Either reflash the microcontroller with LumaSync v1 firmware, or enable
+  the v1.4+ Adalight-profile toggle (Settings → Device) and reuse the
+  existing Adalight firmware unchanged. See
+  [USB controllers](/docs/usb-leds/controllers).
 - Your Hue setup moves cleanly — the Hue Bridge is stateful, so your
   Entertainment Area and bulb positions remain. Pair LumaSync, pick the
   area. [Pairing walkthrough](/docs/hue/pairing).
