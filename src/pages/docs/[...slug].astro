@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { listDocs, DOC_GROUP_LABELS } from '../../lib/content';
-import { breadcrumbSchema, techArticleSchema } from '../../lib/seo';
+import { breadcrumbSchema, howToSchema, techArticleSchema, type HowToInput } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const entries = await listDocs();
@@ -17,6 +17,81 @@ const { Content } = await render(entry);
 const groupLabel = DOC_GROUP_LABELS[entry.data.group];
 const slug = entry.id.replace(/\.mdx$/, '');
 const docPath = `/docs/${slug}`;
+
+// HowTo schemas for the step-by-step getting-started guides. Each
+// step.text is a self-contained instruction so Google rich-result
+// eligibility stays intact; the docs page itself carries the full
+// prose. Keyed by slug so the Astro build emits the schema only for
+// the matching MDX entry.
+const HOWTO_BY_SLUG: Record<string, Omit<HowToInput, 'url'>> = {
+  'getting-started/install': {
+    name: 'Install LumaSync',
+    description:
+      'Install LumaSync on macOS, Windows, or Linux from a signed binary, then verify the signature before first launch.',
+    totalTime: 'PT5M',
+    steps: [
+      {
+        name: 'Check prerequisites',
+        text: 'Confirm you are on macOS 13+, Windows 10+, or a mainstream Linux desktop, and that you have either a Philips Hue Bridge with an Entertainment Area or a WS2812B strip driven by a CH340 or FT232 USB-serial controller.',
+        url: '/docs/getting-started/install#prerequisites',
+      },
+      {
+        name: 'Download for your OS',
+        text: 'Open the Download page and choose the build matching your operating system. macOS ships as a universal .dmg, Windows as an MSI installer, Linux as an AppImage.',
+        url: '/download',
+      },
+      {
+        name: 'Install the binary',
+        text: 'Run the installer (macOS / Windows) or move the AppImage somewhere on PATH and chmod +x it (Linux). LumaSync is a single application, no background service to manage.',
+        url: '/docs/getting-started/install',
+      },
+      {
+        name: 'Verify the signature',
+        text: 'On first launch the auto-updater verifies the minisign signature against the bundled public key. If verification fails the install aborts — re-download from a clean source.',
+        url: '/docs/advanced/auto-updater',
+      },
+      {
+        name: 'Run the first-setup walkthrough',
+        text: 'Launch LumaSync and follow the in-app first-setup flow to pair your Hue bridge or connect your USB controller and confirm lights are responding.',
+        url: '/docs/getting-started/first-setup',
+      },
+    ],
+  },
+  'getting-started/first-setup': {
+    name: 'First setup walkthrough',
+    description:
+      'Pair LumaSync with your Hue bridge or USB controller, pick a scene preset, and confirm lights respond — start to first sync in under five minutes.',
+    totalTime: 'PT5M',
+    steps: [
+      {
+        name: 'Open LumaSync and pick a target',
+        text: 'Launch LumaSync. The first-run flow asks whether you want to drive a Hue Entertainment Area, a USB LED strip, or both.',
+      },
+      {
+        name: 'Pair your Hue bridge (Hue path)',
+        text: 'Press the link button on top of the Hue bridge, then click Pair in LumaSync within thirty seconds. The bridge issues an application key that LumaSync stores locally.',
+        url: '/docs/hue/pairing',
+      },
+      {
+        name: 'Plug in your USB controller (USB path)',
+        text: 'Connect the CH340 or FT232 controller via USB. LumaSync detects the chipset and prompts you to assign it to a strip in the room map.',
+        url: '/docs/usb-leds/controllers',
+      },
+      {
+        name: 'Pick a scene preset',
+        text: 'Open the scenes panel and pick Ambilight, Solid colour, or one of the gradient presets. The lights should mirror the screen within milliseconds.',
+        url: '/docs/advanced/scenes',
+      },
+      {
+        name: 'Watch the Δ/Σ telemetry pill',
+        text: 'Confirm capture and send rates are healthy — Δ should sit under 20 ms and Σ should match your screen refresh rate. If either drifts, see the performance docs for tuning.',
+        url: '/docs/ambilight/performance',
+      },
+    ],
+  },
+};
+
+const howto = HOWTO_BY_SLUG[slug];
 
 const schemas = entry.data.draft
   ? []
@@ -34,6 +109,7 @@ const schemas = entry.data.draft
         dateModified: entry.data.updated.toISOString(),
         section: groupLabel,
       }),
+      ...(howto ? [howToSchema({ ...howto, url: docPath })] : []),
     ];
 ---
 

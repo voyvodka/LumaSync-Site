@@ -19,3 +19,13 @@
 
 /og/*
   Cache-Control: public, max-age=31536000, immutable
+
+# RFC 8288 Link headers for agent discovery — points crawlers and AI
+# agents at the canonical site map and the llms.txt entry point.
+# Applies to all HTML responses; static assets under /_astro/ and /og/
+# are matched by their more-specific blocks above and inherit none of
+# this (per Cloudflare _headers precedence rules).
+/*
+  Link: </llms.txt>; rel="describedby"; type="text/plain"
+  Link: </llms-full.txt>; rel="describedby"; type="text/plain"
+  Link: </sitemap-index.xml>; rel="sitemap"
