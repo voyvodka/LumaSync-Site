@@ -36,7 +36,12 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 
   if (prefersMarkdown(request.headers.get('Accept'))) {
     const mdUrl = new URL(url.toString());
-    mdUrl.pathname = url.pathname.replace(/\/$/, '') + '.md';
+    // Root path needs the explicit `/index.md` rewrite — stripping the
+    // trailing slash leaves an empty string, so `+ '.md'` would resolve
+    // to `.md` (no leading slash) and ASSETS would 404. Subpaths follow
+    // the simple `/path/.md` convention.
+    const stripped = url.pathname.replace(/\/$/, '');
+    mdUrl.pathname = stripped === '' ? '/index.md' : `${stripped}.md`;
     const mdResponse = await env.ASSETS.fetch(new Request(mdUrl.toString(), request));
     if (mdResponse.ok) return passThrough(mdResponse);
     // No .md sibling exists for this path — fall through to HTML.
@@ -51,6 +56,13 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 // Cloudflare's static asset pipeline strips custom headers set at build
 // time, so we recompute the estimate here on the edge and inject it
 // into the outgoing response.
+// Site-wide content-freshness signal. Bumped on each release deploy
+// so AI answer engines and crawlers see a recent Last-Modified value
+// — without one, GEO linters (isitagentready) flag the site as stale
+// and downgrade citation priority. RFC 1123 / RFC 5322 format. Update
+// whenever we cut a new submodule pin or land a substantive rev.
+const LAST_MODIFIED = 'Sat, 25 Apr 2026 10:00:00 GMT';
+
 async function passThrough(response: Response): Promise<Response> {
   const headers = new Headers(response.headers);
   const vary = headers.get('Vary');
@@ -62,6 +74,15 @@ async function passThrough(response: Response): Promise<Response> {
 
   const contentType = headers.get('Content-Type') ?? '';
   const isMarkdown = contentType.toLowerCase().includes('text/markdown');
+  const isHtml = contentType.toLowerCase().includes('text/html');
+
+  // Stamp a Last-Modified on HTML and markdown responses if Cloudflare
+  // didn't already attach one. Static-asset responses for fingerprinted
+  // bundles already carry their own mtime-based Last-Modified, so we
+  // leave those alone.
+  if ((isHtml || isMarkdown) && !headers.has('Last-Modified')) {
+    headers.set('Last-Modified', LAST_MODIFIED);
+  }
 
   if (isMarkdown && !headers.has('X-Markdown-Tokens')) {
     // Read the body so we can count. The .md payloads are ≤ ~20 KB each
