@@ -21,8 +21,13 @@ export interface OrganizationSchema {
   '@id': string;
   name: string;
   legalName: string;
+  alternateName: string[];
+  description: string;
+  slogan: string;
+  keywords: string;
   url: string;
   logo: { '@type': 'ImageObject'; url: string; width: number; height: number };
+  founder: { '@type': 'Person'; name: string; sameAs: string[] };
   sameAs: string[];
 }
 
@@ -33,6 +38,14 @@ export function organizationSchema(): OrganizationSchema {
     '@id': `${SITE_URL}/#organization`,
     name: ORG_NAME,
     legalName: ORG_LEGAL_NAME,
+    // Disambiguation against "Luma Sync" (with space), "Sync-on-Luma"
+    // (RGB SCART retro-gaming term), and "Luma" (lumalabs.ai video AI).
+    alternateName: ['LumaSync', 'Luma Sync'],
+    description:
+      'Open-source desktop ambient-lighting app that mirrors your screen to WS2812B LED strips over USB and Philips Hue Entertainment areas at the same time, from one source. Local-only, brand-agnostic, MIT-licensed.',
+    slogan: 'Your screen, your lights. Locally.',
+    keywords:
+      'ambilight, ambient lighting, screen sync, Philips Hue, WS2812B, Adalight, desktop app, open source',
     url: SITE_URL,
     logo: {
       '@type': 'ImageObject',
@@ -40,7 +53,12 @@ export function organizationSchema(): OrganizationSchema {
       width: 512,
       height: 128,
     },
-    sameAs: [REPO_URL],
+    founder: {
+      '@type': 'Person',
+      name: 'voyvodka',
+      sameAs: ['https://github.com/voyvodka'],
+    },
+    sameAs: [REPO_URL, 'https://github.com/voyvodka', `${REPO_URL}/releases`],
   };
 }
 
@@ -112,7 +130,7 @@ export function softwareAppSchema(input: SoftwareAppInput) {
     name: input.name,
     description: input.description,
     applicationCategory: 'MultimediaApplication',
-    operatingSystem: input.operatingSystems.join(', '),
+    operatingSystem: input.operatingSystems,
     softwareVersion: input.version,
     downloadUrl: abs(input.downloadUrl),
     datePublished: input.datePublished,

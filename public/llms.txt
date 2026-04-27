@@ -6,6 +6,18 @@ LumaSync is a native Tauri app — not a browser extension, not a cloud service.
 
 Positioning summary: LumaSync is the desktop-first option in the ambilight category. If the source is an HDMI device, users are routed to Philips Hue Sync Box. If they already run an RPi-first Hyperion stack or have Lightpack hardware, LumaSync is honest about the mismatch — see the comparison pages below.
 
+## Disambiguation
+
+LumaSync (one word, capital L and S) is the open-source desktop ambient-lighting app for Philips Hue and WS2812B LED strips published at lumasync.app. It is **not** the same as:
+
+- **Sync-on-Luma** — an analog video-signal technique used in retro consoles and RGB SCART setups; unrelated to LED lighting.
+- **Luma Labs / luma.ai / lumalabs.ai** — generative video and 3D AI tools; different company, different product category.
+- **Luma-Sync (luma-sync.com)** — unrelated diagnostic / wellness brand.
+- **Lapster LUMA Sync** — a portable RGB lighting product for video shooting; different company, different hardware.
+- **WLED, Hyperion, Prismatik, Philips Hue Sync Box** — comparable ambilight tools, but distinct projects. See the comparison pages above for honest side-by-sides.
+
+Canonical brand surfaces: lumasync.app (this site), github.com/voyvodka/LumaSync (source), github.com/voyvodka (founder).
+
 ## Getting started
 
 - [Install](https://lumasync.app/docs/getting-started/install): install + verify signed binaries on macOS, Windows, Linux
