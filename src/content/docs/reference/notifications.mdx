@@ -6,23 +6,17 @@ order: 40
 updated: 2026-04-24
 ---
 
-From v1.4, LumaSync emits **OS-level notifications** for runtime events so
-you don't have to keep the main window open. Implementation is
-`tauri-plugin-notification` + `tauri-plugin-process`, wired end-to-end.
+From v1.4, LumaSync emits **OS-level notifications** for runtime events so you don't have to keep the main window open. Implementation is `tauri-plugin-notification` + `tauri-plugin-process`, wired end-to-end.
 
 ## Permission banner
 
-The first time LumaSync wants to notify (typically on first USB connect
-or first Hue pair), a **permission banner** appears in the app asking
-for OS notification rights. Click **Allow** once; the decision persists
-per OS rules:
+The first time LumaSync wants to notify (typically on first USB connect or first Hue pair), a **permission banner** appears in the app asking for OS notification rights. Click **Allow** once; the decision persists per OS rules:
 
 - **macOS** · Settings → Notifications → LumaSync
 - **Windows** · Settings → System → Notifications → LumaSync
 - **Linux** · your desktop environment's notification settings
 
-If you deny, the event flow degrades gracefully — in-app status pills
-still update, only the OS toast goes away.
+If you deny, the event flow degrades gracefully — in-app status pills still update, only the OS toast goes away.
 
 ## Events that emit a toast
 
@@ -36,13 +30,11 @@ still update, only the OS toast goes away.
 | `update.installed` | Update verified and applied; restart on next launch      | Info     |
 | `update.error`     | Minisign verification failed or the download errored out | Error    |
 
-All toasts are local to the OS — nothing goes to a cloud push service.
-No Apple Push, no FCM, no third-party relay.
+All toasts are local to the OS — nothing goes to a cloud push service. No Apple Push, no FCM, no third-party relay.
 
 ## The `open_log_dir` command
 
-LumaSync exposes an `open_log_dir` Tauri command that reveals the log
-directory in Finder / Explorer / your file manager. Triggered from:
+LumaSync exposes an `open_log_dir` Tauri command that reveals the log directory in Finder / Explorer / your file manager. Triggered from:
 
 - **Settings → About → Open log directory**
 - **Update modal `error` state → Show logs**
@@ -56,15 +48,11 @@ Log location per OS:
 | Windows | `%LOCALAPPDATA%\com.lumasync.app\logs\` |
 | Linux   | `~/.local/share/com.lumasync.app/logs/` |
 
-See [Telemetry → Logs](/docs/reference/telemetry#logs) for what the log
-files actually contain.
+See [Telemetry → Logs](/docs/reference/telemetry#logs) for what the log files actually contain.
 
 ## Disabling notifications
 
-There is no in-app toggle — notifications are on-by-default once OS
-permission is granted. To silence them, revoke at the OS level using
-the paths under [Permission banner](#permission-banner) above. LumaSync
-respects the OS-level setting without needing a restart.
+There is no in-app toggle — notifications are on-by-default once OS permission is granted. To silence them, revoke at the OS level using the paths under [Permission banner](#permission-banner) above. LumaSync respects the OS-level setting without needing a restart.
 
 ## Related
 

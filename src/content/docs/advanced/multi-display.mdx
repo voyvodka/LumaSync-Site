@@ -10,79 +10,45 @@ import { LATEST_VERSION } from '../../../lib/version';
 
 ## Which display drives the pipeline
 
-LumaSync captures from a **single display at a time**. The output of that
-capture feeds **both** output paths — USB LED strips and the Hue
-Entertainment Area — simultaneously. There is no per-target routing in
-{LATEST_VERSION}.
+LumaSync captures from a **single display at a time**. The output of that capture feeds **both** output paths — USB LED strips and the Hue Entertainment Area — simultaneously. There is no per-target routing in {LATEST_VERSION}.
 
 ### Default
 
 - **Single-display setup**: LumaSync picks that display automatically.
-- **Multi-display setup** (first launch): defaults to the **primary**
-  display — on macOS, the one carrying the menu bar; on Windows, the one
-  marked primary in Display settings.
+- **Multi-display setup** (first launch): defaults to the **primary** display — on macOS, the one carrying the menu bar; on Windows, the one marked primary in Display settings.
 
 ### Changing the source
 
 Settings → **Ambilight** → **Source display**.
 
-LumaSync enumerates the OS's displays via its `list_displays` command
-and lists each entry with the OS-provided name, its physical resolution,
-and a "primary" badge where applicable. Pick one; the pipeline rebinds
-immediately without restarting the mode.
+LumaSync enumerates the OS's displays via its `list_displays` command and lists each entry with the OS-provided name, its physical resolution, and a "primary" badge where applicable. Pick one; the pipeline rebinds immediately without restarting the mode.
 
-From v1.4, LumaSync keys each display by a **stable identifier** —
-`SCDisplay.displayID` on macOS and the adapter `device_name` on Windows —
-rather than the hot-reassigned index. Two consequences:
+From v1.4, LumaSync keys each display by a **stable identifier** — `SCDisplay.displayID` on macOS and the adapter `device_name` on Windows — rather than the hot-reassigned index. Two consequences:
 
-- **Your selection persists across restarts.** If you picked the
-  external 4K last session, it's still picked when the app relaunches.
-- **Unplug is handled automatically.** If the previously-selected
-  display disappears (dock disconnected, monitor powered off), LumaSync
-  falls back to the primary display without error. Plug it back in and
-  the original selection isn't auto-restored — switch it manually if
-  that's what you want.
+- **Your selection persists across restarts.** If you picked the external 4K last session, it's still picked when the app relaunches.
+- **Unplug is handled automatically.** If the previously-selected display disappears (dock disconnected, monitor powered off), LumaSync falls back to the primary display without error. Plug it back in and the original selection isn't auto-restored — switch it manually if that's what you want.
 
 ## Hot-plug behaviour
 
 When you plug or unplug an external monitor mid-session:
 
-- **Windows and macOS** emit display-changed events that LumaSync
-  subscribes to; the dropdown updates within ~500 ms and the current
-  selection falls back to primary if the previously-selected display
-  disappeared.
-- **Linux (X11)** works similarly if the capture backend receives RandR
-  events. If the dropdown looks stale, reopen Settings → Display to
-  trigger a rebuild.
-- **Linux (Wayland)** portals don't expose a hot-plug event stream —
-  you'll see the new display listed on the next ambilight session
-  restart.
+- **Windows and macOS** emit display-changed events that LumaSync subscribes to; the dropdown updates within ~500 ms and the current selection falls back to primary if the previously-selected display disappeared.
+- **Linux (X11)** works similarly if the capture backend receives RandR events. If the dropdown looks stale, reopen Settings → Display to trigger a rebuild.
+- **Linux (Wayland)** portals don't expose a hot-plug event stream — you'll see the new display listed on the next ambilight session restart.
 
 ## Calibration overlay
 
-The calibration test pattern (Settings → Calibration → **Test pattern**)
-is drawn via `open_display_overlay` on whichever display you've picked as
-the source. Other displays stay untouched. Fullscreen behaviour:
+The calibration test pattern (Settings → Calibration → **Test pattern**) is drawn via `open_display_overlay` on whichever display you've picked as the source. Other displays stay untouched. Fullscreen behaviour:
 
-- **macOS** uses `macos-private-api` for borderless fullscreen — enabled
-  in the app's Tauri config, no user action needed.
-- **Windows** may render the overlay as a foreground window rather than
-  true fullscreen on some composition driver versions. Functional for
-  calibration but not edge-to-edge.
-- **Linux** varies by window manager. GNOME and KDE Plasma handle it;
-  tiling WMs may force the overlay into a tile.
+- **macOS** uses `macos-private-api` for borderless fullscreen — enabled in the app's Tauri config, no user action needed.
+- **Windows** may render the overlay as a foreground window rather than true fullscreen on some composition driver versions. Functional for calibration but not edge-to-edge.
+- **Linux** varies by window manager. GNOME and KDE Plasma handle it; tiling WMs may force the overlay into a tile.
 
 ## What is not available in {LATEST_VERSION}
 
-**Per-target display routing — "drive USB from Display 1 and Hue from
-Display 2" — is not a shipped feature.** The pipeline has one capture
-source at a time, and both output targets read from it.
+**Per-target display routing — "drive USB from Display 1 and Hue from Display 2" — is not a shipped feature.** The pipeline has one capture source at a time, and both output targets read from it.
 
-If you genuinely need two different sources, the practical workaround is
-to run **two LumaSync instances** on the same machine — each with its
-own `~/.config/lumasync/app.json` (by setting a custom data directory
-per instance). Not officially supported; expect rough edges around tray
-icons clashing.
+If you genuinely need two different sources, the practical workaround is to run **two LumaSync instances** on the same machine — each with its own `~/.config/lumasync/app.json` (by setting a custom data directory per instance). Not officially supported; expect rough edges around tray icons clashing.
 
 ## Related
 

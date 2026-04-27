@@ -8,53 +8,39 @@ updated: 2026-04-23
 
 import { LATEST_VERSION, LATEST_VERSION_BARE } from '../../../lib/version';
 
-LumaSync checks for a newer release when the app starts. If one's
-available, you see a non-blocking modal with the release notes and a
-**Install & restart** button. If not, you see nothing — no nag, no
-tray-icon badge.
+LumaSync checks for a newer release when the app starts. If one's available, you see a non-blocking modal with the release notes and a **Install & restart** button. If not, you see nothing — no nag, no tray-icon badge.
 
 ## How it works
 
-Under the hood, LumaSync uses `tauri-plugin-updater` against a GitHub
-Releases-based feed. Each release includes a `latest.json` manifest:
+Under the hood, LumaSync uses `tauri-plugin-updater` against a GitHub Releases-based feed. Each release includes a `latest.json` manifest:
 
 ```
 https://github.com/voyvodka/LumaSync/releases/latest/download/latest.json
 ```
 
-The manifest lists the new version, download URLs per platform, and the
-**minisign signatures** for each artifact. The updater:
+The manifest lists the new version, download URLs per platform, and the **minisign signatures** for each artifact. The updater:
 
 1. Downloads `latest.json` on startup (once, then cached for the session).
 2. Compares the version string to the running app.
-3. If newer, fetches the matching platform artifact **and** its `.sig`
-   signature file.
-4. Verifies the signature against the minisign public key bundled in the
-   app's Tauri config.
+3. If newer, fetches the matching platform artifact **and** its `.sig` signature file.
+4. Verifies the signature against the minisign public key bundled in the app's Tauri config.
 5. Only if the signature verifies does it replace the on-disk binary.
 6. Prompts the user to restart.
 
-No intermediate server, no version-pinning mechanism — `latest.json` is
-the source of truth.
+No intermediate server, no version-pinning mechanism — `latest.json` is the source of truth.
 
 ## The update modal (four states)
 
-From v1.3, the updater surfaces a single modal that walks through four
-named states, each with localised labels (TR + EN ship today) and
-contextual actions:
+From v1.3, the updater surfaces a single modal that walks through four named states, each with localised labels (TR + EN ship today) and contextual actions:
 
-| State         | What it shows                                     | Actions                         |
-| ------------- | ------------------------------------------------- | ------------------------------- |
-| `available`   | Version, release-notes preview, download size     | **Install & restart** · Later   |
-| `downloading` | Progress bar + bytes-transferred counter          | Cancel                          |
-| `installing`  | Spinner + minisign verification status            | —                               |
-| `error`       | Error code, short message, full detail in the log | **Show logs** · Dismiss · Retry |
+| State | What it shows | Actions |
+| --- | --- | --- |
+| `available` | Version, release-notes preview, download size | **Install & restart** · Later |
+| `downloading` | Progress bar + bytes-transferred counter | Cancel |
+| `installing` | Spinner + minisign verification status | — |
+| `error` | Error code, short message, full detail in the log | **Show logs** · Dismiss · Retry |
 
-The `error` surface covers the common failure modes — network timeout,
-signature verification mismatch, disk full, write-protected install
-path — each with a distinct code so the log entry maps back to the
-right fix. **Show logs** opens the platform log directory via the
-`open_log_dir` command (see [Notifications](/docs/reference/notifications#the-open_log_dir-command)).
+The `error` surface covers the common failure modes — network timeout, signature verification mismatch, disk full, write-protected install path — each with a distinct code so the log entry maps back to the right fix. **Show logs** opens the platform log directory via the `open_log_dir` command (see [Notifications](/docs/reference/notifications#the-open_log_dir-command)).
 
 ## The public key
 
@@ -69,20 +55,14 @@ Embedded in `src-tauri/tauri.conf.json`:
 }
 ```
 
-The base64 value decodes to a standard minisign public key. If someone
-replaced the binary at the download endpoint without access to the
-corresponding private key, verification fails and the updater refuses to
-install anything.
+The base64 value decodes to a standard minisign public key. If someone replaced the binary at the download endpoint without access to the corresponding private key, verification fails and the updater refuses to install anything.
 
 ## Verify a download manually
 
-If you prefer to install from a fresh download rather than through the
-in-app updater:
+If you prefer to install from a fresh download rather than through the in-app updater:
 
-1. Grab both the artifact and its matching `.sig` file from the
-   [Releases page](https://github.com/voyvodka/LumaSync/releases/latest).
-2. Extract the public key from the app (or use the `minisign.pub` committed
-   to the app repo).
+1. Grab both the artifact and its matching `.sig` file from the [Releases page](https://github.com/voyvodka/LumaSync/releases/latest).
+2. Extract the public key from the app (or use the `minisign.pub` committed to the app repo).
 3. Run:
 
 ```bash
@@ -93,35 +73,25 @@ Exit code 0 means the signature verifies. Anything else, don't install.
 
 ## When the updater skips
 
-- **Corporate / restricted networks** that block `github.com` or
-  `releases.githubusercontent.com`. The updater fails the check and stays
-  silent — no blocking modal, no error toast. You'll need to install
-  manually from another network.
-- **Running from a read-only mount** (SIP-protected locations on macOS, for
-  example). The updater skips the replacement step and logs a warning.
+- **Corporate / restricted networks** that block `github.com` or `releases.githubusercontent.com`. The updater fails the check and stays silent — no blocking modal, no error toast. You'll need to install manually from another network.
+- **Running from a read-only mount** (SIP-protected locations on macOS, for example). The updater skips the replacement step and logs a warning.
 - **User disabled it** in Settings → Updates → Automatic update checks.
 
 ## What it does NOT do
 
-- **Does not silently install**. Every update is confirmed by the user via
-  the modal before the binary swap happens.
-- **Does not phone home with telemetry**. The only network call is the
-  `latest.json` fetch and the subsequent artifact / signature downloads.
-- **Does not check between sessions**. The check fires exactly once per
-  app launch.
+- **Does not silently install**. Every update is confirmed by the user via the modal before the binary swap happens.
+- **Does not phone home with telemetry**. The only network call is the `latest.json` fetch and the subsequent artifact / signature downloads.
+- **Does not check between sessions**. The check fires exactly once per app launch.
 
 ## Rolling back
 
 If a release turns out bad:
 
-1. Download the previous version's artifact manually from the
-   [Releases page](https://github.com/voyvodka/LumaSync/releases).
+1. Download the previous version's artifact manually from the [Releases page](https://github.com/voyvodka/LumaSync/releases).
 2. Verify with minisign.
-3. Install over the current version. Config in
-   `~/.config/lumasync/app.json` is preserved — no data loss.
+3. Install over the current version. Config in `~/.config/lumasync/app.json` is preserved — no data loss.
 
-Future: a "pin current version" toggle in Settings → Updates is tracked as
-an enhancement. Not shipped as of {LATEST_VERSION}.
+Future: a "pin current version" toggle in Settings → Updates is tracked as an enhancement. Not shipped as of {LATEST_VERSION}.
 
 ## Related
 

@@ -10,6 +10,10 @@
     {
       "files": "*.astro",
       "options": { "parser": "astro" }
+    },
+    {
+      "files": ["*.md", "*.mdx"],
+      "options": { "proseWrap": "never" }
     }
   ]
 }

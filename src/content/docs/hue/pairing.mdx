@@ -8,20 +8,15 @@ updated: 2026-04-21
 
 ## Prerequisites
 
-- A **Hue Bridge gen 2 or newer** (the square one). Old round bridges do not
-  support the Entertainment streaming API.
+- A **Hue Bridge gen 2 or newer** (the square one). Old round bridges do not support the Entertainment streaming API.
 - Bridge and LumaSync machine on the **same local network**.
-- Bridge firmware up to date (auto-updated by the Hue app — just open it once
-  if you haven't recently).
-- At least one **Entertainment Area** configured. Haven't done that? Jump to
-  [Entertainment Area](/docs/hue/entertainment-area) first, then come back.
-- **Physical access** to the bridge for a few seconds — pairing requires
-  pressing its link button.
+- Bridge firmware up to date (auto-updated by the Hue app — just open it once if you haven't recently).
+- At least one **Entertainment Area** configured. Haven't done that? Jump to [Entertainment Area](/docs/hue/entertainment-area) first, then come back.
+- **Physical access** to the bridge for a few seconds — pairing requires pressing its link button.
 
 ## The four steps
 
-LumaSync's Hue onboarding walks through four named stages. The pairing tracker
-at the top of the Hue panel shows where you are:
+LumaSync's Hue onboarding walks through four named stages. The pairing tracker at the top of the Hue panel shows where you are:
 
 1. **Discover** — find the bridge on the LAN
 2. **Pair** — press the physical link button to authorize the app
@@ -32,64 +27,43 @@ at the top of the Hue panel shows where you are:
 
 Open Settings → **Hue** → **Pair bridge**.
 
-LumaSync queries Philips's public discovery endpoint
-(`https://discovery.meethue.com/`) and also scans the LAN via mDNS. Bridges on
-the network show up in the list within a couple of seconds.
+LumaSync queries Philips's public discovery endpoint (`https://discovery.meethue.com/`) and also scans the LAN via mDNS. Bridges on the network show up in the list within a couple of seconds.
 
 If the list stays empty:
 
-- **Manual IP path**: click **Enter IP manually**, type the bridge's LAN IP
-  (find it in the Hue app → Settings → My Hue system → your bridge). LumaSync
-  verifies the address by fetching the bridge's config endpoint before letting
-  you continue.
-- **Discovery blocked**: corporate firewalls or guest VLANs often block mDNS.
-  Manual IP still works in that case — you bypass discovery entirely.
+- **Manual IP path**: click **Enter IP manually**, type the bridge's LAN IP (find it in the Hue app → Settings → My Hue system → your bridge). LumaSync verifies the address by fetching the bridge's config endpoint before letting you continue.
+- **Discovery blocked**: corporate firewalls or guest VLANs often block mDNS. Manual IP still works in that case — you bypass discovery entirely.
 
 ## Step 2 · Pair
 
-LumaSync hits the bridge's pairing endpoint once a second. Bridges respond
-with `HUE_PAIRING_PENDING_LINK_BUTTON` until the physical link button is
-pressed, then immediately issue a credential in response to the next request.
+LumaSync hits the bridge's pairing endpoint once a second. Bridges respond with `HUE_PAIRING_PENDING_LINK_BUTTON` until the physical link button is pressed, then immediately issue a credential in response to the next request.
 
 **What you do**:
 
 1. Walk to the bridge.
 2. Press the round button on the top.
-3. Within 30 seconds, the UI flips to **Pairing successful** — no extra
-   interaction needed.
+3. Within 30 seconds, the UI flips to **Pairing successful** — no extra interaction needed.
 
 ### Error codes (v1.4+)
 
-From v1.4, the CLIP API's `error.type` is split into four distinct codes,
-each with its own localized message instead of the generic
-`HUE_PAIRING_FAILED`:
+From v1.4, the CLIP API's `error.type` is split into four distinct codes, each with its own localized message instead of the generic `HUE_PAIRING_FAILED`:
 
-| Code                      | What it means                                                      | What to do                                             |
-| ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
-| `LINK_BUTTON_NOT_PRESSED` | The 30-second pairing window elapsed before the button was pressed | Click **Try again**, press the button faster           |
-| `DEVICETYPE_INVALID`      | The bridge rejected the client identity LumaSync sent              | Rare — reboot the bridge, then retry                   |
-| `BRIDGE_BUSY`             | Another app is already mid-pairing with the same bridge            | Close the other Hue client (Hue app, Hue Sync Box app) |
-| `RATE_LIMITED`            | Too many pairing attempts in quick succession                      | Wait 60 seconds, then retry                            |
+| Code | What it means | What to do |
+| --- | --- | --- |
+| `LINK_BUTTON_NOT_PRESSED` | The 30-second pairing window elapsed before the button was pressed | Click **Try again**, press the button faster |
+| `DEVICETYPE_INVALID` | The bridge rejected the client identity LumaSync sent | Rare — reboot the bridge, then retry |
+| `BRIDGE_BUSY` | Another app is already mid-pairing with the same bridge | Close the other Hue client (Hue app, Hue Sync Box app) |
+| `RATE_LIMITED` | Too many pairing attempts in quick succession | Wait 60 seconds, then retry |
 
-Retries are free — the bridge has no lockout once the underlying cause is
-cleared.
+Retries are free — the bridge has no lockout once the underlying cause is cleared.
 
-Credentials land in `~/.config/lumasync/app.json` protected by OS user-level
-file permissions. LumaSync performs no network calls outside your LAN — the
-Hue bridge's cloud account is never touched. To invalidate a credential,
-revoke from the Hue app at any time (Settings → My Hue system → paired
-apps); the bridge treats LumaSync as a regular third-party client.
+Credentials land in `~/.config/lumasync/app.json` protected by OS user-level file permissions. LumaSync performs no network calls outside your LAN — the Hue bridge's cloud account is never touched. To invalidate a credential, revoke from the Hue app at any time (Settings → My Hue system → paired apps); the bridge treats LumaSync as a regular third-party client.
 
 ## Step 3 · Area select
 
-LumaSync calls the CLIP v2 Entertainment Configuration endpoint and lists
-every Entertainment Area on the bridge. Pick one. Each area becomes a
-distinct LumaSync **channel map** — switch areas anytime without re-pairing.
+LumaSync calls the CLIP v2 Entertainment Configuration endpoint and lists every Entertainment Area on the bridge. Pick one. Each area becomes a distinct LumaSync **channel map** — switch areas anytime without re-pairing.
 
-If the list is empty (`HUE_AREA_LIST_EMPTY`), you haven't created one in the Hue
-app. Open Hue app → Settings → Entertainment areas → Create. Drop the bulbs
-you want LumaSync to drive into it, position them on the room diagram, and
-save. Return to LumaSync and click **Refresh list**.
+If the list is empty (`HUE_AREA_LIST_EMPTY`), you haven't created one in the Hue app. Open Hue app → Settings → Entertainment areas → Create. Drop the bulbs you want LumaSync to drive into it, position them on the room diagram, and save. Return to LumaSync and click **Refresh list**.
 
 ## Step 4 · Ready
 
@@ -99,15 +73,11 @@ LumaSync runs a readiness check:
 - Do the selected Entertainment Area channels report a valid position?
 - Does a tiny test frame round-trip under 50 ms?
 
-If all three pass, the status pill flips to **Ready** and the Hue target is
-available as a sink in mode selection.
+If all three pass, the status pill flips to **Ready** and the Hue target is available as a sink in mode selection.
 
 ## Re-pairing
 
-The bridge occasionally rotates credentials after firmware updates. LumaSync's
-health check detects this and surfaces a **Repair Hue credentials** banner.
-Click it and walk back through steps 2–4 — step 1 skips because the IP is
-already known.
+The bridge occasionally rotates credentials after firmware updates. LumaSync's health check detects this and surfaces a **Repair Hue credentials** banner. Click it and walk back through steps 2–4 — step 1 skips because the IP is already known.
 
 ## What LumaSync stores
 
@@ -118,8 +88,7 @@ Only what's needed to stream:
 - Selected Entertainment Area UUID
 - Channel position overrides (optional)
 
-Nothing goes to a cloud. The Hue app's cloud account is not touched — pairing
-is LAN-only.
+Nothing goes to a cloud. The Hue app's cloud account is not touched — pairing is LAN-only.
 
 ## Related
 

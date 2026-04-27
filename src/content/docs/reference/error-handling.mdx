@@ -6,71 +6,46 @@ order: 50
 updated: 2026-04-24
 ---
 
-From v1.4, LumaSync wraps every React root with a **global
-ErrorBoundary**. When a render fault bubbles out of the component tree,
-you get a localised fallback card — not a blank tray window, not a
-silent crash. The app keeps running; only the broken panel is replaced
-with the card.
+From v1.4, LumaSync wraps every React root with a **global ErrorBoundary**. When a render fault bubbles out of the component tree, you get a localised fallback card — not a blank tray window, not a silent crash. The app keeps running; only the broken panel is replaced with the card.
 
 ## The fallback card
 
 Shows:
 
-- A short, localised headline ("LumaSync ran into a problem rendering
-  this panel.")
+- A short, localised headline ("LumaSync ran into a problem rendering this panel.")
 - The underlying error message (not the stack trace)
-- An anonymised fingerprint of the error, used to correlate with the
-  log file
+- An anonymised fingerprint of the error, used to correlate with the log file
 
 Three actions sit at the bottom of the card:
 
-- **Show logs** — opens the platform log directory via `open_log_dir`.
-  The full stack trace sits in the most recent log file, correlated by
-  the card's fingerprint. See [Notifications → `open_log_dir`](/docs/reference/notifications#the-open_log_dir-command).
-- **Restart** — terminates and relaunches the app via
-  `tauri-plugin-process`. State in `~/.config/lumasync/app.json`
-  persists across restart; in-memory session data (current mode, frame
-  queue) is discarded.
-- **Copy error** — copies the error message + fingerprint to the
-  clipboard, ready to paste into a GitHub issue or Discussion thread.
-  Does **not** copy your config, credentials, or the log body — those
-  stay on disk.
+- **Show logs** — opens the platform log directory via `open_log_dir`. The full stack trace sits in the most recent log file, correlated by the card's fingerprint. See [Notifications → `open_log_dir`](/docs/reference/notifications#the-open_log_dir-command).
+- **Restart** — terminates and relaunches the app via `tauri-plugin-process`. State in `~/.config/lumasync/app.json` persists across restart; in-memory session data (current mode, frame queue) is discarded.
+- **Copy error** — copies the error message + fingerprint to the clipboard, ready to paste into a GitHub issue or Discussion thread. Does **not** copy your config, credentials, or the log body — those stay on disk.
 
 ## What ErrorBoundary catches
 
 - Render-time exceptions in React components (the common case)
 - Effect-callback exceptions that synchronously propagate during render
-- Lifecycle errors in class components (none ship today, but the
-  boundary handles them anyway)
+- Lifecycle errors in class components (none ship today, but the boundary handles them anyway)
 
 ## What it does NOT catch
 
-- **Backend worker panics** — the Rust / Tauri side. Those are logged by
-  the Rust `tracing` layer and surface as a different UI state: the
-  pipeline halts, status pills go red, no fallback card appears. Check
-  the log file for the `panic` line.
-- **Unhandled promise rejections outside React's lifecycle** — a
-  background fetch that rejects without a `.catch` lands in the log but
-  does not trip the boundary.
-- **WebView hard crashes** (rare) — those terminate the Tauri window
-  entirely; macOS / Windows surface an OS-level crash dialog.
+- **Backend worker panics** — the Rust / Tauri side. Those are logged by the Rust `tracing` layer and surface as a different UI state: the pipeline halts, status pills go red, no fallback card appears. Check the log file for the `panic` line.
+- **Unhandled promise rejections outside React's lifecycle** — a background fetch that rejects without a `.catch` lands in the log but does not trip the boundary.
+- **WebView hard crashes** (rare) — those terminate the Tauri window entirely; macOS / Windows surface an OS-level crash dialog.
 
 ## Filing a good issue
 
 If the fallback card appears, attach:
 
 1. The **Copy error** clipboard contents (message + fingerprint)
-2. The most recent log file from **Show logs** (review first — it
-   contains your bridge IP and local paths)
-3. What you were doing when it fired (opened Settings, switched modes,
-   etc.)
+2. The most recent log file from **Show logs** (review first — it contains your bridge IP and local paths)
+3. What you were doing when it fired (opened Settings, switched modes, etc.)
 
-Together those three let a maintainer reproduce in the dev console
-without asking follow-up questions.
+Together those three let a maintainer reproduce in the dev console without asking follow-up questions.
 
 ## Related
 
 - [Telemetry](/docs/reference/telemetry) — logs directory and rotation
 - [Notifications](/docs/reference/notifications) — `open_log_dir` and OS toasts
-- [USB troubleshooting](/docs/usb-leds/troubleshooting) — device-level
-  errors take a different path than ErrorBoundary
+- [USB troubleshooting](/docs/usb-leds/troubleshooting) — device-level errors take a different path than ErrorBoundary

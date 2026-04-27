@@ -3,27 +3,22 @@ title: Privacy
 effective: 2026-04-21
 ---
 
-LumaSync is designed to be **privacy-quiet by default**. The desktop app
-does not send usage, crash, or analytics data to any server. The website
-you are reading right now uses first-party, cookie-free analytics only.
-This page lays out exactly what is collected, where it lives, and who
-can see it.
+LumaSync is designed to be **privacy-quiet by default**. The desktop app does not send usage, crash, or analytics data to any server. The website you are reading right now uses first-party, cookie-free analytics only. This page lays out exactly what is collected, where it lives, and who can see it.
 
 ## The desktop app
 
 ### Zero network telemetry
 
-The LumaSync desktop app makes **no telemetry calls**. No beacon, no
-error reporter, no "help us improve the product" toggle.
+The LumaSync desktop app makes **no telemetry calls**. No beacon, no error reporter, no "help us improve the product" toggle.
 
 The only network calls the app makes during normal runtime are:
 
-| Destination                                   | Purpose                | Data sent                               |
-| --------------------------------------------- | ---------------------- | --------------------------------------- |
-| `api.github.com` (once at launch)             | Auto-updater check     | User-Agent + repo path in the URL       |
+| Destination | Purpose | Data sent |
+| --- | --- | --- |
+| `api.github.com` (once at launch) | Auto-updater check | User-Agent + repo path in the URL |
 | `discovery.meethue.com` (Hue onboarding only) | List local Hue bridges | Nothing beyond the HTTPS request itself |
-| Your local Hue bridge (LAN)                   | Pairing + streaming    | Hue pairing + DTLS Entertainment stream |
-| Your USB-connected controller                 | LED frame data         | Adalight frames over USB-serial         |
+| Your local Hue bridge (LAN) | Pairing + streaming | Hue pairing + DTLS Entertainment stream |
+| Your USB-connected controller | LED frame data | Adalight frames over USB-serial |
 
 Screen capture happens via OS APIs — no network round-trip.
 
@@ -35,79 +30,44 @@ LumaSync's state persists to a single JSON file via Tauri's `plugin-store`:
 - **Windows**: `%APPDATA%\com.lumasync.app\app.json`
 - **Linux**: `~/.config/com.lumasync.app/app.json`
 
-The file contains your window layout, calibration, Hue bridge IP + pairing
-credential, room map, and preferences. **Protected only by OS user-level
-file permissions**; LumaSync does not encrypt this file.
+The file contains your window layout, calibration, Hue bridge IP + pairing credential, room map, and preferences. **Protected only by OS user-level file permissions**; LumaSync does not encrypt this file.
 
-Logs rotate to a small size cap in the OS-standard log directory. They
-never leave your machine and are not transmitted anywhere by LumaSync.
+Logs rotate to a small size cap in the OS-standard log directory. They never leave your machine and are not transmitted anywhere by LumaSync.
 
 ### Hue bridge credentials
 
-Pairing gives LumaSync a bridge-scoped username token. It is **not tied
-to a Philips Hue cloud account** and does not grant access outside your
-LAN. You can revoke it at any time from the Hue app (Settings → My Hue
-system → paired apps).
+Pairing gives LumaSync a bridge-scoped username token. It is **not tied to a Philips Hue cloud account** and does not grant access outside your LAN. You can revoke it at any time from the Hue app (Settings → My Hue system → paired apps).
 
 ### OS crash reports
 
-If the app crashes, the operating system may produce a crash report
-(macOS Diagnostic Reports, Windows Event Viewer, Linux coredump).
-LumaSync **does not collect or transmit** these files. If you want to
-help diagnose a crash, attach the file manually to a
-[GitHub issue](https://github.com/voyvodka/LumaSync/issues).
+If the app crashes, the operating system may produce a crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump). LumaSync **does not collect or transmit** these files. If you want to help diagnose a crash, attach the file manually to a [GitHub issue](https://github.com/voyvodka/LumaSync/issues).
 
 ## This website (`lumasync.app`)
 
 ### Umami analytics (first-party, self-hosted)
 
-Page views, referrers, and a short list of user-agent signals are
-collected via **Umami**, running on our own server. Umami is
-cookie-free and does not record personal data by design, so no consent
-banner is required under GDPR / ePrivacy. Raw IPs are processed only
-long enough to derive an anonymised hash; no IP ever persists.
+Page views, referrers, and a short list of user-agent signals are collected via **Umami**, running on our own server. Umami is cookie-free and does not record personal data by design, so no consent banner is required under GDPR / ePrivacy. Raw IPs are processed only long enough to derive an anonymised hash; no IP ever persists.
 
-Umami is enabled only when both environment variables
-(`PUBLIC_UMAMI_SITE_ID` + `PUBLIC_UMAMI_SRC`) are populated at build
-time. Local development builds do not emit the tracking script.
+Umami is enabled only when both environment variables (`PUBLIC_UMAMI_SITE_ID` + `PUBLIC_UMAMI_SRC`) are populated at build time. Local development builds do not emit the tracking script.
 
 ### Third-party requests from the site
 
-The site does not embed third-party analytics, fonts, scripts, or
-trackers. Fonts are served from the site's own `public/` folder
-(bundled via `@fontsource`), not Google Fonts. No Facebook pixel, no
-Twitter widget, no YouTube embed unless explicitly called out.
+The site does not embed third-party analytics, fonts, scripts, or trackers. Fonts are served from the site's own `public/` folder (bundled via `@fontsource`), not Google Fonts. No Facebook pixel, no Twitter widget, no YouTube embed unless explicitly called out.
 
-The **`/download`** page fetches release metadata from `api.github.com`
-at build time (server-side, during deploy). Visitors do not make that
-request.
+The **`/download`** page fetches release metadata from `api.github.com` at build time (server-side, during deploy). Visitors do not make that request.
 
 ### Comparison pages
 
-The `/compare/*` pages link out to competitor project / product sites.
-When you click those links, your browser visits the destination and
-whatever the destination logs is covered by their privacy policy, not
-ours.
+The `/compare/*` pages link out to competitor project / product sites. When you click those links, your browser visits the destination and whatever the destination logs is covered by their privacy policy, not ours.
 
 ## What we will never do
 
-- Sell or share any data with third parties. There is no "data" to
-  speak of.
+- Sell or share any data with third parties. There is no "data" to speak of.
 - Add email-capture pop-ups or a mailing list.
-- Silently ship a telemetry SDK in a future update. Any such change
-  would be an explicit, opt-in toggle that defaults to off, announced
-  in the [changelog](/changelog) before the binary ships.
-- Capture what you type into the Cmd+K search. The search runs
-  entirely in your browser via Pagefind; queries are not transmitted
-  to our server or to any analytics back-end.
-- Add heatmaps, session replay, scroll-depth tracking, or
-  mouse-movement capture to the website (Hotjar, Microsoft Clarity,
-  FullStory, LogRocket, PostHog replay, or equivalents). These are
-  out of scope and will not be installed.
+- Silently ship a telemetry SDK in a future update. Any such change would be an explicit, opt-in toggle that defaults to off, announced in the [changelog](/changelog) before the binary ships.
+- Capture what you type into the Cmd+K search. The search runs entirely in your browser via Pagefind; queries are not transmitted to our server or to any analytics back-end.
+- Add heatmaps, session replay, scroll-depth tracking, or mouse-movement capture to the website (Hotjar, Microsoft Clarity, FullStory, LogRocket, PostHog replay, or equivalents). These are out of scope and will not be installed.
 
 ## Contact
 
-Questions about privacy or this statement: open a
-[GitHub Discussion](https://github.com/voyvodka/LumaSync/discussions).
-Security-sensitive disclosures: follow the process in the app repo's
-[`SECURITY.md`](https://github.com/voyvodka/LumaSync/blob/main/SECURITY.md).
+Questions about privacy or this statement: open a [GitHub Discussion](https://github.com/voyvodka/LumaSync/discussions). Security-sensitive disclosures: follow the process in the app repo's [`SECURITY.md`](https://github.com/voyvodka/LumaSync/blob/main/SECURITY.md).

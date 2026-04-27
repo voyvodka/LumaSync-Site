@@ -8,26 +8,15 @@ updated: 2026-04-21
 
 ## What is an Entertainment Area
 
-A **Hue Entertainment Area** is a grouping of bulbs that the Hue Bridge can
-drive via its low-latency streaming API instead of the default state API.
-Streaming trades the bridge's normal "set colour, wait for ack" round-trip
-for a continuous feed of RGB frames at up to **20 Hz** — fast enough for
-video-synced ambient lighting.
+A **Hue Entertainment Area** is a grouping of bulbs that the Hue Bridge can drive via its low-latency streaming API instead of the default state API. Streaming trades the bridge's normal "set colour, wait for ack" round-trip for a continuous feed of RGB frames at up to **20 Hz** — fast enough for video-synced ambient lighting.
 
-LumaSync talks to the bridge through the Entertainment API exclusively. That's
-why pairing **requires** at least one area to exist: there's no fallback to
-the slower state API.
+LumaSync talks to the bridge through the Entertainment API exclusively. That's why pairing **requires** at least one area to exist: there's no fallback to the slower state API.
 
 ## Why the bridge caps at 20 Hz
 
-The Hue Bridge's Entertainment API is rate-limited at the source. Streaming
-faster doesn't get you more frames — the bridge drops them and your feed
-stalls. LumaSync's pipeline is tuned to hit 20 Hz exactly, no more. The
-telemetry pill (`Σ 20 fps` on the Hue target) reflects that.
+The Hue Bridge's Entertainment API is rate-limited at the source. Streaming faster doesn't get you more frames — the bridge drops them and your feed stalls. LumaSync's pipeline is tuned to hit 20 Hz exactly, no more. The telemetry pill (`Σ 20 fps` on the Hue target) reflects that.
 
-If you want a faster update rate, you need a different output target —
-that's what USB LED strips are for. Hue + USB can run simultaneously from the
-same screen source.
+If you want a faster update rate, you need a different output target — that's what USB LED strips are for. Hue + USB can run simultaneously from the same screen source.
 
 ## How to create one
 
@@ -36,53 +25,33 @@ Do this once, in the Hue app (iOS or Android):
 1. Open the Hue app.
 2. Go to **Settings** → **Entertainment areas**.
 3. Tap **Create Entertainment area**.
-4. Choose a room. The app suggests adding every bulb in that room; tap
-   individual bulbs to include or exclude.
-5. **Position each bulb** on the room layout. This is what drives LumaSync's
-   screen-region-to-channel mapping — a bulb the app puts "top-right" will
-   sample the top-right quadrant of your screen.
+4. Choose a room. The app suggests adding every bulb in that room; tap individual bulbs to include or exclude.
+5. **Position each bulb** on the room layout. This is what drives LumaSync's screen-region-to-channel mapping — a bulb the app puts "top-right" will sample the top-right quadrant of your screen.
 6. Save.
 
-Back in LumaSync, open **Settings → Hue**, click **Refresh list**, and pick
-your new area from the dropdown.
+Back in LumaSync, open **Settings → Hue**, click **Refresh list**, and pick your new area from the dropdown.
 
-From v1.4, the area-select UI shows each area's **room archetype** —
-Living Room, Bedroom, Kitchen, Office, and so on — fetched in parallel
-from the CLIP v2 API. Useful when you have multiple Entertainment Areas
-with ambiguous names ("Area 1", "Hue area") and want to pick the right
-one at a glance.
+From v1.4, the area-select UI shows each area's **room archetype** — Living Room, Bedroom, Kitchen, Office, and so on — fetched in parallel from the CLIP v2 API. Useful when you have multiple Entertainment Areas with ambiguous names ("Area 1", "Hue area") and want to pick the right one at a glance.
 
 ## Bulb selection tips
 
 Not every Hue bulb belongs in an Entertainment Area:
 
-- **Good for Entertainment**: Play bars, Lightstrip, Go, Iris, Bloom,
-  standard E27/E14 bulbs. Anything that colour-shifts smoothly.
-- **Less good**: warm-white-only bulbs can still be included but only
-  respond to the L channel, giving you a dim/bright effect without colour.
+- **Good for Entertainment**: Play bars, Lightstrip, Go, Iris, Bloom, standard E27/E14 bulbs. Anything that colour-shifts smoothly.
+- **Less good**: warm-white-only bulbs can still be included but only respond to the L channel, giving you a dim/bright effect without colour.
 - **Avoid**: motion sensors, buttons, plugs — they're not light sources.
 
-LumaSync uses **all** bulbs in the selected area. If you don't want a
-particular bulb dancing along, create a smaller area that excludes it.
+LumaSync uses **all** bulbs in the selected area. If you don't want a particular bulb dancing along, create a smaller area that excludes it.
 
 ## Positioning matters
 
-The coordinates you set in the Hue app's room layout aren't cosmetic —
-they're what LumaSync reads back via CLIP v2 to decide which part of the
-screen each bulb should sample. Position your Play bars roughly where they
-physically sit relative to the TV. A bulb at "back-left" will pull colour
-from the top-left edge of your screen.
+The coordinates you set in the Hue app's room layout aren't cosmetic — they're what LumaSync reads back via CLIP v2 to decide which part of the screen each bulb should sample. Position your Play bars roughly where they physically sit relative to the TV. A bulb at "back-left" will pull colour from the top-left edge of your screen.
 
-You can fine-tune this in LumaSync's **Hue Channel Map Panel** (Settings →
-Hue → Edit positions) without touching the Hue app — LumaSync persists
-overrides locally.
+You can fine-tune this in LumaSync's **Hue Channel Map Panel** (Settings → Hue → Edit positions) without touching the Hue app — LumaSync persists overrides locally.
 
 ## Multiple areas
 
-Only one Entertainment Area can stream at a time from a given client. If you
-want different lighting per room (living room for movies, bedroom for
-reading), create one area per room and switch between them in LumaSync's
-dropdown. No re-pairing needed.
+Only one Entertainment Area can stream at a time from a given client. If you want different lighting per room (living room for movies, bedroom for reading), create one area per room and switch between them in LumaSync's dropdown. No re-pairing needed.
 
 ## Related
 
