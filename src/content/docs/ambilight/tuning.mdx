@@ -3,12 +3,23 @@ title: Ambilight tuning
 description: Saturation, smoothing, brightness cap, and update rate — the four knobs that shape the ambilight feel once the pipeline is running.
 group: ambilight
 order: 30
-updated: 2026-04-21
+updated: 2026-04-27
 ---
 
 Ambilight is already usable with default settings. This page covers the
 four knobs you'll likely want to tweak once you know what the defaults look
 like — where to find them and what they trade off.
+
+## Quick reference — four tuning knobs
+
+| Knob                 | Default | Range       | What it changes                       |
+| -------------------- | ------- | ----------- | ------------------------------------- |
+| **Saturation**       | `1.0`   | `0.5–2.0`   | Colour intensity, brightness-stable.  |
+| **Responsiveness**   | mid     | low–high    | Smoothing + ease toward each frame.   |
+| **Color correction** | neutral | per-channel | R/G/B gain to match your strip's hue. |
+| **Brightness cap**   | `100%`  | `0–100%`    | Hard ceiling on output brightness.    |
+
+Update rate is a fifth knob covered separately below.
 
 ## Saturation
 
