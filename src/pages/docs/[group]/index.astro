@@ -1,0 +1,212 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import {
+  groupDocs,
+  docHref,
+  DOC_GROUPS,
+  DOC_GROUP_LABELS,
+  type DocGroup,
+} from '../../../lib/content';
+import { breadcrumbSchema, collectionPageSchema } from '../../../lib/seo';
+
+export async function getStaticPaths() {
+  const groups = await groupDocs();
+  return groups.map(({ group, label, items }) => ({
+    params: { group },
+    props: { group, label, items },
+  }));
+}
+
+interface Props {
+  group: DocGroup;
+  label: string;
+  items: Awaited<ReturnType<typeof groupDocs>>[number]['items'];
+}
+
+const { group, label, items } = Astro.props as Props;
+
+const publishedItems = items
+  .filter((item) => !item.data.draft)
+  .map((item) => ({
+    name: item.data.title,
+    url: docHref(item),
+    description: item.data.description,
+  }));
+
+// Group-specific lede + keyword padding so the page ranks for the
+// broad query (e.g. "lumasync hue setup", "lumasync usb leds").
+const GROUP_LEDE: Record<DocGroup, { lede: string; keywords: string }> = {
+  'getting-started': {
+    lede: 'Install LumaSync, run through first setup, and check your hardware against the supported list. Quick start path is below — start with Install, then First setup.',
+    keywords: 'install, quick start, first setup, hardware checklist',
+  },
+  hue: {
+    lede: 'Set up a Philips Hue bridge, configure an Entertainment Area, and troubleshoot streaming issues over DTLS 1.2 PSK.',
+    keywords: 'Philips Hue, Hue bridge, Entertainment Area, DTLS, pairing, setup',
+  },
+  'usb-leds': {
+    lede: 'Connect a CH340 or FT232 USB-serial controller, calibrate your WS2812B LED strip layout, and pick the right serial protocol — LumaSync v1 frame or Adalight profile.',
+    keywords: 'WS2812B, USB-serial, CH340, FT232, LED calibration, Adalight, controller',
+  },
+  ambilight: {
+    lede: 'Configure screen capture (handle macOS / Windows / Linux screen-recording permissions), tune ambilight performance (latency, FPS), and adjust colour per channel.',
+    keywords:
+      'ambilight, screen capture, screen recording, latency, FPS, performance, tuning, colour',
+  },
+  advanced: {
+    lede: 'Auto-updater, multi-display rigs, and scenes — features that compose on top of the core ambilight loop.',
+    keywords: 'auto-updater, multi-display, scenes, presets',
+  },
+  reference: {
+    lede: 'Configuration files, error handling, notifications, keyboard shortcuts, and the (currently disabled) telemetry surface.',
+    keywords: 'config file, error handling, notifications, shortcuts, telemetry',
+  },
+};
+
+const meta = GROUP_LEDE[group];
+const groupUrl = `/docs/${group}`;
+
+const schemas = [
+  breadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Docs', url: '/docs' },
+    { name: label, url: groupUrl },
+  ]),
+  collectionPageSchema({
+    name: `LumaSync — ${label}`,
+    description: meta.lede,
+    url: groupUrl,
+    items: publishedItems,
+  }),
+];
+---
+
+<DocsLayout title={`${label} — Docs`} description={meta.lede} schemas={schemas}>
+  <section class="docs-group">
+    <header>
+      <p class="eyebrow">Documentation · {label}</p>
+      <h1 class="page-title">{label}</h1>
+      <p class="lede">{meta.lede}</p>
+    </header>
+
+    <ul role="list" class="entries">
+      {
+        items.map((item) => (
+          <li>
+            <a href={docHref(item)}>
+              <span class="title-row">
+                <span class="title">{item.data.title}</span>
+                {item.data.draft && <span class="pill">draft</span>}
+              </span>
+              <span class="desc">{item.data.description}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="meta">
+      Browse the full <a href="/docs">documentation index</a> or jump to other groups: {
+        DOC_GROUPS.filter((g) => g !== group).map((g, i, arr) => (
+          <>
+            <a href={`/docs/${g}`}>{DOC_GROUP_LABELS[g]}</a>
+            {i < arr.length - 1 ? ', ' : '.'}
+          </>
+        ))
+      }
+    </p>
+  </section>
+</DocsLayout>
+
+<style>
+  .docs-group > header {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 {
+    font-size: var(--fs-3xl);
+    margin: 0 0 0.75rem;
+  }
+
+  .lede {
+    color: var(--text-secondary);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  ul.entries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  li a {
+    display: block;
+    padding: 1rem 1.125rem;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  li a:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .title {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 0.0625rem 0.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .desc {
+    display: block;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    margin-top: 0.25rem;
+  }
+
+  .meta {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .meta a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 2px;
+  }
+
+  .meta a:hover {
+    color: var(--text-primary);
+    text-decoration-color: var(--accent);
+  }
+</style>
