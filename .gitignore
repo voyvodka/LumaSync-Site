@@ -34,6 +34,9 @@ pnpm-debug.log*
 .vercel/
 .netlify/
 
+# Wrangler / Cloudflare local dev cache
+.wrangler/
+
 # Generated at build — checked in only as outputs of the build pipeline
 public/pagefind/
 public/og/

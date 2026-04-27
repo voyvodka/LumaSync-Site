@@ -6,13 +6,31 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://lumasync.app',
-  trailingSlash: 'never',
+  // Cloudflare Pages 308s extensionless URLs to their trailing-slash twin.
+  // Emitting sitemap + canonicals with the slash matches the live URL 1:1
+  // so Google doesn't index the redirect form (was the cause of 30/34
+  // sitemap URLs falling out of GSC's index in Apr 2026).
+  trailingSlash: 'always',
   // Legacy URL → new slug. Keeps old references (external blogs, cached
   // search results) from 404-ing after the scenes-and-presets → scenes
   // rename. Astro emits a small meta-refresh HTML at the old path.
   redirects: {
     '/docs/advanced/scenes-and-presets': '/docs/advanced/scenes',
     '/docs/usb-leds/adalight-protocol': '/docs/usb-leds/serial-protocol',
+    // Search-intent aliases — users (and Gemini AI Overview) type
+    // "lumasync quick start" / "lumasync led calibration" but the
+    // canonical slugs are first-setup / usb-leds/calibration.
+    '/quick-start': '/docs/getting-started/first-setup',
+    '/docs/getting-started/quick-start': '/docs/getting-started/first-setup',
+    '/led-calibration': '/docs/usb-leds/calibration',
+    '/docs/concepts/led-calibration': '/docs/usb-leds/calibration',
+    '/hue-pairing': '/docs/hue/pairing',
+    '/hue-entertainment': '/docs/hue/entertainment-area',
+    '/usb-setup': '/docs/usb-leds/controllers',
+    '/serialport': '/docs/usb-leds/serial-protocol',
+    '/screens': '/docs/ambilight/screen-capture',
+    '/multi-monitor': '/docs/advanced/multi-display',
+    '/compare-tools': '/compare',
   },
   integrations: [mdx(), sitemap()],
   vite: {
