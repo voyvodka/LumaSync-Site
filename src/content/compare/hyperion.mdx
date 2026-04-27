@@ -7,100 +7,62 @@ updated: 2026-04-25
 
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../../lib/version';
 
-**Hyperion.NG** is the actively maintained open-source ambilight server —
-headless Linux daemon, web-UI configuration, typically deployed on a
-Raspberry Pi sitting next to the TV. It's the power user's choice: more LED
-controllers supported, more grabber options, fine-grained effect scripting.
-**LumaSync** is a desktop tray app: installs on the machine you already use,
-starts in minutes, fewer knobs, and opinionated about Hue.
+**Hyperion.NG** is the actively maintained open-source ambilight server — headless Linux daemon, web-UI configuration, typically deployed on a Raspberry Pi sitting next to the TV. It's the power user's choice: more LED controllers supported, more grabber options, fine-grained effect scripting. **LumaSync** is a desktop tray app: installs on the machine you already use, starts in minutes, fewer knobs, and opinionated about Hue.
 
-Short version: **Hyperion is the right answer if you're fine running a
-Raspberry Pi as a dedicated ambilight box. LumaSync is the right answer if
-you want that to be your existing computer.**
+Short version: **Hyperion is the right answer if you're fine running a Raspberry Pi as a dedicated ambilight box. LumaSync is the right answer if you want that to be your existing computer.**
 
 ## TL;DR
 
-- **Hyperion wins** for RPi-based setups with HDMI capture grabbers, exotic
-  LED controllers (APA102, SPI, many-meter strips), and scripted effects.
-- **LumaSync wins** for macOS users (Hyperion's macOS story is
-  community-ported and fragile), setups where you don't want a dedicated
-  device, and first-class Hue Entertainment integration.
-- **Both are MIT-compatible open source.** If you outgrow LumaSync for a
-  specific hardware need, Hyperion is a reasonable upgrade path.
+- **Hyperion wins** for RPi-based setups with HDMI capture grabbers, exotic LED controllers (APA102, SPI, many-meter strips), and scripted effects.
+- **LumaSync wins** for macOS users (Hyperion's macOS story is community-ported and fragile), setups where you don't want a dedicated device, and first-class Hue Entertainment integration.
+- **Both are MIT-compatible open source.** If you outgrow LumaSync for a specific hardware need, Hyperion is a reasonable upgrade path.
 
 ## Feature comparison
 
-| Feature                   | LumaSync                                                                                  | Hyperion.NG                                                                                                                 |
-| ------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Target platform           | Desktop app (macOS, Windows, Linux)                                                       | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
-| Deployment                | Install + run                                                                             | Provision RPi / server, install package, configure via web UI                                                               |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others                                                                  |
-| Philips Hue Entertainment | Native DTLS 1.2 PSK streaming                                                             | Via forwarder / plugin — functional, not native                                                                             |
-| HDMI capture              | No — OS screen buffer only                                                                | Yes — via USB HDMI grabber on RPi                                                                                           |
-| LED count ceiling         | Comfortable up to ~300 over USB-serial                                                    | Multi-thousand LEDs via SPI not uncommon                                                                                    |
-| Effects engine            | Ambilight + solid; mode contract is closed enum                                           | Scripted effects (Python), large community library                                                                          |
-| Configuration             | Native desktop UI                                                                         | Browser-based web UI on the daemon's IP                                                                                     |
-| Room map editor           | Yes — drag-drop canvas for positioning                                                    | Layout via numerical zones in web UI                                                                                        |
-| Auto-updates              | minisign-signed, GitHub Releases                                                          | Package-manager / manual download                                                                                           |
-| Dedicated hardware        | None                                                                                      | Typically a Raspberry Pi 3/4                                                                                                |
-| Last update               | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog)                                     | Hyperion 2.2.1 (2026-04-06) — ~6-month release cadence                                                                      |
+| Feature | LumaSync | Hyperion.NG |
+| --- | --- | --- |
+| Target platform | Desktop app (macOS, Windows, Linux) | Headless daemon (Linux primary, but 2.2.1 ships first-party signed installers for Windows x64/arm64 and macOS x86_64/arm64) |
+| Deployment | Install + run | Provision RPi / server, install package, configure via web UI |
+| USB LED strips (WS2812B) | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | Yes — plus SPI / GPIO via RPi, APA102, SK9822, many others |
+| Philips Hue Entertainment | Native DTLS 1.2 PSK streaming | Via forwarder / plugin — functional, not native |
+| HDMI capture | No — OS screen buffer only | Yes — via USB HDMI grabber on RPi |
+| LED count ceiling | Comfortable up to ~300 over USB-serial | Multi-thousand LEDs via SPI not uncommon |
+| Effects engine | Ambilight + solid; mode contract is closed enum | Scripted effects (Python), large community library |
+| Configuration | Native desktop UI | Browser-based web UI on the daemon's IP |
+| Room map editor | Yes — drag-drop canvas for positioning | Layout via numerical zones in web UI |
+| Auto-updates | minisign-signed, GitHub Releases | Package-manager / manual download |
+| Dedicated hardware | None | Typically a Raspberry Pi 3/4 |
+| Last update | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog) | Hyperion 2.2.1 (2026-04-06) — ~6-month release cadence |
 
 ## When to pick LumaSync
 
-- **You watch video or game on a Mac, Windows, or Linux desktop.** The
-  pixels are already on that machine — screen-buffer capture is orders of
-  magnitude simpler than standing up an HDMI grabber on a Pi.
-- **You want a tray-first desktop app instead of a headless daemon.**
-  Hyperion 2.2.1 does ship signed Apple Silicon and Intel Mac installers
-  now, but it's still a daemon + web-UI on a local port, not a tray
-  app. LumaSync lives in the menu bar with compact + full windows.
-- **Philips Hue Entertainment is your main target.** LumaSync speaks the
-  native DTLS 1.2 PSK API; Hyperion proxies via a forwarder layer that
-  works but isn't the canonical path.
-- **You want fewer knobs, not more.** LumaSync's tuning surface is four
-  knobs (saturation, smoothing, brightness cap, update rate). That's it.
+- **You watch video or game on a Mac, Windows, or Linux desktop.** The pixels are already on that machine — screen-buffer capture is orders of magnitude simpler than standing up an HDMI grabber on a Pi.
+- **You want a tray-first desktop app instead of a headless daemon.** Hyperion 2.2.1 does ship signed Apple Silicon and Intel Mac installers now, but it's still a daemon + web-UI on a local port, not a tray app. LumaSync lives in the menu bar with compact + full windows.
+- **Philips Hue Entertainment is your main target.** LumaSync speaks the native DTLS 1.2 PSK API; Hyperion proxies via a forwarder layer that works but isn't the canonical path.
+- **You want fewer knobs, not more.** LumaSync's tuning surface is four knobs (saturation, smoothing, brightness cap, update rate). That's it.
 
 ## When to pick Hyperion
 
-- **Your TV is fed by a console / Blu-ray / Apple TV** and you need HDMI
-  capture. LumaSync cannot help — the source isn't on a computer. Hyperion
+- **Your TV is fed by a console / Blu-ray / Apple TV** and you need HDMI capture. LumaSync cannot help — the source isn't on a computer. Hyperion
   - a USB HDMI grabber on a Pi is the standard recipe.
-- **You have very long LED strips** (1000+ LEDs, multi-strip rooms).
-  SPI/APA102 via direct GPIO scales much better than a single USB-serial
-  line at 115200 baud.
-- **You want scripted effects** — rainbow sweeps, beat-reactive pulses,
-  custom patterns. Hyperion has a mature effect engine and a large
-  community library. LumaSync's mode model is intentionally closed.
-- **You have a spare RPi and want to isolate the ambilight workload** from
-  your daily-driver machine.
+- **You have very long LED strips** (1000+ LEDs, multi-strip rooms). SPI/APA102 via direct GPIO scales much better than a single USB-serial line at 115200 baud.
+- **You want scripted effects** — rainbow sweeps, beat-reactive pulses, custom patterns. Hyperion has a mature effect engine and a large community library. LumaSync's mode model is intentionally closed.
+- **You have a spare RPi and want to isolate the ambilight workload** from your daily-driver machine.
 
 ## Migration notes
 
 Coming from **Hyperion to LumaSync**:
 
-- Your USB hardware (CH340/FT232 + WS2812B) is reusable, but the
-  controller firmware needs to speak the
-  [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol) by default —
-  Hyperion's `adalight` output driver is **not** wire-compatible with v1.
-  Either reflash the microcontroller with LumaSync v1 firmware, or enable
-  the v1.4+ Adalight-profile toggle (Settings → Device) and reuse the
-  existing Adalight firmware unchanged. See
-  [USB controllers](/docs/usb-leds/controllers).
-- Your Hue setup moves cleanly — the Hue Bridge is stateful, so your
-  Entertainment Area and bulb positions remain. Pair LumaSync, pick the
-  area. [Pairing walkthrough](/docs/hue/pairing).
-- Your Hyperion layout config (edge counts, corner ownership) doesn't
-  auto-import. Re-enter it in [Calibration](/docs/usb-leds/calibration) —
-  takes ~2 minutes with the test pattern open.
+- Your USB hardware (CH340/FT232 + WS2812B) is reusable, but the controller firmware needs to speak the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol) by default — Hyperion's `adalight` output driver is **not** wire-compatible with v1. Either reflash the microcontroller with LumaSync v1 firmware, or enable the v1.4+ Adalight-profile toggle (Settings → Device) and reuse the existing Adalight firmware unchanged. See [USB controllers](/docs/usb-leds/controllers).
+- Your Hue setup moves cleanly — the Hue Bridge is stateful, so your Entertainment Area and bulb positions remain. Pair LumaSync, pick the area. [Pairing walkthrough](/docs/hue/pairing).
+- Your Hyperion layout config (edge counts, corner ownership) doesn't auto-import. Re-enter it in [Calibration](/docs/usb-leds/calibration) — takes ~2 minutes with the test pattern open.
 
 Coming from **LumaSync to Hyperion**:
 
-- Plausible when you hit USB-serial throughput ceilings or need HDMI
-  grabber input. No import path; Hyperion's config format is its own.
+- Plausible when you hit USB-serial throughput ceilings or need HDMI grabber input. No import path; Hyperion's config format is its own.
 
 ## Further reading
 
 - [USB controllers](/docs/usb-leds/controllers) — what LumaSync recognises
-- [Pair your Hue bridge](/docs/hue/pairing) — if migrating from Hyperion's
-  Hue forwarder
+- [Pair your Hue bridge](/docs/hue/pairing) — if migrating from Hyperion's Hue forwarder
 - [Hyperion.NG project](https://github.com/hyperion-project/hyperion.ng) (external)

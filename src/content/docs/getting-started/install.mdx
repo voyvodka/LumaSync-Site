@@ -10,68 +10,47 @@ import { LATEST_VERSION_BARE } from '../../../lib/version';
 
 ## System requirements
 
-- **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE). For
-  Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`.
-- **At least one supported hardware target**, otherwise the app runs but nothing
-  lights up:
-  - A **Philips Hue Bridge** (gen 2 or newer) with one or more Entertainment Areas
-    configured in the Hue app, **or**
-  - A **WS2812B LED strip** driven by a **CH340** (`1A86:7523`) or **FTDI FT232**
-    (`0403:6001`) USB-serial controller running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol).
-- See [Hardware checklist](/docs/getting-started/hardware-checklist) for a parts
-  list if you're starting from scratch.
+- **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE). For Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`.
+- **At least one supported hardware target**, otherwise the app runs but nothing lights up:
+  - A **Philips Hue Bridge** (gen 2 or newer) with one or more Entertainment Areas configured in the Hue app, **or**
+  - A **WS2812B LED strip** driven by a **CH340** (`1A86:7523`) or **FTDI FT232** (`0403:6001`) USB-serial controller running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol).
+- See [Hardware checklist](/docs/getting-started/hardware-checklist) for a parts list if you're starting from scratch.
 
 ## macOS
 
-Download the universal `.dmg` from the [Download page](/download) or the latest
-[GitHub release](https://github.com/voyvodka/LumaSync/releases/latest). Apple
-Silicon and Intel Macs are covered by the same installer.
+Download the universal `.dmg` from the [Download page](/download) or the latest [GitHub release](https://github.com/voyvodka/LumaSync/releases/latest). Apple Silicon and Intel Macs are covered by the same installer.
 
 1. Open the `.dmg` and drag **LumaSync.app** into **Applications**.
-2. On first launch, macOS asks for **Screen Recording** permission so the
-   ambilight pipeline can sample your display. Grant it — without it the
-   ambient mode has nothing to read from.
-3. LumaSync starts hidden to the tray; click the menu-bar icon to open the main
-   window.
+2. On first launch, macOS asks for **Screen Recording** permission so the ambilight pipeline can sample your display. Grant it — without it the ambient mode has nothing to read from.
+3. LumaSync starts hidden to the tray; click the menu-bar icon to open the main window.
 
 ## Windows
 
-Download the **`.msi`** installer from the [Download page](/download). It signs
-you into a typical "Next, Next, Finish" dialog and installs to
-`C:\Program Files\LumaSync\`.
+Download the **`.msi`** installer from the [Download page](/download). It signs you into a typical "Next, Next, Finish" dialog and installs to `C:\Program Files\LumaSync\`.
 
-The MSI is preferred over the `.exe` setup for enterprise and audit tracking.
-Both are signed with the same keypair; either works for home use.
+The MSI is preferred over the `.exe` setup for enterprise and audit tracking. Both are signed with the same keypair; either works for home use.
 
 ## Linux (experimental)
 
-Use the `.AppImage` from the [Download page](/download). Mark it executable and
-run:
+Use the `.AppImage` from the [Download page](/download). Mark it executable and run:
 
 ```bash
 chmod +x LumaSync_{LATEST_VERSION_BARE}_amd64.AppImage
 ./LumaSync_{LATEST_VERSION_BARE}_amd64.AppImage
 ```
 
-Tray behavior varies by desktop environment — GNOME requires a third-party
-extension like **AppIndicator Support** to show the LumaSync tray icon; KDE
-Plasma works out of the box. A Flathub package is in progress and will be the
-recommended path once it lands.
+Tray behavior varies by desktop environment — GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma works out of the box. A Flathub package is in progress and will be the recommended path once it lands.
 
 ## Verification
 
-Every release asset is signed with minisign. The public key is embedded in the
-app and the updater verifies every binary before replacing anything on disk.
-To verify a download manually:
+Every release asset is signed with minisign. The public key is embedded in the app and the updater verifies every binary before replacing anything on disk. To verify a download manually:
 
 ```bash
 minisign -Vm LumaSync_{LATEST_VERSION_BARE}_universal.dmg -P "$(cat minisign.pub)"
 ```
 
-`minisign.pub` is committed to the app repo. See [Auto-updater](/docs/advanced/auto-updater)
-for how this works in-app.
+`minisign.pub` is committed to the app repo. See [Auto-updater](/docs/advanced/auto-updater) for how this works in-app.
 
 ## Next steps
 
-Once installed, continue to [First setup](/docs/getting-started/first-setup) to
-pair your Hue bridge or connect a USB controller, then pick your first mode.
+Once installed, continue to [First setup](/docs/getting-started/first-setup) to pair your Hue bridge or connect a USB controller, then pick your first mode.

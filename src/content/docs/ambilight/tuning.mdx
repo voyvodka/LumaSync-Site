@@ -6,9 +6,7 @@ order: 30
 updated: 2026-04-27
 ---
 
-Ambilight is already usable with default settings. This page covers the
-four knobs you'll likely want to tweak once you know what the defaults look
-like — where to find them and what they trade off.
+Ambilight is already usable with default settings. This page covers the four knobs you'll likely want to tweak once you know what the defaults look like — where to find them and what they trade off.
 
 ## Quick reference — four tuning knobs
 
@@ -25,75 +23,38 @@ Update rate is a fifth knob covered separately below.
 
 **Settings → Ambilight → Saturation** · default `1.0` · range `0.5–2.0`
 
-Scales the colour intensity of every frame before it reaches the LEDs.
-Implementation is **Rec.601 luminance-preserving** — as you pull
-saturation down, total brightness stays constant so the LEDs don't dim
-along with the colour drop.
+Scales the colour intensity of every frame before it reaches the LEDs. Implementation is **Rec.601 luminance-preserving** — as you pull saturation down, total brightness stays constant so the LEDs don't dim along with the colour drop.
 
-- **`1.0`** (identity): pixel colours pass through unchanged. What you
-  see on screen is what the LEDs try to match.
-- **`1.4–1.6`**: "pop" mode. Desaturated scenes still produce noticeable
-  lighting. Good for TV in a room with warm bias lighting where the LEDs
-  would otherwise blend in.
-- **`0.6–0.8`**: muted. The lighting is present but doesn't compete with
-  the on-screen content. Good for productivity / text-heavy windows.
-- **`0.5`** (floor): heavily muted, but never fully grayscale — the
-  range stops above zero on purpose, so the lighting always carries
-  at least some colour signal.
+- **`1.0`** (identity): pixel colours pass through unchanged. What you see on screen is what the LEDs try to match.
+- **`1.4–1.6`**: "pop" mode. Desaturated scenes still produce noticeable lighting. Good for TV in a room with warm bias lighting where the LEDs would otherwise blend in.
+- **`0.6–0.8`**: muted. The lighting is present but doesn't compete with the on-screen content. Good for productivity / text-heavy windows.
+- **`0.5`** (floor): heavily muted, but never fully grayscale — the range stops above zero on purpose, so the lighting always carries at least some colour signal.
 
 ## Responsiveness (smoothing + intensity)
 
-**Settings → Ambilight → Responsiveness** · default `Moderate` ·
-`Subtle / Moderate / Intense`
+**Settings → Ambilight → Responsiveness** · default `Moderate` · `Subtle / Moderate / Intense`
 
-From v1.4, the old continuous smoothing slider and the separate Hue-only
-intensity preset are merged into a single **three-step responsiveness
-control** that drives both USB and Hue EWMA paths at once. One dial, both
-targets, no mismatched feel between strip and bulbs.
+From v1.4, the old continuous smoothing slider and the separate Hue-only intensity preset are merged into a single **three-step responsiveness control** that drives both USB and Hue EWMA paths at once. One dial, both targets, no mismatched feel between strip and bulbs.
 
 The coefficients behind the tiles are:
 
-- **Subtle** — EWMA `0.15`. Heavy smoothing, cinematic damping. Scene
-  changes lag by ~200 ms, jitter on noisy low-light content disappears.
-  Best for ambient movie watching in a dim room.
-- **Moderate** (default) — EWMA `0.35`. Balanced. Visible but not
-  distracting lag on hard cuts, enough damping to kill frame noise.
-- **Intense** — EWMA `0.60`. Light smoothing, maximum responsiveness.
-  Best for sports, action gaming, or anything where you want strict
-  pixel-to-LED mapping.
+- **Subtle** — EWMA `0.15`. Heavy smoothing, cinematic damping. Scene changes lag by ~200 ms, jitter on noisy low-light content disappears. Best for ambient movie watching in a dim room.
+- **Moderate** (default) — EWMA `0.35`. Balanced. Visible but not distracting lag on hard cuts, enough damping to kill frame noise.
+- **Intense** — EWMA `0.60`. Light smoothing, maximum responsiveness. Best for sports, action gaming, or anything where you want strict pixel-to-LED mapping.
 
-The old persisted keys (`smoothingAlpha`, `hueIntensityPreset`) still
-read through a fallback chain on upgrade, so your previous setting
-survives the migration without manual re-selection.
+The old persisted keys (`smoothingAlpha`, `hueIntensityPreset`) still read through a fallback chain on upgrade, so your previous setting survives the migration without manual re-selection.
 
 ## Color correction (per-channel)
 
 **Settings → Ambilight → Color correction** · `R / G / B gamma` · `Kelvin` · `Saturation trim`
 
-From v1.4, LumaSync applies a **per-channel color correction** pipeline
-on the hot path before smoothing, so every sink (USB strip, Hue bulbs,
-the edge-signal preview) sees the same corrected frame. The USB encoder
-and the Hue serializer share the exact byte-for-byte chain, so a strip
-tuned to match bulbs stays matched across modes. Three knobs:
+From v1.4, LumaSync applies a **per-channel color correction** pipeline on the hot path before smoothing, so every sink (USB strip, Hue bulbs, the edge-signal preview) sees the same corrected frame. The USB encoder and the Hue serializer share the exact byte-for-byte chain, so a strip tuned to match bulbs stays matched across modes. Three knobs:
 
-- **R / G / B gamma** · independent per channel, range `0.5–3.0`, default
-  `2.2`. Compensates for LEDs whose red or blue channel responds
-  non-linearly. Bluish strips often need `R ≈ 2.0` to pull perceptual
-  neutral back to grey.
-- **Kelvin white balance** · `2000–10000 K`, default `6500 K`. Per-strip
-  white-balance multiplier. Warm-white stock (`~3000 K` LEDs) usually
-  needs `4500–5000 K` to stop pulling everything red; cool-white stock
-  sits at `6500–7500 K`.
-- **Saturation trim** · BT.601-luminance preserving, applied after gamma
-  and Kelvin. Different from the top-level **Saturation** knob at the
-  top of this page — this one is a per-strip calibration trim
-  (compensating for a strip that natively over- or under-saturates),
-  not a per-session mood control.
+- **R / G / B gamma** · independent per channel, range `0.5–3.0`, default `2.2`. Compensates for LEDs whose red or blue channel responds non-linearly. Bluish strips often need `R ≈ 2.0` to pull perceptual neutral back to grey.
+- **Kelvin white balance** · `2000–10000 K`, default `6500 K`. Per-strip white-balance multiplier. Warm-white stock (`~3000 K` LEDs) usually needs `4500–5000 K` to stop pulling everything red; cool-white stock sits at `6500–7500 K`.
+- **Saturation trim** · BT.601-luminance preserving, applied after gamma and Kelvin. Different from the top-level **Saturation** knob at the top of this page — this one is a per-strip calibration trim (compensating for a strip that natively over- or under-saturates), not a per-session mood control.
 
-**Order matters**: gamma first (raw LED response), Kelvin second (strip
-white balance), saturation trim last (final appearance match). Tune
-once per strip; values persist to `~/.config/lumasync/app.json` under
-`ambilight.colorCorrection` and survive upgrades.
+**Order matters**: gamma first (raw LED response), Kelvin second (strip white balance), saturation trim last (final appearance match). Tune once per strip; values persist to `~/.config/lumasync/app.json` under `ambilight.colorCorrection` and survive upgrades.
 
 ## Brightness cap
 
@@ -101,15 +62,10 @@ once per strip; values persist to `~/.config/lumasync/app.json` under
 
 Scales the maximum output brightness. Two reasons you'll touch this:
 
-1. **Power draw** — at `1.0`, a long WS2812B strip draws a lot. Capping at
-   `0.7` roughly halves the peak current while dropping perceived
-   brightness by only ~15%.
-2. **Heat / thermal protection** — strips adhesive-mounted to the back of
-   a TV can overheat at sustained full white. Cap at `0.6` for kits where
-   airflow is poor.
+1. **Power draw** — at `1.0`, a long WS2812B strip draws a lot. Capping at `0.7` roughly halves the peak current while dropping perceived brightness by only ~15%.
+2. **Heat / thermal protection** — strips adhesive-mounted to the back of a TV can overheat at sustained full white. Cap at `0.6` for kits where airflow is poor.
 
-Doesn't affect low-brightness content at all — scenes that never hit full
-white look identical at `1.0` and `0.7`. Only the bright ceiling moves.
+Doesn't affect low-brightness content at all — scenes that never hit full white look identical at `1.0` and `0.7`. Only the bright ceiling moves.
 
 ## Update rate
 
@@ -117,30 +73,18 @@ white look identical at `1.0` and `0.7`. Only the bright ceiling moves.
 
 How often the capture pipeline samples the screen and pushes to the LEDs.
 
-- **`20 Hz`**: lowest CPU use. Matches the Hue bridge's ceiling exactly.
-  Feels slightly laggy on fast content.
-- **`30 Hz`** (default): good balance. Cinematic content (24 fps films)
-  upsamples fine; sports / gaming content shows visible stepping.
-- **`60 Hz`**: gaming / sports optimised. USB LED path only — Hue still
-  caps at 20 Hz internally, so setting 60 Hz while outputting to Hue just
-  wastes CPU.
+- **`20 Hz`**: lowest CPU use. Matches the Hue bridge's ceiling exactly. Feels slightly laggy on fast content.
+- **`30 Hz`** (default): good balance. Cinematic content (24 fps films) upsamples fine; sports / gaming content shows visible stepping.
+- **`60 Hz`**: gaming / sports optimised. USB LED path only — Hue still caps at 20 Hz internally, so setting 60 Hz while outputting to Hue just wastes CPU.
 
 ## One global state, no profiles
 
-Ambilight tuning is a **single global state** today — there are no
-named profiles. Whatever values the four knobs hold persist to
-`~/.config/lumasync/app.json` via `shellStore` and apply to every
-Ambilight session. If you want a "movie mode" colour fill instead of
-Ambilight capture, see [Scenes](/docs/advanced/scenes) — those are the
-shipped tiles for pre-set colour + brightness in SOLID mode.
+Ambilight tuning is a **single global state** today — there are no named profiles. Whatever values the four knobs hold persist to `~/.config/lumasync/app.json` via `shellStore` and apply to every Ambilight session. If you want a "movie mode" colour fill instead of Ambilight capture, see [Scenes](/docs/advanced/scenes) — those are the shipped tiles for pre-set colour + brightness in SOLID mode.
 
 ## When not to tune
 
-- If Δ latency is bad (see [Performance](/docs/ambilight/performance)),
-  tuning won't help. Fix the capture-side issue first, then come back.
-- If colours are persistently wrong (red on screen → green on LEDs), it's
-  a firmware / wiring issue, not a tuning one. See
-  [USB troubleshooting](/docs/usb-leds/troubleshooting#wrong-colours).
+- If Δ latency is bad (see [Performance](/docs/ambilight/performance)), tuning won't help. Fix the capture-side issue first, then come back.
+- If colours are persistently wrong (red on screen → green on LEDs), it's a firmware / wiring issue, not a tuning one. See [USB troubleshooting](/docs/usb-leds/troubleshooting#wrong-colours).
 
 ## Related
 

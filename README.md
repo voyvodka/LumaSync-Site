@@ -1,7 +1,6 @@
 # LumaSync-Site
 
-Marketing site, docs, and blog for [**LumaSync**](https://github.com/voyvodka/LumaSync) —
-the tray-first open-source ambilight + Philips Hue desktop app.
+Marketing site, docs, and blog for [**LumaSync**](https://github.com/voyvodka/LumaSync) — the tray-first open-source ambilight + Philips Hue desktop app.
 
 - **Site**: https://lumasync.app
 - **App repo**: https://github.com/voyvodka/LumaSync
@@ -28,8 +27,7 @@ pnpm build      # astro build + pagefind index
 
 ## Deploy
 
-Every push to `main` triggers `.github/workflows/deploy.yml`, which
-lint- and type-checks, builds, and ships `dist/` to Cloudflare Pages.
+Every push to `main` triggers `.github/workflows/deploy.yml`, which lint- and type-checks, builds, and ships `dist/` to Cloudflare Pages.
 
 Required repo secrets for CI: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
@@ -38,17 +36,12 @@ Required repo secrets for CI: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 - **Code** (Astro components, layouts, CI, styling) — [MIT](./LICENSE)
 - **Content** (MDX under `src/content/`, docs, comparisons, blog) — CC BY 4.0
 
-See [`/license`](https://lumasync.app/license) for the public-facing summary
-and [`LICENSE`](./LICENSE) for the full text.
+See [`/license`](https://lumasync.app/license) for the public-facing summary and [`LICENSE`](./LICENSE) for the full text.
 
 ## Contributing
 
-Issues and PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for
-scope, local preview, and commit conventions. For app-level bugs
-(firmware, USB pipeline, Hue streaming), file against the
-[LumaSync app repo](https://github.com/voyvodka/LumaSync/issues) instead.
+Issues and PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for scope, local preview, and commit conventions. For app-level bugs (firmware, USB pipeline, Hue streaming), file against the [LumaSync app repo](https://github.com/voyvodka/LumaSync/issues) instead.
 
 ## Security
 
-Report vulnerabilities through GitHub's Private Vulnerability Reporting —
-see [`SECURITY.md`](./SECURITY.md) or [`/.well-known/security.txt`](https://lumasync.app/.well-known/security.txt).
+Report vulnerabilities through GitHub's Private Vulnerability Reporting — see [`SECURITY.md`](./SECURITY.md) or [`/.well-known/security.txt`](https://lumasync.app/.well-known/security.txt).

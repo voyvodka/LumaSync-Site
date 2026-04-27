@@ -17,16 +17,9 @@ import { LATEST_VERSION } from '../../../lib/version';
 | `Cmd/Ctrl + W`    | Hide window to tray (window stays running) |
 | `Cmd/Ctrl + Q`    | Quit LumaSync (kills the tray)             |
 
-On macOS the `Cmd` modifier; on Windows / Linux `Ctrl`. The Settings
-shortcut is `Cmd+,` on macOS and `Alt+,` on Windows / Linux.
+On macOS the `Cmd` modifier; on Windows / Linux `Ctrl`. The Settings shortcut is `Cmd+,` on macOS and `Alt+,` on Windows / Linux.
 
-From {LATEST_VERSION}, the global shortcuts use **TR-layout-safe key
-resolution** — physical key position, not the character the layout
-produces — so `Alt+,` fires on Turkish Q and F keyboards even though the
-comma sits on a different physical key. An **input-focus guard** also
-suppresses the shortcuts while a text input, textarea, or the Cmd+K
-search modal is focused, so typing a comma in a search query never
-accidentally opens Settings.
+From {LATEST_VERSION}, the global shortcuts use **TR-layout-safe key resolution** — physical key position, not the character the layout produces — so `Alt+,` fires on Turkish Q and F keyboards even though the comma sits on a different physical key. An **input-focus guard** also suppresses the shortcuts while a text input, textarea, or the Cmd+K search modal is focused, so typing a comma in a search query never accidentally opens Settings.
 
 ## Lights section (compact + full)
 
@@ -37,9 +30,7 @@ accidentally opens Settings.
 | `Alt+3` / `Cmd+3`           | Solid mode      |
 | `↑` / `↓` (Solid mode only) | Brightness ± 5% |
 
-On macOS use the `Cmd` modifier; on Windows / Linux use `Alt`. Same
-input-focus guard as the global shortcuts — mode switching is blocked
-while you're typing in a field.
+On macOS use the `Cmd` modifier; on Windows / Linux use `Alt`. Same input-focus guard as the global shortcuts — mode switching is blocked while you're typing in a field.
 
 ## Room map editor
 
@@ -64,8 +55,7 @@ From {LATEST_VERSION} the room map editor ships with a full shortcut set:
 
 ## Tray menu
 
-Right-click the tray icon for a context menu with these entries (all
-keyboard-accessible once the menu is open):
+Right-click the tray icon for a context menu with these entries (all keyboard-accessible once the menu is open):
 
 - **Open Settings** — brings the main window forward
 - **Lights off** — switches mode to Off
@@ -73,9 +63,7 @@ keyboard-accessible once the menu is open):
 - **Solid color** — jumps straight to Solid mode picker
 - **Quit** — kills the tray and all pipeline threads
 
-The IDs of these entries are defined in
-`src/shared/contracts/shell.ts` under `TRAY_MENU_IDS` if you're
-scripting anything against them externally.
+The IDs of these entries are defined in `src/shared/contracts/shell.ts` under `TRAY_MENU_IDS` if you're scripting anything against them externally.
 
 ## Related
 

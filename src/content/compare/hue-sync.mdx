@@ -7,101 +7,58 @@ updated: 2026-04-25
 
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../../lib/version';
 
-The **Philips Hue Play HDMI Sync Box 8K** (the 2024-era revision of what
-Philips called the Hue Sync Box) is retail-priced HDMI passthrough
-hardware with 4 HDMI 2.1 inputs and one HDMI output, which reads the
-video signal going to your TV and syncs your Hue lights to it. It
-handles 8K60 / 4K120 passthrough and the usual HDR modes. Regional
-pricing varies — see the Philips product page for current retail. **LumaSync** is an open-source desktop app that
-reads the OS-level screen buffer on your Mac, Windows, or Linux machine and
-drives the same Hue Entertainment Areas plus USB LED strips.
+The **Philips Hue Play HDMI Sync Box 8K** (the 2024-era revision of what Philips called the Hue Sync Box) is retail-priced HDMI passthrough hardware with 4 HDMI 2.1 inputs and one HDMI output, which reads the video signal going to your TV and syncs your Hue lights to it. It handles 8K60 / 4K120 passthrough and the usual HDR modes. Regional pricing varies — see the Philips product page for current retail. **LumaSync** is an open-source desktop app that reads the OS-level screen buffer on your Mac, Windows, or Linux machine and drives the same Hue Entertainment Areas plus USB LED strips.
 
-Short version: **Hue Sync Box is the right product for console / Apple TV
-rooms where the PC isn't the source. LumaSync is the right product for
-anything where your computer is already the media machine.**
+Short version: **Hue Sync Box is the right product for console / Apple TV rooms where the PC isn't the source. LumaSync is the right product for anything where your computer is already the media machine.**
 
 ## TL;DR
 
-- **Hue Sync Box wins** if your TV is fed by a console, Apple TV, Blu-ray
-  player, or any HDMI source that isn't a computer.
-- **LumaSync wins** if you watch video, work, or game on a Mac / Windows /
-  Linux machine — no extra hardware, no HDMI wiring, free.
-- The **Philips Hue Sync app for PC and Mac was officially discontinued
-  by Signify** (**[TBD: verify exact EOL date]**). If that's what you were
-  looking for, LumaSync is the direct replacement — same Hue Entertainment
-  streaming, same Bridge, same areas.
+- **Hue Sync Box wins** if your TV is fed by a console, Apple TV, Blu-ray player, or any HDMI source that isn't a computer.
+- **LumaSync wins** if you watch video, work, or game on a Mac / Windows / Linux machine — no extra hardware, no HDMI wiring, free.
+- The **Philips Hue Sync app for PC and Mac was officially discontinued by Signify** (**[TBD: verify exact EOL date]**). If that's what you were looking for, LumaSync is the direct replacement — same Hue Entertainment streaming, same Bridge, same areas.
 
 ## Feature comparison
 
-| Feature                   | LumaSync                                                                                  | Hue Sync Box                                                                                                                                                 |
-| ------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Screen source             | OS screen buffer (macOS / Windows / Linux)                                                | HDMI input (up to 4 devices, passthrough)                                                                                                                    |
-| Supported platforms       | macOS, Windows, Linux                                                                     | HDMI 2.1 inputs (4-in / 1-out) on the current 8K revision                                                                                                    |
-| Philips Hue Entertainment | Yes — DTLS 1.2 PSK, 20 Hz                                                                 | Yes — same Bridge, same areas                                                                                                                                |
-| USB LED strips (WS2812B)  | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | No                                                                                                                                                           |
-| HDMI passthrough          | No                                                                                        | Yes — native feature                                                                                                                                         |
-| HDR passthrough           | N/A                                                                                       | HDR10 / HDR10+ / Dolby Vision passthrough on the 8K revision                                                                                                 |
-| Setup                     | Install app, pair Bridge, pick area                                                       | Wire HDMI inputs, provision via Hue Sync mobile app                                                                                                          |
-| Extra hardware            | None (runs on computer you own)                                                           | The Box itself — regional pricing varies, [see the Philips product page](https://www.philips-hue.com/en-us/explore-hue/blog/sync-with-tv) for current retail |
-| Open source               | Yes — MIT                                                                                 | No                                                                                                                                                           |
-| Auto-updates              | minisign-signed, GitHub Releases                                                          | Firmware push via Philips                                                                                                                                    |
-| Cloud dependency          | None — LAN only                                                                           | Requires Hue account; some features cloud-gated                                                                                                              |
-| Last update               | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog)                                     | Firmware pushed by Philips on their own schedule (no public cadence commitment)                                                                              |
+| Feature | LumaSync | Hue Sync Box |
+| --- | --- | --- |
+| Screen source | OS screen buffer (macOS / Windows / Linux) | HDMI input (up to 4 devices, passthrough) |
+| Supported platforms | macOS, Windows, Linux | HDMI 2.1 inputs (4-in / 1-out) on the current 8K revision |
+| Philips Hue Entertainment | Yes — DTLS 1.2 PSK, 20 Hz | Yes — same Bridge, same areas |
+| USB LED strips (WS2812B) | Yes — CH340 / FT232 at 115200 baud (LumaSync v1 frame; opt-in Adalight profile from v1.4) | No |
+| HDMI passthrough | No | Yes — native feature |
+| HDR passthrough | N/A | HDR10 / HDR10+ / Dolby Vision passthrough on the 8K revision |
+| Setup | Install app, pair Bridge, pick area | Wire HDMI inputs, provision via Hue Sync mobile app |
+| Extra hardware | None (runs on computer you own) | The Box itself — regional pricing varies, [see the Philips product page](https://www.philips-hue.com/en-us/explore-hue/blog/sync-with-tv) for current retail |
+| Open source | Yes — MIT | No |
+| Auto-updates | minisign-signed, GitHub Releases | Firmware push via Philips |
+| Cloud dependency | None — LAN only | Requires Hue account; some features cloud-gated |
+| Last update | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog) | Firmware pushed by Philips on their own schedule (no public cadence commitment) |
 
 ## When to pick LumaSync
 
-- **You already watch on a laptop or desktop.** The video is on your
-  computer; LumaSync samples it directly. Zero hardware to rewire. One app
-  to install.
-- **You want USB LED strips behind your screen**, not just Hue bulbs. The
-  Sync Box can't drive WS2812B strips — LumaSync can drive them _and_ Hue at
-  the same time from the same source.
-- **You care about the Hue Sync Mac/PC app being discontinued.** LumaSync
-  speaks the same Entertainment API; if you were a Hue Sync desktop user,
-  you can keep your existing Entertainment Area and just point LumaSync at
-  it. See [Pair your Hue bridge](/docs/hue/pairing).
+- **You already watch on a laptop or desktop.** The video is on your computer; LumaSync samples it directly. Zero hardware to rewire. One app to install.
+- **You want USB LED strips behind your screen**, not just Hue bulbs. The Sync Box can't drive WS2812B strips — LumaSync can drive them _and_ Hue at the same time from the same source.
+- **You care about the Hue Sync Mac/PC app being discontinued.** LumaSync speaks the same Entertainment API; if you were a Hue Sync desktop user, you can keep your existing Entertainment Area and just point LumaSync at it. See [Pair your Hue bridge](/docs/hue/pairing).
 
 ## When to pick Hue Sync Box
 
-- **Your TV is the whole room's source** and your PC doesn't live near it.
-  The Box sits inline between your console / Apple TV / Blu-ray and the TV;
-  it doesn't need a PC running at all.
-- **You specifically want HDMI passthrough with HDR.** The Box is built for
-  video signal handling — handshake with modern HDR, CEC power sync,
-  console refresh rates. LumaSync reads the already-composed desktop
-  pixels; it doesn't touch HDMI.
-- **You're deep in the official Philips ecosystem** and OK paying for
-  polish. Official support, guaranteed firmware updates, sold next to the
-  bulbs at the same retailer.
+- **Your TV is the whole room's source** and your PC doesn't live near it. The Box sits inline between your console / Apple TV / Blu-ray and the TV; it doesn't need a PC running at all.
+- **You specifically want HDMI passthrough with HDR.** The Box is built for video signal handling — handshake with modern HDR, CEC power sync, console refresh rates. LumaSync reads the already-composed desktop pixels; it doesn't touch HDMI.
+- **You're deep in the official Philips ecosystem** and OK paying for polish. Official support, guaranteed firmware updates, sold next to the bulbs at the same retailer.
 
 ## Migration notes
 
-Coming from the **Hue Sync app for PC/Mac** (officially discontinued —
-**[TBD: verify exact EOL date]**):
+Coming from the **Hue Sync app for PC/Mac** (officially discontinued — **[TBD: verify exact EOL date]**):
 
-- Your **Entertainment Area** is on the Bridge, not the app. LumaSync reads
-  it unchanged. Install LumaSync, pair the same Bridge (see
-  [pairing](/docs/hue/pairing)), pick your existing area from the dropdown.
-- Your **bulb positions** inside the area are also on the Bridge. They
-  propagate automatically. Fine-tune in LumaSync's Hue Channel Map Panel if
-  needed.
-- There's nothing to export from the old Hue Sync desktop app; it never
-  stored config locally.
+- Your **Entertainment Area** is on the Bridge, not the app. LumaSync reads it unchanged. Install LumaSync, pair the same Bridge (see [pairing](/docs/hue/pairing)), pick your existing area from the dropdown.
+- Your **bulb positions** inside the area are also on the Bridge. They propagate automatically. Fine-tune in LumaSync's Hue Channel Map Panel if needed.
+- There's nothing to export from the old Hue Sync desktop app; it never stored config locally.
 
 Coming from the **Hue Sync Box**:
 
-- **Only one tool can stream to your Bridge at a time.** The Hue Bridge
-  supports a single active Entertainment streaming session per bridge,
-  total — it is not a per-area limit. LumaSync's own readiness check
-  surfaces this as `HUE_STREAM_NOT_READY` with an
-  `active_streamer` hint when another client holds the stream. In
-  practice: starting LumaSync takes over; the Sync Box stops receiving
-  signal until you switch back (and vice versa).
-- **To run both in parallel you need two Hue Bridges.** Separate bridges,
-  separate Entertainment Areas, one client per bridge. Viable for a
-  multi-bridge home; most setups pick one tool at a time.
-- **Retiring the Box entirely**: keep the Entertainment Area as-is and
-  point LumaSync at it. Nothing else changes on the Hue side.
+- **Only one tool can stream to your Bridge at a time.** The Hue Bridge supports a single active Entertainment streaming session per bridge, total — it is not a per-area limit. LumaSync's own readiness check surfaces this as `HUE_STREAM_NOT_READY` with an `active_streamer` hint when another client holds the stream. In practice: starting LumaSync takes over; the Sync Box stops receiving signal until you switch back (and vice versa).
+- **To run both in parallel you need two Hue Bridges.** Separate bridges, separate Entertainment Areas, one client per bridge. Viable for a multi-bridge home; most setups pick one tool at a time.
+- **Retiring the Box entirely**: keep the Entertainment Area as-is and point LumaSync at it. Nothing else changes on the Hue side.
 
 ## Further reading
 

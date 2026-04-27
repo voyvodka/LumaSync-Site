@@ -6,24 +6,13 @@ order: 20
 updated: 2026-04-23
 ---
 
-LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a
-115200-baud link. This page is the wire-level reference — useful if you're
-flashing firmware onto a microcontroller, writing your own controller, or
-debugging why a kit isn't lighting up.
+LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a 115200-baud link. This page is the wire-level reference — useful if you're flashing firmware onto a microcontroller, writing your own controller, or debugging why a kit isn't lighting up.
 
 ## LumaSync v1 frame, with an Adalight fallback
 
-LumaSync's default USB framing is **not** Adalight-compatible: different
-magic bytes, different length encoding, different checksum. A controller
-running unmodified [Adalight firmware](https://learn.adafruit.com/adalight-diy-ambient-tv-lighting)
-will **not** respond to an unconfigured LumaSync install.
+LumaSync's default USB framing is **not** Adalight-compatible: different magic bytes, different length encoding, different checksum. A controller running unmodified [Adalight firmware](https://learn.adafruit.com/adalight-diy-ambient-tv-lighting) will **not** respond to an unconfigured LumaSync install.
 
-From **v1.4**, the Device panel exposes a **Firmware profile** toggle
-(LumaSync v1 · Adalight). Switch to **Adalight** and LumaSync emits the
-legacy `Ada` header framing byte-for-byte; the setting persists per
-device so you don't need to reconfigure it on every session. Keep the
-default **LumaSync v1** profile for controllers running the reference
-firmware below.
+From **v1.4**, the Device panel exposes a **Firmware profile** toggle (LumaSync v1 · Adalight). Switch to **Adalight** and LumaSync emits the legacy `Ada` header framing byte-for-byte; the setting persists per device so you don't need to reconfigure it on every session. Keep the default **LumaSync v1** profile for controllers running the reference firmware below.
 
 ## Wire format (v1)
 
@@ -37,96 +26,57 @@ Payload:  RGB triplets              (LED_COUNT × 3 bytes, gamma-corrected, one 
 Trailer:  XOR_CHECKSUM              (1 byte, XOR of every preceding byte)
 ```
 
-For a 120-LED strip: 4 bytes header + 360 bytes RGB + 1 byte checksum =
-365 bytes per frame. At 20 Hz that's ~7.3 KB/s, comfortably under
-115200 baud's ~11.5 KB/s usable budget.
+For a 120-LED strip: 4 bytes header + 360 bytes RGB + 1 byte checksum = 365 bytes per frame. At 20 Hz that's ~7.3 KB/s, comfortably under 115200 baud's ~11.5 KB/s usable budget.
 
 ### Gamma correction
 
-RGB triplets are **pre-gamma-corrected** on the host side (Rec. 709 gamma
-2.2). Firmware should not apply additional gamma. If your LEDs look
-crushed at low values or blown out at high values, double-check the
-firmware isn't re-gamma-ing on top.
+RGB triplets are **pre-gamma-corrected** on the host side (Rec. 709 gamma 2.2). Firmware should not apply additional gamma. If your LEDs look crushed at low values or blown out at high values, double-check the firmware isn't re-gamma-ing on top.
 
 ### Byte order
 
-LED count is **little-endian u16** (LSB first). Adalight uses big-endian
-and encodes `count − 1`; LumaSync v1 uses straight LE and the actual
-count. This is the single detail most likely to trip up anyone porting
-from an Adalight sketch.
+LED count is **little-endian u16** (LSB first). Adalight uses big-endian and encodes `count − 1`; LumaSync v1 uses straight LE and the actual count. This is the single detail most likely to trip up anyone porting from an Adalight sketch.
 
 ## Baud rate
 
-**115200**, hard-coded in LumaSync. Don't raise it — the WS2812B strip
-itself is the bottleneck, not the serial link.
+**115200**, hard-coded in LumaSync. Don't raise it — the WS2812B strip itself is the bottleneck, not the serial link.
 
 ## The handshake
 
 When you click **Health check** in Settings → Device, LumaSync:
 
 1. Opens the serial port at 115200-8-N-1.
-2. Waits ~2 seconds for the controller to finish its reset
-   (Arduino-class boards auto-reset on serial open).
-3. Sends a minimal zero-LED-count LumaSync v1 frame — magic + length +
-   correct checksum + no payload.
-4. Reads the serial line briefly. A LumaSync v1 firmware replies with
-   `0xA5`; legacy Adalight firmware stays silent; a completely mismatched
-   firmware surfaces as an errored read.
-5. Reports `DEVICE_READY` on the ack, `DEVICE_MANUAL_REQUIRED` on silence
-   or error.
+2. Waits ~2 seconds for the controller to finish its reset (Arduino-class boards auto-reset on serial open).
+3. Sends a minimal zero-LED-count LumaSync v1 frame — magic + length + correct checksum + no payload.
+4. Reads the serial line briefly. A LumaSync v1 firmware replies with `0xA5`; legacy Adalight firmware stays silent; a completely mismatched firmware surfaces as an errored read.
+5. Reports `DEVICE_READY` on the ack, `DEVICE_MANUAL_REQUIRED` on silence or error.
 
-`DEVICE_MANUAL_REQUIRED` is not fatal: LumaSync streams frames anyway and
-assumes the firmware cooperates. If the strip lights up, you're fine.
+`DEVICE_MANUAL_REQUIRED` is not fatal: LumaSync streams frames anyway and assumes the firmware cooperates. If the strip lights up, you're fine.
 
 ## Frame rate
 
-LumaSync pushes up to **30 frames per second** on the USB path by default.
-The serial link can handle it for strips up to ~300 LEDs; longer strips
-need a lower rate to avoid buffering. The telemetry pill on the Device
-panel shows the actual push rate.
+LumaSync pushes up to **30 frames per second** on the USB path by default. The serial link can handle it for strips up to ~300 LEDs; longer strips need a lower rate to avoid buffering. The telemetry pill on the Device panel shows the actual push rate.
 
 ## Firmware implementations
 
-- **Companion firmware sketch** — a reference Arduino/PlatformIO sketch
-  that implements this exact frame format will ship alongside the app
-  once the companion hardware repo is published. Tracked in the project
-  roadmap.
-- **Porting from Adalight** — the core loop is similar; what changes is
-  the magic bytes (`Ada` → `0xAA 0x55`), the length encoding (BE `n−1` →
-  LE `n`), the handshake ack, and dropping any brightness-byte or RGBW
-  extensions Adalight variants may have added.
-- **Adalight profile (v1.4+, opt-in)** — if you already have Adalight
-  firmware flashed (common on "ambilight USB kit" marketplace purchases),
-  enable the Adalight profile under Settings → Device instead of
-  reflashing. LumaSync emits Adalight framing byte-for-byte; the rest of
-  the pipeline is unchanged.
+- **Companion firmware sketch** — a reference Arduino/PlatformIO sketch that implements this exact frame format will ship alongside the app once the companion hardware repo is published. Tracked in the project roadmap.
+- **Porting from Adalight** — the core loop is similar; what changes is the magic bytes (`Ada` → `0xAA 0x55`), the length encoding (BE `n−1` → LE `n`), the handshake ack, and dropping any brightness-byte or RGBW extensions Adalight variants may have added.
+- **Adalight profile (v1.4+, opt-in)** — if you already have Adalight firmware flashed (common on "ambilight USB kit" marketplace purchases), enable the Adalight profile under Settings → Device instead of reflashing. LumaSync emits Adalight framing byte-for-byte; the rest of the pipeline is unchanged.
 
 ## USB output: per-LED sampling
 
-From **v1.4**, each LED samples its own edge region of the screen,
-anchored to your room map's `LedCalibrationConfig` (edge counts, start
-anchor, direction, bottom gap). The strip's colour is no longer a single
-RGB triplet extended across every LED — every pixel is computed from
-the matching screen zone.
+From **v1.4**, each LED samples its own edge region of the screen, anchored to your room map's `LedCalibrationConfig` (edge counts, start anchor, direction, bottom gap). The strip's colour is no longer a single RGB triplet extended across every LED — every pixel is computed from the matching screen zone.
 
-The 115200 baud ceiling constrains the frame rate, and LumaSync adapts
-dynamically:
+The 115200 baud ceiling constrains the frame rate, and LumaSync adapts dynamically:
 
 - **60 LEDs** → ~60 FPS
 - **120 LEDs** → ~30 FPS
 - **200 LEDs** → ~19 FPS
 
-No configuration is needed; LumaSync picks the rate that fits inside the
-baud budget given your LED count. The telemetry pill on the Device panel
-reports the actual push rate.
+No configuration is needed; LumaSync picks the rate that fits inside the baud budget given your LED count. The telemetry pill on the Device panel reports the actual push rate.
 
 ## Why not raw APA102 / SPI?
 
-USB-serial buys hot-pluggable hardware at the cost of a latency ceiling.
-SPI-attached strips (APA102, SK9822) are faster and don't need a
-microcontroller intermediary — but they require wiring into the host
-machine, which excludes 99% of desktop users. USB-serial is the
-pragmatic path.
+USB-serial buys hot-pluggable hardware at the cost of a latency ceiling. SPI-attached strips (APA102, SK9822) are faster and don't need a microcontroller intermediary — but they require wiring into the host machine, which excludes 99% of desktop users. USB-serial is the pragmatic path.
 
 ## Related
 

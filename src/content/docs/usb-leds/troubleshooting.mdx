@@ -10,122 +10,72 @@ updated: 2026-04-23
 
 **Symptom**: Plug in the controller, Settings → Device → dropdown is empty.
 
-1. **Driver not installed** — CH340 on Windows sometimes needs a manual
-   driver from WCH's website. Install, reboot, check again.
-2. **Linux permissions** — your user may not be in the `dialout` group:
-   `sudo usermod -aG dialout $USER`, log out, log back in.
-3. **Cable is charge-only** — cheap USB-A cables without data lines enumerate
-   no device. Try a known-good data cable.
-4. **Unsupported chipset** — if the device enumerates but LumaSync doesn't
-   recognise it, see [USB controllers → "My controller isn't on the list"](/docs/usb-leds/controllers#my-controller-isnt-on-the-list).
+1. **Driver not installed** — CH340 on Windows sometimes needs a manual driver from WCH's website. Install, reboot, check again.
+2. **Linux permissions** — your user may not be in the `dialout` group: `sudo usermod -aG dialout $USER`, log out, log back in.
+3. **Cable is charge-only** — cheap USB-A cables without data lines enumerate no device. Try a known-good data cable.
+4. **Unsupported chipset** — if the device enumerates but LumaSync doesn't recognise it, see [USB controllers → "My controller isn't on the list"](/docs/usb-leds/controllers#my-controller-isnt-on-the-list).
 
 ## Health check fails
 
-**Symptom**: Port connects, health check returns a non-healthy
-`SerialHealthCode` or `DEVICE_MANUAL_REQUIRED`.
+**Symptom**: Port connects, health check returns a non-healthy `SerialHealthCode` or `DEVICE_MANUAL_REQUIRED`.
 
-From v1.4, LumaSync sends a **PING/PONG opcode exchange** during the
-handshake and reports a structured `SerialHealthReport` back to the UI.
-The coded statuses you may see:
+From v1.4, LumaSync sends a **PING/PONG opcode exchange** during the handshake and reports a structured `SerialHealthReport` back to the UI. The coded statuses you may see:
 
-| `SerialHealthCode`       | What it means                                                                      |
-| ------------------------ | ---------------------------------------------------------------------------------- |
-| `HEALTHY`                | PING acknowledged, frame acks arriving — green pill, streaming armed               |
-| `HANDSHAKE_TIMEOUT`      | Controller didn't reply to the zero-LED frame within ~2 s — wrong firmware/profile |
-| `PING_TIMEOUT`           | Handshake passed but runtime PING never acked — likely a flaky cable or USB hub    |
-| `BAUD_MISMATCH`          | Reply arrived but bytes were garbage — baud rate not 115200                        |
-| `DEVICE_BUSY`            | Port opened by another process (Arduino IDE, screen, vendor utility)               |
+| `SerialHealthCode` | What it means |
+| --- | --- |
+| `HEALTHY` | PING acknowledged, frame acks arriving — green pill, streaming armed |
+| `HANDSHAKE_TIMEOUT` | Controller didn't reply to the zero-LED frame within ~2 s — wrong firmware/profile |
+| `PING_TIMEOUT` | Handshake passed but runtime PING never acked — likely a flaky cable or USB hub |
+| `BAUD_MISMATCH` | Reply arrived but bytes were garbage — baud rate not 115200 |
+| `DEVICE_BUSY` | Port opened by another process (Arduino IDE, screen, vendor utility) |
 | `DEVICE_MANUAL_REQUIRED` | Unrecognised firmware but the port is writable — opt in and LumaSync streams blind |
 
 Common causes and what to do:
 
-- **Wrong baud rate** (→ `BAUD_MISMATCH`) — LumaSync v1 firmware must run
-  at 115200. Other rates are rejected.
-- **Wrong firmware / wrong profile** (→ `HANDSHAKE_TIMEOUT`) — a
-  controller flashed with Adalight firmware won't answer a LumaSync v1
-  handshake. Either flip the **Firmware profile** toggle to **Adalight**
-  in Settings → Device (v1.4+), or reflash with LumaSync v1 firmware.
-  CircuitPython / MicroPython boards with custom protocols stay on
-  `DEVICE_MANUAL_REQUIRED`.
-- **Serial port already owned** (→ `DEVICE_BUSY`) — close other serial
-  monitors (Arduino IDE, screen, minicom, vendor utilities).
-- **Flaky cable or USB hub** (→ `PING_TIMEOUT`) — swap the cable, try a
-  powered hub, or plug straight into a back-panel USB port.
+- **Wrong baud rate** (→ `BAUD_MISMATCH`) — LumaSync v1 firmware must run at 115200. Other rates are rejected.
+- **Wrong firmware / wrong profile** (→ `HANDSHAKE_TIMEOUT`) — a controller flashed with Adalight firmware won't answer a LumaSync v1 handshake. Either flip the **Firmware profile** toggle to **Adalight** in Settings → Device (v1.4+), or reflash with LumaSync v1 firmware. CircuitPython / MicroPython boards with custom protocols stay on `DEVICE_MANUAL_REQUIRED`.
+- **Serial port already owned** (→ `DEVICE_BUSY`) — close other serial monitors (Arduino IDE, screen, minicom, vendor utilities).
+- **Flaky cable or USB hub** (→ `PING_TIMEOUT`) — swap the cable, try a powered hub, or plug straight into a back-panel USB port.
 
-You can continue in `DEVICE_MANUAL_REQUIRED`; LumaSync streams frames and
-assumes the firmware cooperates. If the strip lights up, you're fine.
+You can continue in `DEVICE_MANUAL_REQUIRED`; LumaSync streams frames and assumes the firmware cooperates. If the strip lights up, you're fine.
 
 ## LEDs flicker or freeze
 
 **Symptom**: Strip reacts but drops frames visibly every few seconds.
 
-- **USB bandwidth shared with other high-speed devices** (external SSD,
-  webcam, audio interface). Move the controller to a dedicated USB port
-  or hub.
-- **Power supply under-spec** — cheap 1–2 A wall-warts brown out under
-  all-white peak draw. LEDs flicker at brightness spikes. Use a 5 A+
-  supply for anything over 120 LEDs.
-- **Back-EMF corruption** — long signal wires between controller and strip
-  pick up noise. Keep the wire short (< 30 cm ideal), and put a small
-  470 Ω resistor inline with the data line if you see persistent
-  corruption.
+- **USB bandwidth shared with other high-speed devices** (external SSD, webcam, audio interface). Move the controller to a dedicated USB port or hub.
+- **Power supply under-spec** — cheap 1–2 A wall-warts brown out under all-white peak draw. LEDs flicker at brightness spikes. Use a 5 A+ supply for anything over 120 LEDs.
+- **Back-EMF corruption** — long signal wires between controller and strip pick up noise. Keep the wire short (< 30 cm ideal), and put a small 470 Ω resistor inline with the data line if you see persistent corruption.
 
 ## Wrong colours
 
-**Symptom**: LEDs light up but colours are clearly wrong — red shows as
-blue, or everything is slightly off-hue.
+**Symptom**: LEDs light up but colours are clearly wrong — red shows as blue, or everything is slightly off-hue.
 
-- **RGB vs GRB ordering mismatch**. WS2812B is actually GRB internally;
-  LumaSync handles the conversion, but some firmware does it too, resulting
-  in a double-conversion. Configure your firmware to pass RGB through
-  unmodified, or reflash with LumaSync v1 firmware (which expects
-  pre-gamma-corrected RGB from the host).
-- **White balance on the strip doesn't match your content**. Warm-white
-  WS2812B strips have a red-tinted LED that bleeds into warm greys. There's
-  no fix at the protocol level — this is a strip choice. Swap to a
-  cool-white strip or accept the tint.
+- **RGB vs GRB ordering mismatch**. WS2812B is actually GRB internally; LumaSync handles the conversion, but some firmware does it too, resulting in a double-conversion. Configure your firmware to pass RGB through unmodified, or reflash with LumaSync v1 firmware (which expects pre-gamma-corrected RGB from the host).
+- **White balance on the strip doesn't match your content**. Warm-white WS2812B strips have a red-tinted LED that bleeds into warm greys. There's no fix at the protocol level — this is a strip choice. Swap to a cool-white strip or accept the tint.
 
 ## Only part of the strip lights up
 
 **Symptom**: You have 120 LEDs, but only the first 90 respond.
 
-- **Power injection missing**. WS2812B signal attenuates along the strip.
-  Past ~120 LEDs, inject 5 V from a second tap — solder or wire-nut extra
-  power in the middle of the strip. Doesn't change the LumaSync side.
-- **Edge counts wrong**. Check calibration — your edge counts add up to
-  90 instead of 120? Fix the count and the rest will light.
-- **Strip has a dead pixel breaking the chain**. If you have a segment that
-  lights fine up to a point then nothing beyond, the first non-lit LED is
-  likely the dead one. WS2812B strips are chain-broken by a single failure.
-  Replace the dead LED, or cut past it and solder a short jumper wire.
+- **Power injection missing**. WS2812B signal attenuates along the strip. Past ~120 LEDs, inject 5 V from a second tap — solder or wire-nut extra power in the middle of the strip. Doesn't change the LumaSync side.
+- **Edge counts wrong**. Check calibration — your edge counts add up to 90 instead of 120? Fix the count and the rest will light.
+- **Strip has a dead pixel breaking the chain**. If you have a segment that lights fine up to a point then nothing beyond, the first non-lit LED is likely the dead one. WS2812B strips are chain-broken by a single failure. Replace the dead LED, or cut past it and solder a short jumper wire.
 
 ## Colours lag behind the screen
 
-**Symptom**: Ambilight responds, but the lighting clearly trails the video
-by a visible amount.
+**Symptom**: Ambilight responds, but the lighting clearly trails the video by a visible amount.
 
-- **Capture rate too low on the source side**. Check Settings → Ambilight
-  → Update rate. 30 Hz is the default; 20 Hz will feel laggy. The 60 Hz
-  target is for gaming setups only.
-- **macOS screen recording throttles in Low Power Mode**. Plug in the
-  charger.
-- **Target is a rendered fullscreen app that bypasses composition**
-  (some games, fullscreen video). macOS screen capture APIs capture the
-  pre-composition frame; you'll get the right pixels but with the rendering
-  engine's latency added. Runs better in windowed mode.
+- **Capture rate too low on the source side**. Check Settings → Ambilight → Update rate. 30 Hz is the default; 20 Hz will feel laggy. The 60 Hz target is for gaming setups only.
+- **macOS screen recording throttles in Low Power Mode**. Plug in the charger.
+- **Target is a rendered fullscreen app that bypasses composition** (some games, fullscreen video). macOS screen capture APIs capture the pre-composition frame; you'll get the right pixels but with the rendering engine's latency added. Runs better in windowed mode.
 
 ## Strip goes dim or off mid-session
 
 **Symptom**: Works for 5 minutes, dims, eventually stops.
 
-- **Thermal throttling at max brightness**. At 100% all-white, WS2812B
-  strips shed ~60 mA per LED — a 200-LED strip dissipates ~12 W of heat.
-  Adhesive-mounted strips on the back of a TV can hit thermal cutoff. Lower
-  the max brightness (Settings → Ambilight → Tuning → Cap brightness at
-  0.6 instead of 1.0).
-- **Power supply overcurrent trip**. 5 V supplies with foldback protection
-  shut off under sustained load. Upgrade to a higher-amp supply, or cap
-  brightness.
+- **Thermal throttling at max brightness**. At 100% all-white, WS2812B strips shed ~60 mA per LED — a 200-LED strip dissipates ~12 W of heat. Adhesive-mounted strips on the back of a TV can hit thermal cutoff. Lower the max brightness (Settings → Ambilight → Tuning → Cap brightness at 0.6 instead of 1.0).
+- **Power supply overcurrent trip**. 5 V supplies with foldback protection shut off under sustained load. Upgrade to a higher-amp supply, or cap brightness.
 
 ## Related
 

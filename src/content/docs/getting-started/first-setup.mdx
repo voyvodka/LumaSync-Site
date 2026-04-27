@@ -18,19 +18,13 @@ Expect ~5 minutes if your hardware is already on the network and plugged in.
 
 ## 1 · Start LumaSync
 
-Launch the app. On macOS it lives in the menu bar (top-right); on Windows and
-Linux in the system tray. **The main window hides to the tray on close rather
-than quitting** — this is intentional. Right-click the tray icon to quit for
-real.
+Launch the app. On macOS it lives in the menu bar (top-right); on Windows and Linux in the system tray. **The main window hides to the tray on close rather than quitting** — this is intentional. Right-click the tray icon to quit for real.
 
-First launch opens the main window automatically. Compact mode is `320×480`
-and meant for quick toggles. Click the expand icon to switch to the full
-`900×620` window for configuration.
+First launch opens the main window automatically. Compact mode is `320×480` and meant for quick toggles. Click the expand icon to switch to the full `900×620` window for configuration.
 
 ## 2 · Connect something
 
-You need at least one target for the light pipeline to drive. Do either or
-both:
+You need at least one target for the light pipeline to drive. Do either or both:
 
 ### Pair a Philips Hue bridge
 
@@ -39,52 +33,38 @@ Settings → **Hue** → **Pair bridge**.
 1. LumaSync auto-discovers bridges on your local network (mDNS).
 2. Select yours from the list — or enter the IP manually.
 3. Press the physical **link button** on the bridge, then click **Continue**.
-4. Pick an **Entertainment Area** from the dropdown. If none exist, create
-   one in the Hue app first (Settings → Entertainment areas).
+4. Pick an **Entertainment Area** from the dropdown. If none exist, create one in the Hue app first (Settings → Entertainment areas).
 
-On success the pairing credentials land in `~/.config/lumasync/app.json` and
-never leave your machine. See [Hue pairing](/docs/hue/pairing) for a deeper
-walkthrough or troubleshooting.
+On success the pairing credentials land in `~/.config/lumasync/app.json` and never leave your machine. See [Hue pairing](/docs/hue/pairing) for a deeper walkthrough or troubleshooting.
 
 ### Connect a USB controller
 
 Plug your CH340 or FT232 controller into a USB port. Settings → **Device**.
 
-1. LumaSync auto-detects supported controllers. If yours doesn't appear,
-   check the supported chipsets in [USB controllers](/docs/usb-leds/controllers).
+1. LumaSync auto-detects supported controllers. If yours doesn't appear, check the supported chipsets in [USB controllers](/docs/usb-leds/controllers).
 2. Pick the port from the dropdown.
-3. Click **Health check** — LumaSync sends a handshake at 115200 baud and
-   confirms the strip is responsive. The result shows up next to the port
-   entry within a couple of seconds.
+3. Click **Health check** — LumaSync sends a handshake at 115200 baud and confirms the strip is responsive. The result shows up next to the port entry within a couple of seconds.
 
 ## 3 · Pick a mode
 
-Compact mode header has three tiles: **Off · Ambilight · Solid**. Click
-Ambilight to start real-time screen capture, or Solid to push a single RGB
-color and brightness to both targets.
+Compact mode header has three tiles: **Off · Ambilight · Solid**. Click Ambilight to start real-time screen capture, or Solid to push a single RGB color and brightness to both targets.
 
-For more structured scenes (colour presets, warm-white reading, movie-night
-cinema), use the scene picker below the mode tiles. Scenes trigger the same
-pipeline but pin the parameters.
+For more structured scenes (colour presets, warm-white reading, movie-night cinema), use the scene picker below the mode tiles. Scenes trigger the same pipeline but pin the parameters.
 
 ## 4 · Calibrate (optional)
 
-If you just plugged in a USB strip and nothing matches the edge of your TV,
-open Settings → **Calibration**:
+If you just plugged in a USB strip and nothing matches the edge of your TV, open Settings → **Calibration**:
 
 - Set **edge counts** (top, right, bottom, left)
 - Mark which **corner owns** the seam
 - Pick the **start anchor** and **direction**
 - Hit the **test pattern** toggle to confirm with a visible chase
 
-See [LED calibration](/docs/usb-leds/calibration) for the full reference. Most
-strip kits work with the defaults.
+See [LED calibration](/docs/usb-leds/calibration) for the full reference. Most strip kits work with the defaults.
 
 ## 5 · Keep it open forever
 
-The **Auto-start on login** toggle (Settings → General) puts LumaSync in your
-OS login items so the app is always in the tray when you log in. Combined with
-"hide on close", it means you pair your bridge once and forget the app exists.
+The **Auto-start on login** toggle (Settings → General) puts LumaSync in your OS login items so the app is always in the tray when you log in. Combined with "hide on close", it means you pair your bridge once and forget the app exists.
 
 ## What next?
 

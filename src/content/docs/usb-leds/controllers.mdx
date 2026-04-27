@@ -6,26 +6,18 @@ order: 10
 updated: 2026-04-27
 ---
 
-LumaSync's USB LED path drives a WS2812B strip through a USB-to-serial
-controller, streaming frames at 115200 baud using the
-[LumaSync v1 serial frame format](/docs/usb-leds/serial-protocol) — not
-Adalight. An **opt-in Adalight profile** shipped in v1.4; flip
-**Settings → Device → Firmware profile** to **Adalight** to keep
-existing Adalight controllers running unchanged.
+LumaSync's USB LED path drives a WS2812B strip through a USB-to-serial controller, streaming frames at 115200 baud using the [LumaSync v1 serial frame format](/docs/usb-leds/serial-protocol) — not Adalight. An **opt-in Adalight profile** shipped in v1.4; flip **Settings → Device → Firmware profile** to **Adalight** to keep existing Adalight controllers running unchanged.
 
 ## Supported chipsets — CH340 and FT232
 
 Two USB-to-serial chipsets are supported out of the box:
 
-| Chip           | USB VID:PID | Where you'll find it                                                                   |
-| -------------- | ----------- | -------------------------------------------------------------------------------------- |
-| **CH340**      | `1A86:7523` | Most cheap Arduino-clone ambilight kits; "ambilight USB kit" on the usual marketplaces |
-| **FTDI FT232** | `0403:6001` | Higher-end kits, DIY boards using genuine FTDI                                         |
+| Chip | USB VID:PID | Where you'll find it |
+| --- | --- | --- |
+| **CH340** | `1A86:7523` | Most cheap Arduino-clone ambilight kits; "ambilight USB kit" on the usual marketplaces |
+| **FTDI FT232** | `0403:6001` | Higher-end kits, DIY boards using genuine FTDI |
 
-LumaSync scans the OS's serial port list and matches against these IDs. If
-your controller reports a different VID:PID, the **Device** panel flags it
-`manual_required` — you can still connect it by pointing at the port
-explicitly, but LumaSync won't auto-detect.
+LumaSync scans the OS's serial port list and matches against these IDs. If your controller reports a different VID:PID, the **Device** panel flags it `manual_required` — you can still connect it by pointing at the port explicitly, but LumaSync won't auto-detect.
 
 ## How to check what you have
 
@@ -39,12 +31,10 @@ Look for `0x1a86` (CH340) or `0x0403` (FTDI) in the vendor field.
 
 ### Windows
 
-**Device Manager** → **Ports (COM & LPT)** — the device name usually spells
-out the chipset:
+**Device Manager** → **Ports (COM & LPT)** — the device name usually spells out the chipset:
 
 - "USB-SERIAL CH340 (COM3)" → CH340
-- "USB Serial Port (COM4)" → FTDI, confirm by clicking Properties → Details
-  → Hardware IDs, should show `VID_0403&PID_6001`.
+- "USB Serial Port (COM4)" → FTDI, confirm by clicking Properties → Details → Hardware IDs, should show `VID_0403&PID_6001`.
 
 ### Linux
 
@@ -52,51 +42,31 @@ out the chipset:
 lsusb | grep -iE '1a86|0403'
 ```
 
-And the serial port is typically `/dev/ttyUSB0` for both chipsets once the
-kernel driver loads (`ch341` for CH340, `ftdi_sio` for FTDI).
+And the serial port is typically `/dev/ttyUSB0` for both chipsets once the kernel driver loads (`ch341` for CH340, `ftdi_sio` for FTDI).
 
 ## Drivers
 
-- **macOS 13+**: both chipsets work with bundled drivers. No third-party
-  install needed.
-- **Windows 10/11**: CH340 drivers sometimes need a manual install from
-  WCH's website (search "CH340 driver"). FTDI chips install automatically
-  through Windows Update.
-- **Linux**: kernel ships both drivers since forever. If `/dev/ttyUSB0`
-  doesn't appear, your user probably isn't in the `dialout` group:
-  `sudo usermod -aG dialout $USER` then log out and back in.
+- **macOS 13+**: both chipsets work with bundled drivers. No third-party install needed.
+- **Windows 10/11**: CH340 drivers sometimes need a manual install from WCH's website (search "CH340 driver"). FTDI chips install automatically through Windows Update.
+- **Linux**: kernel ships both drivers since forever. If `/dev/ttyUSB0` doesn't appear, your user probably isn't in the `dialout` group: `sudo usermod -aG dialout $USER` then log out and back in.
 
 ## Firmware on the controller
 
-The controller needs to run **LumaSync v1 firmware at 115200 baud** — see
-[Serial protocol](/docs/usb-leds/serial-protocol) for the full wire spec.
+The controller needs to run **LumaSync v1 firmware at 115200 baud** — see [Serial protocol](/docs/usb-leds/serial-protocol) for the full wire spec.
 
-- A **companion reference sketch** will ship alongside the firmware
-  companion repo; until then, the serial-protocol page has the byte-level
-  format so you can port or write your own (~40 lines of Arduino code).
-- Most "ambilight USB kit" marketplace products ship pre-flashed with
-  **Adalight firmware**. From v1.4, LumaSync includes an **opt-in
-  Adalight encoder profile** — pick "Firmware profile: LumaSync v1 |
-  Adalight" in Settings → Device, and LumaSync emits the legacy Adalight
-  framing instead of its native v1 frame. Alternatively, reflash the
-  controller with LumaSync v1 firmware.
-- Don't change the baud rate from 115200. LumaSync hard-codes it for the
-  handshake, and most firmware ships at 115200 by default.
+- A **companion reference sketch** will ship alongside the firmware companion repo; until then, the serial-protocol page has the byte-level format so you can port or write your own (~40 lines of Arduino code).
+- Most "ambilight USB kit" marketplace products ship pre-flashed with **Adalight firmware**. From v1.4, LumaSync includes an **opt-in Adalight encoder profile** — pick "Firmware profile: LumaSync v1 | Adalight" in Settings → Device, and LumaSync emits the legacy Adalight framing instead of its native v1 frame. Alternatively, reflash the controller with LumaSync v1 firmware.
+- Don't change the baud rate from 115200. LumaSync hard-codes it for the handshake, and most firmware ships at 115200 by default.
 
 ## "My controller isn't on the list"
 
-If your chip is neither CH340 nor FTDI but is a standard USB-to-serial
-bridge at 115200 baud (e.g. CP2102, WCH CH9102):
+If your chip is neither CH340 nor FTDI but is a standard USB-to-serial bridge at 115200 baud (e.g. CP2102, WCH CH9102):
 
-1. Plug it in and note the device path (macOS: `ls /dev/tty.usbserial*`;
-   Linux: `ls /dev/ttyUSB*`; Windows: Device Manager → Ports).
+1. Plug it in and note the device path (macOS: `ls /dev/tty.usbserial*`; Linux: `ls /dev/ttyUSB*`; Windows: Device Manager → Ports).
 2. Settings → **Device** → **Enter port manually**.
-3. Paste the path. LumaSync attempts the LumaSync v1 handshake and
-   connects if the firmware responds. Nothing else changes.
+3. Paste the path. LumaSync attempts the LumaSync v1 handshake and connects if the firmware responds. Nothing else changes.
 
-Adding the chipset to the auto-detect list requires a code change in the
-shared contracts — please open an [issue](https://github.com/voyvodka/LumaSync/issues)
-with the VID:PID if you'd like it bundled.
+Adding the chipset to the auto-detect list requires a code change in the shared contracts — please open an [issue](https://github.com/voyvodka/LumaSync/issues) with the VID:PID if you'd like it bundled.
 
 ## Related
 
