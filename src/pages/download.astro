@@ -104,7 +104,7 @@ const publishedDate = release?.published_at
   : null;
 
 const downloadDescription =
-  'Download LumaSync for macOS, Windows, or Linux. Binaries signed with minisign and verified before any update replaces them on disk.';
+  'Download LumaSync for macOS, Windows, or Linux — DMG, MSI, and AppImage installers signed with minisign and verified before any update replaces them on disk.';
 
 const schemas = [
   breadcrumbSchema([
@@ -122,7 +122,7 @@ const schemas = [
 ];
 ---
 
-<BaseLayout title="Download" description={downloadDescription} schemas={schemas}>
+<BaseLayout title="Download LumaSync" description={downloadDescription} schemas={schemas}>
   <section class="download">
     <header>
       <p class="eyebrow">Install</p>

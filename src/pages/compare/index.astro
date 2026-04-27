@@ -56,6 +56,14 @@ function oneLiner(slug: string): string {
         source is an HDMI device, if you own Lightpack hardware, if WLED is already in your home —
         we'll tell you to pick differently.
       </p>
+      <p class="sublede">
+        LumaSync sits at the intersection of USB LED controllers and Philips Hue streaming. This
+        guide positions it against the four most common ambilight alternatives: <strong
+          >Philips Hue Sync Box</strong
+        > (HDMI passthrough hardware), <strong>Hyperion</strong> (RPi-first stack),
+        <strong>WLED</strong> (ESP32 firmware), and <strong>Prismatik</strong> (legacy Lightpack driver).
+        Pick your starting point below.
+      </p>
     </header>
 
     <ul role="list" class="grid">
@@ -106,6 +114,18 @@ function oneLiner(slug: string): string {
     font-size: var(--fs-lg);
     line-height: var(--lh-relaxed);
     margin: 0;
+  }
+
+  .sublede {
+    color: var(--text-secondary);
+    font-size: var(--fs-base);
+    line-height: var(--lh-relaxed);
+    margin: 1rem 0 0;
+  }
+
+  .sublede strong {
+    color: var(--text-primary);
+    font-weight: 500;
   }
 
   .grid {
