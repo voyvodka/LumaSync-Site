@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CompareCTA from '../../components/CompareCTA.astro';
-import { breadcrumbSchema } from '../../lib/seo';
+import { articleSchema, breadcrumbSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const entries = await getCollection('compare');
@@ -16,6 +16,8 @@ const { entry } = Astro.props;
 const { slug } = Astro.params;
 const { Content } = await render(entry);
 
+const updatedISO = entry.data.updated.toISOString().slice(0, 10);
+
 const schemas = entry.data.draft
   ? []
   : [
@@ -24,6 +26,12 @@ const schemas = entry.data.draft
         { name: 'Compare', url: '/compare' },
         { name: `vs ${entry.data.competitor}`, url: `/compare/${slug}` },
       ]),
+      articleSchema({
+        title: entry.data.title,
+        description: entry.data.description,
+        url: `/compare/${slug}`,
+        dateModified: updatedISO,
+      }),
     ];
 ---
 
