@@ -96,6 +96,12 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   min-height: 100dvh;
   background: var(--surface-0);
