@@ -22,9 +22,11 @@ type Props = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const allDocs = await getCollection('docs');
-  const allCompare = await getCollection('compare');
-  const legal = await getCollection('legal');
+  const [allDocs, allCompare, legal] = await Promise.all([
+    getCollection('docs'),
+    getCollection('compare'),
+    getCollection('legal'),
+  ]);
 
   const publishable = <T extends { data: { draft?: boolean } }>(e: T) =>
     INCLUDES_DRAFTS || !e.data.draft;
