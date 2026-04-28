@@ -1,3 +1,3 @@
-## 2024-05-24 - Sequential I/O in Astro Server Routes
+## 2026-04-28 - Sequential I/O in Astro Server Routes
 
 **Learning:** Sequential `await` calls in data-fetching or build-time loops (like iterating over MDX entries and sequentially resolving `mdxBody`) can significantly slow down SSG (Static Site Generation) processes and dynamic endpoints. Even reading local files or calling `getCollection` sequentially aggregates the I/O cost. **Action:** When working with Astro routes or loops that need to parse multiple Markdown/MDX files, map entries to their promises and use `Promise.all` to fetch/resolve them concurrently before processing the results synchronously.
