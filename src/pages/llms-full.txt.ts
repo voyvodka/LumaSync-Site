@@ -20,9 +20,11 @@ const SITE_URL = 'https://lumasync.app';
 const INCLUDES_DRAFTS = import.meta.env.PUBLIC_SITE_STAGE === 'beta';
 
 export const GET: APIRoute = async () => {
-  const allDocs = await getCollection('docs');
-  const allCompare = await getCollection('compare');
-  const legal = await getCollection('legal');
+  const [allDocs, allCompare, legal] = await Promise.all([
+    getCollection('docs'),
+    getCollection('compare'),
+    getCollection('legal'),
+  ]);
 
   const docs = (INCLUDES_DRAFTS ? allDocs : allDocs.filter((e) => !e.data.draft)).sort((a, b) => {
     const ag = DOC_GROUPS.indexOf(a.data.group);
@@ -52,6 +54,17 @@ export const GET: APIRoute = async () => {
   }
   chunks.push('');
 
+  // Pre-fetch all MDX bodies in parallel
+  const [docsBodies, compareBodies, legalBodies] = await Promise.all([
+    Promise.all(docs.map((doc) => mdxBody('docs', doc.id))),
+    Promise.all(compare.map((c) => mdxBody('compare', c.id))),
+    Promise.all(legal.map((l) => mdxBody('legal', l.id))),
+  ]);
+
+  const docsBodyMap = new Map(docs.map((doc, i) => [doc.id, docsBodies[i]]));
+  const compareBodyMap = new Map(compare.map((c, i) => [c.id, compareBodies[i]]));
+  const legalBodyMap = new Map(legal.map((l, i) => [l.id, legalBodies[i]]));
+
   for (const group of DOC_GROUPS) {
     const groupDocs = docs.filter((d) => d.data.group === group);
     if (!groupDocs.length) continue;
@@ -66,7 +79,7 @@ export const GET: APIRoute = async () => {
       chunks.push(`> Source: ${SITE_URL}/docs/${slug}`);
       if (doc.data.draft) chunks.push('> Status: draft');
       chunks.push('');
-      chunks.push(await mdxBody('docs', doc.id));
+      chunks.push(docsBodyMap.get(doc.id)!);
       chunks.push('');
       chunks.push('---');
       chunks.push('');
@@ -85,7 +98,7 @@ export const GET: APIRoute = async () => {
       chunks.push(`> Source: ${SITE_URL}/compare/${slug}`);
       if (c.data.draft) chunks.push('> Status: draft');
       chunks.push('');
-      chunks.push(await mdxBody('compare', c.id));
+      chunks.push(compareBodyMap.get(c.id)!);
       chunks.push('');
       chunks.push('---');
       chunks.push('');
@@ -101,7 +114,7 @@ export const GET: APIRoute = async () => {
       chunks.push('');
       chunks.push(`> Source: ${SITE_URL}/${slug}`);
       chunks.push('');
-      chunks.push(await mdxBody('legal', l.id));
+      chunks.push(legalBodyMap.get(l.id)!);
       chunks.push('');
       chunks.push('---');
       chunks.push('');
