@@ -24,18 +24,18 @@ interface OgEntry {
   category: string;
 }
 
-// ─── Fonts ──────────────────────────────────────
+// ─── Fonts & Entry Sets ──────────────────────────────────────
 // Loaded once at module scope and reused for every page's generation.
+// Grouped into Promise.all to fetch them concurrently for performance.
 const fontRoot = resolve(process.cwd(), 'node_modules/@fontsource');
-const plexSans400 = await readFile(
-  `${fontRoot}/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff`,
-);
-const plexSans600 = await readFile(
-  `${fontRoot}/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff`,
-);
-const plexMono400 = await readFile(
-  `${fontRoot}/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff`,
-);
+
+const [plexSans400, plexSans600, plexMono400, rawDocs, compareEntries] = await Promise.all([
+  readFile(`${fontRoot}/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff`),
+  readFile(`${fontRoot}/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff`),
+  readFile(`${fontRoot}/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff`),
+  listDocs(),
+  getCollection('compare'),
+]);
 
 const fonts = [
   { name: 'IBM Plex Sans', data: plexSans400, weight: 400 as const, style: 'normal' as const },
@@ -44,7 +44,7 @@ const fonts = [
 ];
 
 // ─── Entry set ─────────────────────────────────
-const docs = (await listDocs()).map((e) => ({
+const docs = rawDocs.map((e) => ({
   id: `docs/${e.id.replace(/\.mdx$/, '')}`,
   entry: {
     title: e.data.title,
@@ -53,7 +53,6 @@ const docs = (await listDocs()).map((e) => ({
   },
 }));
 
-const compareEntries = await getCollection('compare');
 const compare = compareEntries.map((e) => ({
   id: `compare/${e.id.replace(/\.mdx$/, '')}`,
   entry: {
