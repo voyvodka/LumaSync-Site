@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.3] — 2026-04-30
+
+### Security
+
+- **JSON-LD script-breakout XSS**: in `src/components/Schema.astro`, the raw output of `JSON.stringify` is now post-processed with three replaces — `<` → `\u003c`, `>` → `\u003e`, `&` → `\u0026` — before being injected into the inline `<script type="application/ld+json">` tag, so a `</script>` substring inside any schema field can't break out of the script context. Also wrap `r.url` with the existing `escapeHtml` helper in `src/components/Search.astro` to block attribute injection on dynamically-rendered search-result links.
+
 ## [1.1.2] — 2026-04-30
 
 ### Performance
