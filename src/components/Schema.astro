@@ -3,8 +3,9 @@
 // can stack Organization + WebSite + page-specific schemas without
 // collapsing into an @graph wrapper (cleaner for validators).
 //
-// JSON.stringify is safe here — schema fields are built from build-time
-// data we control; no user-supplied strings pass through.
+// Escaping is required because schema fields (like title/description)
+// could contain HTML entities. Without escaping `<` and `>`,
+// an attacker could breakout of the script tag (e.g. </script>).
 interface Props {
   schemas: unknown[];
 }
@@ -14,6 +15,13 @@ const { schemas } = Astro.props;
 
 {
   schemas.map((schema) => (
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(schema)
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e')
+        .replace(/&/g, '\\u0026')}
+    />
   ))
 }
