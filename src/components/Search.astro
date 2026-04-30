@@ -108,7 +108,7 @@
       resultsEl.innerHTML = hits
         .map(
           (r, i) => `
-            <a class="search-result" href="${r.url}" data-index="${i}">
+            <a class="search-result" href="${escapeHtml(r.url)}" data-index="${i}">
               <span class="result-kicker">${escapeHtml(r.meta?.section || r.meta?.category || '')}</span>
               <span class="result-title">${escapeHtml(r.meta?.title || r.url)}</span>
               <span class="result-excerpt">${r.excerpt || ''}</span>
