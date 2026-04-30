@@ -4,6 +4,16 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.2] — 2026-04-30
+
+### Performance
+
+- **OG image I/O**: parallelized three font `readFile` calls and two content collection fetches in `src/pages/og/[...route].ts` into a single `Promise.all`, reducing module initialization time from the sum of all five I/O operations to the duration of the slowest one.
+
+### Security
+
+- **Security headers**: added `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` to the `public/_headers` catch-all rule.
+
 ## [1.1.1] — 2026-04-27
 
 ### Fixed
