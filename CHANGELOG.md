@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.4] — 2026-05-01
+
+### Accessibility
+
+- **Keyboard focus indicators**: added `:focus-visible` outline rules using the existing `var(--focus-ring)` design token to two interactive elements that previously rendered no visible focus state — the modal close button in `src/components/Search.astro` and the search CTA button in `src/pages/404.astro`. Keyboard navigation now surfaces focus on these controls consistently with the rest of the site.
+
 ## [1.1.3] — 2026-04-30
 
 ### Security
