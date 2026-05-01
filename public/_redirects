@@ -1,0 +1,10 @@
+# Cloudflare Pages Redirects file — edge-level 301s evaluated before
+# the trailing-slash 308 layer, so a single rule per path catches the
+# request directly (no double-hop).
+
+# /security is a common UX convention (GitHub, Stripe, Cloudflare all
+# expose it) but RFC 9116 standardizes the endpoint at
+# /.well-known/security.txt. Forward both shapes to the canonical one
+# so manual /security probes don't 404.
+/security   /.well-known/security.txt  301
+/security/  /.well-known/security.txt  301
