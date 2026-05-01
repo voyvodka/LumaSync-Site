@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.5] — 2026-05-01
+
+### SEO
+
+- **Per-URL sitemap `lastmod`**: added a `serialize` callback to `@astrojs/sitemap` that resolves each URL to its source file (page or content collection entry) and stamps `<lastmod>` from `git log -1 --format=%cI`. Routes without an obvious source mapping omit `<lastmod>` rather than emit a wrong build-date value, since Google deprioritizes `lastmod` sitewide when it detects untrustworthy values. Provides accurate per-URL freshness signals to help drain the GSC indexing queue for sub-pages.
+
 ## [1.1.4] — 2026-05-01
 
 ### Accessibility
