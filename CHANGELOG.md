@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.6] — 2026-05-01
+
+### Fixed
+
+- **`/security` URL alias**: added `public/_redirects` with single-hop 301 rules for `/security` and `/security/` pointing at the canonical `/.well-known/security.txt`. Closes the UX gap where bare `/security` probes (the convention exposed by GitHub, Stripe, Cloudflare) returned 404 even though the RFC 9116 endpoint was always live. Cloudflare Pages evaluates `_redirects` ahead of the trailing-slash 308 layer, so each rule catches the request directly without the double-hop a meta-refresh redirect would introduce.
+
 ## [1.1.5] — 2026-05-01
 
 ### SEO
