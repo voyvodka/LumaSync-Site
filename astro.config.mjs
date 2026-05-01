@@ -1,7 +1,65 @@
+import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+
+// Resolves a sitemap URL to its source file so we can stamp <lastmod>
+// from git history. Returns null when no obvious mapping exists — we'd
+// rather omit lastmod than emit a wrong one (Google deprioritizes
+// lastmod across the whole site when it detects untrustworthy values,
+// e.g. every URL stamped with the build date).
+function urlToSourceFile(url) {
+  const pathname = new URL(url).pathname;
+
+  const staticRoutes = {
+    '/': 'src/pages/index.astro',
+    '/changelog/': 'src/pages/changelog.astro',
+    '/community/': 'src/pages/community.astro',
+    '/compare/': 'src/pages/compare/index.astro',
+    '/docs/': 'src/pages/docs/index.astro',
+    '/download/': 'src/pages/download.astro',
+    '/license/': 'src/pages/license.astro',
+    '/privacy/': 'src/content/legal/privacy.mdx',
+  };
+  if (staticRoutes[pathname]) return staticRoutes[pathname];
+
+  const compareSlug = pathname.match(/^\/compare\/([^/]+)\/$/);
+  if (compareSlug) {
+    const f = `src/content/compare/${compareSlug[1]}.mdx`;
+    if (existsSync(f)) return f;
+  }
+
+  const docsGroup = pathname.match(/^\/docs\/([^/]+)\/$/);
+  if (docsGroup) return 'src/pages/docs/[group]/index.astro';
+
+  const docsEntry = pathname.match(/^\/docs\/([^/]+)\/([^/]+)\/$/);
+  if (docsEntry) {
+    const f = `src/content/docs/${docsEntry[1]}/${docsEntry[2]}.mdx`;
+    if (existsSync(f)) return f;
+  }
+
+  return null;
+}
+
+const gitMtimeCache = new Map();
+
+function gitLastmod(file) {
+  if (gitMtimeCache.has(file)) return gitMtimeCache.get(file);
+  let result = null;
+  try {
+    const out = execSync(`git log -1 --format=%cI -- "${file}"`, {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    if (out) result = out;
+  } catch {
+    // Shallow clone or non-git build env — fall through to null.
+  }
+  gitMtimeCache.set(file, result);
+  return result;
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -32,7 +90,19 @@ export default defineConfig({
     '/multi-monitor': '/docs/advanced/multi-display',
     '/compare-tools': '/compare',
   },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      serialize(item) {
+        const source = urlToSourceFile(item.url);
+        if (source) {
+          const lastmod = gitLastmod(source);
+          if (lastmod) item.lastmod = lastmod;
+        }
+        return item;
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
