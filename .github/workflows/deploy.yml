@@ -1,15 +1,19 @@
 name: deploy
 
-# Deploys the built Astro site to Cloudflare Pages on every push to
-# main. Manual dispatch available for forcing a redeploy from any commit.
+# Deploys the built Astro site to Cloudflare Pages whenever a GitHub
+# Release is published (every `gh release create vX.Y.Z` cuts a deploy)
+# or via manual dispatch for ad-hoc redeploys of any ref. Plain pushes
+# to main intentionally do NOT trigger deploys — only tagged releases
+# go live, so intermediate `chore(release)` / merge commits don't
+# generate Cloudflare deployment noise.
 #
 # Required repo secrets:
 #   - CLOUDFLARE_API_TOKEN  (Pages:Edit + Zone:Read)
 #   - CLOUDFLARE_ACCOUNT_ID
 
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
 
 concurrency:
