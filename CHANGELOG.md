@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.7] — 2026-05-02
+
+### Security
+
+- **Markdown→HTML XSS hardening**: the `/changelog/` page reads `vendor/lumasync/CHANGELOG.md` from the pinned submodule, parses it with `marked`, and injects the result via Astro's `set:html`. Because `marked` preserves inline raw HTML, an upstream payload (`<script>` / `onclick=` etc.) would have rendered verbatim into the deployed page. The parsed HTML now passes through `DOMPurify.sanitize()` (via `isomorphic-dompurify` for SSR) before being assigned, so unsafe tags and attributes are stripped at build time. Defends against a supply-chain compromise of the vendor changelog content path.
+
 ## [1.1.6] — 2026-05-01
 
 ### Fixed
