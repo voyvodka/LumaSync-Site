@@ -2,6 +2,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { marked } from 'marked';
+import DOMPurify from 'isomorphic-dompurify';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 // Sourced from vendor/lumasync/CHANGELOG.md at the pinned submodule ref.
@@ -27,7 +28,10 @@ try {
   // Strip the leading "# Changelog" heading — the page header renders
   // an h1 already, and we want the first version section to lead the body.
   const normalised = raw.replace(/^#\s+Changelog\s*$/m, '');
-  html = await marked.parse(normalised);
+  // Parse to HTML then sanitize to prevent XSS via malformed CHANGELOG.md
+  // DOMPurify strips unsafe tags/attributes like <script> or onclick=
+  const parsed = await marked.parse(normalised);
+  html = DOMPurify.sanitize(parsed);
 } catch {
   html = null;
 }
