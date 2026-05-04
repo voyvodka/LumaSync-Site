@@ -1,4 +1,5 @@
 ---
+import DOMPurify from 'isomorphic-dompurify';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../lib/seo';
 
@@ -115,7 +116,7 @@ const schemas = [
           triage.map((item) => (
             <>
               <dt>{item.q}</dt>
-              <dd set:html={item.a} />
+              <dd set:html={DOMPurify.sanitize(item.a)} />
             </>
           ))
         }
