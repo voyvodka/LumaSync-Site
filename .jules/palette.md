@@ -11,9 +11,9 @@
 **Learning:** When adding keyboard navigation and focus rings to elements dynamically injected into the DOM via client-side JavaScript (like Pagefind `.search-result` links), Astro's scoped CSS will ignore them unless the `:global()` modifier is applied. **Action:** Always wrap selectors for client-side injected elements in `:global()` (e.g., `:global(.search-result:focus-visible)`) to ensure the focus ring styling takes effect for keyboard users navigating the results.
 
 ## 2026-05-05 - Native Tooltips on Icon-Only Buttons
-**Learning:** While `aria-label` is great for screen readers, visual users of icon-only buttons (like a magnifying glass for search or a hamburger menu) may still be confused about their exact function if there is no text.
-**Action:** When adding or auditing icon-only buttons, always ensure they have a native `title` attribute matching the `aria-label` to provide a native browser tooltip for visual users on hover.
+
+**Learning:** While `aria-label` is great for screen readers, visual users of icon-only buttons (like a magnifying glass for search or a hamburger menu) may still be confused about their exact function if there is no text. **Action:** When adding or auditing icon-only buttons, always ensure they have a native `title` attribute matching the `aria-label` to provide a native browser tooltip for visual users on hover.
 
 ## 2026-05-05 - Tactile Click Feedback on Interactive Elements
-**Learning:** Adding a subtle scale-down effect on the `:active` state of interactive elements like buttons gives users immediate tactile feedback that their click was registered, improving the perceived responsiveness of the application.
-**Action:** Use `.element:active { transform: scale(0.96); }` (combined with an appropriate `transition`) on buttons to provide tactile feedback, but **always** wrap it in `@media (prefers-reduced-motion: no-preference)` to respect accessibility settings.
+
+**Learning:** Adding a subtle scale-down effect on the `:active` state of interactive elements like buttons gives users immediate tactile feedback that their click was registered, improving the perceived responsiveness of the application. **Action:** Use `.element:active { transform: scale(0.96); }` (combined with an appropriate `transition`) on buttons to provide tactile feedback, but **always** wrap it in `@media (prefers-reduced-motion: no-preference)` to respect accessibility settings.
