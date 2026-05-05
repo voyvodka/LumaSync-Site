@@ -3,17 +3,18 @@ title: Install
 description: Install LumaSync on macOS, Windows, or Linux. Binaries are signed with minisign and verified automatically before updates.
 group: getting-started
 order: 10
-updated: 2026-04-27
+updated: 2026-05-05
 ---
 
 import { LATEST_VERSION_BARE } from '../../../lib/version';
 
 ## System requirements
 
-- **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE). For Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`.
+- **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE, XFCE). On Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`; the AppImage bundles X11 capture deps (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
 - **At least one supported hardware target**, otherwise the app runs but nothing lights up:
   - A **Philips Hue Bridge** (gen 2 or newer) with one or more Entertainment Areas configured in the Hue app, **or**
-  - A **WS2812B LED strip** driven by a **CH340** (`1A86:7523`) or **FTDI FT232** (`0403:6001`) USB-serial controller running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol).
+  - A **WS2812B / SK6812 RGBW LED strip** driven by a supported USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol) or the opt-in Adalight profile, **or**
+  - An **ESP32 / ESP8266 board running WLED firmware** on the same LAN as the host machine — see the [WLED bridge](/docs/usb-leds/wled) page.
 - See [Hardware checklist](/docs/getting-started/hardware-checklist) for a parts list if you're starting from scratch.
 
 ## macOS
@@ -22,24 +23,29 @@ Download the universal `.dmg` from the [Download page](/download) or the latest 
 
 1. Open the `.dmg` and drag **LumaSync.app** into **Applications**.
 2. On first launch, macOS asks for **Screen Recording** permission so the ambilight pipeline can sample your display. Grant it — without it the ambient mode has nothing to read from.
-3. LumaSync starts hidden to the tray; click the menu-bar icon to open the main window.
+3. LumaSync starts hidden to the tray; click the menu-bar icon to open the main window. Cmd+Q from anywhere shuts the app down cleanly via the watchdog-bounded shutdown path; closing the window only hides it to the tray.
 
 ## Windows
 
-Download the **`.msi`** installer from the [Download page](/download). It signs you into a typical "Next, Next, Finish" dialog and installs to `C:\Program Files\LumaSync\`.
+Download the signed **`.msi`** installer from the [Download page](/download). It runs a typical "Next, Next, Finish" dialog and installs to `C:\Program Files\LumaSync\`. From v1.5.1 every release ships the MSI alongside the macOS DMG and Linux packages — no more platform gaps between releases.
 
-The MSI is preferred over the `.exe` setup for enterprise and audit tracking. Both are signed with the same keypair; either works for home use.
+## Linux
 
-## Linux (experimental)
-
-Use the `.AppImage` from the [Download page](/download). Mark it executable and run:
+Three packages ship every release: `.AppImage` (distro-agnostic), `.deb` (Debian / Ubuntu), and `.rpm` (Fedora / openSUSE). Pick whichever your distro prefers.
 
 ```bash
+# AppImage
 chmod +x LumaSync_{LATEST_VERSION_BARE}_amd64.AppImage
 ./LumaSync_{LATEST_VERSION_BARE}_amd64.AppImage
+
+# Debian / Ubuntu
+sudo apt install ./lumasync_{LATEST_VERSION_BARE}_amd64.deb
+
+# Fedora / openSUSE
+sudo rpm -i lumasync-{LATEST_VERSION_BARE}.x86_64.rpm
 ```
 
-Tray behavior varies by desktop environment — GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma works out of the box. A Flathub package is in progress and will be the recommended path once it lands.
+Screen capture uses **xcap** for native X11 sampling — Wayland sessions need the X11 fallback (XWayland) for now. Tray behaviour varies by desktop environment: GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma and XFCE work out of the box. A Flathub package is in progress and will be the recommended path once it lands.
 
 ## Verification
 

@@ -1,9 +1,9 @@
 ---
 title: Auto-updater
-description: How LumaSync checks for new releases, verifies them with minisign, and replaces the binary without you thinking about it.
+description: How LumaSync checks for new releases, verifies them with minisign, and replaces the binary without you thinking about it. Stable and beta channels.
 group: advanced
 order: 20
-updated: 2026-04-23
+updated: 2026-05-05
 ---
 
 import { LATEST_VERSION, LATEST_VERSION_BARE } from '../../../lib/version';
@@ -70,6 +70,15 @@ minisign -Vm LumaSync_{LATEST_VERSION_BARE}_universal.dmg -P "$(cat minisign.pub
 ```
 
 Exit code 0 means the signature verifies. Anything else, don't install.
+
+## Update channels
+
+From v1.5.0, LumaSync exposes a **channel** selector (Settings → Updates → **Update channel**) with two values:
+
+- **Stable** (default) — points at `latest.json` and only sees tagged stable releases (`vX.Y.Z`).
+- **Beta** — points at a separate `latest-beta.json` endpoint that publishes pre-release builds for opted-in users. Beta builds are tagged with the standard semver plus a `-beta.N` suffix and ship between stable releases when there's something worth a wider test pass.
+
+The channel value persists in the `updateChannel` shell-state field, so the selection survives across restarts and migrates cleanly if you switch back. Switching to **Stable** when running a beta build does _not_ immediately downgrade — the next stable release that supersedes the running beta version triggers the swap, so there's no abrupt rollback. Most users should stay on Stable; the Beta channel exists so the project can put a release in front of motivated testers without forcing it on everyone.
 
 ## When the updater skips
 

@@ -1,0 +1,82 @@
+---
+title: WLED bridge
+description: Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol. Auto-discovery over mDNS, manual IP fallback, IP guard, and led_count validation.
+group: usb-leds
+order: 50
+updated: 2026-05-05
+---
+
+From v1.5.0, LumaSync drives ESP32 / ESP8266 boards running [WLED firmware](https://kno.wled.ge/) over Wi-Fi as a first-class output target alongside USB strips and Philips Hue. The wire protocol is **DDP** (Distributed Display Protocol) over UDP — a thin per-frame format that WLED understands natively, no firmware modifications needed.
+
+## When to use WLED instead of (or alongside) USB
+
+- The strip is too far from the host machine to wire over USB — typical for ceiling coves, hallway runs, or strips behind a TV in a room without a desktop.
+- You already own ESP-based controllers from the WLED ecosystem and don't want to buy CH340 / FTDI USB-serial adapters.
+- You want LumaSync's screen-driven ambilight without committing the host machine to a permanent USB tether.
+
+You can drive **WLED and USB simultaneously** — the chip-type selector and per-LED sampling apply to each sink independently. Running WLED _and_ Hue zones from the same screen capture is also fully supported.
+
+## Hardware requirements
+
+- An **ESP32** (preferred), **ESP8266**, **ESP32-S2**, or **ESP32-C3** board flashed with current WLED firmware. WLED's [board list](https://kno.wled.ge/basics/compatible-hardware/) covers what works.
+- The board joined to the **same LAN** as the host machine. Wi-Fi 5 GHz or wired uplinks reduce jitter on busier networks; 2.4 GHz works but you'll see occasional frame drops on a congested band.
+- WLED's own configuration done first: strip type, LED count, GPIO pin, power budget — all live in the WLED web UI, not in LumaSync. LumaSync only streams DDP frames in.
+
+## Setup
+
+### 1 · Discovery
+
+Open Settings → **Device** → **WLED**.
+
+LumaSync auto-discovers WLED boards on the LAN over mDNS by browsing `_wled._tcp.local.`. Discovered boards appear in the picker with their hostname, IP, and the LED count WLED reports. Click one to select.
+
+If mDNS is blocked on your network (some enterprise / hotel Wi-Fi setups, or if WLED's mDNS responder is disabled), use the **manual IP** field instead. Paste the WLED board's IPv4 address — leave blank fields for IPv6 or hostname-only entries.
+
+### 2 · IP validation
+
+Before any connect attempt, the IP is validated host-side. Inputs that resolve to any of the following are rejected with `WLED_INVALID_IP`:
+
+- **Loopback** (`127.0.0.0/8`) — wouldn't drive a real strip anyway.
+- **Unspecified** (`0.0.0.0`) — placeholder for "any interface", invalid as a destination.
+- **Multicast** (`224.0.0.0/4`) — would deliver frames to every subscriber on the segment.
+- **Broadcast** (`255.255.255.255`) — same problem at the link layer.
+
+This sits on top of the v1.5.1 parser-level SSRF guard that rejected unparseable inputs. The combined effect is that frames are only ever sent to a single, routable LAN address.
+
+### 3 · Connect
+
+Click **Connect**. LumaSync queries the WLED `/json/info` endpoint to confirm the board is responsive and reads back the strip layout (LED count, segment configuration). Boards that reply with `led_count == 0` are rejected with `WLED_INVALID_LED_COUNT` — there's nothing to drive on a zero-length strip, and proceeding silently would leave the pipeline in an inconsistent state.
+
+### 4 · Test
+
+Click **Test**. LumaSync pushes a brief solid-colour pattern over DDP and reports the **round-trip in milliseconds** (`WledTestResponse`) in the picker. If you see a real number, the path is open and ready for Ambilight mode. If you see a timeout, check the network reachability section below.
+
+## How DDP frames are sent
+
+The encoder emits DDP packets over UDP to the board's port (4048 by default in WLED). Each packet carries a chunk of the LED buffer; large strips are split across multiple packets per frame. The host-side encoder applies the same gamma + Kelvin + saturation chain as the USB and Hue paths so all three sinks stay visually consistent — there's no separate WLED-only colour pipeline.
+
+UDP is intentionally connectionless: dropped packets aren't retransmitted. On a healthy LAN this is invisible; on a congested 2.4 GHz radio you may see occasional brief hitches.
+
+## Network reachability checklist
+
+If discovery / connect / test fail:
+
+1. **Same subnet** — host and board must share an L2 segment for mDNS to work. VLANs and guest-network isolation block mDNS.
+2. **WLED mDNS enabled** — WLED's Sync Setup page has an mDNS toggle; some bare-bones builds ship with it off.
+3. **Firewall** — host firewalls (macOS Firewall, Windows Defender, Linux ufw) sometimes block outbound UDP to the WLED port. Add a rule for the DDP port if necessary.
+4. **Manual IP** — if mDNS is broken at the network level, paste the IP directly. The board's IP is visible in the WLED web UI under the WiFi page.
+
+## Why DDP and not WLED's other protocols
+
+WLED supports several real-time protocols (DDP, E1.31, Art-Net, TPM2). LumaSync uses DDP for three reasons:
+
+- **Lowest framing overhead** of the four — fewer bytes per frame means less Wi-Fi airtime.
+- **No DMX universe accounting** — Art-Net and E1.31 inherit a 512-channel-per-universe model that doesn't compose well with arbitrary LED counts.
+- **WLED's own preferred path** — DDP is the protocol the WLED maintainers point at first for high-FPS streaming use cases.
+
+## Related
+
+- [Hardware checklist](/docs/getting-started/hardware-checklist) — picking ESP boards
+- [USB controllers](/docs/usb-leds/controllers) — the wired alternative
+- [LED calibration](/docs/usb-leds/calibration) — same room map drives both
+- [WLED comparison](/compare/wled) — when WLED-on-its-own is the right answer

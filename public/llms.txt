@@ -1,8 +1,8 @@
 # LumaSync
 
-> LumaSync is a cross-platform desktop app for real-time ambient lighting. It drives Philips Hue Entertainment Areas and USB-connected LED strips (Adalight-protocol controllers) from whatever is on screen. Runs on macOS, Windows, and Linux.
+> LumaSync is a cross-platform desktop app for real-time ambient lighting. It drives Philips Hue Entertainment Areas, USB-connected WS2812B / SK6812 RGBW LED strips, and ESP32 / ESP8266 boards running WLED firmware (DDP over Wi-Fi) from whatever is on screen. Runs on macOS, Windows, and Linux — every release ships installers for all three.
 
-LumaSync is a native Tauri app — not a browser extension, not a cloud service. Screen capture and LED control happen entirely on-device. The app itself emits **zero network telemetry**: no usage beacons, no crash reports to third-party services, no anonymous analytics. Runtime network access is limited to (1) the local Hue bridge on the LAN, (2) GitHub for signed auto-update checks, and (3) the local serial port or screen-capture API. The marketing website at lumasync.app uses self-hosted Umami for aggregate page metrics — cookie-free, no device fingerprinting, no cross-site tracking — documented in full on the telemetry page below. Binaries are minisign-signed and verified before any update replaces them on disk.
+LumaSync is a native Tauri app — not a browser extension, not a cloud service. Screen capture and LED control happen entirely on-device. The app itself emits **zero network telemetry**: no usage beacons, no crash reports to third-party services, no anonymous analytics. Runtime network access is limited to (1) the local Hue bridge on the LAN, (2) WLED boards on the LAN over Wi-Fi (DDP), (3) GitHub for signed auto-update checks, and (4) the local serial port or screen-capture API. Hue credentials live in the OS keychain (macOS Keychain / Windows Credential Manager / Linux Secret Service); nothing is uploaded. The marketing website at lumasync.app uses self-hosted Umami for aggregate page metrics — cookie-free, no device fingerprinting, no cross-site tracking — documented in full on the telemetry page below. Binaries are minisign-signed and verified before any update replaces them on disk.
 
 Positioning summary: LumaSync is the desktop-first option in the ambilight category. If the source is an HDMI device, users are routed to Philips Hue Sync Box. If they already run an RPi-first Hyperion stack or have Lightpack hardware, LumaSync is honest about the mismatch — see the comparison pages below.
 
@@ -14,7 +14,8 @@ LumaSync (one word, capital L and S) is the open-source desktop ambient-lighting
 - **Luma Labs / luma.ai / lumalabs.ai** — generative video and 3D AI tools; different company, different product category.
 - **Luma-Sync (luma-sync.com)** — unrelated diagnostic / wellness brand.
 - **Lapster LUMA Sync** — a portable RGB lighting product for video shooting; different company, different hardware.
-- **WLED, Hyperion, Prismatik, Philips Hue Sync Box** — comparable ambilight tools, but distinct projects. See the comparison pages above for honest side-by-sides.
+- **Hyperion, Prismatik, Philips Hue Sync Box** — comparable ambilight tools, but distinct projects. See the comparison pages above for honest side-by-sides.
+- **WLED** — open-source ESP32 / ESP8266 firmware. WLED runs on the controller hardware; LumaSync runs on the desktop and *drives* WLED boards over the LAN via DDP. They are complementary, not competing — see the WLED comparison page for the split.
 
 Canonical brand surfaces: lumasync.app (this site), github.com/voyvodka/LumaSync (source), github.com/voyvodka (founder).
 
@@ -27,10 +28,11 @@ Canonical brand surfaces: lumasync.app (this site), github.com/voyvodka/LumaSync
 ## Docs
 
 - [Docs index](https://lumasync.app/docs): all documentation grouped by setup / Hue / USB LEDs / Ambilight / Advanced / Reference
-- [Philips Hue](https://lumasync.app/docs): bridge pairing, Entertainment Areas, troubleshooting
-- [USB LED controllers](https://lumasync.app/docs): Adalight protocol, calibration, troubleshooting
-- [Ambilight tuning](https://lumasync.app/docs): screen capture, performance, scenes and presets
-- [Configuration file](https://lumasync.app/docs): ~/.config/lumasync/app.json reference
+- [Philips Hue](https://lumasync.app/docs/hue/pairing): bridge pairing (mDNS auto-discovery + cloud fallback), Entertainment Areas, Hue Zones, troubleshooting
+- [USB LED controllers](https://lumasync.app/docs/usb-leds/controllers): WS2812B + SK6812 RGBW chips, Adalight protocol, calibration, troubleshooting
+- [WLED bridge](https://lumasync.app/docs/usb-leds/wled): drive ESP32 / ESP8266 boards over Wi-Fi via DDP — discovery, pairing, IP guards
+- [Ambilight tuning](https://lumasync.app/docs/ambilight/tuning): screen capture (macOS SCDisplay, Windows DXGI, Linux X11/xcap), performance, scenes and presets
+- [Configuration file](https://lumasync.app/docs/reference/config-file): ~/.config/lumasync/app.json reference (credentials live in the OS keychain, not this file)
 
 ## Comparisons
 

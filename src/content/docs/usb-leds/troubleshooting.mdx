@@ -3,17 +3,28 @@ title: USB troubleshooting
 description: Common USB LED failure modes — port missing, health check fails, LEDs flicker, colours wrong, strip partially lit — and the fix for each.
 group: usb-leds
 order: 40
-updated: 2026-04-23
+updated: 2026-05-05
 ---
 
 ## Port doesn't show up
 
 **Symptom**: Plug in the controller, Settings → Device → dropdown is empty.
 
-1. **Driver not installed** — CH340 on Windows sometimes needs a manual driver from WCH's website. Install, reboot, check again.
+1. **Driver not installed** — CH340 / CH341 on Windows sometimes need a manual driver from WCH's website. Install, reboot, check again.
 2. **Linux permissions** — your user may not be in the `dialout` group: `sudo usermod -aG dialout $USER`, log out, log back in.
 3. **Cable is charge-only** — cheap USB-A cables without data lines enumerate no device. Try a known-good data cable.
 4. **Unsupported chipset** — if the device enumerates but LumaSync doesn't recognise it, see [USB controllers → "My controller isn't on the list"](/docs/usb-leds/controllers#my-controller-isnt-on-the-list).
+
+## `PORT_UNSUPPORTED` on connect
+
+**Symptom**: You select a port, click Connect, and get `PORT_UNSUPPORTED` instead of opening.
+
+From v1.5.2, LumaSync rejects non-USB serial endpoints up-front rather than letting the OS open them and silently swallowing writes. Common offenders:
+
+- `/dev/cu.Bluetooth-Incoming-Port` and other Bluetooth virtual ports on macOS — they enumerate as serial but don't go anywhere.
+- Motherboard / PCI / Unknown-class serial ports listed by the OS but not actually connected to a USB endpoint.
+
+The fix is straightforward: pick the actual USB controller from the dropdown. The auto-detected list is filtered to USB endpoints only, so this error only appears when you've manually pasted a non-USB path.
 
 ## Health check fails
 

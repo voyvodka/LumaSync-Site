@@ -3,7 +3,7 @@ title: LED calibration
 description: Tell LumaSync how many LEDs are on each edge of your TV, where they start, and which direction they run — the layout editor and room map walkthrough.
 group: usb-leds
 order: 30
-updated: 2026-04-27
+updated: 2026-05-05
 ---
 
 import { LATEST_VERSION } from '../../../lib/version';
@@ -27,7 +27,7 @@ Tell LumaSync how many LEDs are on each edge of your screen:
 - **Bottom**
 - **Left**
 
-Counts are exclusive — a corner LED belongs to exactly one edge per the "corner ownership" setting below.
+Counts are exclusive — a corner LED belongs to exactly one edge per the "corner ownership" setting below. From v1.5.2 each edge field accepts **direct numeric keyboard input** alongside the stepper buttons; the same applies to the stand-gap field if your strip skips LEDs at the start (e.g. cable run into a control box).
 
 ### Corner ownership
 
@@ -68,7 +68,11 @@ If any of those fails, tweak the setting and check again. The test pattern strea
 
 For richer setups — multiple USB strips, furniture blocking parts of the TV, or projecting Hue channels onto the physical space — LumaSync ships a **Room map editor** (Settings → Calibration → Open room map).
 
-Drag a **TV anchor** into position, add **USB strip** objects with your calibrated edge counts, and drop furniture (table, couch, bookshelf) for reference. Hue channel positions from your Entertainment Area project onto the same canvas, and you can fine-tune them per-bulb without touching the Hue app.
+Drag a **TV anchor** into position, add **USB strip** objects with your calibrated edge counts, and drop furniture (table, couch, bookshelf) for reference. Hue channel positions from your Entertainment Area project onto the same canvas, and you can fine-tune them per-bulb without touching the Hue app. From v1.5.2 the editor uses the amber Rev 07 design tokens with a 32 px minimum tap-target floor throughout the dock and toolbar; pan / zoom / drag interactions no longer thrash the canvas event listeners between frames.
+
+### Hue Zones
+
+From v1.5.0, Hue channels can be grouped into **Zones** — logical regions on the room map with zone-relative coordinates and an aspect-ratio-locked size slider. The full guide lives on the [Entertainment Area](/docs/hue/entertainment-area) page.
 
 Shortcuts ({LATEST_VERSION}):
 

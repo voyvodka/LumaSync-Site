@@ -3,19 +3,19 @@ title: Keyboard shortcuts
 description: Keyboard shortcuts for LumaSync — global commands, mode switcher, room map editor 50-step undo/redo and object tools, plus the tray context menu entries.
 group: reference
 order: 10
-updated: 2026-04-27
+updated: 2026-05-05
 ---
 
 import { LATEST_VERSION } from '../../../lib/version';
 
 ## Global shortcuts (app-wide)
 
-| Shortcut          | Action                                     |
-| ----------------- | ------------------------------------------ |
-| `Cmd+,` / `Alt+,` | Open Settings                              |
-| `Cmd/Ctrl + /`    | Toggle compact ↔ full mode                 |
-| `Cmd/Ctrl + W`    | Hide window to tray (window stays running) |
-| `Cmd/Ctrl + Q`    | Quit LumaSync (kills the tray)             |
+| Shortcut | Action |
+| --- | --- |
+| `Cmd+,` / `Alt+,` | Open Settings |
+| `Cmd/Ctrl + /` | Toggle compact ↔ full mode |
+| `Cmd/Ctrl + W` | Hide window to tray (window stays running; v1.5.2 fires a one-shot OS notification the first time so you know the app is still alive) |
+| `Cmd/Ctrl + Q` | Quit LumaSync (kills the tray; v1.5.2 unifies Cmd+Q, tray Quit, and Ctrl+C onto a single watchdog-bounded shutdown path) |
 
 On macOS the `Cmd` modifier; on Windows / Linux `Ctrl`. The Settings shortcut is `Cmd+,` on macOS and `Alt+,` on Windows / Linux.
 
@@ -31,6 +31,10 @@ From {LATEST_VERSION}, the global shortcuts use **TR-layout-safe key resolution*
 | `↑` / `↓` (Solid mode only) | Brightness ± 5% |
 
 On macOS use the `Cmd` modifier; on Windows / Linux use `Alt`. Same input-focus guard as the global shortcuts — mode switching is blocked while you're typing in a field.
+
+## Compact-mode deep links
+
+From v1.5.2, deep-linking into a non-LIGHTS section while the app is in compact mode (`320×480`) **auto-expands** the window to full mode (`900×620`) so the target panel actually fits. The Settings shortcut (`Cmd+,` / `Alt+,`), the tray menu's **Open Settings** entry, and any URL-style deep link land you on the requested section in full mode rather than a clipped compact view.
 
 ## Room map editor
 

@@ -3,7 +3,7 @@ title: Hue troubleshooting
 description: Common Philips Hue failure modes and how to fix them — discovery, pairing, streaming latency, credentials expiry, bulbs not responding.
 group: hue
 order: 30
-updated: 2026-04-21
+updated: 2026-05-05
 ---
 
 Most Hue issues fall into one of five buckets. This page is organised stage-by-stage so you can jump to where you are stuck.
@@ -44,6 +44,14 @@ Cause: no area has been created in the Hue app yet. Follow [Entertainment Area c
 - **UDP 2100 blocked**. Hue Entertainment uses DTLS over UDP 2100 from client to bridge. Some routers / firewalls block outbound UDP. Fix: open UDP 2100 outbound on the machine running LumaSync.
 - **Entertainment Area conflict**. Another app is already streaming to the same area. The bridge only allows one streamer per area at a time. Fix: close the other app (Hue Sync Box apps are the usual culprit).
 - **Credentials rotated**. The bridge occasionally cycles credentials after firmware updates. LumaSync surfaces a **Repair Hue credentials** banner; click it and re-run steps 2–4 of pairing.
+
+## `HUE_STREAM_NOT_READY_ACTIVE_STREAMER` (retired in v1.5.2)
+
+**Symptom (pre-v1.5.2)**: Stop streaming, immediately try to start again, the bridge replies 403 with "active streamer". Required ~10 s of waiting before the bridge cleared its session slot.
+
+From v1.5.2, LumaSync emits an explicit DTLS `close_notify` alert before dropping the socket and dedupes foreground / background deactivate calls through a single-shot atomic token. The bridge clears its "active streamer" slot immediately on stop, so back-to-back stop / start is now reliable on the same session. The 1 s defensive sleep that was the previous workaround has been removed.
+
+If you still see this on v1.5.2+, another client is genuinely holding the slot — typically the Hue app's own play screen, a Hue Sync Box app, or a third-party Entertainment client. Stop streaming there first.
 
 ## Bulbs respond but look "laggy"
 

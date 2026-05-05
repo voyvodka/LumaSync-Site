@@ -1,54 +1,69 @@
 ---
 title: USB controllers
-description: The two USB-to-serial chipsets LumaSync recognises out of the box, how to identify what you have, and what kits ship with them.
+description: The USB-to-serial chipsets LumaSync recognises out of the box, supported strip chip types (WS2812B / SK6812 RGBW), how to identify what you have, and what kits ship with them.
 group: usb-leds
 order: 10
-updated: 2026-04-27
+updated: 2026-05-05
 ---
 
-LumaSync's USB LED path drives a WS2812B strip through a USB-to-serial controller, streaming frames at 115200 baud using the [LumaSync v1 serial frame format](/docs/usb-leds/serial-protocol) — not Adalight. An **opt-in Adalight profile** shipped in v1.4; flip **Settings → Device → Firmware profile** to **Adalight** to keep existing Adalight controllers running unchanged.
+LumaSync's USB LED path drives a WS2812B (RGB) or SK6812 RGBW strip through a USB-to-serial controller, streaming frames at 115200 baud using the [LumaSync v1 serial frame format](/docs/usb-leds/serial-protocol) — not Adalight. An **opt-in Adalight profile** shipped in v1.4; flip **Settings → Device → Firmware profile** to **Adalight** to keep existing Adalight controllers running unchanged.
 
-## Supported chipsets — CH340 and FT232
+## Supported chipsets
 
-Two USB-to-serial chipsets are supported out of the box:
+Six USB-to-serial chipsets are auto-detected from v1.5.0 onwards:
 
 | Chip | USB VID:PID | Where you'll find it |
 | --- | --- | --- |
-| **CH340** | `1A86:7523` | Most cheap Arduino-clone ambilight kits; "ambilight USB kit" on the usual marketplaces |
-| **FTDI FT232** | `0403:6001` | Higher-end kits, DIY boards using genuine FTDI |
+| **CH340** | `1A86:7523` | Most cheap Arduino-clone ambilight kits; "ambilight USB kit" on the usual marketplaces. |
+| **CH341** | `1A86:5523` | CH340's sibling; some module vendors label them interchangeably. |
+| **FTDI FT232R** | `0403:6001` | Higher-end kits, DIY boards using genuine FTDI. |
+| **FTDI FT232H** | `0403:6014` | High-speed FTDI variant; behaves identically to FT232R at 115200 baud. |
+| **Prolific PL2303** | `067B:2303` | Common on legacy Arduino-clone boards. |
+| **Silicon Labs CP2104** | `10C4:EA60` | Compact, low-power, frequently shipped on ESP32 dev kits when the ESP isn't routing serial directly. |
 
-LumaSync scans the OS's serial port list and matches against these IDs. If your controller reports a different VID:PID, the **Device** panel flags it `manual_required` — you can still connect it by pointing at the port explicitly, but LumaSync won't auto-detect.
+LumaSync scans the OS's serial port list, matches against these VID:PIDs, and rejects anything that isn't a USB-class endpoint up-front (`PORT_UNSUPPORTED`) — so Bluetooth virtual ports like `/dev/cu.Bluetooth-Incoming-Port` on macOS, PCI / motherboard serial, and "Unknown"-classed ports are filtered out before they can be opened. If your controller reports a different USB VID:PID, the **Device** panel flags it `manual_required` — you can still connect it by pointing at the port explicitly.
+
+## Strip chip type — WS2812B vs SK6812 RGBW
+
+Each connected USB controller has a **chip type** selector under **Settings → Device → Strip chip**:
+
+- **WS2812B** (RGB, 24 bits per pixel) — the default for the vast majority of ambilight kits. Three bytes per LED on the wire.
+- **SK6812 RGBW** (RGB + dedicated white, 32 bits per pixel) — adds a true-white channel. LumaSync's host-side encoder derives W with the standard `W = min(R, G, B)` extraction so RGB stays accurate while the white LED carries the achromatic component. Four bytes per LED on the wire.
+
+The selection is persisted per controller, so a WS2812B strip on one port and an SK6812 RGBW strip on another both work simultaneously.
 
 ## How to check what you have
 
 ### macOS
 
 ```bash
-ioreg -p IOUSB -l -w 0 | grep -iE 'idVendor|idProduct|CH340|FT232'
+ioreg -p IOUSB -l -w 0 | grep -iE 'idVendor|idProduct|CH34|FT232|PL2303|CP210'
 ```
 
-Look for `0x1a86` (CH340) or `0x0403` (FTDI) in the vendor field.
+Look for `0x1a86` (WCH / CH340 / CH341), `0x0403` (FTDI), `0x067b` (Prolific), or `0x10c4` (Silicon Labs) in the vendor field.
 
 ### Windows
 
 **Device Manager** → **Ports (COM & LPT)** — the device name usually spells out the chipset:
 
 - "USB-SERIAL CH340 (COM3)" → CH340
-- "USB Serial Port (COM4)" → FTDI, confirm by clicking Properties → Details → Hardware IDs, should show `VID_0403&PID_6001`.
+- "USB Serial Port (COM4)" → FTDI; Properties → Details → Hardware IDs shows `VID_0403&PID_6001` or `VID_0403&PID_6014`.
+- "Prolific USB-to-Serial Comm Port" → PL2303
+- "Silicon Labs CP210x USB to UART Bridge" → CP2104
 
 ### Linux
 
 ```bash
-lsusb | grep -iE '1a86|0403'
+lsusb | grep -iE '1a86|0403|067b|10c4'
 ```
 
-And the serial port is typically `/dev/ttyUSB0` for both chipsets once the kernel driver loads (`ch341` for CH340, `ftdi_sio` for FTDI).
+And the serial port is typically `/dev/ttyUSB0` once the kernel driver loads (`ch341` for CH340 / CH341, `ftdi_sio` for FTDI, `pl2303` for Prolific, `cp210x` for Silicon Labs).
 
 ## Drivers
 
-- **macOS 13+**: both chipsets work with bundled drivers. No third-party install needed.
-- **Windows 10/11**: CH340 drivers sometimes need a manual install from WCH's website (search "CH340 driver"). FTDI chips install automatically through Windows Update.
-- **Linux**: kernel ships both drivers since forever. If `/dev/ttyUSB0` doesn't appear, your user probably isn't in the `dialout` group: `sudo usermod -aG dialout $USER` then log out and back in.
+- **macOS 13+**: all six chipsets work with bundled drivers. No third-party install needed.
+- **Windows 10/11**: CH340 / CH341 drivers sometimes need a manual install from WCH's website (search "CH340 driver"). FTDI, Prolific, and Silicon Labs drivers install automatically through Windows Update.
+- **Linux**: kernel ships all four drivers (`ch341`, `ftdi_sio`, `pl2303`, `cp210x`) since forever. If `/dev/ttyUSB0` doesn't appear, your user probably isn't in the `dialout` group: `sudo usermod -aG dialout $USER` then log out and back in.
 
 ## Firmware on the controller
 
@@ -60,16 +75,17 @@ The controller needs to run **LumaSync v1 firmware at 115200 baud** — see [Ser
 
 ## "My controller isn't on the list"
 
-If your chip is neither CH340 nor FTDI but is a standard USB-to-serial bridge at 115200 baud (e.g. CP2102, WCH CH9102):
+The auto-detect list covers the vast majority of marketplace ambilight kits and ESP32 dev boards. If your chip is something else (e.g. CP2102, WCH CH9102) but is still a standard USB-to-serial bridge at 115200 baud:
 
 1. Plug it in and note the device path (macOS: `ls /dev/tty.usbserial*`; Linux: `ls /dev/ttyUSB*`; Windows: Device Manager → Ports).
 2. Settings → **Device** → **Enter port manually**.
-3. Paste the path. LumaSync attempts the LumaSync v1 handshake and connects if the firmware responds. Nothing else changes.
+3. Paste the path. LumaSync rejects non-USB endpoints up-front, so virtual / Bluetooth / PCI ports won't be accepted. For an actual USB chip it attempts the LumaSync v1 handshake and connects if the firmware responds.
 
 Adding the chipset to the auto-detect list requires a code change in the shared contracts — please open an [issue](https://github.com/voyvodka/LumaSync/issues) with the VID:PID if you'd like it bundled.
 
 ## Related
 
+- [WLED bridge](/docs/usb-leds/wled) — drive ESP32 / ESP8266 boards over Wi-Fi instead of USB
 - [Serial protocol](/docs/usb-leds/serial-protocol) — what goes over the wire
 - [LED calibration](/docs/usb-leds/calibration) — once connected, map the strip to your screen
 - [USB troubleshooting](/docs/usb-leds/troubleshooting)

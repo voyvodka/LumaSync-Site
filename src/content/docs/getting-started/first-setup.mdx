@@ -3,7 +3,7 @@ title: First setup
 description: Start LumaSync, find the tray, pair a Hue bridge, connect a USB controller, and pick your first mode.
 group: getting-started
 order: 20
-updated: 2026-04-27
+updated: 2026-05-05
 ---
 
 ## Quick start
@@ -11,39 +11,49 @@ updated: 2026-04-27
 By the end of this page you'll have:
 
 - LumaSync running and visible in the tray
-- Either a Hue bridge paired, or a USB controller connected (or both)
+- At least one sink connected — Philips Hue, USB strip, or WLED board (or any combination)
 - Your first mode selected (Ambilight, Hue scene, or Solid color)
 
 Expect ~5 minutes if your hardware is already on the network and plugged in.
 
 ## 1 · Start LumaSync
 
-Launch the app. On macOS it lives in the menu bar (top-right); on Windows and Linux in the system tray. **The main window hides to the tray on close rather than quitting** — this is intentional. Right-click the tray icon to quit for real.
+Launch the app. On macOS it lives in the menu bar (top-right); on Windows and Linux in the system tray. **The main window hides to the tray on close rather than quitting** — this is intentional, and the first time you close the window LumaSync surfaces a one-shot OS notification confirming it's still running. Right-click the tray icon to quit for real (or Cmd+Q / Ctrl+Q from anywhere).
 
-First launch opens the main window automatically. Compact mode is `320×480` and meant for quick toggles. Click the expand icon to switch to the full `900×620` window for configuration.
+First launch opens the main window automatically and walks through a three-step inline onboarding banner — pair, calibrate, light up — that disappears for good once you've completed the flow. Compact mode is `320×480` and meant for quick toggles; click the expand icon to switch to the full `900×620` window for configuration. Deep-links into non-Lights sections from compact mode auto-expand to full so the target panel is always visible.
 
 ## 2 · Connect something
 
-You need at least one target for the light pipeline to drive. Do either or both:
+You need at least one sink for the light pipeline to drive. Do any combination:
 
 ### Pair a Philips Hue bridge
 
 Settings → **Hue** → **Pair bridge**.
 
-1. LumaSync auto-discovers bridges on your local network (mDNS).
+1. LumaSync auto-discovers bridges on the LAN over mDNS (`_hue._tcp.local.`), with the Philips cloud API as a fallback if mDNS is blocked on your network.
 2. Select yours from the list — or enter the IP manually.
 3. Press the physical **link button** on the bridge, then click **Continue**.
 4. Pick an **Entertainment Area** from the dropdown. If none exist, create one in the Hue app first (Settings → Entertainment areas).
 
-On success the pairing credentials land in `~/.config/lumasync/app.json` and never leave your machine. See [Hue pairing](/docs/hue/pairing) for a deeper walkthrough or troubleshooting.
+On success the bridge username and PSK land in your **OS keychain** (macOS Keychain / Windows Credential Manager / Linux Secret Service); the rest of the configuration lives in `~/.config/lumasync/app.json`. Nothing is uploaded. See [Hue pairing](/docs/hue/pairing) for a deeper walkthrough or troubleshooting.
 
 ### Connect a USB controller
 
-Plug your CH340 or FT232 controller into a USB port. Settings → **Device**.
+Plug your USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) into a USB port. Settings → **Device**.
 
-1. LumaSync auto-detects supported controllers. If yours doesn't appear, check the supported chipsets in [USB controllers](/docs/usb-leds/controllers).
-2. Pick the port from the dropdown.
-3. Click **Health check** — LumaSync sends a handshake at 115200 baud and confirms the strip is responsive. The result shows up next to the port entry within a couple of seconds.
+1. LumaSync auto-detects supported controllers and rejects non-USB serial endpoints (Bluetooth, PCI, Unknown) up-front with `PORT_UNSUPPORTED`. If your chip doesn't appear, check the full list in [USB controllers](/docs/usb-leds/controllers).
+2. Pick the port from the dropdown, then pick the **chip type** — WS2812B (RGB) or SK6812 RGBW. The host-side encoder derives the white channel as `W = min(R, G, B)` for SK6812.
+3. Click **Health check** — LumaSync sends a PING/PONG handshake at 115200 baud and confirms the strip is responsive. The result shows up next to the port entry within a couple of seconds.
+
+### Connect a WLED board
+
+Settings → **Device** → **WLED**.
+
+1. LumaSync auto-discovers WLED boards on the LAN over mDNS (`_wled._tcp.local.`). You can also paste a static IP — loopback / multicast / broadcast addresses are rejected up-front.
+2. Click **Connect**, then **Test** to push a brief solid pattern. The round-trip is reported in milliseconds.
+3. The board is driven over UDP via the **DDP** protocol once Ambilight is active.
+
+See the dedicated [WLED bridge](/docs/usb-leds/wled) page for the full reference.
 
 ## 3 · Pick a mode
 

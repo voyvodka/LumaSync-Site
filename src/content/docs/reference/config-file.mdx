@@ -1,9 +1,9 @@
 ---
 title: Config file
-description: Where LumaSync stores its state, what shape the file has, which fields are safe to edit by hand, and how to reset to defaults.
+description: Where LumaSync stores its state, what shape the file has, which fields are safe to edit by hand, and how to reset to defaults. Hue credentials live in the OS keychain, not this file.
 group: reference
 order: 20
-updated: 2026-04-21
+updated: 2026-05-05
 ---
 
 LumaSync persists all configuration via Tauri's `plugin-store`. On disk that lives at:
@@ -24,37 +24,44 @@ The full shape is typed in `src/shared/contracts/shell.ts` under `ShellState`. T
 
 | Field | Type | What it stores |
 | --- | --- | --- |
+| `schemaVersion` | `number` | Persistence schema version (current: `2`); migrations run on bump |
 | `windowWidth` / `windowHeight` | `number \| null` | Last main-window size in pixels |
-| `windowX` / `windowY` | `number \| null` | Last main-window position; null = OS-centered |
+| `windowX` / `windowY` | `number \| null` | Last main-window position; v1.5.2 anchors by window centre instead of top-left, with a monitor-clamp guard that snaps the window on-screen if the saved position falls outside the current display geometry |
 | `isCompactMode` | `boolean` | Was the app last used in compact mode? |
 | `activeSectionId` | `SectionId` | Which settings section was last open |
-| `lightingMode` | `LightingModeConfig` | Current mode + per-mode parameters |
-| `ledCalibration` | `LedCalibrationConfig` | Edge counts, corner ownership, anchor, direction |
-| `hue.bridge` | `HueBridgeSummary \| null` | Paired bridge (IP, ID) |
+| `lightingMode` | `LightingModeConfig` | Current mode + per-mode parameters (saturation, smoothing, brightness cap, chip type, firmware profile) |
+| `ledCalibration` | `LedCalibrationConfig` | Edge counts, corner ownership, anchor, direction, gap |
+| `hue.bridge` | `HueBridgeSummary \| null` | Paired bridge (IP, ID — _not_ the username/PSK; those live in the OS keychain) |
 | `hue.onboarding.step` | `HueOnboardingStep` | Last reached step in the flow |
 | `hue.credentialStatus` | `HueCredentialStatus` | Valid / needs-repair / unknown |
 | `hue.runtimeTarget` | `HueRuntimeTarget` | Selected Entertainment Area |
-| `roomMap` | `RoomMapConfig` | Room map editor state (objects, positions, layers) |
+| `roomMap` | `RoomMapConfig` | Room map editor state — objects, zones, positions, layers; schema migrated 1→2 in v1.5.0 to add Hue Zones |
+| `wled.targets` | `WledTarget[]` | Paired WLED boards (IP, LED count, friendly name) |
 | `autoStartOnLogin` | `boolean` | OS login-items enrolment |
+| `updateChannel` | `'stable' \| 'beta'` | Auto-updater channel selector — added v1.5.0 |
 | `updater.checkOnStartup` | `boolean` | Whether to poll GitHub Releases on launch |
 
 Anything not listed above is either computed at runtime (telemetry, stream state) or lives in a sub-config — the `LightingModeConfig` for example has nested saturation / smoothing / brightness cap fields.
 
+**Not in this file**: Hue bridge **username** and **PSK**, and any future credential-class secret. Those live in the OS keychain (`keyring` Rust crate → macOS Keychain / Windows Credential Manager / Linux Secret Service) so a back-up of `app.json` does not leak them, and the file is safe to share when filing a bug report (after redacting the bridge IP if you want to be extra careful).
+
 ## Safe to edit by hand
 
-**Low-risk**: `windowWidth`, `windowHeight`, `isCompactMode`, `autoStartOnLogin`, `updater.checkOnStartup`. Wrong values just get clamped or ignored.
+**Low-risk**: `windowWidth`, `windowHeight`, `isCompactMode`, `autoStartOnLogin`, `updater.checkOnStartup`, `updateChannel`. Wrong values just get clamped or ignored.
 
 **Moderate-risk**: `ledCalibration.counts` / `cornerOwnership` / `startAnchor` / `direction`. The app re-validates on load, but an unreasonable combo (e.g., zero total LEDs) will render the strip inert until fixed.
 
-**High-risk**: `hue.bridge`, `hue.credentialStatus`. Editing these by hand puts pairing into an inconsistent state — you're better off clicking **Forget bridge** in Settings → Hue and re-pairing.
+**High-risk**: `hue.bridge`, `hue.credentialStatus`, `wled.targets`. Editing these by hand puts pairing into an inconsistent state — you're better off clicking **Forget bridge** / **Remove WLED board** in Settings and re-pairing.
 
-**Do not touch**: anything under `roomMap` unless you know what you're doing. The coordinate space + layer ordering has subtle invariants; the editor maintains them for you.
+**Do not touch**: anything under `roomMap` unless you know what you're doing. The coordinate space, zone discriminator, and layer ordering have subtle invariants; the editor maintains them for you.
 
 ## Format
 
-Plain JSON, written compactly. No comments allowed (JSON standard). Versioning: no explicit schema version yet — migrations happen in-code by checking field presence and filling defaults.
+Plain JSON, written compactly. No comments allowed (JSON standard).
 
-Back up the file if you want to preserve a working configuration across machines. Copy to the matching path on the new machine before first launch.
+**Schema version** is tracked explicitly in the `schemaVersion` field as of the v1.5.0 zone unification. The persistence layer migrates `1 → 2` automatically on first launch (an idempotent, downgrade-safe shim that re-shapes existing room maps for the unified `Zone` discriminated union); no user action is needed.
+
+Back up the file if you want to preserve a working configuration across machines. Copy to the matching path on the new machine before first launch — and remember the OS keychain entry will need to be re-paired separately, since keychain entries don't move with the JSON.
 
 ## Reset to defaults
 

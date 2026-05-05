@@ -3,7 +3,7 @@ title: Screen capture
 description: How LumaSync reads your screen, the OS permissions each platform asks for, and why the macOS prompt arrives on first launch.
 group: ambilight
 order: 10
-updated: 2026-04-23
+updated: 2026-05-05
 ---
 
 The ambilight pipeline samples your screen every frame, reduces it to a small colour grid, and pushes that grid to USB LEDs and Hue Entertainment Areas. This page covers the **capture** step — what OS permissions are required, and what to do when they're missing.
@@ -32,7 +32,7 @@ and is only relevant during calibration, not normal ambilight runtime.
 
 ## Windows — no permission prompt
 
-Windows 10/11 does not require explicit screen capture permission for desktop apps. LumaSync uses the DXGI desktop duplication API, which is available by default. If capture fails, it's usually a GPU driver issue:
+Windows 10/11 does not require explicit screen capture permission for desktop apps. LumaSync uses the **DXGI desktop duplication API** via the `windows-capture` crate, which is available by default. If capture fails, it's usually a GPU driver issue:
 
 - NVIDIA: update via GeForce Experience
 - AMD: update via Adrenalin
@@ -40,14 +40,16 @@ Windows 10/11 does not require explicit screen capture permission for desktop ap
 
 The capture pipeline reports which display it's sampling in the ambilight telemetry. If Windows has hot-switched to a different GPU (common on laptops with hybrid graphics), stop and restart ambilight — capture re-binds to the correct adapter.
 
-## Linux — Wayland vs X11
+A **hardware-accelerated downscale scaffold** landed in v1.5.0 — the frame builder accepts a downscale hint that's wired through the Windows capture path so 4K displays don't have to ship a full 8.3 MP frame to the host every tick. Full GPU-side downscaling follows in a subsequent patch; the current build still does the reduction host-side, just with the plumbing in place.
 
-LumaSync uses Tauri's GTK/WebKit screen capture under the hood, which behaves differently based on your display server:
+## Linux — X11 via xcap
 
-- **X11**: full-screen capture works without prompts. Good.
-- **Wayland**: screen capture goes through `xdg-desktop-portal-screenshot` or PipeWire's portal interface. Each capture triggers a portal dialog asking which screen to share, once per session. This is by design — Wayland doesn't allow background apps to grab the screen without user consent.
+From v1.5.0, LumaSync ships native Linux X11 capture via [xcap](https://github.com/nashaofu/xcap) — same daily-driver path as macOS / Windows, no portal dialogs, no per-session prompts. The AppImage / deb / rpm bundle the X11 dependencies (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
 
-On Wayland, expect the portal dialog on startup of every ambilight session. We don't control the dialog — it's the OS-side guardrail.
+- **X11 sessions**: capture works without prompts. Good.
+- **Wayland sessions**: LumaSync runs under XWayland for capture. Native Wayland portals (`xdg-desktop-portal-screenshot`, PipeWire) trigger a portal dialog per session and aren't currently a default code path; the XWayland fallback is what most setups will hit.
+
+If you're on a Wayland-only compositor where XWayland isn't installed, the AppImage will fall back to portal-based capture and surface the per-session dialog — that's the OS-side guardrail, not a LumaSync setting.
 
 ## Multiple displays
 

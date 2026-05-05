@@ -1,9 +1,9 @@
 ---
 title: Serial protocol
-description: The LumaSync v1 serial frame format LumaSync sends over USB to drive WS2812B strips — 0xAA 0x55 header, LE LED count, gamma-corrected RGB, XOR checksum, 115200 baud.
+description: The LumaSync v1 serial frame format sent over USB to drive WS2812B and SK6812 RGBW strips — 0xAA 0x55 header, LE LED count, gamma-corrected RGB(W), XOR checksum, 115200 baud.
 group: usb-leds
 order: 20
-updated: 2026-04-23
+updated: 2026-05-05
 ---
 
 LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a 115200-baud link. This page is the wire-level reference — useful if you're flashing firmware onto a microcontroller, writing your own controller, or debugging why a kit isn't lighting up.
@@ -22,15 +22,24 @@ Each frame is:
 Header:   0xAA 0x55                (2 bytes, magic)
           LED_COUNT_LO              (1 byte, low byte of LED count)
           LED_COUNT_HI              (1 byte, high byte of LED count — little-endian u16)
-Payload:  RGB triplets              (LED_COUNT × 3 bytes, gamma-corrected, one per LED)
+Payload:  pixel data                (LED_COUNT × 3 or × 4 bytes — see "Chip type" below)
 Trailer:  XOR_CHECKSUM              (1 byte, XOR of every preceding byte)
 ```
 
-For a 120-LED strip: 4 bytes header + 360 bytes RGB + 1 byte checksum = 365 bytes per frame. At 20 Hz that's ~7.3 KB/s, comfortably under 115200 baud's ~11.5 KB/s usable budget.
+For a 120-LED WS2812B strip: 4 bytes header + 360 bytes RGB + 1 byte checksum = 365 bytes per frame. SK6812 RGBW at 120 LEDs is 4 + 480 + 1 = 485 bytes. At 20 Hz that's ~7.3 KB/s and ~9.7 KB/s respectively, comfortably under 115200 baud's ~11.5 KB/s usable budget.
+
+### Chip type — RGB vs RGBW
+
+LumaSync's host-side encoder switches per controller based on the **Strip chip** selector under Settings → Device:
+
+- **WS2812B (RGB)**: 3 bytes per LED, in order `R G B`.
+- **SK6812 RGBW**: 4 bytes per LED, in order `R G B W`. The white channel is derived host-side as `W = min(R, G, B)` so the achromatic component lights the dedicated white LED while the RGB triple keeps the chromatic component pure. The firmware passes the bytes through unchanged.
+
+The chip-type selection is persisted per controller and the value flows into the encoder before the frame is built — there is no separate wire-level tag for chip type, so the firmware is expected to know which physical strip it drives.
 
 ### Gamma correction
 
-RGB triplets are **pre-gamma-corrected** on the host side (Rec. 709 gamma 2.2). Firmware should not apply additional gamma. If your LEDs look crushed at low values or blown out at high values, double-check the firmware isn't re-gamma-ing on top.
+Pixel triplets / quadruplets are **pre-gamma-corrected** on the host side (Rec. 709 gamma 2.2). Firmware should not apply additional gamma. If your LEDs look crushed at low values or blown out at high values, double-check the firmware isn't re-gamma-ing on top.
 
 ### Byte order
 

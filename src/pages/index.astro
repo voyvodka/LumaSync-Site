@@ -5,7 +5,7 @@ import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
 
 const title = 'LumaSync';
 const description =
-  'LumaSync mirrors your screen to WS2812B LED strips over USB and Philips Hue Entertainment areas at the same time, from one source. Local-only, brand-agnostic, MIT-licensed.';
+  'LumaSync mirrors your screen to WS2812B / SK6812 RGBW LED strips over USB, WLED boards over Wi-Fi, and Philips Hue Entertainment areas — all from one source. Local-only, brand-agnostic, MIT-licensed.';
 
 const repo = 'https://github.com/voyvodka/LumaSync';
 
@@ -28,7 +28,7 @@ const schemas = [
   softwareAppSchema({
     name: 'LumaSync',
     description:
-      'Open-source desktop ambient-lighting app that mirrors your screen to WS2812B LED strips over USB and Philips Hue Entertainment areas at the same time.',
+      'Open-source desktop ambient-lighting app that mirrors your screen to WS2812B / SK6812 RGBW LED strips over USB, WLED boards over Wi-Fi (DDP), and Philips Hue Entertainment areas — all from one source.',
     version: LATEST_VERSION,
     operatingSystems: ['macOS', 'Windows', 'Linux'],
     downloadUrl: '/download',
@@ -42,19 +42,25 @@ const schemas = [
         name: 'USB LED strips',
         url: '/docs/usb-leds/serial-protocol',
         description:
-          'Drives WS2812B strips through CH340 / FT232 USB-serial controllers running the LumaSync v1 serial frame at 115200 baud.',
+          'Drives WS2812B and SK6812 RGBW strips through CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial controllers; LumaSync-native and Adalight framing both supported at 115200 baud.',
+      },
+      {
+        name: 'WLED bridge',
+        url: '/docs/usb-leds/wled',
+        description:
+          'Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol — discovered automatically on the LAN over mDNS or paired by IP.',
       },
       {
         name: 'Philips Hue Entertainment streaming',
         url: '/docs/hue/entertainment-area',
         description:
-          'DTLS 1.2 PSK streaming to any configured Entertainment Area at up to 20 Hz — the bridge ceiling.',
+          'DTLS 1.2 PSK streaming to any configured Entertainment Area at up to 20 Hz — with Hue Zones, AR-locked sizing, and per-bulb gamut clipping.',
       },
       {
-        name: 'Synchronized USB + Hue',
+        name: 'Three sinks, one pipeline',
         url: '/docs/getting-started/first-setup',
         description:
-          'A single screen-capture pipeline drives both targets simultaneously, switched per-mode from the system tray.',
+          'A single screen-capture pipeline drives USB strips, WLED boards, and Hue zones simultaneously, switched per-mode from the system tray.',
       },
       {
         name: 'Room map editor',
@@ -84,7 +90,7 @@ const schemas = [
     {
       question: 'What hardware do I need?',
       answer:
-        'Either a Philips Hue Bridge (gen 2 or newer) with at least one Entertainment Area configured, or a WS2812B LED strip driven by a CH340 / FT232 USB-serial controller running LumaSync firmware. Either path on its own is enough.',
+        'Any one of: a Philips Hue Bridge (gen 2 or newer) with at least one Entertainment Area, a WS2812B or SK6812 RGBW LED strip driven by a CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial controller, or an ESP32 / ESP8266 board running WLED firmware on the same LAN. Any single path on its own is enough; LumaSync can drive all three concurrently.',
     },
     {
       question: 'Is LumaSync free and open source?',
@@ -94,7 +100,12 @@ const schemas = [
     {
       question: 'Does LumaSync work on Linux?',
       answer:
-        'Yes, experimentally. AppImage ships today and a Flathub submission is underway. Tray behaviour varies by desktop environment — GNOME needs an AppIndicator extension, and tiling window managers may force the window into a tile.',
+        'Yes. v1.5.0 added native X11 screen capture via xcap, and v1.5.1 was the first release to ship all three platform installers in lockstep — macOS DMG, Windows MSI, and Linux AppImage / deb / rpm. Tray behaviour still varies by desktop environment: GNOME needs an AppIndicator extension, and some tiling window managers may force the window into a tile.',
+    },
+    {
+      question: 'Where are my Hue credentials stored?',
+      answer:
+        'In the OS keychain — macOS Keychain, Windows Credential Manager, or Linux Secret Service (gnome-keyring / KWallet). Existing v1.4 installs migrate transparently from the previous shellStore plaintext on first launch of v1.5.0+, with an idempotent and downgrade-safe migration path.',
     },
   ]),
 ];
@@ -111,7 +122,7 @@ const schemas = [
         <a class="cta-primary" href="/download" data-os-cta> Download </a>
         <a class="cta-secondary" href={repo}> View on GitHub → </a>
       </div>
-      <p class="platform-note">macOS · Windows · Linux (experimental)</p>
+      <p class="platform-note">macOS · Windows · Linux</p>
     </div>
 
     <figure class="hero-visual">
@@ -130,43 +141,57 @@ const schemas = [
     </figure>
   </section>
 
-  {/* ─── "Both, at once" feature grid ───────────────────────── */}
+  {/* ─── Three sinks, one pipeline ─────────────────────────── */}
   <section class="features">
-    <p class="section-eyebrow">Both, at once</p>
-    <h2 class="section-title">One pipeline. Two targets.</h2>
-    <div class="feature-grid">
+    <p class="section-eyebrow">All at once</p>
+    <h2 class="section-title">One pipeline. Three sinks.</h2>
+    <div class="feature-grid feature-grid-quad">
       <article>
         <div class="feature-icon" aria-hidden="true">USB</div>
         <h3>USB LED strips</h3>
         <p>
-          CH340 and FT232 controllers at 115200 baud, running the
-          <a href="/docs/usb-leds/serial-protocol">LumaSync v1 serial frame</a>. Opt-in Adalight
-          profile shipped in v1.4.
+          WS2812B and SK6812 RGBW chips over CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial
+          controllers at 115200 baud — running the
+          <a href="/docs/usb-leds/serial-protocol">LumaSync v1 serial frame</a> or the opt-in Adalight
+          profile.
         </p>
         <a href="/docs/usb-leds/controllers">Supported chipsets →</a>
+      </article>
+
+      <article>
+        <div class="feature-icon" aria-hidden="true">WLED</div>
+        <h3>WLED over Wi-Fi</h3>
+        <p>
+          Drive ESP32 / ESP8266 boards running WLED firmware via the DDP protocol — auto-discovered
+          on the LAN over mDNS or paired by static IP. Loopback, multicast, and broadcast addresses
+          are rejected up-front.
+        </p>
+        <a href="/docs/usb-leds/wled">WLED setup →</a>
       </article>
 
       <article>
         <div class="feature-icon" aria-hidden="true">HUE</div>
         <h3>Philips Hue Entertainment</h3>
         <p>
-          DTLS 1.2 PSK streaming to any configured Entertainment Area. Up to 20 Hz — the bridge's
-          real limit.
+          DTLS 1.2 PSK streaming to any Entertainment Area at up to 20 Hz, with
+          <a href="/docs/hue/entertainment-area">Hue Zones</a>, AR-locked sizing, and per-bulb gamut
+          clipping for accurate colour.
         </p>
         <a href="/docs/hue/entertainment-area">How Hue streaming works →</a>
       </article>
 
       <article>
         <div class="feature-icon" aria-hidden="true">⌃</div>
-        <h3>Both, synchronized</h3>
+        <h3>All three, synchronized</h3>
         <p>
-          Same screen source drives both targets. Pick per mode: USB, Hue, or both — switched from
-          the tray.
+          Same screen source drives every sink. Pick per mode — USB, WLED, Hue, or any combination —
+          switched from the tray.
         </p>
         <ul class="feature-badges" role="list" aria-label="Ships today">
           <li>Live Δ/Σ telemetry</li>
           <li>EN · TR i18n</li>
           <li>Compact 320×480 / Full 900×620</li>
+          <li>OS keychain credentials</li>
         </ul>
         <a href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
       </article>
@@ -278,23 +303,23 @@ const schemas = [
           macOS
           <span class="tag tag-ok">Full support</span>
         </h3>
-        <p>Primary development target. Universal binary (Apple Silicon + Intel).</p>
+        <p>Primary development target. Universal DMG (Apple Silicon + Intel).</p>
       </article>
       <article>
         <h3>
           Windows
-          <span class="tag tag-ok">Supported</span>
+          <span class="tag tag-ok">Full support</span>
         </h3>
-        <p>MSI installer, winget in progress. USB + Hue paths fully functional.</p>
+        <p>Signed MSI installer, winget in progress. All three sinks fully functional.</p>
       </article>
       <article>
         <h3>
           Linux
-          <span class="tag tag-warn">Experimental</span>
+          <span class="tag tag-ok">Supported</span>
         </h3>
         <p>
-          AppImage ships today, Flathub submission underway. Tray behavior varies by desktop
-          environment.
+          Native X11 screen capture (xcap). AppImage / deb / rpm ship every release; Flathub
+          submission underway. Tray behaviour still varies by desktop environment.
         </p>
       </article>
     </div>
@@ -396,33 +421,45 @@ const schemas = [
         </header>
         <ul role="list">
           <li>
-            USB per-LED sampling — each LED maps to its own edge region (replaces the v1.3
-            single-zone path)
+            <strong>WLED bridge over Wi-Fi</strong> — DDP protocol with mDNS auto-discovery (<code
+              >_wled._tcp.local.</code
+            >) and IP guard against loopback / multicast / broadcast
           </li>
           <li>
-            Opt-in Adalight firmware profile — reuse existing Adalight controllers without
-            reflashing
+            <strong>Hue Zones</strong> — entertainment areas mapped to logical zones with zone-relative
+            coordinates, AR-locked sizing, HSV picker, and live bounds visual
           </li>
           <li>
-            Per-channel color correction — R/G/B gamma, Kelvin white-balance, BT.601 saturation;
-            same chain on USB and Hue
+            <strong>Linux X11 capture</strong> via xcap — LumaSync now ships on macOS, Windows, and Linux
+            every release
           </li>
           <li>
-            Multi-monitor capture with stable display IDs and primary-display fallback on unplug
+            <strong>SK6812 RGBW</strong> chip support with host-side <code>W = min(R,G,B)</code>
+            extraction; expanded USB allowlist (PL2303, CH341, CP2104, FT232H)
           </li>
           <li>
-            StatusBar FPS / latency pill — green/amber/red thresholds, always visible while
-            Ambilight is on
+            <strong>OS keychain credentials</strong> — Hue username + PSK migrated from plaintext store
+            to macOS Keychain / Windows CredMan / Linux Secret Service
           </li>
           <li>
-            Native OS notifications via <code>tauri-plugin-notification</code> + global ErrorBoundary
-            fallback
+            <strong>Per-bulb Hue gamut clipping</strong> — A/B/C triangle clipping in the DTLS frame builder
+            hot-path with luminance-preserving xy→RGB mapping
           </li>
           <li>
-            Keyboard shortcuts: ⌥1 / ⌥2 / ⌥3 to switch modes, ⌘, for Settings (TR-layout safe)
+            <strong>Beta update channel</strong> scaffold — opt-in <code>updateChannel</code> shell state
+            with separate <code>latest-beta.json</code> endpoint
           </li>
           <li>
-            Hue: richer pairing error codes, CLIP v2 room archetypes, three-step intensity presets
+            <strong>macOS lifecycle hardening</strong> — Cmd+Q, tray Quit, and Ctrl+C unified onto a single
+            watchdog-bounded shutdown path; close-to-tray OS notification on first dismiss
+          </li>
+          <li>
+            <strong>Polling discipline</strong> — telemetry and Hue health checks pause when the window
+            is hidden, resume on visibility (lower idle CPU and battery draw)
+          </li>
+          <li>
+            <strong>Frontend log bridge</strong> — webview <code>console.*</code> calls now write into
+            the platform log file alongside Rust log entries
           </li>
         </ul>
         <a class="inline-cta" href="/changelog">Full changelog →</a>
@@ -431,22 +468,26 @@ const schemas = [
       <article class="roadmap-col roadmap-next">
         <header>
           <span class="roadmap-tag tag-next">Next</span>
-          <h3>v1.5 — in flight</h3>
+          <h3>v1.6 — queued</h3>
         </header>
         <ul role="list">
           <li>
-            WLED sink — drive ESP32/ESP8266 boards over the LAN, on top of the v1.4 <code
-              >LedSink</code
-            > trait
+            Flathub submission for Linux — discoverable in GNOME Software / KDE Discover with
+            verified runtime sandboxing
           </li>
           <li>
-            Companion firmware repo — reference sketch + PING/PONG handshake for v1 controllers
+            <code>glib</code> 0.18 → 0.19 migration to clear the remaining
+            <code>RUSTSEC-2024-0429</code> Linux-runtime warning (gated on Tauri / gtk-rs upstream)
+          </li>
+          <li>
+            Companion firmware repo — reference sketch with the v1.5 PING/PONG handshake for
+            LumaSync v1 controllers
           </li>
           <li>OpenRGB sink (v2.0 track) — peripherals, motherboards, fans on the same pipeline</li>
         </ul>
         <p class="roadmap-caveat">
-          No dates promised. The <code>LedSink</code> abstraction landed in v1.4 to make these tracks
-          tractable.
+          No dates promised. The <code>LedSink</code> abstraction (v1.4) and the WLED bridge (v1.5) make
+          the OpenRGB track tractable.
         </p>
       </article>
 
@@ -479,15 +520,16 @@ const schemas = [
         > instead.
       </li>
       <li>
-        <strong>You don't have a Hue Bridge or a WS2812B controller.</strong>
+        <strong>You don't have a Hue Bridge, a WS2812B / SK6812 controller, or a WLED board.</strong
+        >
         The app will run, but you won't see anything light up. Start with the <a
           href="/docs/getting-started/hardware-checklist">hardware checklist</a
         >.
       </li>
       <li>
-        <strong>You're on an unusual Linux desktop environment.</strong>
-        Tray behavior varies — GNOME needs an AppIndicator extension, tiling WMs may force windows into
-        tiles. Community-driven support on Linux for now.
+        <strong>You're on a tiling Linux WM with no system tray.</strong>
+        LumaSync expects to live in the menu bar — GNOME needs an AppIndicator extension, and tiling WMs
+        may force the window into a tile. The pipeline still runs; the UX is just less menu-bar-shaped.
       </li>
     </ul>
   </section>

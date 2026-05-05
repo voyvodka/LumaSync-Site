@@ -3,7 +3,7 @@ title: Pair your Hue bridge
 description: Discover a bridge, press the link button, pick an Entertainment Area, and start streaming. The full four-step onboarding flow with failure modes for each stage.
 group: hue
 order: 10
-updated: 2026-04-21
+updated: 2026-05-05
 ---
 
 ## Prerequisites
@@ -27,12 +27,12 @@ LumaSync's Hue onboarding walks through four named stages. The pairing tracker a
 
 Open Settings → **Hue** → **Pair bridge**.
 
-LumaSync queries Philips's public discovery endpoint (`https://discovery.meethue.com/`) and also scans the LAN via mDNS. Bridges on the network show up in the list within a couple of seconds.
+From v1.5.0, LumaSync's primary discovery path is **mDNS** — it browses `_hue._tcp.local.` on the LAN through a shared mDNS responder (the same responder that powers WLED discovery). Philips's public discovery endpoint (`https://discovery.meethue.com/`) acts as a cloud fallback if mDNS doesn't resolve. Bridges on the network show up within a couple of seconds.
 
 If the list stays empty:
 
 - **Manual IP path**: click **Enter IP manually**, type the bridge's LAN IP (find it in the Hue app → Settings → My Hue system → your bridge). LumaSync verifies the address by fetching the bridge's config endpoint before letting you continue.
-- **Discovery blocked**: corporate firewalls or guest VLANs often block mDNS. Manual IP still works in that case — you bypass discovery entirely.
+- **Discovery blocked**: corporate firewalls or guest VLANs often block mDNS _and_ the cloud endpoint. Manual IP still works in that case — you bypass discovery entirely.
 
 ## Step 2 · Pair
 
@@ -57,7 +57,7 @@ From v1.4, the CLIP API's `error.type` is split into four distinct codes, each w
 
 Retries are free — the bridge has no lockout once the underlying cause is cleared.
 
-Credentials land in `~/.config/lumasync/app.json` protected by OS user-level file permissions. LumaSync performs no network calls outside your LAN — the Hue bridge's cloud account is never touched. To invalidate a credential, revoke from the Hue app at any time (Settings → My Hue system → paired apps); the bridge treats LumaSync as a regular third-party client.
+From v1.5.0, the bridge **username and PSK** land in your **OS keychain** — macOS Keychain, Windows Credential Manager, or Linux Secret Service (gnome-keyring / KWallet) — not in the JSON config file. Existing v1.4 installs migrate transparently from the previous plaintext `shellStore` on first launch of v1.5.0+; the migration is idempotent and downgrade-safe. LumaSync performs no network calls outside your LAN — the Hue bridge's cloud account is never touched. To invalidate a credential, revoke from the Hue app at any time (Settings → My Hue system → paired apps); the bridge treats LumaSync as a regular third-party client.
 
 ## Step 3 · Area select
 
@@ -83,12 +83,10 @@ The bridge occasionally rotates credentials after firmware updates. LumaSync's h
 
 Only what's needed to stream:
 
-- Bridge IP and identifier
-- Username token (what you authorize in step 2)
-- Selected Entertainment Area UUID
-- Channel position overrides (optional)
+- **Bridge username + PSK** — in the OS keychain (macOS Keychain / Windows CredMan / Linux Secret Service), retrieved via the `keyring` Rust crate's platform abstraction.
+- **Bridge IP, identifier, selected Entertainment Area UUID, channel position overrides** — in `~/.config/lumasync/app.json`.
 
-Nothing goes to a cloud. The Hue app's cloud account is not touched — pairing is LAN-only.
+Nothing goes to a cloud. The Hue app's cloud account is not touched — pairing is LAN-only, and after pairing the bridge is reached only via mDNS or its static LAN IP.
 
 ## Related
 

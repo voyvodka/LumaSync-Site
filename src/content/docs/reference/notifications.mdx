@@ -3,7 +3,7 @@ title: Platform notifications
 description: How LumaSync emits OS-level notifications for connection, stream, and update events — the one-time permission banner, and the open_log_dir command.
 group: reference
 order: 40
-updated: 2026-04-24
+updated: 2026-05-05
 ---
 
 From v1.4, LumaSync emits **OS-level notifications** for runtime events so you don't have to keep the main window open. Implementation is `tauri-plugin-notification` + `tauri-plugin-process`, wired end-to-end.
@@ -20,17 +20,27 @@ If you deny, the event flow degrades gracefully — in-app status pills still up
 
 ## Events that emit a toast
 
-| Event              | When                                                     | Severity |
-| ------------------ | -------------------------------------------------------- | -------- |
-| `connection.ok`    | Serial port opens and handshake returns `HEALTHY`        | Info     |
-| `connection.lost`  | Serial port closes mid-session or `PING_TIMEOUT` fires   | Warning  |
-| `stream.started`   | Hue Entertainment stream armed, first frame acknowledged | Info     |
-| `stream.stopped`   | Mode switched to Off or the target went away             | Info     |
-| `update.available` | Auto-updater found a newer release at startup            | Info     |
-| `update.installed` | Update verified and applied; restart on next launch      | Info     |
-| `update.error`     | Minisign verification failed or the download errored out | Error    |
+| Event | When | Severity |
+| --- | --- | --- |
+| `connection.ok` | Serial port opens and handshake returns `HEALTHY` | Info |
+| `connection.lost` | Serial port closes mid-session or `PING_TIMEOUT` fires | Warning |
+| `stream.started` | Hue Entertainment stream armed, first frame acknowledged | Info |
+| `stream.stopped` | Mode switched to Off or the target went away | Info |
+| `wled.connected` | WLED `/json/info` returned a non-zero LED count and Test acknowledged | Info |
+| `update.available` | Auto-updater found a newer release at startup | Info |
+| `update.installed` | Update verified and applied; restart on next launch | Info |
+| `update.error` | Minisign verification failed or the download errored out | Error |
+| `window.closed-to-tray` (v1.5.2, one-shot) | First time the user closes the main window — confirms LumaSync is still running in the tray | Info |
 
 All toasts are local to the OS — nothing goes to a cloud push service. No Apple Push, no FCM, no third-party relay.
+
+### macOS tray template image
+
+From v1.5.2 the macOS tray icon ships as a **template image** (monochrome silhouette), so the OS renders it at the correct size and respects Dark / Light menu bar mode automatically. If you saw a coloured bitmap-shaped tray on older builds, this is the fix.
+
+### Frontend log bridge
+
+From v1.5.2 every webview `console.log` / `console.warn` / `console.error` call is bridged into the platform log file alongside the Rust `log::*` entries. The same lines that appear in DevTools also appear in `~/Library/Logs/com.lumasync.app/` (or your platform's equivalent), so debugging a runtime issue no longer requires a DevTools window to be open. Each bridged record is prefixed `[webview]` to keep it distinguishable from the Rust side.
 
 ## The `open_log_dir` command
 
