@@ -4,6 +4,17 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.9] — 2026-05-05
+
+### Security
+
+- **DOM-based XSS in Pagefind search results**: `src/components/Search.astro` was injecting Pagefind result excerpts into the DOM via `innerHTML` with `${r.excerpt || ''}` unescaped. Indexed content reaching the excerpt could break out and execute arbitrary HTML. Excerpts now flow through a `sanitizeExcerpt` helper that HTML-escapes the whole string and then selectively restores the `<mark>` / `</mark>` tags Pagefind needs for search-term highlighting, preserving the highlight UI without trusting raw excerpt content.
+
+### Accessibility
+
+- **Native tooltips on icon-only buttons**: the header search trigger, the mobile nav open/close buttons, and the search modal `Esc` close button now carry matching `title` attributes alongside their `aria-label`s. Visual users hovering an icon now get the same affordance keyboard / screen-reader users already had, removing ambiguity for buttons that have no text label.
+- **Tactile click feedback**: the same controls gain a subtle `transform: scale(0.96)` on `:active`, wrapped in `@media (prefers-reduced-motion: no-preference)` so users who opt out of motion are unaffected. Adds perceived responsiveness on click without compromising the reduced-motion contract.
+
 ## [1.1.8] — 2026-05-05
 
 ### Content
