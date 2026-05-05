@@ -3,7 +3,7 @@ title: Telemetry
 description: What LumaSync measures locally — capture FPS, send FPS, queue health — where the numbers live on disk, and why none of them leave your machine.
 group: reference
 order: 30
-updated: 2026-04-23
+updated: 2026-05-05
 ---
 
 ## Zero network telemetry
@@ -14,13 +14,19 @@ The only network calls the app makes at runtime are:
 
 | Call | When | Why |
 | --- | --- | --- |
-| `https://api.github.com/repos/voyvodka/LumaSync/releases/latest/download/latest.json` | App startup (once) | Auto-updater check |
-| `https://discovery.meethue.com/` | Hue onboarding "Discover" step | List local Hue bridges |
-| Local bridge IP (port 80 + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment stream |
+| `https://github.com/voyvodka/LumaSync/releases/latest/download/latest.json` (or `latest-beta.json` on beta channel) | App startup (once) | Auto-updater check |
+| `https://discovery.meethue.com/` | Hue onboarding "Discover" step (cloud fallback) | List local Hue bridges |
+| LAN mDNS (`_hue._tcp.local.`, `_wled._tcp.local.`) | Onboarding | Bridge / WLED board discovery on the local segment |
+| Local bridge IP (HTTPS 443 + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment DTLS stream |
+| Local WLED IP (HTTP 80 + UDP DDP port) | WLED connect / test / streaming | `/json/info` query + DDP frame push |
 | Serial `/dev/ttyUSB*` or COM port | USB mode active | LumaSync v1 frame push |
 | macOS/Windows/Linux screen capture APIs | Ambilight mode active | Pixel sampling (local OS, no network) |
 
 That's it. Nothing else outbound.
+
+### Visibility-aware polling
+
+From v1.5.2, all polling intervals — telemetry, Hue health checks, updater status — **pause when the window is hidden** and resume on visibility. So an idle LumaSync sitting in the menu bar doesn't burn CPU or battery polling for state that nobody is looking at; the moment you click the tray icon and bring the window forward, polling resumes within one tick.
 
 ## On-device telemetry
 
@@ -69,14 +75,14 @@ If you're filing a bug on GitHub, attach the most recent log. Review it first �
 
 ## Hue bridge credentials
 
-Pairing with a Hue bridge gives LumaSync a **username token**, written to `~/.config/lumasync/app.json` under `hue.bridge.username`. This token:
+Pairing with a Hue bridge gives LumaSync a **username token + PSK**. From v1.5.0 these live in the OS keychain — macOS Keychain, Windows Credential Manager, or Linux Secret Service (gnome-keyring / KWallet) — not in `app.json`. The credential set:
 
 - Is scoped to the bridge (not a Hue cloud account)
 - Does not contain your email, name, or any account identifier
 - Can be revoked any time in the Hue app (Settings → My Hue system → paired apps)
 - Lives only on your machine
 
-LumaSync never sees your Hue cloud account.
+LumaSync never sees your Hue cloud account, and the bridge never receives anything outside the local LAN session.
 
 ## Crash reports
 

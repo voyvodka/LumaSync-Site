@@ -3,7 +3,7 @@ title: Working with multiple displays
 description: Which display LumaSync captures from, how to change it, and the one-capture-source constraint that shapes everything else.
 group: advanced
 order: 30
-updated: 2026-04-23
+updated: 2026-05-05
 ---
 
 import { LATEST_VERSION } from '../../../lib/version';
@@ -33,8 +33,8 @@ From v1.4, LumaSync keys each display by a **stable identifier** — `SCDisplay.
 When you plug or unplug an external monitor mid-session:
 
 - **Windows and macOS** emit display-changed events that LumaSync subscribes to; the dropdown updates within ~500 ms and the current selection falls back to primary if the previously-selected display disappeared.
-- **Linux (X11)** works similarly if the capture backend receives RandR events. If the dropdown looks stale, reopen Settings → Display to trigger a rebuild.
-- **Linux (Wayland)** portals don't expose a hot-plug event stream — you'll see the new display listed on the next ambilight session restart.
+- **Linux (X11)** uses the **xcap** backend (added in v1.5.0) and listens for RandR events; the dropdown updates within ~500 ms when monitors are plugged or unplugged. If it looks stale, reopen Settings → Display to trigger a rebuild.
+- **Linux (Wayland)** sessions fall back to XWayland for capture; portals don't expose a hot-plug event stream — you'll see the new display listed on the next ambilight session restart.
 
 ## Calibration overlay
 

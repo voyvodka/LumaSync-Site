@@ -4,6 +4,52 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.8] — 2026-05-05
+
+### Content
+
+- **App v1.5.0 + v1.5.1 + v1.5.2 surfaced on the site.** Submodule pin advanced from the v1.4.0 merge (`79c8407`) to post-v1.5.2 (`b1db41a`), so `LATEST_VERSION` / `LATEST_VERSION_DATE` now resolve to `v1.5.2 — 2026-05-05` from the upstream changelog without code changes. Three site-version-spans of upstream work are now reflected in landing copy, structured data, llms.txt, and docs.
+- **Landing page roadmap shift**: the "Shipped" column rewrote from v1.4 highlights (per-LED sampling, Adalight profile, multi-monitor capture, FPS pill) to v1.5.2 highlights (WLED bridge over Wi-Fi, Hue Zones, Linux X11 capture, SK6812 RGBW, OS keychain credentials, per-bulb gamut clipping, beta update channel, macOS lifecycle hardening, visibility-aware polling, frontend log bridge). The "Next" column rewrote from "v1.5 — in flight" to "v1.6 — queued" (Flathub, gtk-rs / glib migration, OpenRGB sink, companion firmware repo).
+- **Linux platform support**: card promoted from "Experimental" to "Supported" across landing, FAQ, hero platform-note, and download page asset hint (`AppImage · experimental` → `AppImage · deb · rpm`). Reflects the v1.5.0 native X11 capture via xcap and the v1.5.1 lockstep three-installer release pipeline.
+- **Three-sink narrative**: feature grid expanded from a 3-card "USB · Hue · Both" layout to a 4-card "USB · WLED · Hue · All three, synchronized" layout. Hero copy, ItemList JSON-LD, and softwareAppSchema description rewrote to mention WS2812B / SK6812 RGBW USB, WLED-over-Wi-Fi, and Philips Hue together.
+
+### Docs
+
+- **New `docs/usb-leds/wled.mdx`** — full WLED bridge reference: DDP-over-UDP, mDNS auto-discovery (`_wled._tcp.local.`), manual IP fallback, IP guard rejecting loopback / unspecified / multicast / broadcast, `WLED_INVALID_LED_COUNT` rejection, network reachability checklist, "why DDP and not E1.31 / Art-Net" notes.
+- **`getting-started/install.mdx`** rewrote — three Linux installers (AppImage / deb / rpm), Windows MSI v1.5.1+ stable, Linux "experimental" wording removed, X11 capture deps (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`) called out.
+- **`getting-started/first-setup.mdx`** — added the v1.5.0 first-run onboarding banner, the v1.5.2 close-to-tray notification, the WLED pairing step, and the chip-type selector (WS2812B / SK6812 RGBW) at USB connect time. mDNS + cloud-fallback Hue discovery clarified.
+- **`getting-started/hardware-checklist.mdx`** — corrected the `WS2812B (aka SK6812 in most drop-in forms)` mistake (SK6812 RGBW is a distinct 4-channel chip, not a drop-in for WS2812B), expanded the USB chipset table to six entries (CH340, CH341, FT232R, FT232H, PL2303, CP2104), added a third "WLED path" section.
+- **`usb-leds/controllers.mdx`** — six chipsets covered, USB-class endpoint filtering (`PORT_UNSUPPORTED` for Bluetooth / PCI / Unknown), strip-chip selector documented, OS detection one-liners updated to match.
+- **`usb-leds/serial-protocol.mdx`** — chip-type section added covering WS2812B (3 bytes / LED) and SK6812 RGBW (4 bytes / LED with `W = min(R, G, B)` extraction), wire-format diagram updated to be chip-type-agnostic.
+- **`usb-leds/calibration.mdx`** — direct numeric keyboard input on edge counts and stand-gap (v1.5.2), amber Rev 07 design tokens with a 32 px tap-target floor (v1.5.2), Hue Zones cross-link.
+- **`usb-leds/troubleshooting.mdx`** — `PORT_UNSUPPORTED` failure mode added with the macOS Bluetooth-virtual-port example.
+- **`hue/pairing.mdx`** — mDNS-as-primary discovery (`_hue._tcp.local.` shared responder with WLED), cloud endpoint demoted to fallback, **bridge username + PSK now stored in the OS keychain** (macOS Keychain / Windows CredMan / Linux Secret Service), idempotent + downgrade-safe v1.4 → v1.5 migration noted.
+- **`hue/entertainment-area.mdx`** — new "Hue Zones" section (zone-relative coordinates, AR-locked sizing, schema 1→2 migration), new "Per-bulb gamut clipping" section (A/B/C triangle xy → RGB mapping in the DTLS frame builder hot-path).
+- **`hue/troubleshooting.mdx`** — `HUE_STREAM_NOT_READY_ACTIVE_STREAMER` 403 noted as retired in v1.5.2 via DTLS `close_notify` alert + idempotent single-shot deactivate token; previous 1 s defensive sleep removed.
+- **`advanced/auto-updater.mdx`** — beta update channel (`updateChannel: 'stable' | 'beta'`) documented with `latest-beta.json` endpoint and the no-immediate-downgrade behaviour.
+- **`advanced/multi-display.mdx`** — Linux hot-plug now via xcap RandR events (X11) and XWayland fallback (Wayland).
+- **`ambilight/screen-capture.mdx`** — Linux X11 via xcap as the default Linux path (no portal dialogs), Windows hardware-accelerated downscale scaffold (v1.5.0).
+- **`reference/telemetry.mdx`** — runtime network call table extended with mDNS rows and the WLED `/json/info` + DDP UDP entries; visibility-aware polling discipline section added; Hue credential storage corrected to "OS keychain, not `app.json`".
+- **`reference/notifications.mdx`** — added the `wled.connected` event and the v1.5.2 one-shot `window.closed-to-tray` notification, the macOS template tray icon, and the frontend `console.*` → file-sink log bridge.
+- **`reference/shortcuts.mdx`** — Cmd+Q / tray Quit / Ctrl+C unified shutdown path noted on the global table; new "Compact-mode deep links" section covering the v1.5.2 auto-expand-to-full behaviour.
+- **`reference/error-handling.mdx`** — new "macOS lifecycle hardening (v1.5.2)" section covering `kick_off_shutdown_and_die`, `SHUTDOWN_FIRED` atomic, the `tauri-plugin-single-instance` socket-leak fix, and the detached `stop_hue_stream` worker thread with 1.5 s abandon timeout.
+- **`reference/config-file.mdx`** — `schemaVersion`, `updateChannel`, `wled.targets`, and zone-aware `roomMap` fields added to the shape table; explicit "Hue username + PSK live in the OS keychain, not this file" callout; window-position persistence now anchored by window centre with a monitor-clamp guard.
+- **`compare/wled.mdx`** — reframed top-to-bottom: WLED is no longer "a thing LumaSync can't drive" but a complementary sink that LumaSync drives natively over DDP from v1.5.0. Recommended setup is "WLED + LumaSync together" for ESP-based hardware; standalone WLED and standalone LumaSync USB-serial each retain their own sweet spots.
+
+### Discoverability
+
+- **`public/llms.txt`** — opening summary expanded to mention WS2812B / SK6812 RGBW over USB, ESP32 / ESP8266 boards over Wi-Fi via DDP, and the OS keychain for credentials. WLED moved out of the "alternatives we don't drive" list and into a complementarity note. Docs link list reorganised to add the WLED bridge entry and surface mDNS / X11 specifics under the relevant docs lines.
+- **`download.astro`** — Linux asset note `AppImage · experimental` → `AppImage · deb · rpm` to match the v1.5.1+ three-installer-per-release pipeline.
+
+### Pre-deploy patches now live
+
+The four PRs merged into `main` after v1.1.7 but never tagged are now part of v1.1.8 (`deploy.yml` is release-driven, not push-driven):
+
+- **`fix(security)` Sentinel**: `community.astro` now wraps `triage[i].a` in `DOMPurify.sanitize()` before the `<dd set:html>` injection. Closes a latent XSS surface that would have activated if the hardcoded `triage` array ever became dynamic.
+- **`feat(a11y)` Palette**: Pagefind `.search-result` links get a `:global(.search-result:focus-visible)` outline + `outline-offset` so keyboard users see a visible focus ring on dynamically-injected DOM. Astro's scoped CSS otherwise ignored the rule.
+- **`chore(deps)` Dependabot**: Astro 6.1.9 → 6.2.1, marked 18.0.2 → 18.0.3, @astrojs/check 0.9.8 → 0.9.9, prettier-plugin-tailwindcss 0.7.3 → 0.8.0.
+- **`chore(deps)` Dependabot**: pnpm/action-setup SHA pin refreshed (`903f9c1` → `8912a91`), tracking the upstream v6.0.3 → v6.0.5 release.
+
 ## [1.1.7] — 2026-05-02
 
 ### Security

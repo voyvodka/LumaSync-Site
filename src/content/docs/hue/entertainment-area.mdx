@@ -1,9 +1,9 @@
 ---
 title: Entertainment Area
-description: What a Hue Entertainment Area is, why LumaSync requires one, and how to create or edit one in the Hue app.
+description: What a Hue Entertainment Area is, why LumaSync requires one, and how to create or edit one in the Hue app — plus Hue Zones, AR-locked sizing, and per-bulb gamut clipping.
 group: hue
 order: 20
-updated: 2026-04-21
+updated: 2026-05-05
 ---
 
 ## What is an Entertainment Area
@@ -49,6 +49,22 @@ The coordinates you set in the Hue app's room layout aren't cosmetic — they're
 
 You can fine-tune this in LumaSync's **Hue Channel Map Panel** (Settings → Hue → Edit positions) without touching the Hue app — LumaSync persists overrides locally.
 
+## Hue Zones
+
+From v1.5.0, LumaSync introduces **Hue Zones** — a layer on top of the Entertainment Area's bulb positions that lets you group bulbs into logical regions on the room map and place them with **zone-relative** coordinates instead of absolute ones.
+
+A zone is defined by a centre point, a border colour, and an aspect-ratio-locked size slider that exposes the long-edge metric in real-world units. The size slider keeps the zone's AR fixed as you scale, so a 16:9 TV-aligned zone stays 16:9 regardless of how big you make it. Each zone can contain a subset of the Entertainment Area's bulbs; bulb positions inside the zone are stored as fractions of the zone's bounds, so resizing the zone scales the bulb layout uniformly without re-positioning each bulb by hand.
+
+Zones are persisted as part of the room map (schema migrated automatically from v1.4 layouts via a 1→2 migration shim — your existing setup keeps working). The room map editor renders every zone simultaneously with a per-zone show/hide toggle, so you can sanity-check the layout before streaming.
+
+The full editor walkthrough lives on the [LED calibration](/docs/usb-leds/calibration#room-map-editor) page; the same canvas drives Hue Zones, USB strip placement, and furniture markers.
+
+## Per-bulb gamut clipping
+
+The Hue colour gamut is bulb-specific. Philips classifies bulbs into three gamut types — A, B, and C — each defined by a different RGB triangle in xy chromaticity space. Sending a colour outside a bulb's gamut causes the bridge to silently clip in the brightest channel direction, which can shift hue.
+
+From v1.5.0, LumaSync fetches each bulb's `archetype` and `gamut_type` from the CLIP v2 `/resource/light` endpoint during area activation and applies **per-bulb gamut A/B/C triangle clipping** in the DTLS frame builder hot-path. The clip is luminance-preserving (xy→RGB mapping retains brightness while constraining the chromaticity), so Play bars (gamut C) stay accurate while older E27 bulbs (gamut B) clip without colour drift. No configuration is needed; clipping happens automatically per bulb.
+
 ## Multiple areas
 
 Only one Entertainment Area can stream at a time from a given client. If you want different lighting per room (living room for movies, bedroom for reading), create one area per room and switch between them in LumaSync's dropdown. No re-pairing needed.
@@ -56,4 +72,5 @@ Only one Entertainment Area can stream at a time from a given client. If you wan
 ## Related
 
 - [Pair your Hue bridge](/docs/hue/pairing) — four-step onboarding flow
+- [LED calibration](/docs/usb-leds/calibration) — room map editor and zone authoring
 - [Hue troubleshooting](/docs/hue/troubleshooting)

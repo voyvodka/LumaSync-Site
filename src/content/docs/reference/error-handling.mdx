@@ -1,9 +1,9 @@
 ---
 title: Error handling
-description: How LumaSync recovers from render faults — the global ErrorBoundary, the fallback card, and the actions available from it.
+description: How LumaSync recovers from render faults — the global ErrorBoundary, the fallback card, the actions available from it, and the macOS lifecycle shutdown path.
 group: reference
 order: 50
-updated: 2026-04-24
+updated: 2026-05-05
 ---
 
 From v1.4, LumaSync wraps every React root with a **global ErrorBoundary**. When a render fault bubbles out of the component tree, you get a localised fallback card — not a blank tray window, not a silent crash. The app keeps running; only the broken panel is replaced with the card.
@@ -44,8 +44,20 @@ If the fallback card appears, attach:
 
 Together those three let a maintainer reproduce in the dev console without asking follow-up questions.
 
+## macOS lifecycle hardening (v1.5.2)
+
+The macOS shutdown path was previously fragile: Cmd+Q, the tray Quit menu, and Ctrl+C in dev each had their own teardown logic, with subtle ordering differences that could leak file descriptors, the single-instance lock socket, or the Hue DTLS sender thread.
+
+From v1.5.2 all three paths converge on a single `kick_off_shutdown_and_die` Rust function gated by an atomic `SHUTDOWN_FIRED` flag. Two follow-ups landed alongside the unification:
+
+- The watchdog's `std::process::exit(0)` previously bypassed Tauri plugin `destroy()` callbacks, which left `tauri-plugin-single-instance`'s `/tmp/com_lumasync_app_si.sock` socket on disk. The next dev launch detected the stale socket and exited within ~50 ms. The plugin is now `#[cfg(not(debug_assertions))]`-gated to release builds only, so dev launches don't touch the socket and don't leak it.
+- `stop_hue_stream` could block for up to 8 s under a worst-case combination of `reqwest` timeout (5 s) plus a DTLS sender Condvar (3 s), blowing through the 4 s watchdog budget. The call is now detached onto a worker thread and abandoned after 1.5 s — safe because the bridge times out the entertainment session server-side regardless.
+
+End result: Cmd+Q closes the app cleanly within the watchdog budget every time, and dev rebuilds no longer fail with single-instance-lock hangs.
+
 ## Related
 
 - [Telemetry](/docs/reference/telemetry) — logs directory and rotation
 - [Notifications](/docs/reference/notifications) — `open_log_dir` and OS toasts
 - [USB troubleshooting](/docs/usb-leds/troubleshooting) — device-level errors take a different path than ErrorBoundary
+- [Hue troubleshooting](/docs/hue/troubleshooting) — the `HUE_STREAM_NOT_READY_ACTIVE_STREAMER` 403 retired in v1.5.2
