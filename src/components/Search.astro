@@ -111,7 +111,7 @@
             <a class="search-result" href="${escapeHtml(r.url)}" data-index="${i}">
               <span class="result-kicker">${escapeHtml(r.meta?.section || r.meta?.category || '')}</span>
               <span class="result-title">${escapeHtml(r.meta?.title || r.url)}</span>
-              <span class="result-excerpt">${r.excerpt || ''}</span>
+              <span class="result-excerpt">${r.excerpt ? sanitizeExcerpt(r.excerpt) : ''}</span>
             </a>`,
         )
         .join('');
@@ -131,6 +131,11 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+
+    const sanitizeExcerpt = (s) =>
+      escapeHtml(s)
+        .replace(/&lt;mark&gt;/g, '<mark>')
+        .replace(/&lt;\/mark&gt;/g, '</mark>');
 
     let queryTimer = 0;
     input.addEventListener('input', (e) => {
