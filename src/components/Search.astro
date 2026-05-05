@@ -24,7 +24,7 @@
         data-search-input
         aria-label="Search query"
       />
-      <button type="submit" class="close" aria-label="Close">
+      <button type="submit" class="close" aria-label="Close" title="Close">
         <kbd>Esc</kbd>
       </button>
     </div>
@@ -239,6 +239,20 @@
     border: none;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .close:hover {
+    background: var(--surface-2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .close:active {
+      transform: scale(0.96);
+    }
   }
 
   .close:focus-visible {
