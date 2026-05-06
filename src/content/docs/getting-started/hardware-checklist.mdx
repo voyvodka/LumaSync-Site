@@ -35,7 +35,7 @@ Any of the supported chipsets:
 
 Non-USB endpoints (Bluetooth, PCI, Unknown) are rejected up-front with `PORT_UNSUPPORTED` so you can't accidentally pair against `/dev/cu.Bluetooth-Incoming-Port` or similar.
 
-The controller must run **LumaSync v1 firmware at 115200 baud** — see the [Serial protocol](/docs/usb-leds/serial-protocol) page for the wire spec. Most "ambilight USB kit" marketplace products ship pre-flashed with Adalight firmware. From v1.4, LumaSync includes an **opt-in Adalight encoder profile** — either enable it in Settings → Device, or reflash the controller with LumaSync v1 firmware. Leave the baud rate at 115200 either way.
+The controller must run **LumaSync v1 firmware at 115200 baud** — see the [Serial protocol](/docs/usb-leds/serial-protocol/) page for the wire spec. Most "ambilight USB kit" marketplace products ship pre-flashed with Adalight firmware. From v1.4, LumaSync includes an **opt-in Adalight encoder profile** — either enable it in Settings → Device, or reflash the controller with LumaSync v1 firmware. Leave the baud rate at 115200 either way.
 
 ### 3 · 5 V power supply
 
@@ -51,7 +51,7 @@ Any board the [WLED project](https://kno.wled.ge/) supports — ESP32 (preferred
 
 LumaSync auto-discovers WLED boards on the LAN over mDNS (`_wled._tcp.local.`). Manual IP entry is also supported, but loopback (`127.0.0.0/8`), unspecified (`0.0.0.0`), multicast (`224.0.0.0/4`), and broadcast (`255.255.255.255`) addresses are rejected up-front with `WLED_INVALID_IP`. Wired boards work fine; Wi-Fi 5 GHz / wired uplinks reduce jitter on busier networks.
 
-See the [WLED bridge](/docs/usb-leds/wled) page for the full setup walkthrough.
+See the [WLED bridge](/docs/usb-leds/wled/) page for the full setup walkthrough.
 
 ## Philips Hue path
 
@@ -78,7 +78,7 @@ Any bulb or lightstrip that appears in the Hue app's Entertainment Area picker w
 ## Not needed
 
 - A dedicated **HDMI capture box** — LumaSync samples the screen via the OS screen-capture APIs. No extra hardware in the video signal path.
-- A **Hue Sync Box** — that's a different architecture (HDMI passthrough, console/Apple TV focused). See the [Hue Sync comparison](/compare/hue-sync) for how the two differ.
+- A **Hue Sync Box** — that's a different architecture (HDMI passthrough, console/Apple TV focused). See the [Hue Sync comparison](/compare/hue-sync/) for how the two differ.
 - An **always-on server** — the app runs on whatever machine does the screen capture. No Pi or NUC required.
 
 ## Order-of-priority shopping

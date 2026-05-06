@@ -4,6 +4,13 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.10] — 2026-05-06
+
+### SEO
+
+- **Internal-link canonicalization across the URL surface.** Astro config sets `trailingSlash: 'always'` so canonical URLs and sitemap entries end with `/`, but the rest of the site had drifted to slashless internal references — every header / footer nav item, every body link, every `breadcrumbSchema` / `itemList` / `softwareApp.downloadUrl` field, both `compareHref` / `docHref` helpers in `src/lib/content.ts`, the legacy alias targets in `astro.config.mjs`, every URL in `public/llms.txt`, and ~100 markdown links across `src/content/**/*.mdx`. Each slashless link triggered a 308 redirect, and the legacy aliases formed a 2-hop meta-refresh + 308 chain. The April fix repaired the sitemap; this commit completes the consistency pass across the remaining surfaces. Expected impact: clears the redirect-related "Page indexing" entries in Search Console and frees crawl budget previously wasted on internal redirects.
+- **`Header.astro` `isActive` simplified.** With trailing-slash hrefs, the previous `pathname === href || pathname.startsWith(\`${href}/\`)` form no longer matches sub-pages. Replaced with `pathname.startsWith(href)` — same semantics, fewer special cases.
+
 ## [1.1.9] — 2026-05-05
 
 ### Security

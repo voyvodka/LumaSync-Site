@@ -35,13 +35,13 @@ Settings → **Hue** → **Pair bridge**.
 3. Press the physical **link button** on the bridge, then click **Continue**.
 4. Pick an **Entertainment Area** from the dropdown. If none exist, create one in the Hue app first (Settings → Entertainment areas).
 
-On success the bridge username and PSK land in your **OS keychain** (macOS Keychain / Windows Credential Manager / Linux Secret Service); the rest of the configuration lives in `~/.config/lumasync/app.json`. Nothing is uploaded. See [Hue pairing](/docs/hue/pairing) for a deeper walkthrough or troubleshooting.
+On success the bridge username and PSK land in your **OS keychain** (macOS Keychain / Windows Credential Manager / Linux Secret Service); the rest of the configuration lives in `~/.config/lumasync/app.json`. Nothing is uploaded. See [Hue pairing](/docs/hue/pairing/) for a deeper walkthrough or troubleshooting.
 
 ### Connect a USB controller
 
 Plug your USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) into a USB port. Settings → **Device**.
 
-1. LumaSync auto-detects supported controllers and rejects non-USB serial endpoints (Bluetooth, PCI, Unknown) up-front with `PORT_UNSUPPORTED`. If your chip doesn't appear, check the full list in [USB controllers](/docs/usb-leds/controllers).
+1. LumaSync auto-detects supported controllers and rejects non-USB serial endpoints (Bluetooth, PCI, Unknown) up-front with `PORT_UNSUPPORTED`. If your chip doesn't appear, check the full list in [USB controllers](/docs/usb-leds/controllers/).
 2. Pick the port from the dropdown, then pick the **chip type** — WS2812B (RGB) or SK6812 RGBW. The host-side encoder derives the white channel as `W = min(R, G, B)` for SK6812.
 3. Click **Health check** — LumaSync sends a PING/PONG handshake at 115200 baud and confirms the strip is responsive. The result shows up next to the port entry within a couple of seconds.
 
@@ -53,7 +53,7 @@ Settings → **Device** → **WLED**.
 2. Click **Connect**, then **Test** to push a brief solid pattern. The round-trip is reported in milliseconds.
 3. The board is driven over UDP via the **DDP** protocol once Ambilight is active.
 
-See the dedicated [WLED bridge](/docs/usb-leds/wled) page for the full reference.
+See the dedicated [WLED bridge](/docs/usb-leds/wled/) page for the full reference.
 
 ## 3 · Pick a mode
 
@@ -70,7 +70,7 @@ If you just plugged in a USB strip and nothing matches the edge of your TV, open
 - Pick the **start anchor** and **direction**
 - Hit the **test pattern** toggle to confirm with a visible chase
 
-See [LED calibration](/docs/usb-leds/calibration) for the full reference. Most strip kits work with the defaults.
+See [LED calibration](/docs/usb-leds/calibration/) for the full reference. Most strip kits work with the defaults.
 
 ## 5 · Keep it open forever
 
@@ -78,6 +78,6 @@ The **Auto-start on login** toggle (Settings → General) puts LumaSync in your 
 
 ## What next?
 
-- Your ambilight looks laggy or dim → [Performance tuning](/docs/ambilight/performance)
-- USB device went red → [USB troubleshooting](/docs/usb-leds/troubleshooting)
+- Your ambilight looks laggy or dim → [Performance tuning](/docs/ambilight/performance/)
+- USB device went red → [USB troubleshooting](/docs/usb-leds/troubleshooting/)
 - Want to map the room and project Hue channels onto it → [Room map editor](/docs/usb-leds/calibration#room-map-editor)

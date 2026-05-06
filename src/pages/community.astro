@@ -45,11 +45,11 @@ const triage = [
     a:
       '<a href="' +
       repo +
-      '/issues">GitHub Issues</a>. Attach the OS-generated crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump) and the LumaSync log file. <a href="/docs/reference/telemetry#logs">Log locations</a>.',
+      '/issues">GitHub Issues</a>. Attach the OS-generated crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump) and the LumaSync log file. <a href="/docs/reference/telemetry/#logs">Log locations</a>.',
   },
   {
     q: "My hardware isn't recognised — is this a bug?",
-    a: 'Probably not a bug, probably an unsupported chip. Check <a href="/docs/usb-leds/controllers">USB controllers</a> first. If it IS a CH340 or FT232 and still fails, open an issue with <code>lsusb</code> / Device Manager output.',
+    a: 'Probably not a bug, probably an unsupported chip. Check <a href="/docs/usb-leds/controllers/">USB controllers</a> first. If it IS a CH340 or FT232 and still fails, open an issue with <code>lsusb</code> / Device Manager output.',
   },
   {
     q: 'I want a feature — will you build it?',
@@ -67,7 +67,7 @@ const triage = [
 const schemas = [
   breadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Community', url: '/community' },
+    { name: 'Community', url: '/community/' },
   ]),
   faqPageSchema(triage.map(({ q, a }) => ({ question: q, answer: a }))),
 ];

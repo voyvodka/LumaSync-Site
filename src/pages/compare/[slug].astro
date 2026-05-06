@@ -23,13 +23,13 @@ const schemas = entry.data.draft
   : [
       breadcrumbSchema([
         { name: 'Home', url: '/' },
-        { name: 'Compare', url: '/compare' },
-        { name: `vs ${entry.data.competitor}`, url: `/compare/${slug}` },
+        { name: 'Compare', url: '/compare/' },
+        { name: `vs ${entry.data.competitor}`, url: `/compare/${slug}/` },
       ]),
       articleSchema({
         title: entry.data.title,
         description: entry.data.description,
-        url: `/compare/${slug}`,
+        url: `/compare/${slug}/`,
         dateModified: updatedISO,
       }),
     ];

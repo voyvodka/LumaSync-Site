@@ -54,7 +54,7 @@ export async function groupDocs(): Promise<DocGroupBucket[]> {
 }
 
 export function docHref(entry: CollectionEntry<'docs'>): string {
-  return `/docs/${entry.id.replace(/\.mdx$/, '')}`;
+  return `/docs/${entry.id.replace(/\.mdx$/, '')}/`;
 }
 
 export async function listCompare(): Promise<CollectionEntry<'compare'>[]> {
@@ -63,5 +63,5 @@ export async function listCompare(): Promise<CollectionEntry<'compare'>[]> {
 }
 
 export function compareHref(entry: CollectionEntry<'compare'>): string {
-  return `/compare/${entry.id.replace(/\.mdx$/, '')}`;
+  return `/compare/${entry.id.replace(/\.mdx$/, '')}/`;
 }

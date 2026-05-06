@@ -31,7 +31,7 @@ const schemas = [
       'Open-source desktop ambient-lighting app that mirrors your screen to WS2812B / SK6812 RGBW LED strips over USB, WLED boards over Wi-Fi (DDP), and Philips Hue Entertainment areas — all from one source.',
     version: LATEST_VERSION,
     operatingSystems: ['macOS', 'Windows', 'Linux'],
-    downloadUrl: '/download',
+    downloadUrl: '/download/',
     datePublished: LATEST_VERSION_DATE,
   }),
   itemListSchema({
@@ -40,37 +40,37 @@ const schemas = [
     items: [
       {
         name: 'USB LED strips',
-        url: '/docs/usb-leds/serial-protocol',
+        url: '/docs/usb-leds/serial-protocol/',
         description:
           'Drives WS2812B and SK6812 RGBW strips through CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial controllers; LumaSync-native and Adalight framing both supported at 115200 baud.',
       },
       {
         name: 'WLED bridge',
-        url: '/docs/usb-leds/wled',
+        url: '/docs/usb-leds/wled/',
         description:
           'Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol — discovered automatically on the LAN over mDNS or paired by IP.',
       },
       {
         name: 'Philips Hue Entertainment streaming',
-        url: '/docs/hue/entertainment-area',
+        url: '/docs/hue/entertainment-area/',
         description:
           'DTLS 1.2 PSK streaming to any configured Entertainment Area at up to 20 Hz — with Hue Zones, AR-locked sizing, and per-bulb gamut clipping.',
       },
       {
         name: 'Three sinks, one pipeline',
-        url: '/docs/getting-started/first-setup',
+        url: '/docs/getting-started/first-setup/',
         description:
           'A single screen-capture pipeline drives USB strips, WLED boards, and Hue zones simultaneously, switched per-mode from the system tray.',
       },
       {
         name: 'Room map editor',
-        url: '/docs/usb-leds/calibration',
+        url: '/docs/usb-leds/calibration/',
         description:
           'Drag-and-drop canvas for placing the TV anchor, furniture, USB strips, and Hue channels on a normalized grid.',
       },
       {
         name: 'Live Δ/Σ telemetry',
-        url: '/docs/ambilight/performance',
+        url: '/docs/ambilight/performance/',
         description:
           'Realtime frame-latency and FPS pill so you can see when the pipeline is healthy or stalling.',
       },
@@ -119,7 +119,7 @@ const schemas = [
       <h1 class="display">Your screen, your lights. Locally.</h1>
       <p class="subhead">{description}</p>
       <div class="cta-row">
-        <a class="cta-primary" href="/download" data-os-cta> Download </a>
+        <a class="cta-primary" href="/download/" data-os-cta> Download </a>
         <a class="cta-secondary" href={repo}> View on GitHub → </a>
       </div>
       <p class="platform-note">macOS · Windows · Linux</p>
@@ -152,10 +152,10 @@ const schemas = [
         <p>
           WS2812B and SK6812 RGBW chips over CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial
           controllers at 115200 baud — running the
-          <a href="/docs/usb-leds/serial-protocol">LumaSync v1 serial frame</a> or the opt-in Adalight
+          <a href="/docs/usb-leds/serial-protocol/">LumaSync v1 serial frame</a> or the opt-in Adalight
           profile.
         </p>
-        <a href="/docs/usb-leds/controllers">Supported chipsets →</a>
+        <a href="/docs/usb-leds/controllers/">Supported chipsets →</a>
       </article>
 
       <article>
@@ -166,7 +166,7 @@ const schemas = [
           on the LAN over mDNS or paired by static IP. Loopback, multicast, and broadcast addresses
           are rejected up-front.
         </p>
-        <a href="/docs/usb-leds/wled">WLED setup →</a>
+        <a href="/docs/usb-leds/wled/">WLED setup →</a>
       </article>
 
       <article>
@@ -174,10 +174,10 @@ const schemas = [
         <h3>Philips Hue Entertainment</h3>
         <p>
           DTLS 1.2 PSK streaming to any Entertainment Area at up to 20 Hz, with
-          <a href="/docs/hue/entertainment-area">Hue Zones</a>, AR-locked sizing, and per-bulb gamut
-          clipping for accurate colour.
+          <a href="/docs/hue/entertainment-area/">Hue Zones</a>, AR-locked sizing, and per-bulb
+          gamut clipping for accurate colour.
         </p>
-        <a href="/docs/hue/entertainment-area">How Hue streaming works →</a>
+        <a href="/docs/hue/entertainment-area/">How Hue streaming works →</a>
       </article>
 
       <article>
@@ -193,7 +193,7 @@ const schemas = [
           <li>Compact 320×480 / Full 900×620</li>
           <li>OS keychain credentials</li>
         </ul>
-        <a href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
+        <a href="/docs/getting-started/first-setup/">First-setup walkthrough →</a>
       </article>
     </div>
   </section>
@@ -207,7 +207,7 @@ const schemas = [
         Tuned for latency, not flash. The telemetry pill shows live capture and send rates so you
         can see when the pipeline is healthy and when it isn't — no mystery numbers.
       </p>
-      <a class="inline-cta" href="/docs/ambilight/performance">Read about performance →</a>
+      <a class="inline-cta" href="/docs/ambilight/performance/">Read about performance →</a>
     </div>
     <figure class="callout-visual">
       <picture>
@@ -252,7 +252,7 @@ const schemas = [
         Drag your TV, furniture, and USB strips onto a grid. Hue channels project onto normalized
         coordinates. Undo / redo, snap guides, keyboard shortcuts.
       </p>
-      <a class="inline-cta" href="/docs/usb-leds/calibration">Calibration docs →</a>
+      <a class="inline-cta" href="/docs/usb-leds/calibration/">Calibration docs →</a>
     </div>
   </section>
 
@@ -265,7 +265,7 @@ const schemas = [
         Single window hides to tray on close. Compact 320×480 mode for quick toggles, full 900×620
         mode when you want to configure. Auto-starts on login, if you want it to.
       </p>
-      <a class="inline-cta" href="/docs/getting-started/first-setup">First-setup walkthrough →</a>
+      <a class="inline-cta" href="/docs/getting-started/first-setup/">First-setup walkthrough →</a>
     </div>
     <figure class="callout-visual dual">
       <picture class="dual-compact">
@@ -338,7 +338,7 @@ const schemas = [
         <p class="trust-label">Updates signed with minisign</p>
         <p>
           Every binary is signature-verified before replacing the on-disk version. <a
-            href="/docs/advanced/auto-updater">How updates work</a
+            href="/docs/advanced/auto-updater/">How updates work</a
           >.
         </p>
       </div>
@@ -363,7 +363,7 @@ const schemas = [
       <em>Sync-on-Luma</em> RGB SCART signal used in retro consoles or the lumalabs.ai video tools.
     </p>
     <div class="compare-grid">
-      <a class="compare-card" href="/compare/hue-sync">
+      <a class="compare-card" href="/compare/hue-sync/">
         <p class="compare-kicker">vs Philips Hue Sync</p>
         <h3>Desktop app vs HDMI passthrough box</h3>
         <p>
@@ -372,7 +372,7 @@ const schemas = [
         </p>
         <p class="compare-link">Read comparison →</p>
       </a>
-      <a class="compare-card" href="/compare/wled">
+      <a class="compare-card" href="/compare/wled/">
         <p class="compare-kicker">vs WLED</p>
         <h3>Native USB vs ESP32 firmware</h3>
         <p>
@@ -381,7 +381,7 @@ const schemas = [
         </p>
         <p class="compare-link">Read comparison →</p>
       </a>
-      <a class="compare-card" href="/compare/hyperion">
+      <a class="compare-card" href="/compare/hyperion/">
         <p class="compare-kicker">vs Hyperion</p>
         <h3>Install-and-run vs RPi-first stack</h3>
         <p>
@@ -390,7 +390,7 @@ const schemas = [
         </p>
         <p class="compare-link">Read comparison →</p>
       </a>
-      <a class="compare-card" href="/compare/prismatik">
+      <a class="compare-card" href="/compare/prismatik/">
         <p class="compare-kicker">vs Prismatik</p>
         <h3>Built fresh vs Lightpack legacy</h3>
         <p>
@@ -401,7 +401,7 @@ const schemas = [
       </a>
     </div>
     <p class="compare-footnote">
-      <a href="/compare">All four comparisons in one place →</a>
+      <a href="/compare/">All four comparisons in one place →</a>
     </p>
   </section>
 
@@ -462,7 +462,7 @@ const schemas = [
             the platform log file alongside Rust log entries
           </li>
         </ul>
-        <a class="inline-cta" href="/changelog">Full changelog →</a>
+        <a class="inline-cta" href="/changelog/">Full changelog →</a>
       </article>
 
       <article class="roadmap-col roadmap-next">
@@ -516,14 +516,14 @@ const schemas = [
       <li>
         <strong>You need HDMI passthrough for a console or Apple TV.</strong>
         LumaSync reads the OS screen buffer — no HDMI in the signal path. Grab a <a
-          href="/compare/hue-sync">Hue Sync Box</a
+          href="/compare/hue-sync/">Hue Sync Box</a
         > instead.
       </li>
       <li>
         <strong>You don't have a Hue Bridge, a WS2812B / SK6812 controller, or a WLED board.</strong
         >
         The app will run, but you won't see anything light up. Start with the <a
-          href="/docs/getting-started/hardware-checklist">hardware checklist</a
+          href="/docs/getting-started/hardware-checklist/">hardware checklist</a
         >.
       </li>
       <li>

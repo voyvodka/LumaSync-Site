@@ -22,13 +22,13 @@ const publishedItems = groups.flatMap(({ items }) =>
 const schemas = [
   breadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Docs', url: '/docs' },
+    { name: 'Docs', url: '/docs/' },
   ]),
   collectionPageSchema({
     name: 'LumaSync Docs',
     description:
       'LumaSync documentation — setup, hardware, Philips Hue, troubleshooting, reference.',
-    url: '/docs',
+    url: '/docs/',
     items: publishedItems,
   }),
 ];
@@ -45,7 +45,7 @@ const schemas = [
       <h1 class="page-title">LumaSync Docs</h1>
       <p class="lede">
         Everything needed to go from fresh install to a calibrated ambilight setup. Start with <a
-          href="/docs/getting-started/install">Install</a
+          href="/docs/getting-started/install/">Install</a
         >, then work through the group that matches your hardware.
       </p>
     </header>
