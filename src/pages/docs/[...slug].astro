@@ -33,27 +33,27 @@ const HOWTO_BY_SLUG: Record<string, Omit<HowToInput, 'url'>> = {
       {
         name: 'Check prerequisites',
         text: 'Confirm you are on macOS 13+, Windows 10+, or a mainstream Linux desktop, and that you have either a Philips Hue Bridge with an Entertainment Area or a WS2812B strip driven by a CH340 or FT232 USB-serial controller.',
-        url: '/docs/getting-started/install#prerequisites',
+        url: '/docs/getting-started/install/#prerequisites',
       },
       {
         name: 'Download for your OS',
         text: 'Open the Download page and choose the build matching your operating system. macOS ships as a universal .dmg, Windows as an MSI installer, Linux as an AppImage.',
-        url: '/download',
+        url: '/download/',
       },
       {
         name: 'Install the binary',
         text: 'Run the installer (macOS / Windows) or move the AppImage somewhere on PATH and chmod +x it (Linux). LumaSync is a single application, no background service to manage.',
-        url: '/docs/getting-started/install',
+        url: '/docs/getting-started/install/',
       },
       {
         name: 'Verify the signature',
         text: 'On first launch the auto-updater verifies the minisign signature against the bundled public key. If verification fails the install aborts — re-download from a clean source.',
-        url: '/docs/advanced/auto-updater',
+        url: '/docs/advanced/auto-updater/',
       },
       {
         name: 'Run the first-setup walkthrough',
         text: 'Launch LumaSync and follow the in-app first-setup flow to pair your Hue bridge or connect your USB controller and confirm lights are responding.',
-        url: '/docs/getting-started/first-setup',
+        url: '/docs/getting-started/first-setup/',
       },
     ],
   },
@@ -70,22 +70,22 @@ const HOWTO_BY_SLUG: Record<string, Omit<HowToInput, 'url'>> = {
       {
         name: 'Pair your Hue bridge (Hue path)',
         text: 'Press the link button on top of the Hue bridge, then click Pair in LumaSync within thirty seconds. The bridge issues an application key that LumaSync stores locally.',
-        url: '/docs/hue/pairing',
+        url: '/docs/hue/pairing/',
       },
       {
         name: 'Plug in your USB controller (USB path)',
         text: 'Connect the CH340 or FT232 controller via USB. LumaSync detects the chipset and prompts you to assign it to a strip in the room map.',
-        url: '/docs/usb-leds/controllers',
+        url: '/docs/usb-leds/controllers/',
       },
       {
         name: 'Pick a scene preset',
         text: 'Open the scenes panel and pick Ambilight, Solid colour, or one of the gradient presets. The lights should mirror the screen within milliseconds.',
-        url: '/docs/advanced/scenes',
+        url: '/docs/advanced/scenes/',
       },
       {
         name: 'Watch the Δ/Σ telemetry pill',
         text: 'Confirm capture and send rates are healthy — Δ should sit under 20 ms and Σ should match your screen refresh rate. If either drifts, see the performance docs for tuning.',
-        url: '/docs/ambilight/performance',
+        url: '/docs/ambilight/performance/',
       },
     ],
   },
@@ -98,8 +98,8 @@ const schemas = entry.data.draft
   : [
       breadcrumbSchema([
         { name: 'Home', url: '/' },
-        { name: 'Docs', url: '/docs' },
-        { name: groupLabel, url: '/docs' },
+        { name: 'Docs', url: '/docs/' },
+        { name: groupLabel, url: '/docs/' },
         { name: entry.data.title, url: docPath },
       ]),
       techArticleSchema({
@@ -122,7 +122,7 @@ const schemas = entry.data.draft
   <article class="doc">
     <header>
       <p class="crumb">
-        <a href="/docs">Docs</a>
+        <a href="/docs/">Docs</a>
         <span aria-hidden="true">·</span>
         <span>{groupLabel}</span>
       </p>

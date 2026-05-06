@@ -53,7 +53,7 @@ If you're on a Wayland-only compositor where XWayland isn't installed, the AppIm
 
 ## Multiple displays
 
-If you have more than one monitor, open **Settings → Ambilight → Display** to pick which one drives the LEDs. Defaults to the primary. For more complex "this strip from display 1, that Hue area from display 2" setups, see [Multi-display](/docs/advanced/multi-display).
+If you have more than one monitor, open **Settings → Ambilight → Display** to pick which one drives the LEDs. Defaults to the primary. For more complex "this strip from display 1, that Hue area from display 2" setups, see [Multi-display](/docs/advanced/multi-display/).
 
 ## What gets captured
 
@@ -69,13 +69,13 @@ After capture, frames go through:
 
 1. **Downscale** to the edge-signal grid (roughly 16×9 per edge).
 2. **Per-edge reduction** to a colour per LED (for the USB path) or per channel (for the Hue path).
-3. **Temporal smoothing** (see [Tuning](/docs/ambilight/tuning) for how to tweak this).
+3. **Temporal smoothing** (see [Tuning](/docs/ambilight/tuning/) for how to tweak this).
 4. **Output** via USB serial (LumaSync v1 frame) and Hue DTLS streams in parallel.
 
 If you're debugging what LumaSync "sees", the edge-signal preview (compact mode) shows the grid in real time.
 
 ## Related
 
-- [Performance](/docs/ambilight/performance) — Δ/Σ telemetry explained
-- [Tuning](/docs/ambilight/tuning) — saturation, smoothing, caps
-- [Multi-display](/docs/advanced/multi-display)
+- [Performance](/docs/ambilight/performance/) — Δ/Σ telemetry explained
+- [Tuning](/docs/ambilight/tuning/) — saturation, smoothing, caps
+- [Multi-display](/docs/advanced/multi-display/)

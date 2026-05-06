@@ -6,7 +6,7 @@ order: 10
 updated: 2026-05-05
 ---
 
-LumaSync's USB LED path drives a WS2812B (RGB) or SK6812 RGBW strip through a USB-to-serial controller, streaming frames at 115200 baud using the [LumaSync v1 serial frame format](/docs/usb-leds/serial-protocol) — not Adalight. An **opt-in Adalight profile** shipped in v1.4; flip **Settings → Device → Firmware profile** to **Adalight** to keep existing Adalight controllers running unchanged.
+LumaSync's USB LED path drives a WS2812B (RGB) or SK6812 RGBW strip through a USB-to-serial controller, streaming frames at 115200 baud using the [LumaSync v1 serial frame format](/docs/usb-leds/serial-protocol/) — not Adalight. An **opt-in Adalight profile** shipped in v1.4; flip **Settings → Device → Firmware profile** to **Adalight** to keep existing Adalight controllers running unchanged.
 
 ## Supported chipsets
 
@@ -67,7 +67,7 @@ And the serial port is typically `/dev/ttyUSB0` once the kernel driver loads (`c
 
 ## Firmware on the controller
 
-The controller needs to run **LumaSync v1 firmware at 115200 baud** — see [Serial protocol](/docs/usb-leds/serial-protocol) for the full wire spec.
+The controller needs to run **LumaSync v1 firmware at 115200 baud** — see [Serial protocol](/docs/usb-leds/serial-protocol/) for the full wire spec.
 
 - A **companion reference sketch** will ship alongside the firmware companion repo; until then, the serial-protocol page has the byte-level format so you can port or write your own (~40 lines of Arduino code).
 - Most "ambilight USB kit" marketplace products ship pre-flashed with **Adalight firmware**. From v1.4, LumaSync includes an **opt-in Adalight encoder profile** — pick "Firmware profile: LumaSync v1 | Adalight" in Settings → Device, and LumaSync emits the legacy Adalight framing instead of its native v1 frame. Alternatively, reflash the controller with LumaSync v1 firmware.
@@ -85,7 +85,7 @@ Adding the chipset to the auto-detect list requires a code change in the shared 
 
 ## Related
 
-- [WLED bridge](/docs/usb-leds/wled) — drive ESP32 / ESP8266 boards over Wi-Fi instead of USB
-- [Serial protocol](/docs/usb-leds/serial-protocol) — what goes over the wire
-- [LED calibration](/docs/usb-leds/calibration) — once connected, map the strip to your screen
-- [USB troubleshooting](/docs/usb-leds/troubleshooting)
+- [WLED bridge](/docs/usb-leds/wled/) — drive ESP32 / ESP8266 boards over Wi-Fi instead of USB
+- [Serial protocol](/docs/usb-leds/serial-protocol/) — what goes over the wire
+- [LED calibration](/docs/usb-leds/calibration/) — once connected, map the strip to your screen
+- [USB troubleshooting](/docs/usb-leds/troubleshooting/)

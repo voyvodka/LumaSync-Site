@@ -31,7 +31,7 @@ Short version: **Prismatik is the right answer only if you physically own Lightp
 | Auto-updates | minisign-signed, GitHub Releases | Built-in updater with signed artifacts (`.updater_signature` ships alongside installers), but the updater points at a dormant release stream |
 | Open source | MIT | GPLv3 |
 | Apple Silicon | Universal binary | x86_64 only (Rosetta on Apple Silicon) — psieg fork's 5.11.2.31 dmg predates Apple Silicon support |
-| Last update | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog) | 5.11.2.31 on 2022-01-08 |
+| Last update | [{LATEST_VERSION}, {LATEST_VERSION_DATE}](/changelog/) | 5.11.2.31 on 2022-01-08 |
 
 ## When to pick LumaSync
 
@@ -48,9 +48,9 @@ Short version: **Prismatik is the right answer only if you physically own Lightp
 
 Coming from **Prismatik to LumaSync**:
 
-- If you're using a generic CH340/FT232 USB kit, the **strip and controller board are reusable**. Either reflash the microcontroller to the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol), or enable the v1.4+ **Adalight profile** in Settings → Device and keep the existing Adalight firmware. Then stop Prismatik, disconnect its USB port, start LumaSync, run the device health check. See [USB controllers](/docs/usb-leds/controllers).
+- If you're using a generic CH340/FT232 USB kit, the **strip and controller board are reusable**. Either reflash the microcontroller to the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol/), or enable the v1.4+ **Adalight profile** in Settings → Device and keep the existing Adalight firmware. Then stop Prismatik, disconnect its USB port, start LumaSync, run the device health check. See [USB controllers](/docs/usb-leds/controllers/).
 - If you're using actual **Lightpack hardware**: LumaSync does not recognise the Lightpack VID:PID, so it has to be connected via the custom port path. With the **Adalight profile** enabled in Settings → Device (shipped in v1.4), LumaSync emits Prismatik-compatible framing, but the auto-detect convenience is still Prismatik-only. Keep Prismatik if that matters.
-- Your edge counts and calibration settings don't auto-import. Re-enter them in [Calibration](/docs/usb-leds/calibration).
+- Your edge counts and calibration settings don't auto-import. Re-enter them in [Calibration](/docs/usb-leds/calibration/).
 
 Coming from **LumaSync to Prismatik**:
 
@@ -58,6 +58,6 @@ Coming from **LumaSync to Prismatik**:
 
 ## Further reading
 
-- [Hardware checklist](/docs/getting-started/hardware-checklist) — what LumaSync recognises
-- [USB controllers](/docs/usb-leds/controllers) — supported VID:PIDs
+- [Hardware checklist](/docs/getting-started/hardware-checklist/) — what LumaSync recognises
+- [USB controllers](/docs/usb-leds/controllers/) — supported VID:PIDs
 - [Prismatik psieg fork](https://github.com/psieg/Lightpack) (external)

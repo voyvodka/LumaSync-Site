@@ -10,13 +10,13 @@ const publishedEntries = entries.filter((entry) => !entry.data.draft);
 const schemas = [
   breadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Compare', url: '/compare' },
+    { name: 'Compare', url: '/compare/' },
   ]),
   collectionPageSchema({
     name: 'LumaSync vs the alternatives',
     description:
       'Side-by-side comparisons of LumaSync against Philips Hue Sync, Hyperion, Prismatik, and WLED.',
-    url: '/compare',
+    url: '/compare/',
     items: publishedEntries.map((entry) => ({
       name: `LumaSync vs ${entry.data.competitor}`,
       url: compareHref(entry),

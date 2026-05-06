@@ -2,16 +2,15 @@
 import Container from './Container.astro';
 
 const links = [
-  { href: '/docs', label: 'Docs' },
-  { href: '/download', label: 'Download' },
-  { href: '/changelog', label: 'Changelog' },
-  { href: '/compare', label: 'Compare' },
-  { href: '/community', label: 'Community' },
+  { href: '/docs/', label: 'Docs' },
+  { href: '/download/', label: 'Download' },
+  { href: '/changelog/', label: 'Changelog' },
+  { href: '/compare/', label: 'Compare' },
+  { href: '/community/', label: 'Community' },
 ];
 
 const pathname = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
+const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 ---
 
 <header class="site-header" data-pagefind-ignore>
