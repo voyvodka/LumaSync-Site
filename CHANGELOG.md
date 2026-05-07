@@ -4,6 +4,16 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.11] — 2026-05-07
+
+### Security
+
+- **Single-quote escape in JSON-LD serialization**: `src/components/Schema.astro` was injecting `JSON.stringify` output into `<script type="application/ld+json">` via `set:html` with `<`, `>`, and `&` escaped to their `\u00xx` forms, but single quotes left through unchanged. While JSON does not require escaping `'`, leaving it raw inside an HTML script-context payload is a latent script-breakout vector if the script-tag is ever wrapped in a single-quoted attribute or the surrounding template shifts. Added `.replace(/'/g, '\\u0027')` to the existing escape chain so all four script-context-sensitive characters are uniformly neutralized regardless of where the schema string ends up.
+
+### UX
+
+- **Tactile click feedback on 404 page CTAs**: the `Search`, `Home`, and recovery-link controls on `src/pages/404.astro` now scale to `0.96` on `:active`, wrapped in `@media (prefers-reduced-motion: no-preference)` so reduced-motion users are unaffected. Matches the same affordance applied to header / search / nav controls in v1.1.9, restoring perceived responsiveness on the one user-facing page that had been missed.
+
 ## [1.1.10] — 2026-05-06
 
 ### SEO
