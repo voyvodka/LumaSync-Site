@@ -134,7 +134,9 @@ const recoveryLinks = [
     font-size: var(--fs-sm);
     font-weight: 500;
     cursor: pointer;
-    transition: background-color var(--duration-fast) var(--ease-out);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .search-cta:focus-visible {
@@ -164,7 +166,9 @@ const recoveryLinks = [
     text-decoration: none;
     font-size: var(--fs-sm);
     padding: 0.625rem 0.5rem;
-    transition: color var(--duration-fast) var(--ease-out);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .home-cta:hover {
@@ -189,7 +193,8 @@ const recoveryLinks = [
     text-decoration: none;
     transition:
       border-color var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out);
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .recovery a:hover {
@@ -209,5 +214,13 @@ const recoveryLinks = [
     color: var(--text-muted);
     font-size: var(--fs-xs);
     margin-top: 0.125rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .search-cta:active,
+    .home-cta:active,
+    .recovery a:active {
+      transform: scale(0.96);
+    }
   }
 </style>
