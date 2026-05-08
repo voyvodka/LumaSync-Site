@@ -95,7 +95,8 @@ const repo = import.meta.env.PUBLIC_GITHUB_REPO ?? 'https://github.com/voyvodka/
     font-size: var(--fs-sm);
     transition:
       background-color var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out);
+      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .cta-primary {
@@ -115,5 +116,12 @@ const repo = import.meta.env.PUBLIC_GITHUB_REPO ?? 'https://github.com/voyvodka/
 
   .cta-secondary:hover {
     background: var(--surface-1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cta-primary:active,
+    .cta-secondary:active {
+      transform: scale(0.96);
+    }
   }
 </style>
