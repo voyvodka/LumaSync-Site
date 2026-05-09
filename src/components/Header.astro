@@ -134,6 +134,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
     const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     let lastFocused = null;
+    let cachedFocusable = null;
 
     const openNav = () => {
       lastFocused = document.activeElement;
@@ -141,8 +142,14 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
       nav.setAttribute('aria-hidden', 'false');
       toggle.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
-      const first = panel.querySelector(focusableSelector);
-      first && first.focus();
+
+      // Cache focusable elements to prevent layout thrashing on rapid Tab presses
+      if (!cachedFocusable) {
+        cachedFocusable = panel.querySelectorAll(focusableSelector);
+      }
+      if (cachedFocusable.length > 0) {
+        cachedFocusable[0].focus();
+      }
     };
 
     const closeNav = () => {
@@ -167,10 +174,9 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
         return;
       }
       if (e.key === 'Tab') {
-        const focusable = panel.querySelectorAll(focusableSelector);
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
+        if (!cachedFocusable || cachedFocusable.length === 0) return;
+        const first = cachedFocusable[0];
+        const last = cachedFocusable[cachedFocusable.length - 1];
         if (e.shiftKey && document.activeElement === first) {
           e.preventDefault();
           last.focus();
