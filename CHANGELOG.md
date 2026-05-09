@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.12] — 2026-05-09
+
+### Security
+
+- **Content-Security-Policy header on all responses**: `public/_headers` now sets a baseline CSP under `/*` so every HTML response carries it. Policy is restrictive-by-default (`default-src 'self'`, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `block-all-mixed-content`, `upgrade-insecure-requests`) with the minimum allowances Astro and the analytics bundle need: `'unsafe-inline'` on `script-src` / `style-src` (Astro emits inline hydration shims and scoped style blocks), `https:` on `script-src` / `connect-src` / `img-src` for the third-party analytics endpoint, and `data:` on `img-src` / `font-src`. Adds a defense-in-depth layer behind the existing input-sanitization fixes from v1.1.9 / v1.1.11 — if any future XSS vector slipped through, the CSP would block eval, mixed content, framing, and external object loads.
+
+### Performance
+
+- **Cached focus-trap NodeList in `Header.astro`**: the mobile-nav focus trap was calling `panel.querySelectorAll(focusableSelector)` inside the `keydown` handler on every `Tab` press, repeating the same DOM query and risking layout thrashing during rapid keyboard navigation. The query now runs once when the nav opens and is stored in a closure-scoped `cachedFocusable`; the `keydown` branch reads the cached `NodeList` instead. Same focus-trap semantics, near-zero per-keystroke DOM cost.
+
+### UX
+
+- **Tactile click feedback on landing-page CTAs and comparison cards**: `src/pages/index.astro` and `src/components/CompareCTA.astro` now apply `transform: scale(0.96)` on `:active` for `.cta-primary`, `.cta-secondary`, and `.compare-card`, with `transform` added to each element's `transition` list so the scale eases in / out at `var(--duration-fast)` rather than snapping. The `:active` rule is wrapped in `@media (prefers-reduced-motion: no-preference)` to honour the reduced-motion contract. Extends the same tactile affordance shipped on the 404 page in v1.1.11 to the primary conversion surfaces on the landing page.
+
 ## [1.1.11] — 2026-05-07
 
 ### Security
