@@ -654,6 +654,14 @@ const schemas = [
     background: var(--surface-2);
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .cta-primary:active,
+    .cta-secondary:active,
+    .inline-cta:active {
+      transform: scale(0.96);
+    }
+  }
+
   .platform-note {
     margin-top: 1.5rem;
     color: var(--text-muted);
@@ -798,7 +806,10 @@ const schemas = [
     text-transform: uppercase;
     color: var(--text-muted);
     text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-out);
+    display: inline-block;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .inline-cta:hover {

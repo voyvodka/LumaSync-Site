@@ -346,6 +346,12 @@ const schemas = [
     cursor: default;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .card:active:not(.card-disabled) {
+      transform: scale(0.96);
+    }
+  }
+
   /* OS detection → highlight matching card */
   .detected-pill {
     position: absolute;
