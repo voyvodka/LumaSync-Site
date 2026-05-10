@@ -17,3 +17,7 @@
 ## 2026-05-05 - Tactile Click Feedback on Interactive Elements
 
 **Learning:** Adding a subtle scale-down effect on the `:active` state of interactive elements like buttons gives users immediate tactile feedback that their click was registered, improving the perceived responsiveness of the application. **Action:** Use `.element:active { transform: scale(0.96); }` (combined with an appropriate `transition`) on buttons to provide tactile feedback, but **always** wrap it in `@media (prefers-reduced-motion: no-preference)` to respect accessibility settings.
+## 2026-05-15 - Tactile Click Feedback and Focus Rings on Interactive Cards
+
+**Learning:** When using generic elements like `<a>` disguised as complex, interactive "cards" (e.g., download buttons with multiple text lines), the standard interactive states are often forgotten. Missing `:active` states deprive users of tactile feedback, and missing `:focus-visible` styles break keyboard navigation.
+**Action:** When auditing custom interactive components (like `.card`), ensure they include both a tactile `:active` state (e.g., `transform: scale(0.96);`) wrapped in `@media (prefers-reduced-motion: no-preference)` and an explicit `:focus-visible` outline using the project's standard `var(--focus-ring)`. Furthermore, ensure disabled states (e.g., `.card-disabled`) are explicitly excluded from these interaction animations.
