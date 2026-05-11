@@ -44,20 +44,24 @@
     const resultsEl = dialog.querySelector('[data-search-results]');
     if (!input || !resultsEl) return;
 
-    let pagefind = null;
+    let pagefindPromise = null;
     let activeIndex = -1;
     let entries = [];
 
-    const loadPagefind = async () => {
-      if (pagefind) return pagefind;
-      try {
-        pagefind = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
-        await pagefind.options({ baseUrl: '/' });
-        return pagefind;
-      } catch (err) {
-        console.warn('[search] pagefind unavailable:', err);
-        return null;
+    const loadPagefind = () => {
+      if (!pagefindPromise) {
+        pagefindPromise = import(/* @vite-ignore */ '/pagefind/pagefind.js')
+          .then(async (pf) => {
+            await pf.options({ baseUrl: '/' });
+            return pf;
+          })
+          .catch((err) => {
+            console.warn('[search] pagefind unavailable:', err);
+            pagefindPromise = null;
+            return null;
+          });
       }
+      return pagefindPromise;
     };
 
     const openDialog = () => {
@@ -120,9 +124,14 @@
     };
 
     const setActive = (idx) => {
+      if (activeIndex >= 0 && entries[activeIndex]) {
+        entries[activeIndex].removeAttribute('data-active');
+      }
       activeIndex = idx;
-      entries.forEach((el, i) => el.toggleAttribute('data-active', i === idx));
-      if (entries[idx]) entries[idx].scrollIntoView({ block: 'nearest' });
+      if (entries[idx]) {
+        entries[idx].setAttribute('data-active', '');
+        entries[idx].scrollIntoView({ block: 'nearest' });
+      }
     };
 
     const escapeHtml = (s) =>
