@@ -9,3 +9,11 @@
 ## 2026-05-09 - Caching DOM lookups in keyboard event listeners
 
 **Learning:** Re-querying the DOM using `querySelectorAll` inside a high-frequency event listener like `keydown` (especially for common keys like `Tab` used in focus traps) causes unnecessary layout thrashing and performance overhead, particularly on lower-end devices navigating via keyboard. **Action:** When trapping focus or reacting to repeated key events that query static elements, cache the DOM NodeList on initialization or when the containing element opens, and reuse the cached reference inside the keydown listener.
+
+## 2026-05-15 - Caching initialization Promises for async dependencies
+
+**Learning:** When lazily loading asynchronous dependencies (like Pagefind) inside high-frequency or concurrent callbacks (like opening a modal and typing immediately), checking only if the resolved module exists can lead to duplicate network requests and initialization calls if the first fetch is still pending. **Action:** Cache the initialization `Promise` itself rather than just the resolved module to prevent race conditions and duplicate execution.
+
+## 2026-05-15 - O(1) DOM mutations for keyboard navigation
+
+**Learning:** Iterating over an entire NodeList to toggle attributes (e.g., using `forEach` to remove and add a `data-active` attribute based on an index) for keyboard navigation causes O(N) DOM mutations and layout recalculations. **Action:** When updating the active state in a list, track the currently active index and explicitly toggle attributes only on the previously active and newly active nodes to reduce operations to O(1).
