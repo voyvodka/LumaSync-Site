@@ -99,6 +99,17 @@ const normalized = currentPath.replace(/\/$/, '');
     box-shadow: inset 2px 0 0 var(--accent);
   }
 
+  a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a:active {
+      transform: scale(0.96);
+    }
+  }
+
   .title {
     min-width: 0;
     overflow: hidden;
