@@ -4,6 +4,25 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.13] — 2026-05-14
+
+### Security
+
+- **Single-quote escape in Pagefind result rendering**: `src/components/Search.astro`'s `escapeHtml` helper was neutralizing `&`, `<`, `>`, and `"` before injecting Pagefind result excerpts into the DOM, but left `'` untouched. While single quotes are not always dangerous in HTML element-content position, they become an attribute-context breakout vector if the result excerpt is ever rendered inside a single-quoted attribute or the surrounding template shifts. Added `'` → `&#39;` to the existing escape chain so all five script/attribute-sensitive characters are uniformly neutralized regardless of where the search excerpt ends up. Mirrors the same hardening applied to `Schema.astro` in v1.1.11.
+
+### Performance
+
+- **Cached Pagefind init Promise + O(1) keyboard navigation in `Search.astro`**: `loadPagefind` previously memoized only the *resolved* module, which left a race window where a keyboard shortcut + rapid keystrokes could each trigger their own `import()` + `Pagefind.init()` cycle before any of them finished. The cache now holds the in-flight Promise, so concurrent callers await the same initialization. Separately, `setActive` was iterating the entire result NodeList on every Arrow / Tab keypress to toggle `data-active` — replaced with targeted mutations of only the previously-active and newly-active nodes (O(N) → O(1)), eliminating per-keystroke layout work on long result lists.
+
+### UX
+
+- **Tactile click feedback + focus ring on download installer cards**: `src/pages/download.astro` `.card` elements now scale to `0.96` on `:active` (wrapped in `@media (prefers-reduced-motion: no-preference)`) and render an explicit `:focus-visible` outline for keyboard navigation. Disabled cards (`.card-disabled`) are excluded from both. Extends the same tactile affordance shipped on landing-page CTAs in v1.1.12 to the primary conversion surface on `/download/`.
+- **Focus-visible + active states on `DocsSidebar.astro` links**: docs sidebar links now show a 2px focus-visible outline (inset offset so it doesn't clip the active-page indicator) and scale to `0.96` on `:active`, wrapped in `prefers-reduced-motion: no-preference`. Closes the last remaining navigation surface that lacked tactile / keyboard parity with the rest of the site.
+
+### CI
+
+- **`pnpm/action-setup` bumped 6.0.5 → 6.0.6**: pulls in upstream fix where the action's `bin_dest` output now points to the self-updated pnpm rather than the bootstrap binary (pnpm/action-setup#249). No effect on the current workflow's output usage, but keeps the pin current.
+
 ## [1.1.12] — 2026-05-09
 
 ### Security
