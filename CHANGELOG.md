@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.14] — 2026-05-15
+
+### Dependencies
+
+- **`devalue` bumped 5.8.0 → 5.8.1**: transitive dep via Astro, used to serialize server-rendered state into the client hydration bundle. Upstream patch forces sparse arrays to allocate sparsely (sveltejs/devalue@206ca67), a defensive fix for a memory-blowup vector when hydration payloads contain sparse-array structures. Lockfile-only — no source change in this repo.
+
 ## [1.1.13] — 2026-05-14
 
 ### Security
