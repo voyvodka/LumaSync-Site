@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.15] — 2026-05-16
+
+### Accessibility
+
+- **Disabled forum cards on `/community/` now drop their `href` entirely**: `src/pages/community.astro`'s forum-card anchors previously rendered with `href="#"` + `aria-disabled="true"` + `pointer-events: none` to express the "Coming soon" state. The dummy `#` href left the element in the keyboard tab sequence — focusing the card and pressing Enter would activate the no-op anchor and scroll the page to the top. The href is now conditionally omitted (`href={f.disabled ? undefined : f.href}`); without an `href`, browsers treat the `<a>` as a non-interactive placeholder, naturally removing it from the focus order and disabling Enter-key activation. `aria-disabled` is still set so assistive tech announces the state.
+
+### UX
+
+- **Focus-visible outline + tactile click feedback on `/community/` forum cards**: the same anchors now render an explicit `:focus-visible` outline using `var(--focus-ring)` with a 2px offset, matching the keyboard-affordance pattern shipped on landing CTAs (v1.1.12), 404 controls (v1.1.11), download installer cards (v1.1.13), and docs sidebar links (v1.1.13). The `:active` state scales to `0.96` wrapped in `@media (prefers-reduced-motion: no-preference)`, with `transform` added to the existing transition list so the scale eases at `var(--duration-fast)` rather than snapping. Disabled cards are excluded from both via `:not(.disabled)`. Closes the last remaining navigation surface that lacked tactile / keyboard parity with the rest of the site.
+
+### Performance
+
+- **Manual indexed loops in `pickAsset` on `/download/`**: `src/pages/download.astro`'s `pickAsset` helper resolves GitHub release assets at build time by walking each regex matcher and finding the first asset name that matches. The previous implementation called `assets.find((a) => rx.test(a.name))` inside the matchers loop, allocating a closure per asset on every regex iteration. Replaced the inner `.find()` with a manual indexed `for` loop, eliminating the per-item closure allocation and giving the JIT a flatter control-flow path. Build-time-only — runtime user behavior is unchanged.
+
 ## [1.1.14] — 2026-05-15
 
 ### Dependencies
