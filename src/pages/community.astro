@@ -95,7 +95,7 @@ const schemas = [
           forums.map((f) => (
             <li>
               <a
-                href={f.href}
+                href={f.disabled ? undefined : f.href}
                 class={f.disabled ? 'disabled' : ''}
                 aria-disabled={f.disabled ? 'true' : undefined}
               >
@@ -191,7 +191,8 @@ const schemas = [
     text-decoration: none;
     transition:
       border-color var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out);
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .forums a:hover:not(.disabled) {
@@ -202,6 +203,17 @@ const schemas = [
   .forums a.disabled {
     opacity: 0.55;
     pointer-events: none;
+  }
+
+  .forums a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .forums a:active:not(.disabled) {
+      transform: scale(0.96);
+    }
   }
 
   .forums .title {
