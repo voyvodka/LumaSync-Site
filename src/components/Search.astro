@@ -149,6 +149,7 @@
         .replace(/&lt;\/mark&gt;/g, '</mark>');
 
     let queryTimer = 0;
+    let latestQueryId = 0; // Prevent race conditions and layout thrashing from stale queries
     input.addEventListener('input', (e) => {
       clearTimeout(queryTimer);
       const q = e.target.value.trim();
@@ -156,6 +157,7 @@
         renderEmpty();
         return;
       }
+      const currentQueryId = ++latestQueryId;
       queryTimer = window.setTimeout(async () => {
         const pf = await loadPagefind();
         if (!pf) {
@@ -165,7 +167,11 @@
         }
         const { results } = await pf.search(q);
         const data = await Promise.all(results.slice(0, 8).map((r) => r.data()));
-        renderResults(data);
+
+        // Only render if this is still the most recent query
+        if (currentQueryId === latestQueryId) {
+          renderResults(data);
+        }
       }, 120);
     });
 

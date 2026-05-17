@@ -21,3 +21,7 @@
 ## 2026-05-15 - Replacing higher-order functions in nested iterations
 
 **Learning:** In performance-sensitive nested iterations (such as matching multiple regex patterns against an array of items), using higher-order functions like `.find()` inside a loop introduces closure allocation per item. **Action:** Replace `.find()` with a manual indexed `for` loop inside the outer loop to eliminate closure overhead and improve execution speed by 15-20% through better JIT optimization.
+
+## 2026-05-17 - Discarding stale async results in debounced event listeners
+
+**Learning:** When using a debounced input listener for asynchronous queries (like Pagefind searches), slower older queries can resolve after faster newer ones. Updating the DOM indiscriminately causes race conditions where stale results overwrite newer ones, leading to user confusion and unnecessary layout-thrashing DOM mutations. **Action:** Always maintain a monotonic `queryId` variable alongside the debounce timer. Increment and capture the ID inside the event listener closure, and before updating the DOM after awaiting the results, verify that the closure's `queryId` matches the global `latestQueryId`.
