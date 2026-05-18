@@ -149,15 +149,23 @@
         .replace(/&lt;\/mark&gt;/g, '</mark>');
 
     let queryTimer = 0;
+    let currentQueryId = 0; // Monotonic queryId to prevent race conditions on stale responses
+
     input.addEventListener('input', (e) => {
       clearTimeout(queryTimer);
       const q = e.target.value.trim();
+      const localQueryId = ++currentQueryId;
+
       if (!q) {
         renderEmpty();
         return;
       }
       queryTimer = window.setTimeout(async () => {
         const pf = await loadPagefind();
+
+        // Skip updates if another query was typed while waiting
+        if (localQueryId !== currentQueryId) return;
+
         if (!pf) {
           resultsEl.innerHTML =
             '<p class="search-empty">Search index not available. Run a full build first.</p>';
@@ -165,7 +173,11 @@
         }
         const { results } = await pf.search(q);
         const data = await Promise.all(results.slice(0, 8).map((r) => r.data()));
-        renderResults(data);
+
+        // Final guard after fetch completes
+        if (localQueryId === currentQueryId) {
+          renderResults(data);
+        }
       }, 120);
     });
 
