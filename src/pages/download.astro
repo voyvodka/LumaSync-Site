@@ -182,7 +182,7 @@ const schemas = [
           return (
             <a
               class:list={['card', `card-${os}`, disabled && 'card-disabled']}
-              href={href}
+              href={disabled ? undefined : href}
               data-os={os}
               data-umami-event="download"
               data-umami-event-os={umami}
