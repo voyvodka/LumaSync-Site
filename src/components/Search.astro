@@ -149,22 +149,31 @@
         .replace(/&lt;\/mark&gt;/g, '</mark>');
 
     let queryTimer = 0;
+    let queryId = 0;
     input.addEventListener('input', (e) => {
       clearTimeout(queryTimer);
       const q = e.target.value.trim();
       if (!q) {
+        queryId++;
         renderEmpty();
         return;
       }
+      const currentQueryId = ++queryId;
       queryTimer = window.setTimeout(async () => {
         const pf = await loadPagefind();
+        if (currentQueryId !== queryId) return;
+
         if (!pf) {
           resultsEl.innerHTML =
             '<p class="search-empty">Search index not available. Run a full build first.</p>';
           return;
         }
         const { results } = await pf.search(q);
+        if (currentQueryId !== queryId) return;
+
         const data = await Promise.all(results.slice(0, 8).map((r) => r.data()));
+        if (currentQueryId !== queryId) return;
+
         renderResults(data);
       }, 120);
     });
