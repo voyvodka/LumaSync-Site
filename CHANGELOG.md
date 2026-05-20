@@ -4,6 +4,22 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.16] — 2026-05-20
+
+### Bug Fixes
+
+- **Stale search queries no longer overwrite fresher results in `Search.astro`**: the debounced Pagefind input listener fired async work (module load → `pf.search` → `data()` hydration) without tracking which keystroke each result belonged to. A slow earlier query could resolve after a newer one and repaint the result list with stale matches, thrashing layout. Added a monotonic `queryId` captured per input event and re-checked after every `await` boundary — `loadPagefind()`, `pf.search()`, and the `data()` `Promise.all` — so a superseded query bails before touching the DOM. Clearing the input also bumps the id, invalidating any in-flight query.
+
+### Accessibility
+
+- **Disabled download cards on `/download/` now drop their `href` entirely**: `src/pages/download.astro`'s installer-card anchors rendered with a real `href` even when marked `card-disabled`, leaving unavailable-platform cards in the keyboard tab order and activatable with Enter. The href is now conditionally omitted (`href={disabled ? undefined : href}`); without an `href` the `<a>` becomes a non-interactive placeholder, removing it from the focus order. Mirrors the same fix shipped for the community forum cards in v1.1.15.
+
+### Dependencies
+
+- **Minor/patch group bump (4 updates)**: `astro` 6.3.1 → 6.3.3, `@astrojs/mdx` 5.0.4 → 5.0.6, `dompurify` 3.4.2 → 3.4.4, and `isomorphic-dompurify` 3.12.0 → 3.13.0. Routine upstream patch/minor releases; lockfile + manifest only, no source change.
+- **`pnpm/action-setup` 6.0.6 → 6.0.8** in both CI and deploy workflows — patch bump, pinned by commit SHA.
+- **`cloudflare/wrangler-action` 3.15.0 → 4.0.0** in the deploy workflow — major bump, pinned by commit SHA. Non-breaking for this site because the deploy step already pins `wranglerVersion: '4'`, so the Wrangler binary version is unchanged and the action interface (`apiToken`, `accountId`, `command`) is stable across the major. Also corrected the pin's stale version comment (`# v3.14.0` → `# v4.0.0`) that Dependabot left behind.
+
 ## [1.1.15] — 2026-05-16
 
 ### Accessibility
