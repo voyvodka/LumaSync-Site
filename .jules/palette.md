@@ -28,5 +28,4 @@
 
 ## 2026-05-18 - Keyboard Shortcuts in ARIA Labels
 
-**Learning:** When displaying visual keyboard shortcuts (like `<kbd>⌘</kbd><kbd>K</kbd>`) inside interactive elements like buttons, screen readers may read the raw symbol characters clumsily, interrupting the label.
-**Action:** When adding keyboard shortcut hints, wrap the visual `<kbd>` elements in a container with `aria-hidden="true"` and apply the corresponding `aria-keyshortcuts` attribute to the parent interactive element (e.g., `aria-keyshortcuts="Meta+K"`) so the screen reader announces the standardized shortcut cleanly.
+**Learning:** When displaying visual keyboard shortcuts (like `<kbd>⌘</kbd><kbd>K</kbd>`) inside interactive elements like buttons, screen readers may read the raw symbol characters clumsily, interrupting the label. **Action:** When adding keyboard shortcut hints, wrap the visual `<kbd>` elements in a container with `aria-hidden="true"` and apply the corresponding `aria-keyshortcuts` attribute to the parent interactive element (e.g., `aria-keyshortcuts="Meta+K"`) so the screen reader announces the standardized shortcut cleanly.
