@@ -25,3 +25,8 @@
 ## 2026-05-16 - Accessible Disabled Anchor Tags
 
 **Learning:** Adding `pointer-events: none` and `aria-disabled="true"` to an `<a>` tag with a dummy `href="#"` is not sufficient to fully disable it for keyboard users. The link remains in the tab sequence and, if activated via the Enter key, can cause the page layout to jump to the top. **Action:** When a link designed to look like a button or card needs to be disabled, conditionally omit the `href` attribute entirely (e.g., `href={isDisabled ? undefined : actualHref}`). Without an `href`, browsers treat the `<a>` element as a non-interactive placeholder, naturally removing it from the focus order and disabling native activation behaviors.
+
+## 2026-05-18 - Keyboard Shortcuts in ARIA Labels
+
+**Learning:** When displaying visual keyboard shortcuts (like `<kbd>⌘</kbd><kbd>K</kbd>`) inside interactive elements like buttons, screen readers may read the raw symbol characters clumsily, interrupting the label.
+**Action:** When adding keyboard shortcut hints, wrap the visual `<kbd>` elements in a container with `aria-hidden="true"` and apply the corresponding `aria-keyshortcuts` attribute to the parent interactive element (e.g., `aria-keyshortcuts="Meta+K"`) so the screen reader announces the standardized shortcut cleanly.
