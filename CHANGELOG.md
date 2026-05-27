@@ -4,6 +4,21 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.17] — 2026-05-27
+
+### Security
+
+- **CSP hardening — `https:` wildcard removed from `script-src` and `connect-src`**: `public/_headers` previously shipped `script-src 'self' 'unsafe-inline' https:` and `connect-src 'self' https:`, which let any HTTPS origin execute scripts and accept connections — neutralizing the directives' purpose against XSS / data-exfiltration vectors and effectively trusting the entire HTTPS web. The wildcards are now removed; both directives are pinned to `'self'`. `img-src` keeps `https:` (covers user-agent-honored image fetches and was never the XSS vector). The site already serves no third-party scripts at runtime, so this is a no-op for legitimate traffic and a meaningful narrowing of attack surface.
+
+### Accessibility
+
+- **`aria-keyshortcuts` + dialog-popup semantics on search triggers**: `Header.astro`'s search-trigger button and `404.astro`'s `.search-cta` button render a visual `<kbd>⌘</kbd><kbd>K</kbd>` hint, and screen readers were reading the raw symbol characters as part of the accessible name (e.g. "Open search command K"). Both buttons now expose `aria-keyshortcuts="Control+K Meta+K"` so AT announces the shortcut through the standard accessibility API instead, and the visual `<span class="search-kbd">` / `<span class="kbd">` wrappers carry `aria-hidden="true"` to keep the symbols out of the accessible name. The same buttons also gain `aria-haspopup="dialog"` + `aria-controls="search-dialog"` to advertise the search modal relationship (the existing `<dialog id="search-dialog">` in `Search.astro`), and the modal's Close button picks up `aria-keyshortcuts="Escape"` so the keyboard-dismissal affordance is also surfaced semantically. `404.astro`'s search CTA additionally gains an explicit `aria-label="Search"` to give the button a stable accessible name.
+- **Focus-visible outline on `/`'s compare cards**: `src/pages/index.astro`'s `.compare-card` elements had no `:focus-visible` style, so the comparison block was the only landing-page interactive surface without a visible keyboard outline. Added `outline: 2px solid var(--focus-ring)` with a 2px offset matching the focus pattern used across landing CTAs (v1.1.12), 404 controls (v1.1.11), download installer cards (v1.1.13), docs sidebar links (v1.1.13), forum cards (v1.1.15), and download cards (v1.1.16). Closes the last landing-page surface that lacked keyboard parity.
+
+### Dependencies
+
+- **Minor/patch group bump (4 updates)**: `astro` 6.3.3 → 6.3.7, `marked` 18.0.3 → 18.0.4, `dompurify` 3.4.4 → 3.4.5, and `isomorphic-dompurify` 3.13.0 → 3.14.0. Routine upstream patch releases; lockfile + manifest only, no source change.
+
 ## [1.1.16] — 2026-05-20
 
 ### Bug Fixes
