@@ -45,7 +45,11 @@ try {
   }
   release = (await res.json()) as GhRelease;
 } catch (err) {
-  fetchError = err instanceof Error ? err.message : 'unknown error';
+  // Sentinel: Security Enhancement
+  // Avoid leaking internal paths, API structure, or network details to the UI.
+  // Log the raw error internally, but serve a safe, generic message to the user.
+  console.error('[download] GitHub API fetch failed:', err);
+  fetchError = 'upstream API unavailable';
 }
 
 type OS = 'macos' | 'windows' | 'linux';
