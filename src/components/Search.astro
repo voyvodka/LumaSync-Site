@@ -31,12 +31,18 @@
         title="Close"
         aria-keyshortcuts="Escape"
       >
-        <kbd>Esc</kbd>
+        <kbd aria-hidden="true">Esc</kbd>
       </button>
     </div>
     <div class="search-results" data-search-results aria-live="polite">
       <p class="search-hint">
-        Type to search. <kbd>↑</kbd><kbd>↓</kbd> to navigate, <kbd>↵</kbd> to open.
+        Type to search.
+        <span aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd></span>
+        <span class="sr-only">Up and down arrows</span>
+        to navigate,
+        <span aria-hidden="true"><kbd>↵</kbd></span>
+        <span class="sr-only">Enter</span>
+        to open.
       </p>
     </div>
   </form>
@@ -104,7 +110,7 @@
 
     const renderEmpty = () => {
       resultsEl.innerHTML =
-        '<p class="search-hint">Type to search. <kbd>↑</kbd><kbd>↓</kbd> to navigate, <kbd>↵</kbd> to open.</p>';
+        '<p class="search-hint">Type to search. <span aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd></span> <span class="sr-only">Up and down arrows</span> to navigate, <span aria-hidden="true"><kbd>↵</kbd></span> <span class="sr-only">Enter</span> to open.</p>';
       entries = [];
       activeIndex = -1;
     };
@@ -327,6 +333,12 @@
     outline: 2px solid var(--focus-ring);
     outline-offset: -2px;
     background: var(--surface-2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.search-result:active) {
+      transform: scale(0.98);
+    }
   }
 
   :global(.search-result[data-active]) {
