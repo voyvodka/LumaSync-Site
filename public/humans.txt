@@ -4,7 +4,7 @@
   Source:     https://github.com/voyvodka/LumaSync
 
 /* SITE */
-  Last update: 2026-04-22
+  Last update: 2026-05-29
   Language:    English
   Doctype:     HTML5
   IDE:         VS Code
@@ -14,7 +14,7 @@
   Search:      Pagefind
   Fonts:       IBM Plex Sans, IBM Plex Mono, Instrument Serif
   OG images:   Satori + resvg
-  Deploy:      Hetzner (static rsync)
+  Deploy:      Cloudflare Pages
 
 /* THANKS */
   Tauri, Philips Hue SDK, and everyone who reported issues against
