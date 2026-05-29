@@ -50,8 +50,11 @@ export function organizationSchema(): OrganizationSchema {
     logo: {
       '@type': 'ImageObject',
       url: abs('/brand/logotype-light.svg'),
-      width: 512,
-      height: 128,
+      // Match the SVG's intrinsic viewBox (320x80, 4:1) so strict validators
+      // that cross-check ImageObject dimensions against the asset don't flag a
+      // mismatch. Both axes clear Google's 112px minimum.
+      width: 320,
+      height: 80,
     },
     founder: {
       '@type': 'Person',
