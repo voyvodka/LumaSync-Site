@@ -29,3 +29,7 @@
 ## 2026-05-18 - Keyboard Shortcuts in ARIA Labels
 
 **Learning:** When displaying visual keyboard shortcuts (like `<kbd>⌘</kbd><kbd>K</kbd>`) inside interactive elements like buttons, screen readers may read the raw symbol characters clumsily, interrupting the label. **Action:** When adding keyboard shortcut hints, wrap the visual `<kbd>` elements in a container with `aria-hidden="true"` and apply the corresponding `aria-keyshortcuts` attribute to the parent interactive element (e.g., `aria-keyshortcuts="Meta+K"`) so the screen reader announces the standardized shortcut cleanly.
+
+## 2026-05-19 - Explaining Disabled States
+
+**Learning:** While making a link inaccessible to keyboard/click interactions (e.g., omitting `href` and adding `aria-disabled="true"`) is correct for structural accessibility, it leaves visual users who hover over the element confused as to *why* it's disabled. **Action:** When visually disabling interactive elements (such as `<a>` tag cards functioning as buttons), always provide a native `title` attribute explaining why the element is disabled (e.g., 'No release available for this platform yet') to improve the UX for hovering users.
