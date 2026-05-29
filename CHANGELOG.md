@@ -4,6 +4,36 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.19] — 2026-05-29
+
+### Bug Fixes
+
+- **Dead links in `llms.txt` and slashless structured-data URLs**: the `llms.txt` index linked `llms-full.txt/` and `.well-known/security.txt/` with trailing slashes, which 404 because those are static assets rather than HTML routes — an agent following the index to the full-text corpus or the security contact hit a dead end. Both now point at the slashless forms, and the Telemetry entry resolves to `/docs/reference/telemetry/` instead of the docs index. Separately, the docs leaf (`[...slug]`) and docs group (`[group]/index`) pages emitted their breadcrumb-leaf, TechArticle/HowTo, and CollectionPage schema URLs without a trailing slash, so the structured-data entity URLs 308-redirected instead of resolving directly — they now carry the slash to match the `trailingSlash:'always'` canonical, as do the `llms-full.txt` `Source:` pointers.
+- **`/docs/` and `/compare/` hub OG images 404'd**: both hub pages derive an `og:image` URL (`/og/docs.png`, `/og/compare.png`), but the OG generation route had no matching key, so social and crawler unfurls of those two pages rendered without a card. Added both keys.
+- **`SoftwareApplication` declared one `@id` with two download URLs**: the homepage and `/download/` both emit the app's `SoftwareApplication` node under the same `@id` but with divergent `downloadUrl` values, asking consumers to merge conflicting nodes. Both now resolve to the stable `/download/` canonical.
+- **`humans.txt` named the wrong host**: the credits file listed a stale deploy target; corrected to Cloudflare Pages.
+
+### Content
+
+- **Hue Sync comparison repositioned**: `/compare/hue-sync/` claimed Signify had discontinued the Hue Sync desktop app for PC/Mac, but official Philips release notes show that app is still actively maintained — only the separate Hue Sync mobile app was retired. The page now positions LumaSync as a free, open-source alternative to the desktop app (keeping the migration guidance), and the unresolved editorial placeholder was removed.
+
+### Accessibility
+
+- **Muted text now meets WCAG AA contrast**: `--text-muted` was `#6b7280`, below the 4.5:1 normal-text threshold on the dark surfaces (blockquotes, footer tagline, download meta). Lightened to `#8b919c` while keeping the muted feel.
+- **Disabled download cards explain themselves on hover**: unavailable-platform cards now carry a native `title` tooltip ("No release available for this platform yet"), so hovering users understand why the card is inert — the cards were already out of the keyboard/click path from earlier releases.
+
+### Performance
+
+- **Long-lived caching for `/media/`**: hero and screenshot images were served with the 4-hour must-revalidate default; added a 30-day `Cache-Control` block so the LCP hero stops paying a conditional round-trip on repeat visits.
+
+### Discoverability
+
+- **Markdown entry-point `Link` relation**: the RFC 8288 `Link:` header advertising `llms.txt` / `llms-full.txt` now uses `rel="alternate"; type="text/markdown"` — the relation header-only agents key off for markdown discovery — instead of `describedby` / `text/plain`.
+
+### Build
+
+- **CI gates on production CVEs**: added a `pnpm audit --prod --audit-level=high` step so a published vulnerability introduced into the shipped dependency tree fails the build. The existing license audit checks compliance only, not vulnerabilities.
+
 ## [1.1.18] — 2026-05-29
 
 ### Security
