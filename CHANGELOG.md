@@ -4,6 +4,16 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.20] — 2026-05-29
+
+### Security
+
+- **Response-header hardening**: removed the deprecated `block-all-mixed-content` directive from the Content-Security-Policy (the `upgrade-insecure-requests` directive, already present, supersedes it), and added a `Permissions-Policy` that denies camera, microphone, geolocation, payment, USB, the motion sensors, and the Topics API. The static site calls no powerful browser APIs, so this is attack-surface reduction with no functional change.
+
+### Structured Data
+
+- **Organization logo dimensions corrected**: the logo `ImageObject` declared `512x128`, but `brand/logotype-light.svg` has an intrinsic `320x80` viewBox. Aligned the declared dimensions (same 4:1 ratio, both above Google's 112px minimum) so strict validators don't flag a mismatch against the asset.
+
 ## [1.1.19] — 2026-05-29
 
 ### Bug Fixes
