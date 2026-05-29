@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.18] — 2026-05-29
+
+### Security
+
+- **Sanitized GitHub API fetch errors on `/download/`**: `src/pages/download.astro` previously surfaced the raw caught error's `.message` directly into the page's `fetchError` state, which could leak upstream API structure, internal request details, or network specifics into the rendered UI. The raw error is now logged server-side via `console.error` for diagnostics, while the user-facing state is pinned to a generic `'upstream API unavailable'` string. No behavioral change for the success path; failed release fetches now degrade with an opaque message instead of an implementation-revealing one.
+
+### Accessibility
+
+- **Search-hint `<kbd>` glyphs hidden from the accessible name in `Search.astro`**: the modal's "Type to search. ↑↓ to navigate, ↵ to open." hint rendered raw arrow and enter symbols that screen readers announced as literal characters. The visual `<kbd>` clusters now carry `aria-hidden="true"` and are paired with `sr-only` text equivalents ("Up and down arrows", "Enter") so assistive technology reads meaningful labels while sighted users keep the compact symbol hint. The same treatment is applied to both the static markup and the `renderEmpty()` JS template that repaints the hint on an empty query, plus the modal Close button's `<kbd>Esc</kbd>` is now `aria-hidden` (the `aria-keyshortcuts="Escape"` already conveys the shortcut semantically).
+
+### Interaction
+
+- **Press-state feedback on search results**: added a `:active` `transform: scale(0.98)` to `.search-result`, gated behind `@media (prefers-reduced-motion: no-preference)` so it respects motion preferences. Gives keyboard and pointer users tactile confirmation when activating a result without affecting reduced-motion sessions.
+
 ## [1.1.17] — 2026-05-27
 
 ### Security
