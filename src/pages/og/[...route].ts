@@ -112,6 +112,26 @@ const statics: Array<{ id: string; entry: OgEntry }> = [
       category: 'Legal',
     },
   },
+  // Listing/hub index pages. SEO.astro's derivedOgPath() maps `/docs/` ->
+  // `docs` and `/compare/` -> `compare`, so these keys must exist or the
+  // hub pages' og:image 404s (the per-slug docs/compare cards are keyed
+  // separately above via the docs/compare maps).
+  {
+    id: 'docs',
+    entry: {
+      title: 'LumaSync Docs',
+      description: 'Setup, hardware, Philips Hue, troubleshooting, and reference for LumaSync.',
+      category: 'Documentation',
+    },
+  },
+  {
+    id: 'compare',
+    entry: {
+      title: 'LumaSync vs the alternatives',
+      description: 'How LumaSync compares to Hue Sync, Hyperion, Prismatik, and WLED.',
+      category: 'Compare',
+    },
+  },
 ];
 
 const pages: Record<string, OgEntry> = Object.fromEntries(

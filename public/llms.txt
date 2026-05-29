@@ -49,16 +49,16 @@ Canonical brand surfaces: lumasync.app (this site), github.com/voyvodka/LumaSync
 
 ## Full content
 
-- [llms-full.txt](https://lumasync.app/llms-full.txt/): complete body text of every published docs / compare / legal page, concatenated in a single plain-text file for retrieval and grounding. Regenerated on every site build.
+- [llms-full.txt](https://lumasync.app/llms-full.txt): complete body text of every published docs / compare / legal page, concatenated in a single plain-text file for retrieval and grounding. Regenerated on every site build.
 
 ## Policy
 
 - [Privacy](https://lumasync.app/privacy/): what data is collected, when, and how to opt out
-- [Telemetry](https://lumasync.app/docs/): anonymous metrics scope and opt-out steps
+- [Telemetry](https://lumasync.app/docs/reference/telemetry/): anonymous metrics scope and opt-out steps
 - [License](https://lumasync.app/license/): source license terms
 
 ## Project
 
 - [Source code](https://github.com/voyvodka/LumaSync): GitHub repository
 - [Community](https://lumasync.app/community/): where to report issues, request features, or get help
-- [Security contact](https://lumasync.app/.well-known/security.txt/): responsible disclosure
+- [Security contact](https://lumasync.app/.well-known/security.txt): responsible disclosure

@@ -20,14 +20,23 @@
 /og/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Marketing screenshots / hero imagery. Filenames are not fingerprinted,
+# so not `immutable`, but they only change on redeploy — a 30-day max-age
+# drops the Cloudflare-default 4h must-revalidate round-trip on the LCP
+# hero and the feature shots without risking long-term staleness.
+/media/*
+  Cache-Control: public, max-age=2592000
+
 # RFC 8288 Link headers for agent discovery — points crawlers and AI
-# agents at the canonical site map and the llms.txt entry point.
-# Applies to all HTML responses; static assets under /_astro/ and /og/
-# are matched by their more-specific blocks above and inherit none of
-# this (per Cloudflare _headers precedence rules).
+# agents at the canonical site map and the markdown entry point. The
+# llms.txt files are markdown despite the .txt extension, so they are
+# advertised as rel="alternate"; type="text/markdown" (the relation
+# header-only agents key off for markdown discovery). Cloudflare Pages
+# layers these onto the more-specific blocks above (which only override
+# Cache-Control), so /_astro/, /og/, and /media/ responses carry them too.
 /*
-  Link: </llms.txt>; rel="describedby"; type="text/plain"
-  Link: </llms-full.txt>; rel="describedby"; type="text/plain"
+  Link: </llms.txt>; rel="alternate"; type="text/markdown"
+  Link: </llms-full.txt>; rel="alternate"; type="text/markdown"
   Link: </sitemap-index.xml>; rel="sitemap"
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff

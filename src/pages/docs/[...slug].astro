@@ -16,7 +16,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const groupLabel = DOC_GROUP_LABELS[entry.data.group];
 const slug = entry.id.replace(/\.mdx$/, '');
-const docPath = `/docs/${slug}`;
+const docPath = `/docs/${slug}/`;
 
 // HowTo schemas for the step-by-step getting-started guides. Each
 // step.text is a self-contained instruction so Google rich-result

@@ -126,7 +126,11 @@ const schemas = [
     description: downloadDescription,
     version: release?.tag_name,
     operatingSystems: ['macOS', 'Windows', 'Linux'],
-    downloadUrl: release?.html_url ?? RELEASES_PAGE,
+    // Canonical, version-stable download location shared with the homepage's
+    // SoftwareApplication node (same @id). Pointing at a per-release tag URL
+    // here while the homepage points at /download/ would make two divergent
+    // nodes under one @id; the /download/ hub is the durable canonical.
+    downloadUrl: '/download/',
     datePublished: release?.published_at,
   }),
 ];
