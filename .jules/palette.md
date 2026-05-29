@@ -32,4 +32,4 @@
 
 ## 2026-05-19 - Explaining Disabled States
 
-**Learning:** While making a link inaccessible to keyboard/click interactions (e.g., omitting `href` and adding `aria-disabled="true"`) is correct for structural accessibility, it leaves visual users who hover over the element confused as to *why* it's disabled. **Action:** When visually disabling interactive elements (such as `<a>` tag cards functioning as buttons), always provide a native `title` attribute explaining why the element is disabled (e.g., 'No release available for this platform yet') to improve the UX for hovering users.
+**Learning:** While making a link inaccessible to keyboard/click interactions (e.g., omitting `href` and adding `aria-disabled="true"`) is correct for structural accessibility, it leaves visual users who hover over the element confused as to _why_ it's disabled. **Action:** When visually disabling interactive elements (such as `<a>` tag cards functioning as buttons), always provide a native `title` attribute explaining why the element is disabled (e.g., 'No release available for this platform yet') to improve the UX for hovering users.
