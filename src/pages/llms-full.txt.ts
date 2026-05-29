@@ -76,7 +76,7 @@ export const GET: APIRoute = async () => {
       chunks.push('');
       chunks.push(`> ${doc.data.description}`);
       chunks.push('>');
-      chunks.push(`> Source: ${SITE_URL}/docs/${slug}`);
+      chunks.push(`> Source: ${SITE_URL}/docs/${slug}/`);
       if (doc.data.draft) chunks.push('> Status: draft');
       chunks.push('');
       chunks.push(docsBodyMap.get(doc.id)!);
@@ -95,7 +95,7 @@ export const GET: APIRoute = async () => {
       chunks.push('');
       chunks.push(`> ${c.data.description}`);
       chunks.push('>');
-      chunks.push(`> Source: ${SITE_URL}/compare/${slug}`);
+      chunks.push(`> Source: ${SITE_URL}/compare/${slug}/`);
       if (c.data.draft) chunks.push('> Status: draft');
       chunks.push('');
       chunks.push(compareBodyMap.get(c.id)!);
@@ -112,7 +112,7 @@ export const GET: APIRoute = async () => {
       const slug = l.id.replace(/\.mdx$/, '');
       chunks.push(`### ${l.data.title}`);
       chunks.push('');
-      chunks.push(`> Source: ${SITE_URL}/${slug}`);
+      chunks.push(`> Source: ${SITE_URL}/${slug}/`);
       chunks.push('');
       chunks.push(legalBodyMap.get(l.id)!);
       chunks.push('');
