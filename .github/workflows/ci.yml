@@ -50,6 +50,14 @@ jobs:
             exit 1
           fi
 
+      # The license audit above is compliance, not vulnerability scanning.
+      # This gates on published CVEs in the SHIPPED dependency tree only
+      # (--prod) at the high+ threshold, so a build-time-only advisory
+      # (e.g. the transitive `yaml` dev dependency) doesn't fail a PR while
+      # a high-severity CVE introduced into prod deps does.
+      - name: Dependency audit (fail on high-severity prod CVEs)
+        run: pnpm audit --prod --audit-level=high
+
       - name: Lint (prettier --check)
         run: pnpm lint
 
