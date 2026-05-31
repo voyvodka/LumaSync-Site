@@ -34,6 +34,7 @@ const forums = [
       'Opens once active-user count crosses ~100. Follow Discussions for the announcement — the invite will go out there first.',
     cta: 'Coming soon',
     disabled: true,
+    disabledReason: 'Pending community growth',
   },
 ];
 
@@ -98,6 +99,7 @@ const schemas = [
                 href={f.disabled ? undefined : f.href}
                 class={f.disabled ? 'disabled' : ''}
                 aria-disabled={f.disabled ? 'true' : undefined}
+                title={f.disabled ? f.disabledReason || 'Currently disabled' : undefined}
               >
                 <span class="title">{f.title}</span>
                 <span class="blurb">{f.blurb}</span>
