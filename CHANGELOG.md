@@ -4,6 +4,16 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.21] — 2026-06-01
+
+### Accessibility
+
+- **Disabled Discord card explains itself on hover**: the "Coming soon" Discord card on `/community/` — inert until the active-user count crosses its threshold — now carries a native `title` tooltip ("Pending community growth"), mirroring the disabled download-card treatment from v1.1.19 so hovering users understand why the card is non-interactive. The card was already kept out of the keyboard/click path via `aria-disabled` and an undefined `href`.
+
+### Dependencies
+
+- **Minor/patch group bump (4 updates)**: `astro` 6.3.7 → 6.4.2, `@astrojs/sitemap` 3.7.2 → 3.7.3, `dompurify` 3.4.5 → 3.4.7, and `isomorphic-dompurify` 3.14.0 → 3.15.0. The Astro bump is a minor release; the rest are routine upstream patches — lockfile + manifest only, no source change.
+
 ## [1.1.20] — 2026-05-29
 
 ### Security
