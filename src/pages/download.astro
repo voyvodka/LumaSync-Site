@@ -148,12 +148,16 @@ const schemas = [
       {
         release && (
           <div class="release-meta">
-            <a href={release.html_url} class="version-pill">
+            <a href={release.html_url} class="version-pill" rel="noopener noreferrer">
               {release.tag_name}
             </a>
             {publishedDate && <span class="meta">Released {publishedDate}</span>}
             {checksumAsset && (
-              <a href={checksumAsset.browser_download_url} class="meta link">
+              <a
+                href={checksumAsset.browser_download_url}
+                class="meta link"
+                rel="noopener noreferrer"
+              >
                 Checksums
               </a>
             )}
@@ -166,7 +170,10 @@ const schemas = [
       fetchError && (
         <div class="banner banner-warn" role="status">
           <strong>Release metadata unavailable at build time.</strong> Head to the{' '}
-          <a href={RELEASES_PAGE}>Releases page</a> on GitHub. (Reason: {fetchError})
+          <a href={RELEASES_PAGE} rel="noopener noreferrer">
+            Releases page
+          </a>{' '}
+          on GitHub. (Reason: {fetchError})
         </div>
       )
     }
@@ -175,8 +182,10 @@ const schemas = [
       release && !anyAsset && (
         <div class="banner" role="status">
           <strong>{release.tag_name}</strong> is tagged but has no installer assets yet — see the{' '}
-          <a href={release.html_url}>release page</a> for source archives, or wait for the signed
-          binaries to land.
+          <a href={release.html_url} rel="noopener noreferrer">
+            release page
+          </a>{' '}
+          for source archives, or wait for the signed binaries to land.
         </div>
       )
     }
@@ -191,6 +200,7 @@ const schemas = [
             <a
               class:list={['card', `card-${os}`, disabled && 'card-disabled']}
               href={disabled ? undefined : href}
+              rel={disabled ? undefined : 'noopener noreferrer'}
               data-os={os}
               data-umami-event="download"
               data-umami-event-os={umami}
@@ -231,7 +241,9 @@ const schemas = [
 
     <p class="all-releases">
       Need an older version or a specific asset?{' '}
-      <a href={`https://github.com/${REPO}/releases`}>Browse all releases on GitHub</a>.
+      <a href={`https://github.com/${REPO}/releases`} rel="noopener noreferrer"
+        >Browse all releases on GitHub</a
+      >.
     </p>
   </section>
 </BaseLayout>

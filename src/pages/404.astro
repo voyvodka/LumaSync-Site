@@ -57,7 +57,10 @@ const recoveryLinks = [
         {
           recoveryLinks.map((link) => (
             <li>
-              <a href={link.href}>
+              <a
+                href={link.href}
+                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
                 <span class="label">{link.label}</span>
                 <span class="desc">{link.desc}</span>
               </a>
