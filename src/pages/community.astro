@@ -44,7 +44,7 @@ const triage = [
   {
     q: 'It crashed — where do I file that?',
     a:
-      '<a href="' +
+      '<a rel="noopener noreferrer" href="' +
       repo +
       '/issues">GitHub Issues</a>. Attach the OS-generated crash report (macOS Diagnostic Reports, Windows Event Viewer, Linux coredump) and the LumaSync log file. <a href="/docs/reference/telemetry/#logs">Log locations</a>.',
   },
@@ -55,13 +55,13 @@ const triage = [
   {
     q: 'I want a feature — will you build it?',
     a:
-      '<a href="' +
+      '<a rel="noopener noreferrer" href="' +
       repo +
       '/discussions/categories/ideas">Discussions → Ideas</a>. Explain the use case (what problem, who has it). Popular asks with clear scope make it to issues; vague asks get a polite "not planned".',
   },
   {
     q: 'I have a question about Philips Hue itself.',
-    a: 'That\'s upstream — try the <a href="https://developers.meethue.com/">Hue developer portal</a> or the Hue subreddits. If the question is specifically about how LumaSync uses Hue, come back to Discussions.',
+    a: 'That\'s upstream — try the <a rel="noopener noreferrer" href="https://developers.meethue.com/">Hue developer portal</a> or the Hue subreddits. If the question is specifically about how LumaSync uses Hue, come back to Discussions.',
   },
 ];
 
@@ -97,6 +97,7 @@ const schemas = [
             <li>
               <a
                 href={f.disabled ? undefined : f.href}
+                rel={f.href && f.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                 class={f.disabled ? 'disabled' : ''}
                 aria-disabled={f.disabled ? 'true' : undefined}
                 title={f.disabled ? f.disabledReason || 'Currently disabled' : undefined}
@@ -129,10 +130,11 @@ const schemas = [
       <p class="section-label">House rules</p>
       <p>
         LumaSync follows a standard
-        <a href={`${repo}/blob/main/CODE_OF_CONDUCT.md`}>Code of Conduct</a>. Short version: be
-        helpful, be specific, and don't be a jerk. Disagreement is fine; dismissiveness isn't.
-        Project is MIT-licensed; contribution guidelines live in
-        <a href={`${repo}/blob/main/CONTRIBUTING.md`}>CONTRIBUTING.md</a>.
+        <a rel="noopener noreferrer" href={`${repo}/blob/main/CODE_OF_CONDUCT.md`}
+          >Code of Conduct</a
+        >. Short version: be helpful, be specific, and don't be a jerk. Disagreement is fine;
+        dismissiveness isn't. Project is MIT-licensed; contribution guidelines live in
+        <a rel="noopener noreferrer" href={`${repo}/blob/main/CONTRIBUTING.md`}>CONTRIBUTING.md</a>.
       </p>
     </section>
   </section>
