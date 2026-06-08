@@ -4,6 +4,18 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.22] — 2026-06-08
+
+### Accessibility
+
+- **Keyboard focus rings on call-to-action buttons**: the primary and secondary CTAs in `CompareCTA.astro` and on the homepage now render a visible `:focus-visible` outline (2px `--focus-ring`, 2px offset), so keyboard and switch-device users can see which button holds focus. Mouse users are unaffected — `:focus-visible` only triggers for keyboard-style focus.
+- **Compare-listing grid cards respond to keyboard focus and press**: cards in the `/compare/` index grid gain the same `:focus-visible` outline plus a subtle `scale(0.96)` active-press transform, gated behind `prefers-reduced-motion`, matching the interaction feedback already present on the homepage compare cards.
+
+### Dependencies
+
+- **Minor/patch group bump (4 updates)**: `astro` 6.4.2 → 6.4.4, `marked` 18.0.4 → 18.0.5, `dompurify` 3.4.7 → 3.4.8, and `isomorphic-dompurify` 3.15.0 → 3.16.0 — routine upstream patches, lockfile + manifest only, no source change.
+- **`@astrojs/mdx` 5 → 6**: major bump of the MDX integration (5.0.6 → 6.0.2). Astro 6.4 satisfies the new `astro: ^6.4.0` peer range; the build, type-check, and Lighthouse-CI gates all pass with MDX-rendered pages unchanged.
+
 ## [1.1.21] — 2026-06-01
 
 ### Accessibility
