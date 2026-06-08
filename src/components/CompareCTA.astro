@@ -118,6 +118,12 @@ const repo = import.meta.env.PUBLIC_GITHUB_REPO ?? 'https://github.com/voyvodka/
     background: var(--surface-1);
   }
 
+  .cta-primary:focus-visible,
+  .cta-secondary:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .cta-primary:active,
     .cta-secondary:active {
