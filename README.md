@@ -15,7 +15,7 @@ Marketing site, docs, and blog for [**LumaSync**](https://github.com/voyvodka/Lu
 
 ## Develop
 
-Requires Node 22+ and pnpm (pinned via `packageManager` in `package.json`).
+Requires Node 22.12+ and pnpm (pinned via `packageManager` in `package.json`).
 
 ```bash
 pnpm install

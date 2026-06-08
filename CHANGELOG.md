@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.23] — 2026-06-08
+
+### Build
+
+- **Declared Node engine floor aligned to the real requirement**: `package.json` `engines.node` tightened `>=22.0.0` → `>=22.12.0`, and the README "Develop" note now reads "Node 22.12+", matching the actual floor imposed by Astro 6 and `@astrojs/mdx` 6 (both declare `node >=22.12.0`). No runtime or build-output change — `.nvmrc` already resolves a compliant Node 22.x, so CI was unaffected; this just makes the declared range honest.
+
 ## [1.1.22] — 2026-06-08
 
 ### Accessibility
