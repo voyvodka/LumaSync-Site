@@ -147,12 +147,24 @@ function oneLiner(slug: string): string {
     height: 100%;
     transition:
       border-color var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out);
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
   }
 
   .grid a:hover {
     border-color: var(--border-strong);
     background: var(--surface-2);
+  }
+
+  .grid a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .grid a:active {
+      transform: scale(0.96);
+    }
   }
 
   .kicker {
