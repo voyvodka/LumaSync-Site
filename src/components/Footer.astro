@@ -68,6 +68,7 @@ const columns: Array<{ label: string; links: FooterLink[] }> = [
                     href={link.href}
                     data-umami-event={link.umamiTarget ? 'outbound' : undefined}
                     data-umami-event-target={link.umamiTarget}
+                    rel={link.umamiTarget ? 'noopener noreferrer' : undefined}
                   >
                     {link.label}
                   </a>
