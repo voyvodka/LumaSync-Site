@@ -4,6 +4,13 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.24] — 2026-06-09
+
+### Security
+
+- **CSP `img-src` no longer allows arbitrary HTTPS origins**: the Content-Security-Policy permitted images from any `https:` origin, but a repo-wide scan confirmed the site loads no external images at all — every image is served first-party or inlined as a `data:` URI. The directive is now `img-src 'self' data:`, so an injected or compromised markup path can no longer exfiltrate data via attacker-controlled image loads.
+- **External outbound links carry `rel="noopener noreferrer"`**: the GitHub links in `CompareCTA.astro`, the Footer's outbound column links, and the repo/license links on `/changelog/` and `/license/` now set both hints. The links open in the same tab (no `target="_blank"` exists site-wide), so this is defense-in-depth rather than an active tabnabbing fix, plus it stops leaking the Referer header to the destination.
+
 ## [1.1.23] — 2026-06-08
 
 ### Build
