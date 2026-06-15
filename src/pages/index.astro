@@ -120,7 +120,7 @@ const schemas = [
       <p class="subhead">{description}</p>
       <div class="cta-row">
         <a class="cta-primary" href="/download/" data-os-cta> Download </a>
-        <a class="cta-secondary" href={repo}> View on GitHub → </a>
+        <a class="cta-secondary" href={repo} rel="noopener noreferrer"> View on GitHub → </a>
       </div>
       <p class="platform-note">macOS · Windows · Linux</p>
     </div>
@@ -332,7 +332,10 @@ const schemas = [
     <div class="trust-grid">
       <div>
         <p class="trust-label">MIT licensed</p>
-        <p>Source at <a href={repo}>voyvodka/LumaSync</a>. Fork it, ship it, read it.</p>
+        <p>
+          Source at <a href={repo} rel="noopener noreferrer">voyvodka/LumaSync</a>. Fork it, ship
+          it, read it.
+        </p>
       </div>
       <div>
         <p class="trust-label">Updates signed with minisign</p>
