@@ -16,24 +16,24 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.2",
+    "@astrojs/mdx": "^6.0.3",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/instrument-serif": "^5.2.8",
     "@resvg/resvg-js": "^2.6.2",
-    "@tailwindcss/vite": "^4.3.0",
-    "astro": "^6.4.4",
+    "@tailwindcss/vite": "^4.3.1",
+    "astro": "^6.4.6",
     "marked": "^18.0.5",
     "pagefind": "^1.5.2",
     "satori": "^0.26.0",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "dompurify": "^3.4.8",
-    "isomorphic-dompurify": "^3.16.0",
-    "prettier": "^3.8.3",
+    "dompurify": "^3.4.10",
+    "isomorphic-dompurify": "^3.17.0",
+    "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "~6.0.3"
