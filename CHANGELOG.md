@@ -4,6 +4,22 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.25] — 2026-06-15
+
+### Security
+
+- **esbuild advisory cleared (GHSA-gv7w-rqvm-qjhr, GHSA-g7r4-m6w7-qqqr)**: a pnpm `overrides` entry now pins `esbuild` to `>=0.28.1`, resolving the high- and low-severity advisories that reached the build transitively through `@tailwindcss/vite > vite > esbuild`. The dependency-audit CI gate (`pnpm audit --prod --audit-level=high`) is green again.
+- **`yaml` advisory cleared (GHSA-48c2-rrv3-qjmp)**: a pnpm `overrides` entry forces `yaml` to `>=2.8.3`, replacing the vulnerable 2.7.1 pulled in transitively via `@astrojs/check`'s language-server chain. With this, `pnpm audit` reports no known vulnerabilities at any severity, production or development.
+- **External-link hardening completed site-wide**: `rel="noopener noreferrer"` now covers the remaining outbound links on the home, download, and community pages (Hue developer portal, and the GitHub repo / releases / Code of Conduct / Contributing links), finishing the rollout begun in 1.1.24. The links open in the same tab (no `target="_blank"` site-wide), so this is defense-in-depth plus Referer-header suppression.
+
+### Accessibility
+
+- **Disabled community forum links show their tooltip on hover**: `.forums a.disabled` swaps `pointer-events: none` for `cursor: default`, so the native `title` ("Pending community growth") surfaces on hover for the inert Discord card. The links already render no `href` and guard `:hover`/`:active` styling with `:not(.disabled)`, so there is no interactivity regression.
+
+### Dependencies
+
+- **`astro` 6.4.4 → 6.4.7**: routine upstream patch (manifest + lockfile only), bringing the `addAttribute` invalid-attribute-name hardening and prerendered-error-page origin validation from the 6.4.5–6.4.7 patch line. A full lockfile refresh also picked up the latest in-range patches across the tree.
+
 ## [1.1.24] — 2026-06-09
 
 ### Security
