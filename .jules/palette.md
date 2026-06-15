@@ -33,3 +33,7 @@
 ## 2026-05-19 - Explaining Disabled States
 
 **Learning:** While making a link inaccessible to keyboard/click interactions (e.g., omitting `href` and adding `aria-disabled="true"`) is correct for structural accessibility, it leaves visual users who hover over the element confused as to _why_ it's disabled. **Action:** When visually disabling interactive elements (such as `<a>` tag cards functioning as buttons), always provide a native `title` attribute explaining why the element is disabled (e.g., 'No release available for this platform yet') to improve the UX for hovering users.
+
+## 2026-05-19 - Preserving Native Tooltips on Disabled Elements
+
+**Learning:** While using `pointer-events: none` on disabled anchor tags successfully prevents interactions, it has a significant UX drawback: it completely silences mouse events, meaning the native browser `title` tooltip will never appear when a user hovers over the element to learn _why_ it's disabled. **Action:** When styling visually disabled elements (like `.card-disabled` or `.forums a.disabled`), use `cursor: default` instead of `pointer-events: none`. To prevent unintended navigation or JS event listener triggers, ensure the `href` is conditionally omitted (e.g., `href={isDisabled ? undefined : actualHref}`) and JS click events are safely guarded. This preserves the native browser tooltip for hovering users.
