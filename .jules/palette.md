@@ -33,3 +33,7 @@
 ## 2026-05-19 - Explaining Disabled States
 
 **Learning:** While making a link inaccessible to keyboard/click interactions (e.g., omitting `href` and adding `aria-disabled="true"`) is correct for structural accessibility, it leaves visual users who hover over the element confused as to _why_ it's disabled. **Action:** When visually disabling interactive elements (such as `<a>` tag cards functioning as buttons), always provide a native `title` attribute explaining why the element is disabled (e.g., 'No release available for this platform yet') to improve the UX for hovering users.
+
+## 2026-05-20 - Disabled Element Interactivity
+
+**Learning:** While using `cursor: default` instead of `pointer-events: none` preserves native browser tooltips on disabled elements, it can introduce a functional regression by restoring full mouse interactivity. **Action:** To prevent unintended navigation or JS event listener triggers on visually disabled links, ensure the `href` is conditionally removed or use `e.preventDefault()`, and ensure any `a:hover` styles explicitly exclude the disabled state (e.g., `a:hover:not(.disabled)`).
