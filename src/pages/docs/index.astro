@@ -4,19 +4,30 @@ import { groupDocs, docHref } from '../../lib/content';
 import { breadcrumbSchema, collectionPageSchema } from '../../lib/seo';
 
 const groups = await groupDocs();
-const totalCount = groups.reduce((sum, g) => sum + g.items.length, 0);
 
 // Flatten non-draft entries across groups for the CollectionPage
 // ItemList. Drafts stay out of the schema so crawlers don't surface
 // half-baked pages as part of the docs hub.
-const publishedItems = groups.flatMap(({ items }) =>
-  items
-    .filter((item) => !item.data.draft)
-    .map((item) => ({
-      name: item.data.title,
-      url: docHref(item),
-      description: item.data.description,
-    })),
+// Combined with totalCount calculation to avoid multiple array passes.
+const { totalCount, publishedItems } = groups.reduce(
+  (acc, group) => {
+    acc.totalCount += group.items.length;
+    for (let i = 0; i < group.items.length; i++) {
+      const item = group.items[i];
+      if (!item.data.draft) {
+        acc.publishedItems.push({
+          name: item.data.title,
+          url: docHref(item),
+          description: item.data.description,
+        });
+      }
+    }
+    return acc;
+  },
+  {
+    totalCount: 0,
+    publishedItems: [] as Array<{ name: string; url: string; description: string }>,
+  },
 );
 
 const schemas = [
