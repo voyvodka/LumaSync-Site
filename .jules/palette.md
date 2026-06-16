@@ -37,3 +37,7 @@
 ## 2026-05-20 - Disabled Element Interactivity
 
 **Learning:** While using `cursor: default` instead of `pointer-events: none` preserves native browser tooltips on disabled elements, it can introduce a functional regression by restoring full mouse interactivity. **Action:** To prevent unintended navigation or JS event listener triggers on visually disabled links, ensure the `href` is conditionally removed or use `e.preventDefault()`, and ensure any `a:hover` styles explicitly exclude the disabled state (e.g., `a:hover:not(.disabled)`).
+
+## 2026-06-16 - Focus Rings on Transient "Skip to Content" Links
+
+**Learning:** "Skip to content" links that slide into view (e.g., via `transform: translateY(0)`) upon gaining keyboard focus might seem sufficiently obvious because they just appeared. However, the lack of a standard focus ring can still cause confusion when other fixed elements exist, and it breaks design system consistency. Additionally, these elements are technically buttons disguised as links and should have tactile click feedback. **Action:** When implementing or auditing transient components like a skip link, ensure it has the standard focus ring (`outline: 2px solid var(--focus-ring); outline-offset: 2px;`) applied alongside the visibility transform, as well as a tactile `:active` state within `@media (prefers-reduced-motion: no-preference)`.

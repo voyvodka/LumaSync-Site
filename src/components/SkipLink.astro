@@ -19,5 +19,13 @@
 
   .skip-link:focus-visible {
     transform: translateY(0);
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .skip-link:active {
+      transform: scale(0.96) translateY(0);
+    }
   }
 </style>
