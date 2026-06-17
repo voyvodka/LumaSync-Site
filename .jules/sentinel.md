@@ -29,7 +29,7 @@
 ## 2026-06-15 - [Referer Leakage on External Links]
 
 **Vulnerability:** External links (`<a>` tags) across the site, including community forums, GitHub source links, and download sources, did not include the `rel="noopener noreferrer"` attribute. When a user clicked these links, the browser could send a `Referer` header to the external domain, potentially leaking sensitive query parameters, user paths, or internal routing information. Additionally, omitting `noopener` leaves the application vulnerable to reverse tabnabbing attacks, where the newly opened tab can manipulate the original page's `window.opener` object. **Learning:** Default HTML anchor tags with `href` pointing to external domains (e.g., GitHub, Hue Developer Portal) do not provide privacy or security protections out of the box. Assuming modern browsers mitigate all tabnabbing risks is unsafe, and preventing `Referer` leakage is a necessary defense-in-depth measure. **Prevention:** Always add `rel="noopener noreferrer"` to external links across the codebase to ensure both `window.opener` separation and `Referer` header stripping, improving both security and user privacy.
+
 ## 2024-10-27 - [External Link Referer Leakage]
-**Vulnerability:** External links lacked the `rel="noopener noreferrer"` attribute, potentially exposing referer data and creating tabnabbing risks.
-**Learning:** Astro external links should include `rel="noopener noreferrer"` when conditionally applied.
-**Prevention:** Explicitly specify `rel="noopener noreferrer"` for all external anchor tags.
+
+**Vulnerability:** External links lacked the `rel="noopener noreferrer"` attribute, potentially exposing referer data and creating tabnabbing risks. **Learning:** Astro external links should include `rel="noopener noreferrer"` when conditionally applied. **Prevention:** Explicitly specify `rel="noopener noreferrer"` for all external anchor tags.
