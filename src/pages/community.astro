@@ -97,6 +97,7 @@ const schemas = [
             <li>
               <a
                 href={f.disabled ? undefined : f.href}
+                rel={f.disabled ? undefined : 'noopener noreferrer'}
                 class={f.disabled ? 'disabled' : ''}
                 aria-disabled={f.disabled ? 'true' : undefined}
                 title={f.disabled ? f.disabledReason || 'Currently disabled' : undefined}
