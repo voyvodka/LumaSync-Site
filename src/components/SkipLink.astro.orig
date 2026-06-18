@@ -22,10 +22,6 @@
     outline-offset: 2px;
   }
 
-  .skip-link:active {
-    background: var(--accent-strong);
-  }
-
   @media (prefers-reduced-motion: no-preference) {
     .skip-link {
       transition:
@@ -35,6 +31,7 @@
 
     .skip-link:active {
       transform: translateY(0) scale(0.96);
+      background: var(--accent-strong);
     }
   }
 </style>
