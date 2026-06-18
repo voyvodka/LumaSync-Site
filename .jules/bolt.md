@@ -25,3 +25,8 @@
 ## 2026-05-19 - Discarding stale async queries in search
 
 **Learning:** When using a debounced input listener for asynchronous queries (like Pagefind search), slower older queries can resolve after newer ones. If results are rendered sequentially without verification, the UI may thrash and display stale data. **Action:** Always maintain a monotonic `queryId` in the local state of the search listener to track the latest input. Before updating the DOM or continuing async operations, verify that the `queryId` matches the currently active query to discard stale results and prevent race conditions.
+
+## 2026-05-19 - Replacing chained array operations in Astro pages
+
+**Learning:** Sequential, chained array operations (like `.flatMap()`, `.filter()`, and `.map()`) create intermediate arrays in memory and iterate over the collection multiple times (e.g., O(3N)). In build-time tools like Astro SSG or dynamic SSR endpoints that process collections of Markdown/MDX content, this causes unnecessary garbage collection and processing overhead, particularly when generating sitemaps or SEO schemas.
+**Action:** When filtering and transforming arrays simultaneously, replace the chained higher-order functions with a single `.reduce()` method (or a `for` loop inside `reduce`). This restricts the operation to a single O(N) pass and avoids intermediate array allocations entirely, speeding up static builds and SSR response times.

@@ -25,13 +25,19 @@ interface Props {
 
 const { group, label, items } = Astro.props as Props;
 
-const publishedItems = items
-  .filter((item) => !item.data.draft)
-  .map((item) => ({
-    name: item.data.title,
-    url: docHref(item),
-    description: item.data.description,
-  }));
+const publishedItems = items.reduce(
+  (acc, item) => {
+    if (!item.data.draft) {
+      acc.push({
+        name: item.data.title,
+        url: docHref(item),
+        description: item.data.description,
+      });
+    }
+    return acc;
+  },
+  [] as { name: string; url: string; description?: string }[],
+);
 
 // Group-specific lede + keyword padding so the page ranks for the
 // broad query (e.g. "lumasync hue setup", "lumasync usb leds").
