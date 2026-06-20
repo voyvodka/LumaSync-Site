@@ -37,3 +37,7 @@
 ## 2026-05-20 - Disabled Element Interactivity
 
 **Learning:** While using `cursor: default` instead of `pointer-events: none` preserves native browser tooltips on disabled elements, it can introduce a functional regression by restoring full mouse interactivity. **Action:** To prevent unintended navigation or JS event listener triggers on visually disabled links, ensure the `href` is conditionally removed or use `e.preventDefault()`, and ensure any `a:hover` styles explicitly exclude the disabled state (e.g., `a:hover:not(.disabled)`).
+
+## 2026-06-20 - Transient Element Focus Rings and Tactile States
+
+**Learning:** Transient interactive elements (like 'Skip to content' links) that use CSS transforms to become visible must still include standard focus rings (`outline: 2px solid var(--focus-ring); outline-offset: 2px;`) and tactile `:active` scale states for consistent accessibility and UX. Without them, keyboard users lack visual feedback of their position, and clicking users lack tactile feedback. **Action:** When creating or fixing transient elements (e.g. elements using `transform: translateY` to hide/show on focus), apply `.element:focus-visible` outline styles and an `.element:active` transform inside `@media (prefers-reduced-motion: no-preference)`.
