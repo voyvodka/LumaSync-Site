@@ -200,6 +200,7 @@ const schemas = [
             <a
               class:list={['card', `card-${os}`, disabled && 'card-disabled']}
               href={disabled ? undefined : href}
+              rel={disabled ? undefined : 'noopener noreferrer'}
               data-os={os}
               data-umami-event="download"
               data-umami-event-os={umami}
