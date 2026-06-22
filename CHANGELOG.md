@@ -4,6 +4,25 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.26] — 2026-06-22
+
+### Security
+
+- **External-link `noopener` rollout finished on render-time links**: the 1.1.25 pass hardened the static-`href` outbound links, but missed a handful whose `href` resolves conditionally and so never matched a literal-`href` audit — the 404 page's recovery links (the GitHub "Report a bug" entry), the `/community/` FAQ answers built as inline HTML strings (the `/issues` and `/discussions/ideas` GitHub links) and the "where to go" forum cards, and the `/download/` per-OS asset cards. Each now sets `rel="noopener noreferrer"`, with the attribute guarded the same way as the `href` so internal and disabled links stay untouched. Defense-in-depth plus Referer-header suppression; no `target="_blank"` exists site-wide.
+
+### Accessibility
+
+- **Skip-to-content link gains a visible focus ring and press feedback**: the `.skip-link` already slid into view on focus, but rendered no `:focus-visible` outline once visible. It now draws the standard 2px `--focus-ring` outline with a 2px offset and a `prefers-reduced-motion`-gated `scale(0.96)` `:active` state, matching the interaction treatment used elsewhere on the site.
+- **404 page recovery links respond to keyboard focus**: the `.recovery` cards and the `← Home` link on the 404 page now render the standard `:focus-visible` outline (2px `--focus-ring`, 2px offset), so keyboard and switch-device users can see which recovery target holds focus. Mouse users are unaffected.
+
+### Dependencies
+
+- **Minor/patch group bump (3 updates)**: `astro` 6.4.7 → 6.4.8, `dompurify` 3.4.8 → 3.4.11, and `isomorphic-dompurify` 3.16.0 → 3.18.0 — routine upstream patches, manifest + lockfile only, no source change. The build, type-check, and Lighthouse-CI gates pass unchanged.
+
+### Build
+
+- **GitHub Actions bumps**: `actions/checkout` 6 → 7 across the CI, CodeQL, and deploy workflows, and `pnpm/action-setup` 6.0.8 → 6.0.9 (still pinned to its commit SHA with the version comment refreshed). CI-only; no effect on the published site.
+
 ## [1.1.25] — 2026-06-15
 
 ### Security
