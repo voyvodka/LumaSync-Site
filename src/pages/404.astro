@@ -183,6 +183,11 @@ const recoveryLinks = [
     color: var(--text-primary);
   }
 
+  .home-cta:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
   .recovery {
     list-style: none;
     margin: 0;
@@ -208,6 +213,11 @@ const recoveryLinks = [
   .recovery a:hover {
     border-color: var(--border-strong);
     background: var(--surface-2);
+  }
+
+  .recovery a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 
   .recovery .label {
