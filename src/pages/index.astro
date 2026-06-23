@@ -756,6 +756,12 @@ const schemas = [
     color: var(--accent);
   }
 
+  .feature-grid a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
   .feature-badges {
     list-style: none;
     margin: 0 0 0.875rem;
@@ -813,6 +819,12 @@ const schemas = [
 
   .inline-cta:hover {
     color: var(--accent);
+  }
+
+  .inline-cta:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   .callout-visual {
@@ -960,6 +972,12 @@ const schemas = [
 
   .trust-grid a:hover {
     text-decoration-color: var(--accent);
+  }
+
+  .trust-grid a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   .trust-grid code {

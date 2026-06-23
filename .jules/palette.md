@@ -41,3 +41,8 @@
 ## 2026-06-22 - Transient Interactive Elements and Tactile/Focus States
 
 **Learning:** Transient interactive elements (like "Skip to content" links) that use CSS transforms (e.g., `translateY(-200%)`) to hide/show themselves still need standard focus rings and tactile `:active` scale states for consistent accessibility and UX. However, applying a naive `scale` on `:active` will overwrite the `translate` transform that made the element visible, causing visual jumping. **Action:** When applying tactile `:active` transforms to elements that rely on transforms for positioning or visibility, always combine the base transform in the rule (e.g., `transform: translateY(0) scale(0.96);`) to ensure smooth visual behavior while preserving the interaction feedback.
+
+## 2026-07-15 - Focus Rings for Custom Inline Links
+
+**Learning:** When turning standard generic `<a>` elements into custom CTA components (like `.inline-cta` or `.feature-grid a`) using specific typographic treatments (`uppercase`, `monospace`, etc.) and CSS transitions (`color`), developers often remember to provide a `:hover` state but forget to provide an explicit `:focus-visible` state. If omitted, keyboard users only see the browser default outline, which may have insufficient contrast against the background or clash with the design system.
+**Action:** When implementing or auditing custom text-based inline CTA links, always explicitly add a `:focus-visible` state utilizing the project's standard `outline: 2px solid var(--focus-ring);` with appropriate offsets and border radii to ensure keyboard accessibility is fully supported.
