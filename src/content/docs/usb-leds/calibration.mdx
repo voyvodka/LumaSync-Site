@@ -3,7 +3,7 @@ title: LED calibration
 description: Tell LumaSync how many LEDs are on each edge of your TV, where they start, and which direction they run — the layout editor and room map walkthrough.
 group: usb-leds
 order: 30
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 import { LATEST_VERSION } from '../../../lib/version';
@@ -68,7 +68,7 @@ If any of those fails, tweak the setting and check again. The test pattern strea
 
 For richer setups — multiple USB strips, furniture blocking parts of the TV, or projecting Hue channels onto the physical space — LumaSync ships a **Room map editor** (Settings → Calibration → Open room map).
 
-Drag a **TV anchor** into position, add **USB strip** objects with your calibrated edge counts, and drop furniture (table, couch, bookshelf) for reference. Hue channel positions from your Entertainment Area project onto the same canvas, and you can fine-tune them per-bulb without touching the Hue app. From v1.5.2 the editor uses the amber Rev 07 design tokens with a 32 px minimum tap-target floor throughout the dock and toolbar; pan / zoom / drag interactions no longer thrash the canvas event listeners between frames.
+Drag a **TV anchor** into position, add **USB strip** objects with your calibrated edge counts, and drop furniture (table, couch, bookshelf) for reference. Hue channel positions from your Entertainment Area project onto the same canvas, and you can fine-tune them per-bulb without touching the Hue app. From v1.5.2 the editor uses the amber Rev 07 design tokens with a 32 px minimum tap-target floor throughout the dock and toolbar; pan / zoom / drag interactions no longer thrash the canvas event listeners between frames. From v1.5.3 the template selector itself adopts the amber Rev 07 tokens, and each template button now exposes an explicit accessible name (`aria-label`) so screen readers announce it correctly; the 60 Hz edge-signal stream and shell lifecycle events are also delivered only to the main settings webview, so an open room-map / calibration-overlay window is no longer woken on every frame.
 
 ### Hue Zones
 

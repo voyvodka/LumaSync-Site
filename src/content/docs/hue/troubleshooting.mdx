@@ -3,7 +3,7 @@ title: Hue troubleshooting
 description: Common Philips Hue failure modes and how to fix them — discovery, pairing, streaming latency, credentials expiry, bulbs not responding.
 group: hue
 order: 30
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 Most Hue issues fall into one of five buckets. This page is organised stage-by-stage so you can jump to where you are stuck.
@@ -53,6 +53,14 @@ From v1.5.2, LumaSync emits an explicit DTLS `close_notify` alert before droppin
 
 If you still see this on v1.5.2+, another client is genuinely holding the slot — typically the Hue app's own play screen, a Hue Sync Box app, or a third-party Entertainment client. Stop streaming there first.
 
+From v1.5.3 the active-streamer banner clears itself. While the area is held by another streamer, LumaSync re-probes readiness every 3 seconds (instead of the 15-second healthy cadence) and dismisses the banner within ~3 seconds of the other session releasing the slot — no manual revalidate needed.
+
+## Status stuck on "Reconnecting" (fixed in v1.5.3)
+
+**Symptom (pre-v1.5.3)**: the Hue stream stalls permanently on `Reconnecting` and never recovers.
+
+Earlier builds could deadlock here when a status poll raced the reconnect monitor for the same shutdown signal. v1.5.3 keys the monitor's guard off an explicit in-progress flag, so the restart always proceeds and the stream self-heals. If you are on v1.5.2 or earlier and hit a permanent `Reconnecting` status, restart the stream manually or update to v1.5.3.
+
 ## Bulbs respond but look "laggy"
 
 **Symptom**: Lights update but feel delayed compared to the screen.
@@ -67,6 +75,10 @@ If you still see this on v1.5.2+, another client is genuinely holding the slot �
 
 - **Unreachable bulb**. Open the Hue app → tap the bulb in the room view — if it shows "Unreachable", fix power or re-pair the bulb with the bridge first. LumaSync can't stream to a bulb the bridge itself can't see.
 - **Bulb doesn't support Entertainment**. Warm-white-only bulbs respond only to brightness, not colour, and may appear "stuck" at whatever colour the area last saw before they joined. Remove them from the area via the Hue app if that isn't what you want.
+
+## Stop didn't fully complete (`HUE_STOP_TIMEOUT_PARTIAL`)
+
+If stopping the Hue stream times out partway, LumaSync raises a `HUE_STOP_TIMEOUT_PARTIAL` fault. From v1.5.3 this fault surfaces a **Retry Stop** action hint — matching the inline recovery CTA in the device panel — so you can re-issue the stop with one click. The bridge also times out the entertainment session server-side, so the slot clears regardless.
 
 ## When to just repair
 

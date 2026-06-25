@@ -4,6 +4,24 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.27] — 2026-06-25
+
+### Documentation
+
+- **Synced docs to LumaSync app v1.5.3.** Added a macOS launch-crash note — the 1.5.2 build crashed on launch on Macs without Xcode, and v1.5.3 fixes it — to the install guide, the error-handling reference, the download page, and USB troubleshooting. Expanded Hue troubleshooting with the self-clearing active-streamer banner, the fixed "Reconnecting" stall, and the `HUE_STOP_TIMEOUT_PARTIAL` "Retry Stop" hint. Documented the v1.5.3 shutdown-hardening continuation, the transient-notice timer-leak fix, the visibility-aware Hue polling and output hot-path optimizations, the room-map template-selector design-token + `aria-label` work, and single-HTTP-client gamut fetching. Bumped `updated:` frontmatter on every touched doc.
+
+### Content
+
+- **Landing page refreshed for v1.5.3.** The roadmap "Shipped" column now leads with the v1.5.3 headline items (macOS launch-crash fix, self-clearing Hue active-streamer banner, shutdown hardening), and the macOS platform card notes the 1.5.2 → 1.5.3 launch-crash fix.
+
+### Accessibility
+
+- **Focus-visible rings on landing-page text links** — the custom inline CTA links (`.inline-cta`), the feature-grid "→" links, and the trust-section links now draw the standard 2px `--focus-ring` outline on keyboard focus, matching the treatment already used on CTAs and cards. Incorporates community PR #103.
+
+### SEO
+
+- **Bumped the site-wide `Last-Modified` freshness signal** so answer engines and AI crawlers see a current date on HTML and markdown responses.
+
 ## [1.1.26] — 2026-06-22
 
 ### Security

@@ -145,6 +145,10 @@ const schemas = [
         Grab the installer for your platform. Binaries are signed with minisign and verified before
         any update replaces them on disk.
       </p>
+      <p class="note-macos">
+        On macOS and updating from 1.5.2? That build could crash on launch on Macs without Xcode
+        installed — the current release fixes it. Just download and reinstall.
+      </p>
       {
         release && (
           <div class="release-meta">
@@ -278,6 +282,14 @@ const schemas = [
   .lede {
     color: var(--text-secondary);
     font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
+    margin: 0 0 1.5rem;
+    max-width: 36rem;
+  }
+
+  .note-macos {
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
     line-height: var(--lh-relaxed);
     margin: 0 0 1.5rem;
     max-width: 36rem;

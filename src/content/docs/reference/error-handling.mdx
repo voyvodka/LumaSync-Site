@@ -3,7 +3,7 @@ title: Error handling
 description: How LumaSync recovers from render faults — the global ErrorBoundary, the fallback card, the actions available from it, and the macOS lifecycle shutdown path.
 group: reference
 order: 50
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 From v1.4, LumaSync wraps every React root with a **global ErrorBoundary**. When a render fault bubbles out of the component tree, you get a localised fallback card — not a blank tray window, not a silent crash. The app keeps running; only the broken panel is replaced with the card.
@@ -55,9 +55,20 @@ From v1.5.2 all three paths converge on a single `kick_off_shutdown_and_die` Rus
 
 End result: Cmd+Q closes the app cleanly within the watchdog budget every time, and dev rebuilds no longer fail with single-instance-lock hangs.
 
+## macOS launch crash on 1.5.2 (fixed in v1.5.3)
+
+Every 1.5.2 macOS install on a machine **without Xcode** crashed immediately on launch with `dyld: Library not loaded: @rpath/libswift_Concurrency.dylib`. The screen-capture stack's Swift runtime was being linked against a build-machine toolchain path instead of the system Swift concurrency library. v1.5.3 pins the Swift runtime deployment target across all build paths so it links the library that ships with macOS, and a release-pipeline guard now blocks any future binary that would regress this. Fix: update to v1.5.3 or later.
+
+## Shutdown hardening, continued (v1.5.3)
+
+v1.5.3 hardens the same teardown path further:
+
+- The lighting-worker teardown step is now time-bounded to 1.5 s, so a slow worker join can no longer starve the Hue entertainment-mode deactivate under the shutdown watchdog (previously this risked leaving the bridge with a phantom active streamer).
+- On Windows, screen-capture teardown is detached onto its own thread, so switching lighting modes no longer briefly freezes the UI while the capture stack tears down.
+
 ## Related
 
 - [Telemetry](/docs/reference/telemetry/) — logs directory and rotation
 - [Notifications](/docs/reference/notifications/) — `open_log_dir` and OS toasts
 - [USB troubleshooting](/docs/usb-leds/troubleshooting/) — device-level errors take a different path than ErrorBoundary
-- [Hue troubleshooting](/docs/hue/troubleshooting/) — the `HUE_STREAM_NOT_READY_ACTIVE_STREAMER` 403 retired in v1.5.2
+- [Hue troubleshooting](/docs/hue/troubleshooting/) — the active-streamer 403 (retired v1.5.2) and the v1.5.3 self-clearing active-streamer banner

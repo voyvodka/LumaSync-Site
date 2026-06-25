@@ -3,7 +3,7 @@ title: Telemetry
 description: What LumaSync measures locally — capture FPS, send FPS, queue health — where the numbers live on disk, and why none of them leave your machine.
 group: reference
 order: 30
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 ## Zero network telemetry
@@ -27,6 +27,16 @@ That's it. Nothing else outbound.
 ### Visibility-aware polling
 
 From v1.5.2, all polling intervals — telemetry, Hue health checks, updater status — **pause when the window is hidden** and resume on visibility. So an idle LumaSync sitting in the menu bar doesn't burn CPU or battery polling for state that nobody is looking at; the moment you click the tray icon and bring the window forward, polling resumes within one tick.
+
+v1.5.3 brings the remaining Hue background polling into the same discipline — the Hue readiness refresh and stream-health check are now visibility-aware (pausing while the tray window is hidden and re-arming or re-checking on focus) instead of running on a fixed interval, trimming needless background bridge traffic.
+
+### Hot-path optimizations (v1.5.3)
+
+v1.5.3 trims CPU on the output hot paths without changing a single output value:
+
+- 60 Hz edge-signal and shell-lifecycle events are emitted only to the main settings webview, so an open calibration-overlay window is no longer woken on every frame.
+- Gamma-correction lookup tables are computed once and reused instead of rebuilt every frame (previously once per Hue channel per frame, and once per Adalight / SK6812 serial packet) — byte-identical output.
+- Hue stream activation and reconnect reuse a single HTTP client when fetching per-bulb gamut metadata rather than constructing one client per light.
 
 ## On-device telemetry
 

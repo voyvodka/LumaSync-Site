@@ -303,7 +303,10 @@ const schemas = [
           macOS
           <span class="tag tag-ok">Full support</span>
         </h3>
-        <p>Primary development target. Universal DMG (Apple Silicon + Intel).</p>
+        <p>
+          Primary development target. Universal DMG (Apple Silicon + Intel). v1.5.3 fixes a 1.5.2
+          launch crash on Macs without Xcode.
+        </p>
       </article>
       <article>
         <h3>
@@ -423,6 +426,22 @@ const schemas = [
           <h3>{LATEST_VERSION} — {LATEST_VERSION_DATE}</h3>
         </header>
         <ul role="list">
+          <li>
+            <strong>macOS launch-crash fix</strong> — every 1.5.2 macOS install on a Mac without Xcode
+            crashed on launch (<code>dyld: libswift_Concurrency.dylib</code>); the Swift runtime is
+            now pinned across all build paths, with a release-pipeline guard blocking any future
+            regression
+          </li>
+          <li>
+            <strong>Hue active-streamer banner self-clears</strong> — while an area is held by another
+            streamer, readiness is re-probed every 3 s and the banner dismisses within ~3 s of the foreign
+            session releasing — no manual revalidate
+          </li>
+          <li>
+            <strong>Shutdown hardening</strong> — lighting-worker teardown is time-bounded (1.5 s) so
+            a slow join can't starve the Hue deactivate under the watchdog; Windows screen-capture teardown
+            is detached so mode switches no longer freeze the UI
+          </li>
           <li>
             <strong>WLED bridge over Wi-Fi</strong> — DDP protocol with mDNS auto-discovery (<code
               >_wled._tcp.local.</code
@@ -756,6 +775,12 @@ const schemas = [
     color: var(--accent);
   }
 
+  .feature-grid a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
   .feature-badges {
     list-style: none;
     margin: 0 0 0.875rem;
@@ -813,6 +838,12 @@ const schemas = [
 
   .inline-cta:hover {
     color: var(--accent);
+  }
+
+  .inline-cta:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   .callout-visual {
@@ -960,6 +991,12 @@ const schemas = [
 
   .trust-grid a:hover {
     text-decoration-color: var(--accent);
+  }
+
+  .trust-grid a:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   .trust-grid code {
