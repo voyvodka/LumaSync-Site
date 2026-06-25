@@ -3,7 +3,7 @@ title: USB troubleshooting
 description: Common USB LED failure modes — port missing, health check fails, LEDs flicker, colours wrong, strip partially lit — and the fix for each.
 group: usb-leds
 order: 40
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 ## Port doesn't show up
@@ -87,6 +87,10 @@ You can continue in `DEVICE_MANUAL_REQUIRED`; LumaSync streams frames and assume
 
 - **Thermal throttling at max brightness**. At 100% all-white, WS2812B strips shed ~60 mA per LED — a 200-LED strip dissipates ~12 W of heat. Adhesive-mounted strips on the back of a TV can hit thermal cutoff. Lower the max brightness (Settings → Ambilight → Tuning → Cap brightness at 0.6 instead of 1.0).
 - **Power supply overcurrent trip**. 5 V supplies with foldback protection shut off under sustained load. Upgrade to a higher-amp supply, or cap brightness.
+
+## App won't launch at all on macOS
+
+If you're on 1.5.2 and the app crashes on startup with a `dyld: Library not loaded: @rpath/libswift_Concurrency.dylib` error (it affected Macs without Xcode installed), update to v1.5.3 — see [Install → macOS](/docs/getting-started/install/#macos).
 
 ## Related
 

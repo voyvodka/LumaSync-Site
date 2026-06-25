@@ -3,7 +3,7 @@ title: Entertainment Area
 description: What a Hue Entertainment Area is, why LumaSync requires one, and how to create or edit one in the Hue app — plus Hue Zones, AR-locked sizing, and per-bulb gamut clipping.
 group: hue
 order: 20
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 ## What is an Entertainment Area
@@ -63,7 +63,7 @@ The full editor walkthrough lives on the [LED calibration](/docs/usb-leds/calibr
 
 The Hue colour gamut is bulb-specific. Philips classifies bulbs into three gamut types — A, B, and C — each defined by a different RGB triangle in xy chromaticity space. Sending a colour outside a bulb's gamut causes the bridge to silently clip in the brightest channel direction, which can shift hue.
 
-From v1.5.0, LumaSync fetches each bulb's `archetype` and `gamut_type` from the CLIP v2 `/resource/light` endpoint during area activation and applies **per-bulb gamut A/B/C triangle clipping** in the DTLS frame builder hot-path. The clip is luminance-preserving (xy→RGB mapping retains brightness while constraining the chromaticity), so Play bars (gamut C) stay accurate while older E27 bulbs (gamut B) clip without colour drift. No configuration is needed; clipping happens automatically per bulb.
+From v1.5.0, LumaSync fetches each bulb's `archetype` and `gamut_type` from the CLIP v2 `/resource/light` endpoint during area activation and applies **per-bulb gamut A/B/C triangle clipping** in the DTLS frame builder hot-path. The clip is luminance-preserving (xy→RGB mapping retains brightness while constraining the chromaticity), so Play bars (gamut C) stay accurate while older E27 bulbs (gamut B) clip without colour drift. No configuration is needed; clipping happens automatically per bulb. From v1.5.3, activation and reconnect reuse a single HTTP client to fetch this gamut metadata for all bulbs rather than constructing one client per light.
 
 ## Multiple areas
 

@@ -3,7 +3,7 @@ title: Install
 description: Install LumaSync on macOS, Windows, or Linux. Binaries are signed with minisign and verified automatically before updates.
 group: getting-started
 order: 10
-updated: 2026-05-05
+updated: 2026-06-25
 ---
 
 import { LATEST_VERSION_BARE } from '../../../lib/version';
@@ -24,6 +24,8 @@ Download the universal `.dmg` from the [Download page](/download/) or the latest
 1. Open the `.dmg` and drag **LumaSync.app** into **Applications**.
 2. On first launch, macOS asks for **Screen Recording** permission so the ambilight pipeline can sample your display. Grant it — without it the ambient mode has nothing to read from.
 3. LumaSync starts hidden to the tray; click the menu-bar icon to open the main window. Cmd+Q from anywhere shuts the app down cleanly via the watchdog-bounded shutdown path; closing the window only hides it to the tray.
+
+> **Updating from 1.5.2 on macOS?** The 1.5.2 macOS build could crash on launch on Macs without Xcode installed (`dyld: Library not loaded: @rpath/libswift_Concurrency.dylib`). v1.5.3 fixes it — the Swift concurrency runtime now links against the system library that ships with macOS, so no Xcode or developer tools are needed, and a release-pipeline guard prevents the regression from recurring. If you were stuck on 1.5.2, reinstall from the [Download page](/download/).
 
 ## Windows
 
