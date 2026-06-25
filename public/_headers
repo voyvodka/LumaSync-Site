@@ -48,4 +48,11 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), browsing-topics=()
   # upgrade-insecure-requests (below) supersedes the now-deprecated
   # block-all-mixed-content directive, which has been removed.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;
+  #
+  # script-src keeps 'wasm-unsafe-eval' — REQUIRED by Pagefind (the Cmd+K
+  # search), which compiles a WebAssembly module in its web worker. Without
+  # it the browser throws "Refused to create a WebAssembly object because
+  # 'wasm-unsafe-eval' is not an allowed source" and search silently breaks.
+  # 'wasm-unsafe-eval' only permits WASM compilation (not general eval), so
+  # it is the narrow, safe directive — do NOT drop it in a CSP-hardening pass.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;

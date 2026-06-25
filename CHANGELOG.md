@@ -4,6 +4,16 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.28] — 2026-06-25
+
+### Fixed
+
+- **Cmd+K search restored.** The Content-Security-Policy `script-src` was missing `'wasm-unsafe-eval'`, so Pagefind could not compile its WebAssembly module and search silently failed with a CSP console error on every page. Added the narrow `'wasm-unsafe-eval'` source — it permits WASM compilation only, not general `eval` — so the search index loads again.
+
+### Build
+
+- **Pinned the `vendor/lumasync` submodule to the v1.5.3 release commit** so the deployed build resolves the v1.5.3 version surfaces (roadmap header, JSON-LD `softwareVersion`, compare cells) and renders the v1.5.3 release notes on `/changelog/` — completing the v1.1.27 app sync.
+
 ## [1.1.27] — 2026-06-25
 
 ### Documentation
