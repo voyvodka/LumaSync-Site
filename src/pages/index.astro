@@ -443,45 +443,16 @@ const schemas = [
             is detached so mode switches no longer freeze the UI
           </li>
           <li>
-            <strong>WLED bridge over Wi-Fi</strong> — DDP protocol with mDNS auto-discovery (<code
-              >_wled._tcp.local.</code
-            >) and IP guard against loopback / multicast / broadcast
+            <strong>Output hot-path CPU cuts</strong> — gamma LUTs computed once instead of per frame,
+            60 Hz events delivered only to the settings webview, and a single shared HTTP client for Hue
+            gamut metadata — lower idle CPU with byte-identical output
           </li>
           <li>
-            <strong>Hue Zones</strong> — entertainment areas mapped to logical zones with zone-relative
-            coordinates, AR-locked sizing, HSV picker, and live bounds visual
-          </li>
-          <li>
-            <strong>Linux X11 capture</strong> via xcap — LumaSync now ships on macOS, Windows, and Linux
-            every release
-          </li>
-          <li>
-            <strong>SK6812 RGBW</strong> chip support with host-side <code>W = min(R,G,B)</code>
-            extraction; expanded USB allowlist (PL2303, CH341, CP2104, FT232H)
-          </li>
-          <li>
-            <strong>OS keychain credentials</strong> — Hue username + PSK migrated from plaintext store
-            to macOS Keychain / Windows CredMan / Linux Secret Service
-          </li>
-          <li>
-            <strong>Per-bulb Hue gamut clipping</strong> — A/B/C triangle clipping in the DTLS frame builder
-            hot-path with luminance-preserving xy→RGB mapping
-          </li>
-          <li>
-            <strong>Beta update channel</strong> scaffold — opt-in <code>updateChannel</code> shell state
-            with separate <code>latest-beta.json</code> endpoint
-          </li>
-          <li>
-            <strong>macOS lifecycle hardening</strong> — Cmd+Q, tray Quit, and Ctrl+C unified onto a single
-            watchdog-bounded shutdown path; close-to-tray OS notification on first dismiss
-          </li>
-          <li>
-            <strong>Polling discipline</strong> — telemetry and Hue health checks pause when the window
-            is hidden, resume on visibility (lower idle CPU and battery draw)
-          </li>
-          <li>
-            <strong>Frontend log bridge</strong> — webview <code>console.*</code> calls now write into
-            the platform log file alongside Rust log entries
+            <strong>Security advisories resolved</strong> — RUSTSEC-2026-0185 / -0186 (<code
+              >quinn-proto</code
+            >, <code>memmap2</code>), the <code>tar</code> PAX advisory, and a transitive <code
+              >undici</code
+            > bump; the <code>cargo audit</code> gate is green
           </li>
         </ul>
         <a class="inline-cta" href="/changelog/">Full changelog →</a>
