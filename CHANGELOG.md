@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.29] — 2026-06-25
+
+### Changed
+
+- **Landing roadmap "Shipped" column scoped to the current release.** It had been accumulating the full v1.5.0–v1.5.3 feature list (13 bullets), dwarfing the "Next" and "Never" columns and stretching the section well past a screen. It now lists only the latest release's highlights (v1.5.3) — matching the column's version header — so the three columns read at comparable length, with the full history one click away under "Full changelog →".
+
 ## [1.1.28] — 2026-06-25
 
 ### Fixed
