@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.30] — 2026-06-26
+
+### Fixed
+
+- **Cmd+K search now actually loads its WebAssembly — Pagefind core JS is cache-busted per deploy.** The v1.1.28 CSP fix (`wasm-unsafe-eval`) was correct at the origin, but Cloudflare had edge-cached `/pagefind/pagefind-worker.js` with the _old_ CSP header; because that file's bytes never change between deploys, conditional revalidation kept returning `304` and serving the stale header — a "Purge Everything" was re-revalidated straight back to it, so search stayed broken. The build now appends a build-unique stamp to Pagefind's non-fingerprinted core JS (`pagefind.js`, `pagefind-worker.js`, `pagefind-ui.js`) so their ETag changes each deploy, forcing a full `200` that ships the current CSP. The search worker can compile its WASM module again.
+
 ## [1.1.29] — 2026-06-25
 
 ### Changed
