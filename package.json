@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist --output-subdir pagefind",
+    "build": "astro build && pagefind --site dist --output-subdir pagefind && node scripts/stamp-pagefind.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "prettier --check .",
