@@ -152,7 +152,12 @@ const schemas = [
       {
         release && (
           <div class="release-meta">
-            <a href={release.html_url} class="version-pill" rel="noopener noreferrer">
+            <a
+              href={release.html_url}
+              class="version-pill"
+              rel="noopener noreferrer"
+              title={`View ${release.tag_name} release notes`}
+            >
               {release.tag_name}
             </a>
             {publishedDate && <span class="meta">Released {publishedDate}</span>}
@@ -307,12 +312,33 @@ const schemas = [
   }
 
   .version-pill {
+    display: inline-flex;
     padding: 0.25rem 0.625rem;
     background: var(--accent-soft);
     color: var(--accent);
     border-radius: var(--radius-pill);
     text-decoration: none;
     border: 1px solid var(--border-accent);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .version-pill:hover {
+    background: var(--accent);
+    color: var(--text-inverse);
+  }
+
+  .version-pill:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .version-pill:active {
+      transform: scale(0.96);
+    }
   }
 
   .meta {
