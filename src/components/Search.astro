@@ -125,7 +125,7 @@
       resultsEl.innerHTML = hits
         .map(
           (r, i) => `
-            <a class="search-result" href="${escapeHtml(r.url)}" data-index="${i}">
+            <a class="search-result" href="${sanitizeUrl(r.url)}" data-index="${i}">
               <span class="result-kicker">${escapeHtml(r.meta?.section || r.meta?.category || '')}</span>
               <span class="result-title">${escapeHtml(r.meta?.title || r.url)}</span>
               <span class="result-excerpt">${r.excerpt ? sanitizeExcerpt(r.excerpt) : ''}</span>
@@ -154,6 +154,17 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+
+    const sanitizeUrl = (url) => {
+      try {
+        const parsed = new URL(url, 'http://localhost');
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          return escapeHtml(url);
+        }
+      } catch (e) {}
+      console.warn('[search] blocked unsafe URL:', url);
+      return '#';
+    };
 
     const sanitizeExcerpt = (s) =>
       escapeHtml(s)
