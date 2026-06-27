@@ -41,5 +41,7 @@
 ## 2026-06-22 - Transient Interactive Elements and Tactile/Focus States
 
 **Learning:** Transient interactive elements (like "Skip to content" links) that use CSS transforms (e.g., `translateY(-200%)`) to hide/show themselves still need standard focus rings and tactile `:active` scale states for consistent accessibility and UX. However, applying a naive `scale` on `:active` will overwrite the `translate` transform that made the element visible, causing visual jumping. **Action:** When applying tactile `:active` transforms to elements that rely on transforms for positioning or visibility, always combine the base transform in the rule (e.g., `transform: translateY(0) scale(0.96);`) to ensure smooth visual behavior while preserving the interaction feedback.
+
 ## 2024-05-24 - Interactive CSS States on Inline Elements
+
 **Learning:** When applying CSS transforms (like `scale()` for `:active` states) to inline elements such as standard `<a>` or `<span>` tags, the transform will not work. **Action:** Always ensure the element's CSS `display` property is set to `inline-block`, `inline-flex`, or `block` so the transform can properly take effect.
