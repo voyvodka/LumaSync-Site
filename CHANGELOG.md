@@ -4,6 +4,17 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.33] — 2026-06-29
+
+### Added
+
+- **`Content-Usage` AI-preference signal in `robots.txt`.** Alongside the existing Cloudflare `Content-Signal`, the site now also emits the IETF AIPREF standards-track directive (`Content-Usage: search=y, train-ai=n`) — the successor mechanism that updates the Robots Exclusion Protocol (RFC 9309). The AIPREF vocabulary currently defines only `search` and `train-ai`, so the RAG/answer-engine axis stays on `Content-Signal` for now; the policy is unchanged (indexing yes, model training no).
+- **Web Bot Auth directory placeholder.** `/.well-known/http-message-signatures-directory` now serves an empty JWKS (`{ "keys": [] }`) as `application/json`. The site makes no signed outbound requests, so it publishes no keys, but the directory's presence satisfies agent-readiness probes (RFC 9421 HTTP Message Signatures).
+
+### CI
+
+- **Lighthouse CI pinned to `@lhci/cli@0.15.1`** instead of `@latest`, so the runner (and its bundled Lighthouse 12.6.1) no longer re-resolves per run and CI stays deterministic. A note flags adding a `categories:agentic-browsing` assertion once `lhci` ships a build bundling Lighthouse ≥ 13.3.0 (the release that made the Agentic Browsing category default).
+
 ## [1.1.32] — 2026-06-29
 
 ### Security

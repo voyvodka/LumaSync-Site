@@ -8,6 +8,13 @@ Allow: /
 # generation (RAG / answer engines) since pages are already public docs.
 Content-Signal: search=yes, ai-train=no, ai-input=yes
 
+# Content-Usage (IETF AIPREF, draft-ietf-aipref-attach): the standards-track
+# successor to Content-Signal. The vocabulary (draft-ietf-aipref-vocab)
+# currently defines only two categories — search and train-ai (y/n) — so the
+# ai-input/RAG axis stays expressed via Content-Signal above until AIPREF adds
+# a category for it. Same policy: indexing yes, model training no.
+Content-Usage: search=y, train-ai=n
+
 # Retrieval-for-answer bots — allowed. These fetch pages at query time to
 # ground a cited answer; that's indistinguishable from organic discovery.
 User-agent: ChatGPT-User

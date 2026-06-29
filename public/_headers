@@ -56,3 +56,11 @@
   # 'wasm-unsafe-eval' only permits WASM compilation (not general eval), so
   # it is the narrow, safe directive — do NOT drop it in a CSP-hardening pass.
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;
+
+# Web Bot Auth directory (Cloudflare / RFC 9421 HTTP Message Signatures). The
+# file has no extension, so Cloudflare Pages would otherwise serve it as
+# octet-stream — agents key off application/json. The body is an empty JWKS
+# ({ "keys": [] }): this site only receives traffic, so it publishes no
+# signing keys, but the directory's presence satisfies agent-readiness probes.
+/.well-known/http-message-signatures-directory
+  Content-Type: application/json; charset=utf-8
