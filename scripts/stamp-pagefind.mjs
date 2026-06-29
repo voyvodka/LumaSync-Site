@@ -14,7 +14,7 @@
 //
 // Changing the bytes here forces a new ETag, so the next revalidation is a full
 // 200 (not a 304) and the current CSP ships. See memory project_pagefind_csp.
-import { appendFileSync, existsSync } from 'node:fs';
+import { openSync, writeSync, fstatSync, closeSync } from 'node:fs';
 
 const stamp = `\n/* build ${process.env.GITHUB_SHA ?? Date.now()} */\n`;
 const files = ['pagefind-worker.js', 'pagefind.js', 'pagefind-ui.js'];
@@ -22,9 +22,22 @@ const files = ['pagefind-worker.js', 'pagefind.js', 'pagefind-ui.js'];
 let stamped = 0;
 for (const f of files) {
   const p = `dist/pagefind/${f}`;
-  if (existsSync(p)) {
-    appendFileSync(p, stamp);
+  // Operate on a file descriptor instead of re-resolving the path, so there is
+  // no check-then-act window an attacker could exploit (CWE-367). The 'r+' flag
+  // fails with ENOENT when the file is missing, preserving the "stamp only if
+  // present" behaviour without a separate existsSync() probe.
+  let fd;
+  try {
+    fd = openSync(p, 'r+');
+  } catch (err) {
+    if (err.code === 'ENOENT') continue;
+    throw err;
+  }
+  try {
+    writeSync(fd, stamp, fstatSync(fd).size);
     stamped++;
+  } finally {
+    closeSync(fd);
   }
 }
 console.log(`stamp-pagefind: stamped ${stamped}/${files.length} core file(s)`);
