@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.32] — 2026-06-29
+
+### Security
+
+- **Pagefind stamp script no longer has a check-then-act file race.** The build-time stamper probed each core file with `existsSync()` and then appended to it by path — a time-of-check/time-of-use window (CWE-367) where the file referenced by the name could change between the two operations. It now opens each file once with an `r+` descriptor (which fails closed with `ENOENT` when the file is absent, preserving the "stamp only if present" behaviour) and appends through that descriptor, so the check and the write target the same handle. CodeQL `js/file-system-race` alert resolved.
+
 ## [1.1.31] — 2026-06-29
 
 ### Security
