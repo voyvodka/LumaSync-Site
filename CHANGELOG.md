@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.31] — 2026-06-29
+
+### Security
+
+- **Pagefind search results now scheme-validate their link URLs.** Each result's URL was injected into the result anchor's `href` after HTML-escaping, which neutralizes markup but not a `javascript:` or `data:` scheme — so a poisoned index entry could have executed on click. A `sanitizeUrl()` guard now parses every result URL with the native `URL` constructor (a dummy base preserves relative paths) and allow-lists only `http:`/`https:`, falling back to `#` for anything else, before the existing escape. Defense-in-depth: the index is built from our own content, but search URLs are no longer trusted blindly.
+
+### Accessibility
+
+- **The `/download/` version pill reads and behaves as the link it is.** The pill links to the GitHub release but rendered as a static-looking badge with no interactive affordance. It now inverts colors on `:hover`, draws the standard 2px `--focus-ring` outline on `:focus-visible`, presses with a `prefers-reduced-motion`-gated `scale(0.96)` on `:active`, and carries a descriptive `title` — matching the interaction treatment used elsewhere on the site.
+
+### Dependencies
+
+- **Dev-only `prettier` bump 3.8.4 → 3.9.1** (minor/patch group) — manifest + lockfile only, no source change. The prettier-check, type-check, build, and Lighthouse-CI gates pass unchanged.
+
 ## [1.1.30] — 2026-06-26
 
 ### Fixed
