@@ -71,8 +71,16 @@ jobs:
 
       # Enforces the a11y budget from .thinking/02-website.md § #14.
       # accessibility >= 0.95 is hard-fail; perf/best-practices/seo are warn.
+      #
+      # Pinned, not @latest: @latest re-resolves every run, so a new lhci (or
+      # its bundled Lighthouse) could shift scores or audit sets under us and
+      # turn CI non-deterministic. lhci 0.15.1 bundles Lighthouse 12.6.1.
+      # NOTE: Lighthouse 13.3.0 promoted the "Agentic Browsing" category to
+      # default — add a categories:agentic-browsing assertion in
+      # lighthouserc.json once lhci ships a build bundling Lighthouse >= 13.3.0
+      # (0.15.1 still bundles 12.6.x, which has no such category).
       - name: Lighthouse CI
-        run: pnpm dlx @lhci/cli@latest autorun
+        run: pnpm dlx @lhci/cli@0.15.1 autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
