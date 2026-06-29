@@ -125,7 +125,7 @@
       resultsEl.innerHTML = hits
         .map(
           (r, i) => `
-            <a class="search-result" href="${escapeHtml(r.url)}" data-index="${i}">
+            <a class="search-result" href="${escapeHtml(sanitizeUrl(r.url))}" data-index="${i}">
               <span class="result-kicker">${escapeHtml(r.meta?.section || r.meta?.category || '')}</span>
               <span class="result-title">${escapeHtml(r.meta?.title || r.url)}</span>
               <span class="result-excerpt">${r.excerpt ? sanitizeExcerpt(r.excerpt) : ''}</span>
@@ -145,6 +145,16 @@
         entries[idx].setAttribute('data-active', '');
         entries[idx].scrollIntoView({ block: 'nearest' });
       }
+    };
+
+    const sanitizeUrl = (url) => {
+      try {
+        const parsed = new URL(url, 'http://localhost');
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          return url;
+        }
+      } catch (e) {}
+      return '#';
     };
 
     const escapeHtml = (s) =>
