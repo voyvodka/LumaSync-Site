@@ -45,3 +45,7 @@
 ## 2026-06-25 - Interactive States on Pill-Shaped UI Elements
 
 **Learning:** Decorative-looking elements like "version pills" (`.version-pill`) that function as clickable links often lack interactive states (`:hover`, `:active`, `:focus-visible`) because they are initially styled to look like static metadata badges. This leads to a dead, unresponsive feel when users interact with them. **Action:** When auditing or implementing pill-shaped UI elements that act as links, ensure they are treated as full interactive components. Always add a clear `:hover` transition (e.g., inverting colors or darkening the background), a tactile `:active` state with `transform: scale(0.96)` (respecting reduced motion), a standardized `:focus-visible` ring, and a descriptive `title` attribute so visual users understand they are clickable and what action they perform.
+
+## 2026-06-26 - Tactile Feedback on Inline Elements
+
+**Learning:** When applying CSS transforms (like `scale()` for `:active` states) to inline elements such as standard `<a>` or `<span>` tags (e.g., `.inline-cta`), the transform won't take effect because inline elements don't create a formatting context for transforms. **Action:** Ensure the element's CSS `display` property is set to `inline-block`, `inline-flex`, or `block` so the transform can properly apply, and combine it with a smooth `transition` on `transform` for the best UX.
