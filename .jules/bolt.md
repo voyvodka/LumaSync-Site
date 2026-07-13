@@ -25,6 +25,7 @@
 ## 2026-05-19 - Discarding stale async queries in search
 
 **Learning:** When using a debounced input listener for asynchronous queries (like Pagefind search), slower older queries can resolve after newer ones. If results are rendered sequentially without verification, the UI may thrash and display stale data. **Action:** Always maintain a monotonic `queryId` in the local state of the search listener to track the latest input. Before updating the DOM or continuing async operations, verify that the `queryId` matches the currently active query to discard stale results and prevent race conditions.
+
 ## 2024-07-13 - O(N^2) Render Loop Optimization with useMemo
-**Learning:** In React components like `HueChannelMapPanel`, using O(N) array methods (like `.find()`) inside rendering loops (`.map()`) can cause O(N^2) performance bottlenecks and frame drops during rapid state updates, such as dragging map items.
-**Action:** Always pre-compute an O(1) `Map` utilizing `useMemo` before the rendering loop to ensure lookups within `.map()` execute in O(1) time, preserving smooth interactions without sacrificing code readability.
+
+**Learning:** In React components like `HueChannelMapPanel`, using O(N) array methods (like `.find()`) inside rendering loops (`.map()`) can cause O(N^2) performance bottlenecks and frame drops during rapid state updates, such as dragging map items. **Action:** Always pre-compute an O(1) `Map` utilizing `useMemo` before the rendering loop to ensure lookups within `.map()` execute in O(1) time, preserving smooth interactions without sacrificing code readability.
