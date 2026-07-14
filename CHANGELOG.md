@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.34] — 2026-07-14
+
+### Fixed
+
+- **Press-state feedback on inline links now actually renders.** The 404 page's `.home-cta` and the `/download/` version pill both declared a `prefers-reduced-motion`-gated `transform: scale(0.96)` on `:active` and listed `transform` in their transition — but both are anchors laid out as non-replaced inline boxes, and CSS `transform` does not apply to those. The press animation was silently dead CSS. Both now set `display: inline-block`, so the tactile `:active` treatment shipped for the version pill in v1.1.31 finally takes effect.
+
+### Accessibility
+
+- **The landing page's `.inline-cta` links press like the site's other CTAs.** They gained `display: inline-block`, a `transform` entry in their transition list, and a `prefers-reduced-motion`-gated `scale(0.96)` on `:active` — matching the interaction treatment already carried by the primary/secondary CTAs and the compare cards.
+
+### Dependencies
+
+- **Minor/patch group bumps across two batches** — `tailwindcss` and `@tailwindcss/vite` 4.3.0 → 4.3.2, `marked` 18.0.5 → 18.0.6, `dompurify` 3.4.11 → 3.4.12, `prettier` 3.9.1 → 3.9.5. Manifest + lockfile only, no source change; the prettier-check, type-check, build, and Lighthouse-CI gates pass unchanged.
+
 ## [1.1.33] — 2026-06-29
 
 ### Added
