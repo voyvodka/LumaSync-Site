@@ -24,16 +24,16 @@
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.3.2",
     "astro": "^6.4.8",
-    "marked": "^18.0.5",
+    "marked": "^18.0.6",
     "pagefind": "^1.5.2",
     "satori": "^0.26.0",
     "tailwindcss": "^4.3.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "dompurify": "^3.4.11",
+    "dompurify": "^3.4.12",
     "isomorphic-dompurify": "^3.18.0",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "~6.0.3"
