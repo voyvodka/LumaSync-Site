@@ -4,6 +4,26 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.35] — 2026-07-29
+
+### Security
+
+- **Four high-severity CVEs in the shipped dependency tree are closed.** `js-yaml` (GHSA-52cp-r559-cp3m), `svgo` (GHSA-2p49-hgcm-8545), `sharp` (GHSA-f88m-g3jw-g9cj) and `postcss` (GHSA-r28c-9q8g-f849) all picked up advisories after v1.1.34. None is a direct dependency — they arrive transitively through `astro`, `@astrojs/mdx` and `@tailwindcss/vite` — so each is pinned to its patched range via `pnpm.overrides`, alongside the existing `fast-uri` / `esbuild` / `yaml` entries. The `pnpm audit --prod --audit-level=high` gate had been failing on `main` and passes again.
+
+### Fixed
+
+- **TV sizes in the hardware checklist use a real prime mark.** The measurements were authored with a straight `"`, an unpaired quote the Markdown typographer had to guess at. Astro 7's typographer reads it as an opening quote, so the sizes now carry `U+2033` (double prime) — the correct character for inches, and unambiguous under any typographer. The same upgrade also corrects the opening quote on the USB controllers page heading, which had been rendering as a closing quote.
+
+### Dependencies
+
+- **Astro 6.4.8 → 7.1.5 and `@astrojs/mdx` 6.0.3 → 7.0.5**, which also moves vite from 7 to 8. The two majors travel together — `@astrojs/mdx` 6.x peers against Astro 6. Verified against a baseline build of the previous `main`: the output tree is identical (272 files, 54 HTML pages, 34 byte-identical OG images) and scoped-style hashes still resolve. The only deltas are the generator meta tag, regenerated `data-astro-cid` hashes, and tighter whitespace / CSS-declaration minification from the newer pipeline.
+- **TypeScript deliberately held at 6.0.3.** The 7.x native compiler does not ship the programmatic Language Service API that `astro check` is built on, and `@astrojs/check` declares a `^5 || ^6` peer range — so `astro check` fails outright on TypeScript 7. Tracked upstream in withastro/roadmap#1321.
+- **Minor/patch group bump across 11 packages** — `satori` 0.26 → 0.29, `tailwindcss` and `@tailwindcss/vite` 4.3.2 → 4.3.3, the three `@fontsource` families 5.2.x → 5.3.0, `marked` 18.0.6 → 18.0.7, `isomorphic-dompurify` 3.18 → 3.19, `prettier` 3.9.5 → 3.9.6, `prettier-plugin-tailwindcss` 0.8.0 → 0.8.1, `@astrojs/check` 0.9.9 → 0.9.10. Manifest + lockfile only.
+
+### CI
+
+- **`actions/setup-node` pinned forward from v6 to v7** in both the CI and deploy workflows.
+
 ## [1.1.34] — 2026-07-14
 
 ### Fixed
