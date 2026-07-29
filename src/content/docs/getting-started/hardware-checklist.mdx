@@ -16,7 +16,7 @@ LumaSync is a controller, not a store. You bring the lights; we drive them. This
 
 - **Protocol**: WS2812B (3-channel RGB) or SK6812 RGBW (4-channel — host-side encoder derives the white channel as `W = min(R, G, B)`). Non-addressable RGB strips will **not** work; LumaSync needs per-pixel control.
 - **Density**: 30 LEDs/m works for most TV behind-screen setups. 60 LEDs/m looks smoother but draws ~twice the current and costs more.
-- **Length**: measure your screen perimeter plus ~10 cm slack at each corner. A 55" TV is roughly 3.8 m; a 65" is roughly 4.6 m.
+- **Length**: measure your screen perimeter plus ~10 cm slack at each corner. A 55″ TV is roughly 3.8 m; a 65″ is roughly 4.6 m.
 
 The chip type is selectable in Settings → Device per controller, so a WS2812B strip on one port and an SK6812 RGBW strip on another both work simultaneously.
 
