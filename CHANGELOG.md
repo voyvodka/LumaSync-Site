@@ -4,6 +4,25 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.36] — 2026-08-10
+
+### Security
+
+- **Two high-severity CVEs in the shipped dependency tree are closed.** `js-yaml` picked up GHSA-5p4m-2wfm-xmqj (quadratic CPU consumption resolving `!!omap`, unpatched below 4.3.1) and `nanoid` picked up GHSA-2v37-7h3g-55p8 (custom generators can loop indefinitely when `size` is zero, patched in 3.3.17). Neither is a direct dependency — `js-yaml` arrives through `@astrojs/mdx` → `@astrojs/internal-helpers`, `nanoid` through `@tailwindcss/vite` → `vite` → `postcss` — and the refreshed lockfile resolves both to patched releases (4.3.1 and 3.3.18). The `pnpm audit --prod --audit-level=high` gate had been failing on `main` and passes again.
+- **Transitive override floors raised to match the new advisories.** The existing `js-yaml` override still declared `^4.3.0`, the floor set for the earlier GHSA-52cp-r559-cp3m advisory and now itself vulnerable, so it moves to `^4.3.1`; `nanoid` joins the `pnpm.overrides` block at `>=3.3.17`. Both floors already match what the lockfile resolves, so the change records the constraint without any resolution churn.
+
+### Fixed
+
+- **The site-wide `Last-Modified` freshness signal is current again.** The edge middleware's `LAST_MODIFIED` constant had been left at 26 Jun 2026 across the v1.1.34 and v1.1.35 releases, so HTML and markdown responses that Cloudflare doesn't already stamp were advertising two-month-old content to crawlers and AI answer engines — the exact staleness the constant exists to prevent. It now carries this release's date.
+
+### Dependencies
+
+- **Minor/patch group bump across four packages** — `astro` 7.1.5 → 7.2.0 (which also moves vite 8.1.5 → 8.2.1), `marked` 18.0.7 → 18.0.9, `dompurify` 3.4.12 → 3.4.13, `isomorphic-dompurify` 3.19.0 → 3.22.0. Manifest and lockfile only, no source change; the prettier-check, type-check, build, and Lighthouse-CI gates pass unchanged.
+
+### CI
+
+- **`pnpm/action-setup` pinned forward from v6.0.9 to v6.0.10** in both the CI and deploy workflows, commit-SHA pinned as before.
+
 ## [1.1.35] — 2026-07-29
 
 ### Security
