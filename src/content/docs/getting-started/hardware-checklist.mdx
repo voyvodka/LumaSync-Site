@@ -3,7 +3,7 @@ title: Hardware checklist
 description: Parts list for an ambilight-ready setup, with minimum specs and caveats for the USB LED, WLED, and Philips Hue paths.
 group: getting-started
 order: 30
-updated: 2026-05-05
+updated: 2026-08-10
 ---
 
 import { LATEST_VERSION } from '../../../lib/version';
@@ -58,6 +58,8 @@ See the [WLED bridge](/docs/usb-leds/wled/) page for the full setup walkthrough.
 ### 1 · Hue Bridge (gen 2 or newer)
 
 The **square** bridge, not the old round one. Gen 2+ supports the Entertainment streaming API that LumaSync uses. Firmware should be current (the Hue app auto-updates).
+
+The **Hue Bridge Pro** (2025) also works, from **v1.5.4** onwards — it serves its local API over HTTPS only, which earlier builds could not reach. See [Bridge Pro pairing](/docs/hue/pairing#bridge-pro-pairing-v154).
 
 ### 2 · At least one Entertainment Area
 
