@@ -90,7 +90,7 @@ const schemas = [
     {
       question: 'What hardware do I need?',
       answer:
-        'Any one of: a Philips Hue Bridge (gen 2 or newer) with at least one Entertainment Area, a WS2812B or SK6812 RGBW LED strip driven by a CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial controller, or an ESP32 / ESP8266 board running WLED firmware on the same LAN. Any single path on its own is enough; LumaSync can drive all three concurrently.',
+        'Any one of: a Philips Hue Bridge (gen 2 or newer, including the 2025 Bridge Pro) with at least one Entertainment Area, a WS2812B or SK6812 RGBW LED strip driven by a CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial controller, or an ESP32 / ESP8266 board running WLED firmware on the same LAN. Any single path on its own is enough; LumaSync can drive all three concurrently.',
     },
     {
       question: 'Is LumaSync free and open source?',
@@ -427,32 +427,29 @@ const schemas = [
         </header>
         <ul role="list">
           <li>
-            <strong>macOS launch-crash fix</strong> — every 1.5.2 macOS install on a Mac without Xcode
-            crashed on launch (<code>dyld: libswift_Concurrency.dylib</code>); the Swift runtime is
-            now pinned across all build paths, with a release-pipeline guard blocking any future
-            regression
+            <strong>Hue Bridge Pro pairs</strong> — the Bridge Pro serves its local API over HTTPS only,
+            so pairing, IP verification, and credential validation — still on plain HTTP — never reached
+            it; those calls now try HTTPS first and fall back to HTTP for older bridges, which are unaffected
           </li>
           <li>
-            <strong>Hue active-streamer banner self-clears</strong> — while an area is held by another
-            streamer, readiness is re-probed every 3 s and the banner dismisses within ~3 s of the foreign
-            session releasing — no manual revalidate
+            <strong>No more phantom "credentials expired"</strong> — a rejected link button reported an
+            auth failure that did not exist; it now lands on the awaiting-link-button state it always
+            should have
           </li>
           <li>
-            <strong>Shutdown hardening</strong> — lighting-worker teardown is time-bounded (1.5 s) so
-            a slow join can't starve the Hue deactivate under the watchdog; Windows screen-capture teardown
-            is detached so mode switches no longer freeze the UI
+            <strong>SSRF in the Hue readiness check closed</strong> — the stream-readiness probe now runs
+            the same IPv4 validation as the rest of the onboarding endpoints, so loopback, multicast,
+            and broadcast addresses are rejected before a connection is attempted
           </li>
           <li>
-            <strong>Output hot-path CPU cuts</strong> — gamma LUTs computed once instead of per frame,
-            60 Hz events delivered only to the settings webview, and a single shared HTTP client for Hue
-            gamut metadata — lower idle CPU with byte-identical output
+            <strong>Screen-reader gaps closed</strong> — room-map context-menu entries carry accessible
+            names and the calibration save button reports its busy state
           </li>
           <li>
-            <strong>Security advisories resolved</strong> — RUSTSEC-2026-0185 / -0186 (<code
-              >quinn-proto</code
-            >, <code>memmap2</code>), the <code>tar</code> PAX advisory, and a transitive <code
-              >undici</code
-            > bump; the <code>cargo audit</code> gate is green
+            <strong>Security advisory resolved</strong> — RUSTSEC-2026-0235 (<code>rkyv</code>
+            out-of-bounds read) reached LumaSync through an unused optional dependency of <code
+              >tauri-plugin-log</code
+            >, whose 2.9 release drops that chain entirely; the <code>cargo audit</code> gate is green
           </li>
         </ul>
         <a class="inline-cta" href="/changelog/">Full changelog →</a>

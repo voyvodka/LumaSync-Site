@@ -3,7 +3,7 @@ title: Telemetry
 description: What LumaSync measures locally — capture FPS, send FPS, queue health — where the numbers live on disk, and why none of them leave your machine.
 group: reference
 order: 30
-updated: 2026-06-25
+updated: 2026-08-10
 ---
 
 ## Zero network telemetry
@@ -17,12 +17,14 @@ The only network calls the app makes at runtime are:
 | `https://github.com/voyvodka/LumaSync/releases/latest/download/latest.json` (or `latest-beta.json` on beta channel) | App startup (once) | Auto-updater check |
 | `https://discovery.meethue.com/` | Hue onboarding "Discover" step (cloud fallback) | List local Hue bridges |
 | LAN mDNS (`_hue._tcp.local.`, `_wled._tcp.local.`) | Onboarding | Bridge / WLED board discovery on the local segment |
-| Local bridge IP (HTTPS 443 + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment DTLS stream |
+| Local bridge IP (HTTPS 443, HTTP 80 fallback, + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment DTLS stream |
 | Local WLED IP (HTTP 80 + UDP DDP port) | WLED connect / test / streaming | `/json/info` query + DDP frame push |
 | Serial `/dev/ttyUSB*` or COM port | USB mode active | LumaSync v1 frame push |
 | macOS/Windows/Linux screen capture APIs | Ambilight mode active | Pixel sampling (local OS, no network) |
 
 That's it. Nothing else outbound.
+
+From v1.5.4 the bridge's CLIP v1 calls try **HTTPS first** and drop to plain HTTP only when TLS fails at the transport layer — required by the Hue Bridge Pro, which closes port 80 entirely. Either way the request never leaves your LAN.
 
 ### Visibility-aware polling
 

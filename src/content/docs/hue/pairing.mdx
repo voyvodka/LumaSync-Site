@@ -3,12 +3,12 @@ title: Pair your Hue bridge
 description: Discover a bridge, press the link button, pick an Entertainment Area, and start streaming. The full four-step onboarding flow with failure modes for each stage.
 group: hue
 order: 10
-updated: 2026-05-05
+updated: 2026-08-10
 ---
 
 ## Prerequisites
 
-- A **Hue Bridge gen 2 or newer** (the square one). Old round bridges do not support the Entertainment streaming API.
+- A **Hue Bridge gen 2 or newer** — the square bridge, or the **Hue Bridge Pro** (2025). Old round bridges do not support the Entertainment streaming API. Bridge Pro needs **v1.5.4 or later**; see [Bridge Pro pairing](#bridge-pro-pairing-v154) below.
 - Bridge and LumaSync machine on the **same local network**.
 - Bridge firmware up to date (auto-updated by the Hue app — just open it once if you haven't recently).
 - At least one **Entertainment Area** configured. Haven't done that? Jump to [Entertainment Area](/docs/hue/entertainment-area/) first, then come back.
@@ -31,7 +31,7 @@ From v1.5.0, LumaSync's primary discovery path is **mDNS** — it browses `_hue.
 
 If the list stays empty:
 
-- **Manual IP path**: click **Enter IP manually**, type the bridge's LAN IP (find it in the Hue app → Settings → My Hue system → your bridge). LumaSync verifies the address by fetching the bridge's config endpoint before letting you continue.
+- **Manual IP path**: click **Enter IP manually**, type the bridge's LAN IP (find it in the Hue app → Settings → My Hue system → your bridge). LumaSync verifies the address by fetching the bridge's config endpoint before letting you continue. Loopback, multicast, and broadcast addresses are rejected up-front — from v1.5.4 the stream-readiness check applies the same IPv4 guard the rest of the onboarding endpoints already used, so a hand-typed address can never point the readiness probe somewhere off-LAN.
 - **Discovery blocked**: corporate firewalls or guest VLANs often block mDNS _and_ the cloud endpoint. Manual IP still works in that case — you bypass discovery entirely.
 
 ## Step 2 · Pair
@@ -57,7 +57,17 @@ From v1.4, the CLIP API's `error.type` is split into four distinct codes, each w
 
 Retries are free — the bridge has no lockout once the underlying cause is cleared.
 
+Up to v1.5.3, `LINK_BUTTON_NOT_PRESSED` was rendered on the device card as **"Auth error — your credentials have expired"**, which pointed at a credential problem that did not exist. From v1.5.4 it lands on the awaiting-link-button state it always should have: press the button and retry.
+
 From v1.5.0, the bridge **username and PSK** land in your **OS keychain** — macOS Keychain, Windows Credential Manager, or Linux Secret Service (gnome-keyring / KWallet) — not in the JSON config file. Existing v1.4 installs migrate transparently from the previous plaintext `shellStore` on first launch of v1.5.0+; the migration is idempotent and downgrade-safe. LumaSync performs no network calls outside your LAN — the Hue bridge's cloud account is never touched. To invalidate a credential, revoke from the Hue app at any time (Settings → My Hue system → paired apps); the bridge treats LumaSync as a regular third-party client.
+
+### Bridge Pro pairing (v1.5.4)
+
+The **Hue Bridge Pro** serves its local API over **HTTPS only** — port 80 is closed. LumaSync's CLIP v1 calls (bridge verification, pairing, credential validation) were hardcoded to plain HTTP up to v1.5.3, so on a Bridge Pro they failed at the transport layer before the bridge ever saw them. Discovery still worked, because it runs over mDNS and the cloud endpoint, which made the failure look like a credential problem rather than an unreachable endpoint.
+
+From v1.5.4 these calls try **HTTPS first and fall back to plain HTTP** only when the TLS attempt fails at the transport layer. Square gen 2 bridges answer on both ports, so they are unaffected and keep pairing exactly as before — no re-pairing, no configuration change.
+
+If you are on a Bridge Pro and pairing fails with **Auth error / Credentials expired**, you are on v1.5.3 or earlier. Update from the [Download page](/download/) and pair again.
 
 ## Step 3 · Area select
 

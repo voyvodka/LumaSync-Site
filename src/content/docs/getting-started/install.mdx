@@ -3,7 +3,7 @@ title: Install
 description: Install LumaSync on macOS, Windows, or Linux. Binaries are signed with minisign and verified automatically before updates.
 group: getting-started
 order: 10
-updated: 2026-06-25
+updated: 2026-08-10
 ---
 
 import { LATEST_VERSION_BARE } from '../../../lib/version';
@@ -12,7 +12,7 @@ import { LATEST_VERSION_BARE } from '../../../lib/version';
 
 - **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE, XFCE). On Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`; the AppImage bundles X11 capture deps (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
 - **At least one supported hardware target**, otherwise the app runs but nothing lights up:
-  - A **Philips Hue Bridge** (gen 2 or newer) with one or more Entertainment Areas configured in the Hue app, **or**
+  - A **Philips Hue Bridge** (gen 2 or newer, including the 2025 **Bridge Pro** from v1.5.4) with one or more Entertainment Areas configured in the Hue app, **or**
   - A **WS2812B / SK6812 RGBW LED strip** driven by a supported USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol/) or the opt-in Adalight profile, **or**
   - An **ESP32 / ESP8266 board running WLED firmware** on the same LAN as the host machine — see the [WLED bridge](/docs/usb-leds/wled/) page.
 - See [Hardware checklist](/docs/getting-started/hardware-checklist/) for a parts list if you're starting from scratch.

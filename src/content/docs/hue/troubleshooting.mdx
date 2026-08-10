@@ -3,7 +3,7 @@ title: Hue troubleshooting
 description: Common Philips Hue failure modes and how to fix them — discovery, pairing, streaming latency, credentials expiry, bulbs not responding.
 group: hue
 order: 30
-updated: 2026-06-25
+updated: 2026-08-10
 ---
 
 Most Hue issues fall into one of five buckets. This page is organised stage-by-stage so you can jump to where you are stuck.
@@ -30,6 +30,14 @@ From v1.4, LumaSync surfaces a specific error code for each failure mode (see [p
 - **`BRIDGE_BUSY`** — another app is mid-pairing. Close the Hue app's pairing screen (or any Hue Sync Box / third-party client stuck in pairing) and retry. Only one concurrent pairing per bridge.
 - **`RATE_LIMITED`** — too many pairing attempts in a short window. Wait ~60 seconds, then retry. Bridges back off aggressive clients.
 - **Pairing over VPN** — bridges reject pairing from non-LAN origins as a security measure. Disconnect the VPN, pair on the local network, then reconnect VPN afterwards. Runtime streaming works over the VPN once paired; only the pairing handshake is origin-checked.
+
+## Hue Bridge Pro: "Auth error / Credentials expired" (fixed in v1.5.4)
+
+**Symptom (pre-v1.5.4)**: a **Hue Bridge Pro** is discovered without trouble, you press its link button, and pairing fails immediately with **Auth error — your credentials have expired**. Re-pairing gives the same result every time.
+
+Two separate bugs stacked here. The Bridge Pro serves its local API over **HTTPS only** — port 80 is closed — while LumaSync's pairing, IP-verification, and credential-validation calls were still on plain HTTP, so they never reached the bridge. That transport failure was then mapped onto the credentials-expired message, which pointed at a problem you did not have.
+
+v1.5.4 fixes both: the CLIP v1 calls try HTTPS first and fall back to HTTP for older firmware, and a rejected link button now shows the awaiting-link-button state. Square gen 2 bridges are unaffected — they already answered on both ports. If you are on a Bridge Pro, update from the [Download page](/download/), then pair from step 1. See [Bridge Pro pairing](/docs/hue/pairing#bridge-pro-pairing-v154) for the detail.
 
 ## `HUE_AREA_LIST_EMPTY`
 
