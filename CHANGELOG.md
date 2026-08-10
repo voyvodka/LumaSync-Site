@@ -4,6 +4,13 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.37] — 2026-08-10
+
+### Security
+
+- **The `fast-uri` override no longer pins the toolchain to a vulnerable release.** GHSA-7p8r-x3mc-p8w7 (host confusion via a backslash authority introducer) affects `fast-uri` below 3.1.5, and the override floor set in v1.1.35 was still `^3.1.2` — which the lockfile satisfied at 3.1.4. The floor moves to `^3.1.5` and the lockfile resolves accordingly. The package is development-scoped only (`@astrojs/check` → `@astrojs/language-server` → `volar-service-yaml` → `yaml-language-server` → `ajv`), so it never reached the shipped bundle and the `--prod` audit gate stayed green throughout; `pnpm audit --audit-level=high` across the full tree, dev included, is now clean too.
+- **Dependabot's security update for `fast-uri` can complete again.** Because the caret override capped resolution below 4.x, Dependabot's attempt to move to 4.1.2 failed with "the latest possible version that can be installed is 3.1.4" and the update job errored on every run. Raising the floor within the 3.x line resolves the advisory without taking the major, so the job stops failing.
+
 ## [1.1.36] — 2026-08-10
 
 ### Security
