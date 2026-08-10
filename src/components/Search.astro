@@ -151,7 +151,10 @@
       try {
         const parsed = new URL(url, 'http://localhost');
         if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-          return url;
+          if (parsed.origin === 'http://localhost') {
+            return parsed.pathname + parsed.search + parsed.hash;
+          }
+          return parsed.href;
         }
       } catch (e) {}
       return '#';
