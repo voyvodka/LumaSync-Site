@@ -61,7 +61,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env, next }) => {
 // — without one, GEO linters (isitagentready) flag the site as stale
 // and downgrade citation priority. RFC 1123 / RFC 5322 format. Update
 // whenever we cut a new submodule pin or land a substantive rev.
-const LAST_MODIFIED = 'Fri, 26 Jun 2026 09:00:00 GMT';
+const LAST_MODIFIED = 'Mon, 10 Aug 2026 09:00:00 GMT';
 
 async function passThrough(response: Response): Promise<Response> {
   const headers = new Headers(response.headers);
