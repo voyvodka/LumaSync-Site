@@ -4,6 +4,23 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.38] — 2026-08-10
+
+### Added
+
+- **Hue Bridge Pro is documented as a supported bridge.** The 2025 Bridge Pro serves its local API over HTTPS only, so app builds up to v1.5.3 — whose CLIP v1 pairing, IP-verification, and credential-validation calls were hardcoded to plain HTTP — never reached it, and the failure surfaced as a credentials problem rather than an unreachable endpoint. LumaSync v1.5.4 tries HTTPS first and falls back to HTTP for older firmware. A new **Bridge Pro pairing** section on the [Hue pairing](https://lumasync.app/docs/hue/pairing/) page covers the transport change, a matching symptom-first entry lands on [Hue troubleshooting](https://lumasync.app/docs/hue/troubleshooting/), and the hardware checklist, install prerequisites, and the landing page's hardware FAQ answer all name the Bridge Pro explicitly.
+
+### Changed
+
+- **The Hue pairing error table no longer under-describes the link-button case.** Up to v1.5.3 a rejected link button was rendered as "Auth error — your credentials have expired", pointing users at a credential problem they did not have; v1.5.4 routes it to the awaiting-link-button state. Both the pairing and troubleshooting pages now say which version behaves which way, so a user landing from a search for the old message gets the right answer.
+- **The outbound-call table on the [Telemetry](https://lumasync.app/docs/reference/telemetry/) page reflects the real bridge transport.** The row claimed HTTPS 443 while the app was in fact calling HTTP 80; it now reads HTTPS-with-HTTP-fallback, matching v1.5.4, with a note that the request stays on the LAN either way.
+- **Manual-IP guidance records the readiness-check guard.** v1.5.4 applies the same IPv4 validation to the Hue stream-readiness probe that the other onboarding endpoints already used, so loopback, multicast, and broadcast addresses are rejected before a connection is attempted — the Hue counterpart to the `WLED_INVALID_IP` guard already documented on the WLED page.
+- **Room map editor notes extended for v1.5.4** — context-menu entries now carry accessible names, and object drags traverse the object list once per move instead of twice.
+
+### Fixed
+
+- **The landing page's "Shipped" roadmap column no longer mislabels itself on a submodule bump.** Its heading interpolates `LATEST_VERSION` from the pinned submodule while the bullets underneath are hand-written, so moving the pin to the app's v1.5.4 would have re-titled a list of v1.5.3 changes as v1.5.4 — the exact silently-aging footnote the section's own lede promises not to have. The bullets now describe v1.5.4: Bridge Pro pairing, the corrected link-button state, the readiness-check SSRF fix, the screen-reader gaps, and RUSTSEC-2026-0235.
+
 ## [1.1.37] — 2026-08-10
 
 ### Security
