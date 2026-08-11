@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.39] — 2026-08-11
+
+### Fixed
+
+- **The install guide now describes the first launch that actually happens.** LumaSync is not notarized by Apple, so macOS blocks the app on first open and — since Sequoia removed the Control-click override — the user has to go through System Settings → Privacy & Security → Open Anyway. The guide previously jumped straight to the Screen Recording prompt, a step nobody could reach, and any user who searched for help found the Control-click advice that no longer works. Both paths are now written out, and the Windows section documents the SmartScreen "unknown publisher" prompt along with the fact that Smart App Control blocks unsigned installers outright.
+- **"Signed" no longer means two different things on the same page.** The Windows section called the MSI signed while the only signature involved is minisign, which the updater uses to verify a download before replacing anything on disk. That is not an Authenticode signature and does not affect the SmartScreen prompt; the page now says so.
+- **Inline links, code spans, and emphasis no longer swallow the space before them.** In `.astro`, a newline between text and an inline tag is deleted rather than collapsed, so fifteen places across the landing, license, community, compare, docs and search surfaces rendered as "standardCode of Conduct", "stack),WLED", or "affiliation.Philips Hue". Verified against the built HTML across all pages rather than the source.
+- **The `/compare` listing heading uses the sans-serif page title** like every other listing page. `global.css` reserves the serif display face for editorial moments — the landing hero and the individual comparison pages — and the listing was quietly using it.
+
+### Changed
+
+- **System requirements read macOS 12.3, matching the app.** `tauri.conf.json` sets `minimumSystemVersion` to 12.3 while the site said 13+, telling supported users they were unsupported. Corrected in the install guide, the USB controller driver notes, and the FAQ schema that search engines read.
+- **The Flathub package is no longer promised.** It is gated on Linux Wayland capture, which does not exist yet, and Flathub review would not favour an X11-only app requesting the broadest device permission available. The landing page roadmap now lists Wayland capture via `xdg-desktop-portal` in its place — the actual prerequisite, and something that can be honestly queued.
+
 ## [1.1.38] — 2026-08-10
 
 ### Added
