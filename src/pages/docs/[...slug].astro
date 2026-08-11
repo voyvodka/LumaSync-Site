@@ -32,7 +32,7 @@ const HOWTO_BY_SLUG: Record<string, Omit<HowToInput, 'url'>> = {
     steps: [
       {
         name: 'Check prerequisites',
-        text: 'Confirm you are on macOS 13+, Windows 10+, or a mainstream Linux desktop, and that you have either a Philips Hue Bridge with an Entertainment Area or a WS2812B strip driven by a CH340 or FT232 USB-serial controller.',
+        text: 'Confirm you are on macOS 12.3+, Windows 10+, or a mainstream Linux desktop, and that you have either a Philips Hue Bridge with an Entertainment Area or a WS2812B strip driven by a CH340 or FT232 USB-serial controller.',
         url: '/docs/getting-started/install/#prerequisites',
       },
       {
@@ -131,8 +131,7 @@ const schemas = entry.data.draft
       {
         entry.data.draft && (
           <p class="draft-banner" role="note">
-            <span class="pill">draft</span>
-            This page is awaiting owner review. Content may change.
+            <span class="pill">draft</span> This page is awaiting owner review. Content may change.
           </p>
         )
       }
