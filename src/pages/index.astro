@@ -151,7 +151,7 @@ const schemas = [
         <h3>USB LED strips</h3>
         <p>
           WS2812B and SK6812 RGBW chips over CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial
-          controllers at 115200 baud — running the
+          controllers at 115200 baud — running the{' '}
           <a href="/docs/usb-leds/serial-protocol/">LumaSync v1 serial frame</a> or the opt-in Adalight
           profile.
         </p>
@@ -173,7 +173,7 @@ const schemas = [
         <div class="feature-icon" aria-hidden="true">HUE</div>
         <h3>Philips Hue Entertainment</h3>
         <p>
-          DTLS 1.2 PSK streaming to any Entertainment Area at up to 20 Hz, with
+          DTLS 1.2 PSK streaming to any Entertainment Area at up to 20 Hz, with{' '}
           <a href="/docs/hue/entertainment-area/">Hue Zones</a>, AR-locked sizing, and per-bulb
           gamut clipping for accurate colour.
         </p>
@@ -321,8 +321,8 @@ const schemas = [
           <span class="tag tag-ok">Supported</span>
         </h3>
         <p>
-          Native X11 screen capture (xcap). AppImage / deb / rpm ship every release; Flathub
-          submission underway. Tray behaviour still varies by desktop environment.
+          Native X11 screen capture (xcap); Wayland sessions fall back to XWayland. AppImage / deb /
+          rpm ship every release. Tray behaviour still varies by desktop environment.
         </p>
       </article>
     </div>
@@ -351,7 +351,7 @@ const schemas = [
       <div>
         <p class="trust-label">Credentials stay local</p>
         <p>
-          Hue bridge pairing and everything else lives in
+          Hue bridge pairing and everything else lives in{' '}
           <code>~/.config/lumasync/app.json</code> on your machine.
         </p>
       </div>
@@ -365,7 +365,7 @@ const schemas = [
     <p class="compare-lede">
       LumaSync is the open-source desktop ambient-lighting app for Philips Hue and WS2812B LED
       strips. It sits in a different category from each of the alternatives below — pick the
-      comparison that matches what you already own. Not to be confused with the
+      comparison that matches what you already own. Not to be confused with the{' '}
       <em>Sync-on-Luma</em> RGB SCART signal used in retro consoles or the lumalabs.ai video tools.
     </p>
     <div class="compare-grid">
@@ -446,7 +446,7 @@ const schemas = [
             names and the calibration save button reports its busy state
           </li>
           <li>
-            <strong>Security advisory resolved</strong> — RUSTSEC-2026-0235 (<code>rkyv</code>
+            <strong>Security advisory resolved</strong> — RUSTSEC-2026-0235 (<code>rkyv</code>{' '}
             out-of-bounds read) reached LumaSync through an unused optional dependency of <code
               >tauri-plugin-log</code
             >, whose 2.9 release drops that chain entirely; the <code>cargo audit</code> gate is green
@@ -462,11 +462,11 @@ const schemas = [
         </header>
         <ul role="list">
           <li>
-            Flathub submission for Linux — discoverable in GNOME Software / KDE Discover with
-            verified runtime sandboxing
+            Wayland screen capture via <code>xdg-desktop-portal</code> — the missing half of Linux support,
+            and the prerequisite for any Flatpak packaging
           </li>
           <li>
-            <code>glib</code> 0.18 → 0.19 migration to clear the remaining
+            <code>glib</code> 0.18 → 0.19 migration to clear the remaining{' '}
             <code>RUSTSEC-2024-0429</code> Linux-runtime warning (gated on Tauri / gtk-rs upstream)
           </li>
           <li>
@@ -504,7 +504,7 @@ const schemas = [
     <h2 class="section-title">Not for you if…</h2>
     <ul role="list">
       <li>
-        <strong>You need HDMI passthrough for a console or Apple TV.</strong>
+        <strong>You need HDMI passthrough for a console or Apple TV.</strong>{' '}
         LumaSync reads the OS screen buffer — no HDMI in the signal path. Grab a <a
           href="/compare/hue-sync/">Hue Sync Box</a
         > instead.
@@ -512,12 +512,12 @@ const schemas = [
       <li>
         <strong>You don't have a Hue Bridge, a WS2812B / SK6812 controller, or a WLED board.</strong
         >
-        The app will run, but you won't see anything light up. Start with the <a
+        {' '}The app will run, but you won't see anything light up. Start with the <a
           href="/docs/getting-started/hardware-checklist/">hardware checklist</a
         >.
       </li>
       <li>
-        <strong>You're on a tiling Linux WM with no system tray.</strong>
+        <strong>You're on a tiling Linux WM with no system tray.</strong>{' '}
         LumaSync expects to live in the menu bar — GNOME needs an AppIndicator extension, and tiling WMs
         may force the window into a tile. The pipeline still runs; the UX is just less menu-bar-shaped.
       </li>

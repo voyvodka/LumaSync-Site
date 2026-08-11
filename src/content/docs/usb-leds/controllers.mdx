@@ -61,7 +61,7 @@ And the serial port is typically `/dev/ttyUSB0` once the kernel driver loads (`c
 
 ## Drivers
 
-- **macOS 13+**: all six chipsets work with bundled drivers. No third-party install needed.
+- **macOS 12.3+**: all six chipsets work with bundled drivers. No third-party install needed.
 - **Windows 10/11**: CH340 / CH341 drivers sometimes need a manual install from WCH's website (search "CH340 driver"). FTDI, Prolific, and Silicon Labs drivers install automatically through Windows Update.
 - **Linux**: kernel ships all four drivers (`ch341`, `ftdi_sio`, `pl2303`, `cp210x`) since forever. If `/dev/ttyUSB0` doesn't appear, your user probably isn't in the `dialout` group: `sudo usermod -aG dialout $USER` then log out and back in.
 

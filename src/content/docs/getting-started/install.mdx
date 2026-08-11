@@ -1,16 +1,16 @@
 ---
 title: Install
-description: Install LumaSync on macOS, Windows, or Linux. Binaries are signed with minisign and verified automatically before updates.
+description: Install LumaSync on macOS, Windows, or Linux — including the first-launch security warning each platform shows, and the exact steps to clear it.
 group: getting-started
 order: 10
-updated: 2026-08-10
+updated: 2026-08-11
 ---
 
 import { LATEST_VERSION_BARE } from '../../../lib/version';
 
 ## System requirements
 
-- **macOS 13+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE, XFCE). On Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`; the AppImage bundles X11 capture deps (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
+- **macOS 12.3+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE, XFCE). On Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`; the AppImage bundles X11 capture deps (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
 - **At least one supported hardware target**, otherwise the app runs but nothing lights up:
   - A **Philips Hue Bridge** (gen 2 or newer, including the 2025 **Bridge Pro** from v1.5.4) with one or more Entertainment Areas configured in the Hue app, **or**
   - A **WS2812B / SK6812 RGBW LED strip** driven by a supported USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol/) or the opt-in Adalight profile, **or**
@@ -22,14 +22,26 @@ import { LATEST_VERSION_BARE } from '../../../lib/version';
 Download the universal `.dmg` from the [Download page](/download/) or the latest [GitHub release](https://github.com/voyvodka/LumaSync/releases/latest). Apple Silicon and Intel Macs are covered by the same installer.
 
 1. Open the `.dmg` and drag **LumaSync.app** into **Applications**.
-2. On first launch, macOS asks for **Screen Recording** permission so the ambilight pipeline can sample your display. Grant it — without it the ambient mode has nothing to read from.
-3. LumaSync starts hidden to the tray; click the menu-bar icon to open the main window. Cmd+Q from anywhere shuts the app down cleanly via the watchdog-bounded shutdown path; closing the window only hides it to the tray.
+2. **The first launch will be blocked.** LumaSync is not notarized by Apple, so macOS refuses to open it and shows _"Apple could not verify 'LumaSync' is free of malware."_ This is expected, and clearing it takes four steps:
+   - Try to open LumaSync. Click **Done** on the warning.
+   - Open **System Settings → Privacy & Security** and scroll to the **Security** section.
+   - You will see _"LumaSync was blocked to protect your Mac."_ Click **Open Anyway**.
+   - Confirm with Touch ID or your password, then click **Open** on the final prompt.
+
+   You only do this once. On **macOS Sequoia (15) and later, Control-clicking the app and choosing Open no longer works** — Apple removed that shortcut, so ignore any guide that still recommends it. If you would rather verify the download yourself first, see [Verification](#verification) below.
+
+3. Next, macOS asks for **Screen Recording** permission so the ambilight pipeline can sample your display. Grant it — without it the ambient mode has nothing to read from.
+4. LumaSync starts hidden to the tray; click the menu-bar icon to open the main window. Cmd+Q from anywhere shuts the app down cleanly via the watchdog-bounded shutdown path; closing the window only hides it to the tray.
 
 > **Updating from 1.5.2 on macOS?** The 1.5.2 macOS build could crash on launch on Macs without Xcode installed (`dyld: Library not loaded: @rpath/libswift_Concurrency.dylib`). v1.5.3 fixes it — the Swift concurrency runtime now links against the system library that ships with macOS, so no Xcode or developer tools are needed, and a release-pipeline guard prevents the regression from recurring. If you were stuck on 1.5.2, reinstall from the [Download page](/download/).
 
 ## Windows
 
-Download the signed **`.msi`** installer from the [Download page](/download/). It runs a typical "Next, Next, Finish" dialog and installs to `C:\Program Files\LumaSync\`. From v1.5.1 every release ships the MSI alongside the macOS DMG and Linux packages — no more platform gaps between releases.
+Download the **`.msi`** installer from the [Download page](/download/). It runs a typical "Next, Next, Finish" dialog and installs to `C:\Program Files\LumaSync\`. From v1.5.1 every release ships the MSI alongside the macOS DMG and Linux packages — no more platform gaps between releases.
+
+**Windows will warn you before it runs.** LumaSync does not carry a Windows code-signing certificate, so SmartScreen shows _"Windows protected your PC — unknown publisher."_ Click **More info**, then **Run anyway**. If your machine has **Smart App Control** enabled, it blocks unsigned installers outright with no override; you would need to turn it off in Windows Security to install, which is your call to make.
+
+Note that the "signed" you see mentioned around LumaSync releases refers to [minisign](#verification), which is how the updater verifies a download before replacing anything on disk. That is a different thing from a Windows Authenticode signature, and it does not affect the SmartScreen prompt.
 
 ## Linux
 
@@ -47,7 +59,7 @@ sudo apt install ./lumasync_{LATEST_VERSION_BARE}_amd64.deb
 sudo rpm -i lumasync-{LATEST_VERSION_BARE}.x86_64.rpm
 ```
 
-Screen capture uses **xcap** for native X11 sampling — Wayland sessions need the X11 fallback (XWayland) for now. Tray behaviour varies by desktop environment: GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma and XFCE work out of the box. A Flathub package is in progress and will be the recommended path once it lands.
+Screen capture uses **xcap** for native X11 sampling — Wayland sessions need the X11 fallback (XWayland) for now. Tray behaviour varies by desktop environment: GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma and XFCE work out of the box.
 
 ## Verification
 
