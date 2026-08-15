@@ -1,6 +1,6 @@
 ---
 title: WLED bridge
-description: Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol. Auto-discovery over mDNS, manual IP fallback, IP guard, and led_count validation.
+description: Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol. Pairing by IP address, IP guard, and led_count validation.
 group: usb-leds
 order: 50
 updated: 2026-05-05
@@ -24,13 +24,15 @@ You can drive **WLED and USB simultaneously** — the chip-type selector and per
 
 ## Setup
 
-### 1 · Discovery
+### 1 · Enter the board's IP
 
 Open Settings → **Device** → **WLED**.
 
-LumaSync auto-discovers WLED boards on the LAN over mDNS by browsing `_wled._tcp.local.`. Discovered boards appear in the picker with their hostname, IP, and the LED count WLED reports. Click one to select.
+Paste the board's IPv4 address into the **WLED IP** field. LumaSync does not browse the network for boards — you tell it where the board is, and it asks that one address for `/json/info`. If the board answers, its name and the LED count it reports appear, ready to connect.
 
-If mDNS is blocked on your network (some enterprise / hotel Wi-Fi setups, or if WLED's mDNS responder is disabled), use the **manual IP** field instead. Paste the WLED board's IPv4 address — leave blank fields for IPv6 or hostname-only entries.
+The board's IP is on the WLED web UI's WiFi page, and your router's client list will have it too. Give the board a DHCP reservation or a static lease if you would rather not re-enter it after a router restart.
+
+Only IPv4 is accepted — hostnames and IPv6 addresses are not.
 
 ### 2 · IP validation
 
@@ -59,12 +61,12 @@ UDP is intentionally connectionless: dropped packets aren't retransmitted. On a 
 
 ## Network reachability checklist
 
-If discovery / connect / test fail:
+If connect / test fail:
 
-1. **Same subnet** — host and board must share an L2 segment for mDNS to work. VLANs and guest-network isolation block mDNS.
-2. **WLED mDNS enabled** — WLED's Sync Setup page has an mDNS toggle; some bare-bones builds ship with it off.
+1. **Right IP** — a board that took a new address from DHCP is the usual cause. Check the WLED web UI's WiFi page, or your router's client list.
+2. **Routable** — host and board need a route between them. VLANs and guest-network isolation are the common blockers; unlike a discovery browser, a direct probe does not need them on the same L2 segment, only reachable.
 3. **Firewall** — host firewalls (macOS Firewall, Windows Defender, Linux ufw) sometimes block outbound UDP to the WLED port. Add a rule for the DDP port if necessary.
-4. **Manual IP** — if mDNS is broken at the network level, paste the IP directly. The board's IP is visible in the WLED web UI under the WiFi page.
+4. **Board answering HTTP** — pairing reads `/json/info` over HTTP with a 2 s timeout. Open `http://<board-ip>/json/info` in a browser: if that does not load, LumaSync cannot pair either.
 
 ## Why DDP and not WLED's other protocols
 

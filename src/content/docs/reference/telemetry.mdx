@@ -16,7 +16,7 @@ The only network calls the app makes at runtime are:
 | --- | --- | --- |
 | `https://github.com/voyvodka/LumaSync/releases/latest/download/latest.json` (or `latest-beta.json` on beta channel) | App startup (once) | Auto-updater check |
 | `https://discovery.meethue.com/` | Hue onboarding "Discover" step (cloud fallback) | List local Hue bridges |
-| LAN mDNS (`_hue._tcp.local.`, `_wled._tcp.local.`) | Onboarding | Bridge / WLED board discovery on the local segment |
+| LAN mDNS (`_hue._tcp.local.`) | Hue onboarding | Bridge discovery on the local segment |
 | Local bridge IP (HTTPS 443, HTTP 80 fallback, + UDP 2100) | Hue pairing + streaming | Bridge API + Entertainment DTLS stream |
 | Local WLED IP (HTTP 80 + UDP DDP port) | WLED connect / test / streaming | `/json/info` query + DDP frame push |
 | Serial `/dev/ttyUSB*` or COM port | USB mode active | LumaSync v1 frame push |
@@ -87,7 +87,7 @@ If you're filing a bug on GitHub, attach the most recent log. Review it first �
 
 ## Hue bridge credentials
 
-Pairing with a Hue bridge gives LumaSync a **username token + PSK**. From v1.5.0 these live in the OS keychain — macOS Keychain, Windows Credential Manager, or Linux Secret Service (gnome-keyring / KWallet) — not in `app.json`. The credential set:
+Pairing with a Hue bridge gives LumaSync a **username token + PSK**. From v1.5.0 these live in the OS keychain — macOS Keychain, Windows Credential Manager, or Linux Secret Service (gnome-keyring / KWallet) — not in `shell-state.json`. The credential set:
 
 - Is scoped to the bridge (not a Hue cloud account)
 - Does not contain your email, name, or any account identifier

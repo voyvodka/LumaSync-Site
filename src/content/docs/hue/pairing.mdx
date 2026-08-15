@@ -27,7 +27,7 @@ LumaSync's Hue onboarding walks through four named stages. The pairing tracker a
 
 Open Settings → **Hue** → **Pair bridge**.
 
-From v1.5.0, LumaSync's primary discovery path is **mDNS** — it browses `_hue._tcp.local.` on the LAN through a shared mDNS responder (the same responder that powers WLED discovery). Philips's public discovery endpoint (`https://discovery.meethue.com/`) acts as a cloud fallback if mDNS doesn't resolve. Bridges on the network show up within a couple of seconds.
+From v1.5.0, LumaSync's primary discovery path is **mDNS** — it browses `_hue._tcp.local.` on the LAN. Hue is the only output discovered this way; WLED boards are paired by IP address. Philips's public discovery endpoint (`https://discovery.meethue.com/`) acts as a cloud fallback if mDNS doesn't resolve. Bridges on the network show up within a couple of seconds.
 
 If the list stays empty:
 
@@ -94,7 +94,7 @@ The bridge occasionally rotates credentials after firmware updates. LumaSync's h
 Only what's needed to stream:
 
 - **Bridge username + PSK** — in the OS keychain (macOS Keychain / Windows CredMan / Linux Secret Service), retrieved via the `keyring` Rust crate's platform abstraction.
-- **Bridge IP, identifier, selected Entertainment Area UUID, channel position overrides** — in `~/.config/lumasync/app.json`.
+- **Bridge IP, identifier, selected Entertainment Area UUID, channel position overrides** — in `~/.local/share/com.lumasync.app/shell-state.json`.
 
 Nothing goes to a cloud. The Hue app's cloud account is not touched — pairing is LAN-only, and after pairing the bridge is reached only via mDNS or its static LAN IP.
 
