@@ -48,7 +48,7 @@ The calibration test pattern (Settings → Calibration → **Test pattern**) is 
 
 **Per-target display routing — "drive USB from Display 1 and Hue from Display 2" — is not a shipped feature.** The pipeline has one capture source at a time, and both output targets read from it.
 
-If you genuinely need two different sources, the practical workaround is to run **two LumaSync instances** on the same machine — each with its own `~/.config/lumasync/app.json` (by setting a custom data directory per instance). Not officially supported; expect rough edges around tray icons clashing.
+If you genuinely need two different sources, the practical workaround is to run **two LumaSync instances** on the same machine — each with its own `~/.local/share/com.lumasync.app/shell-state.json` (by setting a custom data directory per instance). Not officially supported; expect rough edges around tray icons clashing.
 
 ## Related
 

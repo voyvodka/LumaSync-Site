@@ -19,7 +19,7 @@ Shows:
 Three actions sit at the bottom of the card:
 
 - **Show logs** — opens the platform log directory via `open_log_dir`. The full stack trace sits in the most recent log file, correlated by the card's fingerprint. See [Notifications → `open_log_dir`](/docs/reference/notifications#the-open_log_dir-command).
-- **Restart** — terminates and relaunches the app via `tauri-plugin-process`. State in `~/.config/lumasync/app.json` persists across restart; in-memory session data (current mode, frame queue) is discarded.
+- **Restart** — terminates and relaunches the app via `tauri-plugin-process`. State in `~/.local/share/com.lumasync.app/shell-state.json` persists across restart; in-memory session data (current mode, frame queue) is discarded.
 - **Copy error** — copies the error message + fingerprint to the clipboard, ready to paste into a GitHub issue or Discussion thread. Does **not** copy your config, credentials, or the log body — those stay on disk.
 
 ## What ErrorBoundary catches

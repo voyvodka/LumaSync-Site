@@ -8,50 +8,62 @@ updated: 2026-05-05
 
 LumaSync persists all configuration via Tauri's `plugin-store`. On disk that lives at:
 
-| OS      | Path                                                      |
-| ------- | --------------------------------------------------------- |
-| macOS   | `~/Library/Application Support/com.lumasync.app/app.json` |
-| Windows | `%APPDATA%\com.lumasync.app\app.json`                     |
-| Linux   | `~/.config/com.lumasync.app/app.json`                     |
+| OS      | Path                                                              |
+| ------- | ----------------------------------------------------------------- |
+| macOS   | `~/Library/Application Support/com.lumasync.app/shell-state.json` |
+| Windows | `%APPDATA%\com.lumasync.app\shell-state.json`                     |
+| Linux   | `~/.local/share/com.lumasync.app/shell-state.json`                |
 
-The identifier `com.lumasync.app` is set in `src-tauri/tauri.conf.json` and is how every OS scopes the app's per-user state.
+The identifier `com.lumasync.app` is set in `src-tauri/tauri.conf.json` and is how every OS scopes the app's per-user state. The file name comes from `SHELL_STORE_KEY` in `src/shared/contracts/shell.ts`.
 
-Common shorthand on this site is `~/.config/lumasync/app.json` — that's the Linux convention we use in copy, but the real path varies per OS as above.
+On Linux the directory is the XDG **data** directory, not `~/.config`. Tauri's `app_data_dir()` resolves to `$XDG_DATA_HOME/com.lumasync.app`, which defaults to `~/.local/share/com.lumasync.app`.
 
 ## Shape
 
 The full shape is typed in `src/shared/contracts/shell.ts` under `ShellState`. The top-level fields:
 
+The state is a **flat object** — there are no `hue.*` or `wled.*` nested groups. Every key below is top-level, and all but the first six are optional: an absent key means "never set", which is not the same as a default. The most-asked-about ones:
+
 | Field | Type | What it stores |
 | --- | --- | --- |
-| `schemaVersion` | `number` | Persistence schema version (current: `2`); migrations run on bump |
-| `windowWidth` / `windowHeight` | `number \| null` | Last main-window size in pixels |
-| `windowX` / `windowY` | `number \| null` | Last main-window position; v1.5.2 anchors by window centre instead of top-left, with a monitor-clamp guard that snaps the window on-screen if the saved position falls outside the current display geometry |
-| `isCompactMode` | `boolean` | Was the app last used in compact mode? |
-| `activeSectionId` | `SectionId` | Which settings section was last open |
-| `lightingMode` | `LightingModeConfig` | Current mode + per-mode parameters (saturation, smoothing, brightness cap, chip type, firmware profile) |
+| `schemaVersion` | `number` | Persistence schema version (current: `4`); migrations run on load |
+| `windowCenterX` / `windowCenterY` | `number \| null` | Last main-window position, anchored by **centre** rather than top-left since v1.5.2, with a monitor-clamp guard that snaps the window on-screen if the saved position falls outside the current display geometry |
+| `lastFullSize` | `{ width, height }` | Last full-mode window size in pixels |
+| `uiMode` | `UIMode` | Compact or full |
+| `lastSection` | `SectionId` | Which settings section was last open |
+| `language` | `string` | UI language |
+| `lightingMode` | `LightingModeConfig` | Current mode + per-mode parameters |
 | `ledCalibration` | `LedCalibrationConfig` | Edge counts, corner ownership, anchor, direction, gap |
-| `hue.bridge` | `HueBridgeSummary \| null` | Paired bridge (IP, ID — _not_ the username/PSK; those live in the OS keychain) |
-| `hue.onboarding.step` | `HueOnboardingStep` | Last reached step in the flow |
-| `hue.credentialStatus` | `HueCredentialStatus` | Valid / needs-repair / unknown |
-| `hue.runtimeTarget` | `HueRuntimeTarget` | Selected Entertainment Area |
-| `roomMap` | `RoomMapConfig` | Room map editor state — objects, zones, positions, layers; schema migrated 1→2 in v1.5.0 to add Hue Zones |
-| `wled.targets` | `WledTarget[]` | Paired WLED boards (IP, LED count, friendly name) |
-| `autoStartOnLogin` | `boolean` | OS login-items enrolment |
-| `updateChannel` | `'stable' \| 'beta'` | Auto-updater channel selector — added v1.5.0 |
-| `updater.checkOnStartup` | `boolean` | Whether to poll GitHub Releases on launch |
+| `selectedChipType` | `LedChipType` | WS2812B or SK6812 RGBW — decides three or four bytes per pixel on the wire |
+| `firmwareProfile` | `FirmwareProfile` | LumaSync-native or Adalight serial framing |
+| `colorCorrection` | `ColorCorrectionConfig` | Gamma, Kelvin, saturation trim |
+| `lastSuccessfulPort` | `string` | Serial port to reconnect to |
+| `lastWledSink` | `WledUdpSinkConfig` | The paired WLED board — one, not a list |
+| `lastHueBridge` | `HueBridgeSummary` | Paired bridge (IP, ID — _not_ the username/PSK) |
+| `lastHueAreaId` | `string` | Selected Entertainment Area |
+| `hueOnboardingStep` | `HueOnboardingStep` | Last reached step in the pairing flow |
+| `hueCredentialStatus` | `HueCredentialStatus` | Valid / needs-repair / unknown |
+| `credentialStorageBackend` | `HueCredentialBackend` | Keychain, or legacy plaintext on an unmigrated install |
+| `hueChannelRegionOverrides` | `Record<string, Record<number, string>>` | Per-area, per-channel region assignments |
+| `roomMap` | `RoomMapConfig` | Room map editor state — objects, Hue zones, positions, layers |
+| `selectedDisplayId` | `DisplayId` | Which monitor Ambilight captures |
+| `startupEnabled` | `boolean` | OS login-items enrolment |
+| `notificationsEnabled` | `boolean` | Native OS notifications |
+| `updateChannel` | `'stable' \| 'beta'` | Auto-updater channel — the field landed in v1.5.0, the switch that drives it in v1.5.5 |
 
-Anything not listed above is either computed at runtime (telemetry, stream state) or lives in a sub-config — the `LightingModeConfig` for example has nested saturation / smoothing / brightness cap fields.
+The rest are one-shot UI flags and preview-window state (`trayHintShown`, `hasCompletedOnboarding`, `ledPreview*`, `roomMapShow*`, `dontWarnFirmwareProfileMismatch`, …). `src/shared/contracts/shell.ts` is the authoritative list; this page names the fields worth knowing about, not all of them.
 
-**Not in this file**: Hue bridge **username** and **PSK**, and any future credential-class secret. Those live in the OS keychain (`keyring` Rust crate → macOS Keychain / Windows Credential Manager / Linux Secret Service) so a back-up of `app.json` does not leak them, and the file is safe to share when filing a bug report (after redacting the bridge IP if you want to be extra careful).
+Two fields are legacy and should be empty on a healthy modern install: `hueAppKey` and `hueClientKey` held the bridge credentials in plaintext before v1.5.0 moved them to the OS keychain. If you see values there, the migration has not run.
+
+**Not in this file**: Hue bridge **username** and **PSK**, and any future credential-class secret. Those live in the OS keychain (`keyring` Rust crate → macOS Keychain / Windows Credential Manager / Linux Secret Service) so a back-up of `shell-state.json` does not leak them, and the file is safe to share when filing a bug report (after redacting the bridge IP if you want to be extra careful).
 
 ## Safe to edit by hand
 
-**Low-risk**: `windowWidth`, `windowHeight`, `isCompactMode`, `autoStartOnLogin`, `updater.checkOnStartup`, `updateChannel`. Wrong values just get clamped or ignored.
+**Low-risk**: `lastFullSize`, `uiMode`, `language`, `startupEnabled`, `notificationsEnabled`, `updateChannel`. Wrong values just get clamped or ignored.
 
 **Moderate-risk**: `ledCalibration.counts` / `cornerOwnership` / `startAnchor` / `direction`. The app re-validates on load, but an unreasonable combo (e.g., zero total LEDs) will render the strip inert until fixed.
 
-**High-risk**: `hue.bridge`, `hue.credentialStatus`, `wled.targets`. Editing these by hand puts pairing into an inconsistent state — you're better off clicking **Forget bridge** / **Remove WLED board** in Settings and re-pairing.
+**High-risk**: `lastHueBridge`, `hueCredentialStatus`, `credentialStorageBackend`, `lastWledSink`. Editing these by hand puts pairing into an inconsistent state — you're better off clicking **Forget bridge** / **Remove WLED board** in Settings and re-pairing.
 
 **Do not touch**: anything under `roomMap` unless you know what you're doing. The coordinate space, zone discriminator, and layer ordering have subtle invariants; the editor maintains them for you.
 
@@ -59,7 +71,7 @@ Anything not listed above is either computed at runtime (telemetry, stream state
 
 Plain JSON, written compactly. No comments allowed (JSON standard).
 
-**Schema version** is tracked explicitly in the `schemaVersion` field as of the v1.5.0 zone unification. The persistence layer migrates `1 → 2` automatically on first launch (an idempotent, downgrade-safe shim that re-shapes existing room maps for the unified `Zone` discriminated union); no user action is needed.
+**Schema version** is tracked explicitly in the `schemaVersion` field, currently **4**. The persistence layer runs any missing step automatically on first launch and needs no user action; a file with no `schemaVersion` at all is treated as version 1. The steps: `1 → 2` re-shapes room maps for the Hue zone model, `2 → 3` re-anchors window geometry from top-left to centre, and `3 → 4` recovers Hue zones stranded by an earlier `1 → 2` run. Each is idempotent, so a partially migrated file converges rather than compounding.
 
 Back up the file if you want to preserve a working configuration across machines. Copy to the matching path on the new machine before first launch — and remember the OS keychain entry will need to be re-paired separately, since keychain entries don't move with the JSON.
 
@@ -68,7 +80,7 @@ Back up the file if you want to preserve a working configuration across machines
 If the app is stuck (startup crash, UI blank, pairing confused):
 
 1. Quit LumaSync (tray → Quit, or kill process).
-2. Delete `app.json` (or rename it to `app.json.bak` for safekeeping).
+2. Delete `shell-state.json` (or rename it to `shell-state.json.bak` for safekeeping).
 3. Relaunch. LumaSync starts with factory defaults: single window, Off mode, no paired Hue bridge, no calibration.
 
 You'll lose the pairing, calibration, and room map — re-pair and recalibrate from scratch. Takes ~5 minutes.

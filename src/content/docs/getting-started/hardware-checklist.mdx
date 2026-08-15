@@ -49,7 +49,7 @@ Any board the [WLED project](https://kno.wled.ge/) supports — ESP32 (preferred
 
 ### 2 · Network reachability
 
-LumaSync auto-discovers WLED boards on the LAN over mDNS (`_wled._tcp.local.`). Manual IP entry is also supported, but loopback (`127.0.0.0/8`), unspecified (`0.0.0.0`), multicast (`224.0.0.0/4`), and broadcast (`255.255.255.255`) addresses are rejected up-front with `WLED_INVALID_IP`. Wired boards work fine; Wi-Fi 5 GHz / wired uplinks reduce jitter on busier networks.
+WLED boards are paired by IP address — LumaSync does not browse the network for them, so have the board's IPv4 address to hand (WLED's web UI shows it on the WiFi page). Loopback (`127.0.0.0/8`), unspecified (`0.0.0.0`), multicast (`224.0.0.0/4`), and broadcast (`255.255.255.255`) addresses are rejected up-front with `WLED_INVALID_IP`. Wired boards work fine; Wi-Fi 5 GHz / wired uplinks reduce jitter on busier networks.
 
 See the [WLED bridge](/docs/usb-leds/wled/) page for the full setup walkthrough.
 
