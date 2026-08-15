@@ -147,11 +147,15 @@
       }
     };
 
+    // Return what the parser produced, never the caller's string: handing back
+    // the raw input leaves the guard and the browser reading different strings.
     const sanitizeUrl = (url) => {
       try {
         const parsed = new URL(url, 'http://localhost');
         if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-          return url;
+          return parsed.origin === 'http://localhost'
+            ? parsed.pathname + parsed.search + parsed.hash
+            : parsed.href;
         }
       } catch (e) {}
       return '#';
