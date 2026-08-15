@@ -19,13 +19,13 @@ Both numbers are averaged over the last 10 seconds. Spikes are expected on anima
 
 ## What "good" looks like
 
-| Platform                         | Typical Δ | Typical Σ | Notes                          |
-| -------------------------------- | --------- | --------- | ------------------------------ |
-| macOS (M-series, native display) | 10–20 ms  | 60 fps    | Best case                      |
-| macOS (Intel, external 4K)       | 15–30 ms  | 30–60 fps | GPU-bound on 4K                |
-| Windows (recent GPU)             | 10–25 ms  | 60 fps    | DXGI duplication is fast       |
-| Windows (iGPU)                   | 20–50 ms  | 30 fps    | iGPU bandwidth limits          |
-| Linux X11                        | 15–30 ms  | 60 fps    | The supported Linux path       |
+| Platform                         | Typical Δ | Typical Σ | Notes                    |
+| -------------------------------- | --------- | --------- | ------------------------ |
+| macOS (M-series, native display) | 10–20 ms  | 60 fps    | Best case                |
+| macOS (Intel, external 4K)       | 15–30 ms  | 30–60 fps | GPU-bound on 4K          |
+| Windows (recent GPU)             | 10–25 ms  | 60 fps    | DXGI duplication is fast |
+| Windows (iGPU)                   | 20–50 ms  | 30 fps    | iGPU bandwidth limits    |
+| Linux X11                        | 15–30 ms  | 60 fps    | The supported Linux path |
 
 **Wayland is not a supported capture path**, so there are no figures for it. LumaSync captures X11 on Linux; Wayland needs `xdg-desktop-portal` support that is not built. A Wayland session may appear to work — the capture library falls through to PipeWire — but that path is untested and unsupported, and its performance is not something we can characterise.
 
