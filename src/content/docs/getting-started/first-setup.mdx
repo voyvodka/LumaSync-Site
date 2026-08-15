@@ -35,7 +35,7 @@ Settings → **Hue** → **Pair bridge**.
 3. Press the physical **link button** on the bridge, then click **Continue**.
 4. Pick an **Entertainment Area** from the dropdown. If none exist, create one in the Hue app first (Settings → Entertainment areas).
 
-On success the bridge username and PSK land in your **OS keychain** (macOS Keychain / Windows Credential Manager / Linux Secret Service); the rest of the configuration lives in `~/.config/lumasync/app.json`. Nothing is uploaded. See [Hue pairing](/docs/hue/pairing/) for a deeper walkthrough or troubleshooting.
+On success the bridge username and PSK land in your **OS keychain** (macOS Keychain / Windows Credential Manager / Linux Secret Service); the rest of the configuration lives in `~/.local/share/com.lumasync.app/shell-state.json`. Nothing is uploaded. See [Hue pairing](/docs/hue/pairing/) for a deeper walkthrough or troubleshooting.
 
 ### Connect a USB controller
 
@@ -49,7 +49,7 @@ Plug your USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) into a 
 
 Settings → **Device** → **WLED**.
 
-1. LumaSync auto-discovers WLED boards on the LAN over mDNS (`_wled._tcp.local.`). You can also paste a static IP — loopback / multicast / broadcast addresses are rejected up-front.
+1. Paste the board's IPv4 address — WLED boards are paired by IP, not found for you. Loopback / multicast / broadcast addresses are rejected up-front.
 2. Click **Connect**, then **Test** to push a brief solid pattern. The round-trip is reported in milliseconds.
 3. The board is driven over UDP via the **DDP** protocol once Ambilight is active.
 

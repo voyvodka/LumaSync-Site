@@ -28,7 +28,7 @@ This page exists because WLED is the biggest name in the DIY LED world and many 
 | Deployment | Install app on your machine | Flash firmware to microcontroller, wire to strip |
 | Strip-side configuration | Edge counts, room map, chip type (WS2812B / SK6812 RGBW) | Strip type, GPIO pin, segments, power budget, effects |
 | Screen sync / ambilight | Yes (the entire reason it exists) | No — relies on a separate client to feed frames |
-| LumaSync → WLED bridge | **Yes (v1.5.0+)** — DDP over UDP with mDNS auto-discovery and IP guards | Receives DDP frames natively |
+| LumaSync → WLED bridge | **Yes (v1.5.0+)** — DDP over UDP, paired by IP with SSRF guards | Receives DDP frames natively |
 | LumaSync → USB serial | Yes — six chipset families auto-detected | N/A |
 | LumaSync → Philips Hue Entertainment | Native DTLS 1.2 PSK with Hue Zones | No — WLED doesn't talk Hue |
 | Standalone effect library | Five built-in scene presets (movie / game / music / chill / read) | 100+ effects, audio-reactive via add-ons, preset cycling |
@@ -57,7 +57,7 @@ This page exists because WLED is the biggest name in the DIY LED world and many 
 
 ## Migration notes
 
-- **From WLED standalone to WLED + LumaSync**: pair the existing WLED board to LumaSync via Settings → Device → WLED. Discovery runs over mDNS (`_wled._tcp.local.`); test pushes a brief solid pattern to confirm the round-trip. WLED's own configuration (segments, effects, presets) stays intact and continues to work when LumaSync isn't streaming.
+- **From WLED standalone to WLED + LumaSync**: pair the existing WLED board to LumaSync via Settings → Device → WLED. Pairing takes the board's IP address rather than searching for it; test pushes a brief solid pattern to confirm the round-trip. WLED's own configuration (segments, effects, presets) stays intact and continues to work when LumaSync isn't streaming.
 - **From WLED to LumaSync USB-serial**: only worth doing if you specifically want USB latency over Wi-Fi. The hardware swap (ESP32 → CH340 board + 5 V supply) outweighs the latency gain for most setups.
 - **From LumaSync USB to LumaSync + WLED**: not a migration; both can run simultaneously. The pipeline drives every connected sink at once.
 

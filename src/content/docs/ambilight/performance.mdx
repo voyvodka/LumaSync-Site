@@ -19,14 +19,15 @@ Both numbers are averaged over the last 10 seconds. Spikes are expected on anima
 
 ## What "good" looks like
 
-| Platform                         | Typical Δ | Typical Σ | Notes                          |
-| -------------------------------- | --------- | --------- | ------------------------------ |
-| macOS (M-series, native display) | 10–20 ms  | 60 fps    | Best case                      |
-| macOS (Intel, external 4K)       | 15–30 ms  | 30–60 fps | GPU-bound on 4K                |
-| Windows (recent GPU)             | 10–25 ms  | 60 fps    | DXGI duplication is fast       |
-| Windows (iGPU)                   | 20–50 ms  | 30 fps    | iGPU bandwidth limits          |
-| Linux X11                        | 15–30 ms  | 60 fps    | GLX path                       |
-| Linux Wayland                    | 30–80 ms  | 20–30 fps | Portal-based; slower by design |
+| Platform                         | Typical Δ | Typical Σ | Notes                    |
+| -------------------------------- | --------- | --------- | ------------------------ |
+| macOS (M-series, native display) | 10–20 ms  | 60 fps    | Best case                |
+| macOS (Intel, external 4K)       | 15–30 ms  | 30–60 fps | GPU-bound on 4K          |
+| Windows (recent GPU)             | 10–25 ms  | 60 fps    | DXGI duplication is fast |
+| Windows (iGPU)                   | 20–50 ms  | 30 fps    | iGPU bandwidth limits    |
+| Linux X11                        | 15–30 ms  | 60 fps    | The supported Linux path |
+
+**Wayland is not a supported capture path**, so there are no figures for it. LumaSync captures X11 on Linux; Wayland needs `xdg-desktop-portal` support that is not built. A Wayland session may appear to work — the capture library falls through to PipeWire — but that path is untested and unsupported, and its performance is not something we can characterise.
 
 For the Hue path specifically, **Σ caps at 20 fps** regardless of what your capture pipeline delivers. The bridge is the bottleneck. USB LEDs can go up to 60 fps — but only on short strips.
 
@@ -48,7 +49,7 @@ Beyond 200 LEDs the serial link becomes the bottleneck. Split the strip across t
 
 - **Δ > 100 ms sustained**: capture pipeline is stalling. Most common cause on macOS is Low Power Mode throttling the GPU — plug in the charger.
 - **Δ spikes on fullscreen games**: rendering engines holding the frame longer than composition. Windowed / borderless-windowed modes are faster than exclusive fullscreen.
-- **Linux Wayland consistently 50+ ms**: portal-based capture is slower than X11. Not fixable without switching session type.
+- **On Linux, high Δ under a Wayland session**: LumaSync supports X11 capture only. Log in to an X11 session; a Wayland one is running through an untested fallback.
 
 ### Low Σ (frame rate)
 

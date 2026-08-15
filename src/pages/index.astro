@@ -48,7 +48,7 @@ const schemas = [
         name: 'WLED bridge',
         url: '/docs/usb-leds/wled/',
         description:
-          'Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol — discovered automatically on the LAN over mDNS or paired by IP.',
+          'Drive ESP32 / ESP8266 boards running WLED firmware over Wi-Fi via the DDP protocol — paired by IP address, with loopback, multicast and broadcast rejected up-front.',
       },
       {
         name: 'Philips Hue Entertainment streaming',
@@ -80,7 +80,7 @@ const schemas = [
     {
       question: 'Does LumaSync need a cloud account?',
       answer:
-        'No. LumaSync runs entirely on-device — no accounts, no telemetry, no cloud. Hue bridge pairing and configuration live in ~/.config/lumasync/app.json on your machine.',
+        'No. LumaSync runs entirely on-device — no accounts, no telemetry, no cloud. Hue bridge pairing and configuration live in ~/.local/share/com.lumasync.app/shell-state.json on your machine.',
     },
     {
       question: 'Can I use LumaSync with a console or Apple TV via HDMI?',
@@ -162,9 +162,8 @@ const schemas = [
         <div class="feature-icon" aria-hidden="true">WLED</div>
         <h3>WLED over Wi-Fi</h3>
         <p>
-          Drive ESP32 / ESP8266 boards running WLED firmware via the DDP protocol — auto-discovered
-          on the LAN over mDNS or paired by static IP. Loopback, multicast, and broadcast addresses
-          are rejected up-front.
+          Drive ESP32 / ESP8266 boards running WLED firmware via the DDP protocol — paired by the
+          board's IP address. Loopback, multicast, and broadcast addresses are rejected up-front.
         </p>
         <a href="/docs/usb-leds/wled/">WLED setup →</a>
       </article>
@@ -352,7 +351,7 @@ const schemas = [
         <p class="trust-label">Credentials stay local</p>
         <p>
           Hue bridge pairing and everything else lives in{' '}
-          <code>~/.config/lumasync/app.json</code> on your machine.
+          <code>~/.local/share/com.lumasync.app/shell-state.json</code> on your machine.
         </p>
       </div>
     </div>

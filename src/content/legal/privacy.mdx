@@ -26,11 +26,11 @@ Screen capture happens via OS APIs — no network round-trip.
 
 LumaSync's state persists to a single JSON file via Tauri's `plugin-store`:
 
-- **macOS**: `~/Library/Application Support/com.lumasync.app/app.json`
-- **Windows**: `%APPDATA%\com.lumasync.app\app.json`
-- **Linux**: `~/.config/com.lumasync.app/app.json`
+- **macOS**: `~/Library/Application Support/com.lumasync.app/shell-state.json`
+- **Windows**: `%APPDATA%\com.lumasync.app\shell-state.json`
+- **Linux**: `~/.local/share/com.lumasync.app/shell-state.json`
 
-The file contains your window layout, calibration, Hue bridge IP + pairing credential, room map, and preferences. **Protected only by OS user-level file permissions**; LumaSync does not encrypt this file.
+The file contains your window layout, calibration, Hue bridge IP, room map, and preferences. **Protected only by OS user-level file permissions**; LumaSync does not encrypt this file. The bridge **pairing credential is not in it** — from v1.5.0 the username and PSK live in the OS keychain instead. An install that predates v1.5.0 and has never been launched since still holds them here in plain text; launching a current version migrates them out.
 
 Logs rotate to a small size cap in the OS-standard log directory. They never leave your machine and are not transmitted anywhere by LumaSync.
 
