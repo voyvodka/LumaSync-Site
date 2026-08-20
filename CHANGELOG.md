@@ -4,6 +4,20 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.40] — 2026-08-20
+
+### Fixed
+
+- **The docs stop describing behaviour the app does not have.** Three claims were false against the shipped code. WLED boards were presented as auto-discovered over mDNS by browsing `_wled._tcp.local.` in seven places, while `discover_wled_devices` is a single-IP `/json/info` probe and the only mDNS browser the app registers is Hue's — so the WLED service name was listed on the [Telemetry](https://lumasync.app/docs/reference/telemetry/) page as a LAN request that is never made. The [config-file reference](https://lumasync.app/docs/reference/config-file/) named `app.json` on every platform and `~/.config` on Linux, so the reset instructions told users to delete a file that does not exist; the real file is `shell-state.json` under the XDG data directory, and the wrong name had spread to eleven further pages including the privacy notice. That page's field table was fictional in shape as well, documenting nested `hue.*` / `wled.*` groups and hand-edit advice for keys absent from `ShellState`, two schema versions behind. And the [performance](https://lumasync.app/docs/ambilight/performance/) page published measured-looking figures for a Wayland capture path that is neither implemented nor supported.
+- **Privacy and telemetry now agree on where the Hue credential lives.** One page had it in the JSON state file; it has been in the OS keychain since v1.5.0.
+- **`Last-Modified` reflects this release.** The middleware constant had been sitting at 10 August while the content underneath it changed, and `updated:` frontmatter on the thirteen corrected pages still claimed dates as old as April — so the JSON-LD `dateModified` that answer engines read was dating a rewritten page to before its rewrite.
+
+### Changed
+
+- **`sanitizeUrl` in the search component returns the parser's own output** rather than validating one string and handing back another. An automated report claimed a `javascript:` bypass through control characters; it does not exist — the WHATWG URL parser strips tab, LF and CR before parsing, exactly as the HTML parser does, and a sweep of every C0 character against a simulation of the browser's `href` pipeline found no input the guard reads as `http:` that the DOM would execute. The shape was tightened anyway, because validate-one-value-return-another is what a real bypass would need.
+- **The deploy contract is written down.** `deploy.yml` has fired only on a published release for some time, but `CLAUDE.md` still documented a manual `wrangler` push as the deploy path, which is how this release's content fixes sat merged and unpublished for five days. Merging is now documented as not shipping, with the ad-hoc `workflow_dispatch` path and a verify-by-content step alongside it.
+- **Dependencies:** Astro 7.2.0 → 7.2.2.
+
 ## [1.1.39] — 2026-08-11
 
 ### Fixed
