@@ -29,6 +29,9 @@ pnpm-debug.log*
 *.local
 .planning/
 .thinking-local/
+# Project docs are kept local: this repo is public and the notes below
+# carry audit findings and roadmap thinking that is not release copy.
+/docs/
 
 # Vercel / Netlify (in case of temporary previews)
 .vercel/

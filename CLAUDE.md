@@ -58,8 +58,11 @@ Each release: tag annotated, push tag, create GitHub Release pulling notes from 
 
 - `pnpm format` before every commit (CI's prettier-check gate fails otherwise).
 - `pnpm build` from a clean `unset PUBLIC_SITE_STAGE` env.
-- Deploy: `npx wrangler pages deploy dist --project-name=lumasync-site --branch=main --commit-dirty=true`. Run from this directory — never let `npx wrangler` fall back to a parent-directory config.
+- Deploy is release-gated: `.github/workflows/deploy.yml` fires on `release: [published]` and `workflow_dispatch` only. Pushing to `main` ships nothing — a merged content PR stays dark until a version is tagged and released.
+- Ad-hoc redeploy of the current `main` without a version bump: `gh workflow run deploy.yml`.
+- Manual fallback: `npx wrangler pages deploy dist --project-name=lumasync-site --branch=main --commit-dirty=true`. Run from this directory — never let `npx wrangler` fall back to a parent-directory config.
+- Verify a deploy by content, not by a green run: probe a string the release actually changed.
 
 ## Local notes / planning
 
-`.planning/`, `.thinking-local/`, `.claude/`, `*.local` are gitignored. Use these for audit reports, status notes, intermediate analysis. Never write public-shippable content into these paths (they won't deploy) and never paraphrase from them into commits or release notes.
+`docs/`, `.planning/`, `.thinking-local/`, `.claude/`, `*.local` are gitignored. Project documentation lives in `docs/` — start at `docs/README.md`, and `docs/product/00-state.md` for where things stand. It is kept out of the repo deliberately: this repo is public and those notes carry audit findings and roadmap reasoning that is not release copy. Use these for audit reports, status notes, intermediate analysis. Never write public-shippable content into these paths (they won't deploy) and never paraphrase from them into commits or release notes.
