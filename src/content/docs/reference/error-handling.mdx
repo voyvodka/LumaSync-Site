@@ -3,7 +3,7 @@ title: Error handling
 description: How LumaSync recovers from render faults — the global ErrorBoundary, the fallback card, the actions available from it, and the macOS lifecycle shutdown path.
 group: reference
 order: 50
-updated: 2026-06-25
+updated: 2026-08-15
 ---
 
 From v1.4, LumaSync wraps every React root with a **global ErrorBoundary**. When a render fault bubbles out of the component tree, you get a localised fallback card — not a blank tray window, not a silent crash. The app keeps running; only the broken panel is replaced with the card.
