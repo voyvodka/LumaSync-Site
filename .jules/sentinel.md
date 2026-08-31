@@ -45,3 +45,7 @@
 **Learning:** A parser-differential claim is only real if the two parsers actually differ; check that before assigning severity. The bypass class described here does not exist for tab/LF/CR, and the characters the URL parser _does_ keep (`\x00`-`\x08`, `\x0B`, `\x0C`, …) are equally kept by the HTML parser in interior position, so they stay a relative path rather than becoming a scheme.
 
 **Prevention (kept anyway):** `sanitizeUrl` now returns the parsed output — `parsed.pathname + parsed.search + parsed.hash` for the dummy origin, `parsed.href` otherwise — rather than the caller's string. Not because a bypass was found, but because validating one string and returning another is a shape that invites one. Do not record this entry as a fixed XSS; it was not.
+## 2026-08-31 - [Missing rel="noopener noreferrer" on generic external links]
+**Vulnerability:** External links rendered dynamically without an analytics target bypassed the 'noopener noreferrer' addition in the Footer component, potentially enabling reverse tabnabbing and HTTP Referer leakage.
+**Learning:** Checking for analytics targets (like `umamiTarget`) is insufficient for determining if a link is external and requires security attributes. All external links need protection.
+**Prevention:** Use URL-based condition logic (e.g., `href.startsWith('http')`) to consistently enforce security attributes on all external links, regardless of tracking status.
