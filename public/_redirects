@@ -51,3 +51,9 @@
 /multi-monitor/                      /docs/advanced/multi-display/      301
 /compare-tools                       /compare/                          301
 /compare-tools/                      /compare/                          301
+
+# Astro's sitemap integration names the index `sitemap-index.xml`, and
+# robots.txt points at that. Crawlers and audit tools still probe the
+# conventional `/sitemap.xml` by habit and got a 404. Forward it rather than
+# duplicating the file, so there is one sitemap and one place it is generated.
+/sitemap.xml   /sitemap-index.xml  301
