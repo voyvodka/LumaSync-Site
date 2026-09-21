@@ -92,33 +92,37 @@ const schemas = [
     <section class="forums">
       <p class="section-label">Where to go</p>
       <ul role="list">
-        {forums.map((f) => (
-          <li>
-            <a
-              href={f.disabled ? undefined : f.href}
-              rel={f.disabled ? undefined : 'noopener noreferrer'}
-              class={f.disabled ? 'disabled' : ''}
-              aria-disabled={f.disabled ? 'true' : undefined}
-              title={f.disabled ? f.disabledReason || 'Currently disabled' : undefined}
-            >
-              <span class="title">{f.title}</span>
-              <span class="blurb">{f.blurb}</span>
-              <span class="cta">{f.cta}</span>
-            </a>
-          </li>
-        ))}
+        {
+          forums.map((f) => (
+            <li>
+              <a
+                href={f.disabled ? undefined : f.href}
+                rel={f.disabled ? undefined : 'noopener noreferrer'}
+                class={f.disabled ? 'disabled' : ''}
+                aria-disabled={f.disabled ? 'true' : undefined}
+                title={f.disabled ? f.disabledReason || 'Currently disabled' : undefined}
+              >
+                <span class="title">{f.title}</span>
+                <span class="blurb">{f.blurb}</span>
+                <span class="cta">{f.cta}</span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </section>
 
     <section class="triage">
       <p class="section-label">Quick triage</p>
       <dl>
-        {triage.map((item) => (
-          <>
-            <dt>{item.q}</dt>
-            <dd set:html={DOMPurify.sanitize(item.a)} />
-          </>
-        ))}
+        {
+          triage.map((item) => (
+            <>
+              <dt>{item.q}</dt>
+              <dd set:html={DOMPurify.sanitize(item.a)} />
+            </>
+          ))
+        }
       </dl>
     </section>
 
@@ -126,15 +130,11 @@ const schemas = [
       <p class="section-label">House rules</p>
       <p>
         LumaSync follows a standard{' '}
-        <a href={`${repo}/blob/main/CODE_OF_CONDUCT.md`} rel="noopener noreferrer">
-          Code of Conduct
-        </a>
-        . Short version: be helpful, be specific, and don't be a jerk. Disagreement is fine;
+        <a href={`${repo}/blob/main/CODE_OF_CONDUCT.md`} rel="noopener noreferrer"
+          >Code of Conduct</a
+        >. Short version: be helpful, be specific, and don't be a jerk. Disagreement is fine;
         dismissiveness isn't. Project is MIT-licensed; contribution guidelines live in{' '}
-        <a href={`${repo}/blob/main/CONTRIBUTING.md`} rel="noopener noreferrer">
-          CONTRIBUTING.md
-        </a>
-        .
+        <a href={`${repo}/blob/main/CONTRIBUTING.md`} rel="noopener noreferrer">CONTRIBUTING.md</a>.
       </p>
     </section>
   </section>

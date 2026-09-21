@@ -119,14 +119,8 @@ const schemas = [
       <h1 class="display">Your screen, your lights. Locally.</h1>
       <p class="subhead">{description}</p>
       <div class="cta-row">
-        <a class="cta-primary" href="/download/" data-os-cta>
-          {' '}
-          Download{' '}
-        </a>
-        <a class="cta-secondary" href={repo} rel="noopener noreferrer">
-          {' '}
-          View on GitHub →{' '}
-        </a>
+        <a class="cta-primary" href="/download/" data-os-cta> Download </a>
+        <a class="cta-secondary" href={repo} rel="noopener noreferrer"> View on GitHub → </a>
       </div>
       <p class="platform-note">macOS · Windows · Linux</p>
     </div>
@@ -153,23 +147,19 @@ const schemas = [
     <h2 class="section-title">One pipeline. Three sinks.</h2>
     <div class="feature-grid feature-grid-quad">
       <article>
-        <div class="feature-icon" aria-hidden="true">
-          USB
-        </div>
+        <div class="feature-icon" aria-hidden="true">USB</div>
         <h3>USB LED strips</h3>
         <p>
           WS2812B and SK6812 RGBW chips over CH340 / CH341 / FT232 / PL2303 / CP2104 USB-serial
           controllers at 115200 baud — running the{' '}
-          <a href="/docs/usb-leds/serial-protocol/">LumaSync v1 serial frame</a> or the opt-in
-          Adalight profile.
+          <a href="/docs/usb-leds/serial-protocol/">LumaSync v1 serial frame</a> or the opt-in Adalight
+          profile.
         </p>
         <a href="/docs/usb-leds/controllers/">Supported chipsets →</a>
       </article>
 
       <article>
-        <div class="feature-icon" aria-hidden="true">
-          WLED
-        </div>
+        <div class="feature-icon" aria-hidden="true">WLED</div>
         <h3>WLED over Wi-Fi</h3>
         <p>
           Drive ESP32 / ESP8266 boards running WLED firmware via the DDP protocol — paired by the
@@ -179,9 +169,7 @@ const schemas = [
       </article>
 
       <article>
-        <div class="feature-icon" aria-hidden="true">
-          HUE
-        </div>
+        <div class="feature-icon" aria-hidden="true">HUE</div>
         <h3>Philips Hue Entertainment</h3>
         <p>
           DTLS 1.2 PSK streaming to any Entertainment Area at up to 20 Hz, with{' '}
@@ -192,9 +180,7 @@ const schemas = [
       </article>
 
       <article>
-        <div class="feature-icon" aria-hidden="true">
-          ⌃
-        </div>
+        <div class="feature-icon" aria-hidden="true">⌃</div>
         <h3>All three, synchronized</h3>
         <p>
           Same screen source drives every sink. Pick per mode — USB, WLED, Hue, or any combination —
@@ -220,9 +206,7 @@ const schemas = [
         Tuned for latency, not flash. The telemetry pill shows live capture and send rates so you
         can see when the pipeline is healthy and when it isn't — no mystery numbers.
       </p>
-      <a class="inline-cta" href="/docs/ambilight/performance/">
-        Read about performance →
-      </a>
+      <a class="inline-cta" href="/docs/ambilight/performance/">Read about performance →</a>
     </div>
     <figure class="callout-visual">
       <picture>
@@ -238,13 +222,9 @@ const schemas = [
       </picture>
       <div class="telemetry-pill" aria-hidden="true">
         <span class="pill-eyebrow">Live</span>
-        <span>
-          <strong>Δ</strong> 12 ms
-        </span>
+        <span><strong>Δ</strong> 12 ms</span>
         <span class="pill-sep"></span>
-        <span>
-          <strong>Σ</strong> 60 fps
-        </span>
+        <span><strong>Σ</strong> 60 fps</span>
       </div>
     </figure>
   </section>
@@ -271,9 +251,7 @@ const schemas = [
         Drag your TV, furniture, and USB strips onto a grid. Hue channels project onto normalized
         coordinates. Undo / redo, snap guides, keyboard shortcuts.
       </p>
-      <a class="inline-cta" href="/docs/usb-leds/calibration/">
-        Calibration docs →
-      </a>
+      <a class="inline-cta" href="/docs/usb-leds/calibration/">Calibration docs →</a>
     </div>
   </section>
 
@@ -286,9 +264,7 @@ const schemas = [
         Single window hides to tray on close. Compact 320×480 mode for quick toggles, full 900×620
         mode when you want to configure. Auto-starts on login, if you want it to.
       </p>
-      <a class="inline-cta" href="/docs/getting-started/first-setup/">
-        First-setup walkthrough →
-      </a>
+      <a class="inline-cta" href="/docs/getting-started/first-setup/">First-setup walkthrough →</a>
     </div>
     <figure class="callout-visual dual">
       <picture class="dual-compact">
@@ -359,18 +335,16 @@ const schemas = [
       <div>
         <p class="trust-label">MIT licensed</p>
         <p>
-          Source at{' '}
-          <a href={repo} rel="noopener noreferrer">
-            voyvodka/LumaSync
-          </a>
-          . Fork it, ship it, read it.
+          Source at <a href={repo} rel="noopener noreferrer">voyvodka/LumaSync</a>. Fork it, ship
+          it, read it.
         </p>
       </div>
       <div>
         <p class="trust-label">Updates signed with minisign</p>
         <p>
-          Every binary is signature-verified before replacing the on-disk version.{' '}
-          <a href="/docs/advanced/auto-updater/">How updates work</a>.
+          Every binary is signature-verified before replacing the on-disk version. <a
+            href="/docs/advanced/auto-updater/">How updates work</a
+          >.
         </p>
       </div>
       <div>
@@ -448,41 +422,36 @@ const schemas = [
       <article class="roadmap-col roadmap-shipped">
         <header>
           <span class="roadmap-tag tag-shipped">Shipped</span>
-          <h3>
-            {LATEST_VERSION} — {LATEST_VERSION_DATE}
-          </h3>
+          <h3>{LATEST_VERSION} — {LATEST_VERSION_DATE}</h3>
         </header>
         <ul role="list">
           <li>
-            <strong>Hue Bridge Pro pairs</strong> — the Bridge Pro serves its local API over HTTPS
-            only, so pairing, IP verification, and credential validation — still on plain HTTP —
-            never reached it; those calls now try HTTPS first and fall back to HTTP for older
-            bridges, which are unaffected
+            <strong>Hue Bridge Pro pairs</strong> — the Bridge Pro serves its local API over HTTPS only,
+            so pairing, IP verification, and credential validation — still on plain HTTP — never reached
+            it; those calls now try HTTPS first and fall back to HTTP for older bridges, which are unaffected
           </li>
           <li>
-            <strong>No more phantom "credentials expired"</strong> — a rejected link button reported
-            an auth failure that did not exist; it now lands on the awaiting-link-button state it
-            always should have
+            <strong>No more phantom "credentials expired"</strong> — a rejected link button reported an
+            auth failure that did not exist; it now lands on the awaiting-link-button state it always
+            should have
           </li>
           <li>
-            <strong>SSRF in the Hue readiness check closed</strong> — the stream-readiness probe now
-            runs the same IPv4 validation as the rest of the onboarding endpoints, so loopback,
-            multicast, and broadcast addresses are rejected before a connection is attempted
+            <strong>SSRF in the Hue readiness check closed</strong> — the stream-readiness probe now runs
+            the same IPv4 validation as the rest of the onboarding endpoints, so loopback, multicast,
+            and broadcast addresses are rejected before a connection is attempted
           </li>
           <li>
-            <strong>Screen-reader gaps closed</strong> — room-map context-menu entries carry
-            accessible names and the calibration save button reports its busy state
+            <strong>Screen-reader gaps closed</strong> — room-map context-menu entries carry accessible
+            names and the calibration save button reports its busy state
           </li>
           <li>
             <strong>Security advisory resolved</strong> — RUSTSEC-2026-0235 (<code>rkyv</code>{' '}
-            out-of-bounds read) reached LumaSync through an unused optional dependency of{' '}
-            <code>tauri-plugin-log</code>, whose 2.9 release drops that chain entirely; the{' '}
-            <code>cargo audit</code> gate is green
+            out-of-bounds read) reached LumaSync through an unused optional dependency of <code
+              >tauri-plugin-log</code
+            >, whose 2.9 release drops that chain entirely; the <code>cargo audit</code> gate is green
           </li>
         </ul>
-        <a class="inline-cta" href="/changelog/">
-          Full changelog →
-        </a>
+        <a class="inline-cta" href="/changelog/">Full changelog →</a>
       </article>
 
       <article class="roadmap-col roadmap-next">
@@ -492,8 +461,8 @@ const schemas = [
         </header>
         <ul role="list">
           <li>
-            Wayland screen capture via <code>xdg-desktop-portal</code> — the missing half of Linux
-            support, and the prerequisite for any Flatpak packaging
+            Wayland screen capture via <code>xdg-desktop-portal</code> — the missing half of Linux support,
+            and the prerequisite for any Flatpak packaging
           </li>
           <li>
             <code>glib</code> 0.18 → 0.19 migration to clear the remaining{' '}
@@ -506,8 +475,8 @@ const schemas = [
           <li>OpenRGB sink (v2.0 track) — peripherals, motherboards, fans on the same pipeline</li>
         </ul>
         <p class="roadmap-caveat">
-          No dates promised. The <code>LedSink</code> abstraction (v1.4) and the WLED bridge (v1.5)
-          make the OpenRGB track tractable.
+          No dates promised. The <code>LedSink</code> abstraction (v1.4) and the WLED bridge (v1.5) make
+          the OpenRGB track tractable.
         </p>
       </article>
 
@@ -534,21 +503,22 @@ const schemas = [
     <h2 class="section-title">Not for you if…</h2>
     <ul role="list">
       <li>
-        <strong>You need HDMI passthrough for a console or Apple TV.</strong> LumaSync reads the OS
-        screen buffer — no HDMI in the signal path. Grab a{' '}
-        <a href="/compare/hue-sync/">Hue Sync Box</a> instead.
+        <strong>You need HDMI passthrough for a console or Apple TV.</strong>{' '}
+        LumaSync reads the OS screen buffer — no HDMI in the signal path. Grab a <a
+          href="/compare/hue-sync/">Hue Sync Box</a
+        > instead.
       </li>
       <li>
-        <strong>
-          You don't have a Hue Bridge, a WS2812B / SK6812 controller, or a WLED board.
-        </strong>{' '}
-        The app will run, but you won't see anything light up. Start with the{' '}
-        <a href="/docs/getting-started/hardware-checklist/">hardware checklist</a>.
+        <strong>You don't have a Hue Bridge, a WS2812B / SK6812 controller, or a WLED board.</strong
+        >
+        {' '}The app will run, but you won't see anything light up. Start with the <a
+          href="/docs/getting-started/hardware-checklist/">hardware checklist</a
+        >.
       </li>
       <li>
-        <strong>You're on a tiling Linux WM with no system tray.</strong> LumaSync expects to live
-        in the menu bar — GNOME needs an AppIndicator extension, and tiling WMs may force the window
-        into a tile. The pipeline still runs; the UX is just less menu-bar-shaped.
+        <strong>You're on a tiling Linux WM with no system tray.</strong>{' '}
+        LumaSync expects to live in the menu bar — GNOME needs an AppIndicator extension, and tiling WMs
+        may force the window into a tile. The pipeline still runs; the UX is just less menu-bar-shaped.
       </li>
     </ul>
   </section>
@@ -1291,10 +1261,10 @@ const schemas = [
   /* ─── Responsive ─────────────────────────────────────── */
   @media (max-width: 900px) {
     /* minmax(0, 1fr) (not 1fr) is critical: 1fr resolves to
-       * minmax(auto, 1fr), which content-sizes the column min — any
-       * child carrying an intrinsic width attribute (the ambient +
-       * room-map preview SVGs declare width="1400") then forces the
-       * grid column to 1400px and overflows the viewport. */
+     * minmax(auto, 1fr), which content-sizes the column min — any
+     * child carrying an intrinsic width attribute (the ambient +
+     * room-map preview SVGs declare width="1400") then forces the
+     * grid column to 1400px and overflows the viewport. */
     .hero,
     .callout {
       grid-template-columns: minmax(0, 1fr);
@@ -1310,9 +1280,9 @@ const schemas = [
     }
 
     /* Stacked on mobile; stretch (not flex-start) so the full-mode img
-       * respects container width instead of hugging its 900px intrinsic
-       * size — that was the horizontal-scroll source on narrow screens.
-       * Compact stays capped at 12rem and centers under the full image. */
+     * respects container width instead of hugging its 900px intrinsic
+     * size — that was the horizontal-scroll source on narrow screens.
+     * Compact stays capped at 12rem and centers under the full image. */
     .callout-visual.dual {
       flex-direction: column;
       align-items: stretch;

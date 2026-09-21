@@ -36,16 +36,12 @@ const runtimeDeps = [
       <h2>MIT License — code</h2>
       <p class="meta">
         Applies to the application code at{' '}
-        <a href={repo} rel="noopener noreferrer">
-          <code>voyvodka/LumaSync</code>
-        </a>{' '}
-        and to the site code at{' '}
-        <a href={siteRepo} rel="noopener noreferrer">
-          <code>voyvodka/LumaSync-Site</code>
-        </a>
-        .
+        <a href={repo} rel="noopener noreferrer"><code>voyvodka/LumaSync</code></a>
+        {' '}and to the site code at{' '}
+        <a href={siteRepo} rel="noopener noreferrer"><code>voyvodka/LumaSync-Site</code></a>.
       </p>
-      <pre class="mit">Copyright (c) {year} voyvodka
+      <pre
+        class="mit">Copyright (c) {year} voyvodka
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -69,13 +65,12 @@ SOFTWARE.</pre>
     <section>
       <h2>CC BY 4.0 — site content</h2>
       <p>
-        Copy, docs, comparison pages, and blog posts on <code>lumasync.app</code> are licensed under
-        the{' '}
-        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener noreferrer">
-          Creative Commons Attribution 4.0 International License
-        </a>
-        . In practice: you can copy, translate, and build on the content — just credit LumaSync with
-        a link back.
+        Copy, docs, comparison pages, and blog posts on{' '}
+        <code>lumasync.app</code> are licensed under the{' '}
+        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener noreferrer"
+          >Creative Commons Attribution 4.0 International License</a
+        >. In practice: you can copy, translate, and build on the content — just credit LumaSync
+        with a link back.
       </p>
       <p>Per-file exceptions (if any) are noted at the top of the file.</p>
     </section>
@@ -87,22 +82,23 @@ SOFTWARE.</pre>
         licenses:
       </p>
       <ul>
-        {runtimeDeps.map((dep) => (
-          <li>
-            <strong>{dep.name}</strong> — <span class="muted">{dep.license}</span>
-          </li>
-        ))}
+        {
+          runtimeDeps.map((dep) => (
+            <li>
+              <strong>{dep.name}</strong> — <span class="muted">{dep.license}</span>
+            </li>
+          ))
+        }
       </ul>
       <p class="meta">
         A complete dependency manifest is in the app's{' '}
-        <a href={`${repo}/blob/main/package.json`} rel="noopener noreferrer">
-          <code>package.json</code>
-        </a>{' '}
-        and{' '}
-        <a href={`${repo}/blob/main/src-tauri/Cargo.toml`} rel="noopener noreferrer">
-          <code>Cargo.toml</code>
-        </a>
-        . Each package ships its own license file under{' '}
+        <a href={`${repo}/blob/main/package.json`} rel="noopener noreferrer"
+          ><code>package.json</code></a
+        >
+        {' '}and{' '}
+        <a href={`${repo}/blob/main/src-tauri/Cargo.toml`} rel="noopener noreferrer"
+          ><code>Cargo.toml</code></a
+        >. Each package ships its own license file under{' '}
         <code>node_modules/&lt;package&gt;/LICENSE</code> or the Cargo equivalent.
       </p>
     </section>
@@ -110,11 +106,11 @@ SOFTWARE.</pre>
     <section>
       <h2>Trademarks</h2>
       <p>
-        <strong>LumaSync</strong> and the brand mark are project identifiers. No trademark is
-        registered. You may refer to the project by name in reviews, comparisons, and documentation.
-        Please don't imply endorsement or official affiliation. <strong>Philips Hue</strong> and{' '}
-        <strong>Hue Sync</strong> are trademarks of Signify — referenced here only for
-        interoperability and comparison.
+        <strong>LumaSync</strong> and the brand mark are project identifiers. No trademark is registered.
+        You may refer to the project by name in reviews, comparisons, and documentation. Please don't
+        imply endorsement or official affiliation.{' '}
+        <strong>Philips Hue</strong> and <strong>Hue Sync</strong> are trademarks of Signify — referenced
+        here only for interoperability and comparison.
       </p>
     </section>
   </article>

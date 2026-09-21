@@ -128,11 +128,13 @@ const schemas = entry.data.draft
       </p>
       <h1 class="page-title">{entry.data.title}</h1>
       <p class="desc">{entry.data.description}</p>
-      {entry.data.draft && (
-        <p class="draft-banner" role="note">
-          <span class="pill">draft</span> This page is awaiting owner review. Content may change.
-        </p>
-      )}
+      {
+        entry.data.draft && (
+          <p class="draft-banner" role="note">
+            <span class="pill">draft</span> This page is awaiting owner review. Content may change.
+          </p>
+        )
+      }
     </header>
     <div class="prose">
       <Content />

@@ -34,7 +34,7 @@
     "dompurify": "^3.4.15",
     "isomorphic-dompurify": "^4.3.0",
     "prettier": "^3.9.8",
-    "prettier-plugin-astro": "^1.0.1",
+    "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "~6.0.3"
   },

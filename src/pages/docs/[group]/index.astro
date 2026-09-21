@@ -90,27 +90,30 @@ const schemas = [
     </header>
 
     <ul role="list" class="entries">
-      {items.map((item) => (
-        <li>
-          <a href={docHref(item)}>
-            <span class="title-row">
-              <span class="title">{item.data.title}</span>
-              {item.data.draft && <span class="pill">draft</span>}
-            </span>
-            <span class="desc">{item.data.description}</span>
-          </a>
-        </li>
-      ))}
+      {
+        items.map((item) => (
+          <li>
+            <a href={docHref(item)}>
+              <span class="title-row">
+                <span class="title">{item.data.title}</span>
+                {item.data.draft && <span class="pill">draft</span>}
+              </span>
+              <span class="desc">{item.data.description}</span>
+            </a>
+          </li>
+        ))
+      }
     </ul>
 
     <p class="meta">
-      Browse the full <a href="/docs/">documentation index</a> or jump to other groups:{' '}
-      {DOC_GROUPS.filter((g) => g !== group).map((g, i, arr) => (
-        <>
-          <a href={`/docs/${g}/`}>{DOC_GROUP_LABELS[g]}</a>
-          {i < arr.length - 1 ? ', ' : '.'}
-        </>
-      ))}
+      Browse the full <a href="/docs/">documentation index</a> or jump to other groups: {
+        DOC_GROUPS.filter((g) => g !== group).map((g, i, arr) => (
+          <>
+            <a href={`/docs/${g}/`}>{DOC_GROUP_LABELS[g]}</a>
+            {i < arr.length - 1 ? ', ' : '.'}
+          </>
+        ))
+      }
     </p>
   </section>
 </DocsLayout>

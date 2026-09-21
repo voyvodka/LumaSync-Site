@@ -25,13 +25,15 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
 
       {/* Desktop link row — hidden below 720px */}
       <ul class="nav-links" role="list">
-        {links.map(({ href, label }) => (
-          <li>
-            <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
-              {label}
-            </a>
-          </li>
-        ))}
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
 
       <div class="nav-controls">
@@ -48,12 +50,10 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
           <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
             <path
               d="M11 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-.7 3.3a5.5 5.5 0 1 1 1-1l2.7 2.7-1 1-2.7-2.7Z"
-              fill="currentColor"
-            ></path>
+              fill="currentColor"></path>
           </svg>
           <span class="search-kbd" aria-hidden="true">
-            <kbd>⌘</kbd>
-            <kbd>K</kbd>
+            <kbd>⌘</kbd><kbd>K</kbd>
           </span>
         </button>
 
@@ -73,8 +73,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
               stroke="currentColor"
               stroke-width="1.75"
               stroke-linecap="round"
-              fill="none"
-            ></path>
+              fill="none"></path>
           </svg>
         </button>
       </div>
@@ -109,19 +108,20 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
             stroke="currentColor"
             stroke-width="1.75"
             stroke-linecap="round"
-            fill="none"
-          ></path>
+            fill="none"></path>
         </svg>
       </button>
     </div>
     <ul class="mobile-nav-links" role="list">
-      {links.map(({ href, label }) => (
-        <li>
-          <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
-            {label}
-          </a>
-        </li>
-      ))}
+      {
+        links.map(({ href, label }) => (
+          <li>
+            <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
+              {label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </div>

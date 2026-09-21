@@ -44,36 +44,40 @@ const schemas = [
       <p class="eyebrow">Documentation</p>
       <h1 class="page-title">LumaSync Docs</h1>
       <p class="lede">
-        Everything needed to go from fresh install to a calibrated ambilight setup. Start with{' '}
-        <a href="/docs/getting-started/install/">Install</a>, then work through the group that
-        matches your hardware.
+        Everything needed to go from fresh install to a calibrated ambilight setup. Start with <a
+          href="/docs/getting-started/install/">Install</a
+        >, then work through the group that matches your hardware.
       </p>
     </header>
 
-    {totalCount === 0 && (
-      <p class="empty">
-        No docs published yet. The Phase 1 MVP ships in Week 2 per the action plan.
-      </p>
-    )}
+    {
+      totalCount === 0 && (
+        <p class="empty">
+          No docs published yet. The Phase 1 MVP ships in Week 2 per the action plan.
+        </p>
+      )
+    }
 
-    {groups.map(({ label, items }) => (
-      <section class="group">
-        <h2>{label}</h2>
-        <ul role="list">
-          {items.map((item) => (
-            <li>
-              <a href={docHref(item)}>
-                <span class="title-row">
-                  <span class="title">{item.data.title}</span>
-                  {item.data.draft && <span class="pill">draft</span>}
-                </span>
-                <span class="desc">{item.data.description}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
+    {
+      groups.map(({ label, items }) => (
+        <section class="group">
+          <h2>{label}</h2>
+          <ul role="list">
+            {items.map((item) => (
+              <li>
+                <a href={docHref(item)}>
+                  <span class="title-row">
+                    <span class="title">{item.data.title}</span>
+                    {item.data.draft && <span class="pill">draft</span>}
+                  </span>
+                  <span class="desc">{item.data.description}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
   </section>
 </DocsLayout>
 
