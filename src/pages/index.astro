@@ -3,7 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { articleSchema, faqPageSchema, itemListSchema, softwareAppSchema } from '../lib/seo';
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
 
-const title = 'LumaSync';
+// Brand first so the brand query still reads cleanly, then the category term
+// and the three sinks. Under 60 characters, which is roughly where the results
+// page truncates. "Philips Hue" earns its place on measured demand: it is the
+// site's highest-impression non-brand query family.
+const title = 'LumaSync — Ambilight for Philips Hue, WLED and WS2812B';
 // Kept under ~158 characters: past that the snippet is truncated in the
 // results page, and everything after the cut is copy nobody reads. The
 // positioning that used to sit in the tail now leads.
