@@ -13,16 +13,14 @@ interface Props {
 const { schemas } = Astro.props;
 ---
 
-{
-  schemas.map((schema) => (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(schema)
-        .replace(/</g, '\\u003c')
-        .replace(/>/g, '\\u003e')
-        .replace(/&/g, '\\u0026')
-        .replace(/'/g, '\\u0027')}
-    />
-  ))
-}
+{schemas.map((schema) => (
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(schema)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026')
+      .replace(/'/g, '\\u0027')}
+  ></script>
+))}

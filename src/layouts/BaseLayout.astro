@@ -80,11 +80,12 @@ const allSchemas = [...baseSchemas, ...schemas];
       noindex={effectiveNoindex}
     />
     <Schema schemas={allSchemas} />
-    {
-      umamiSiteId && umamiSrc && (
-        <script is:inline defer data-website-id={umamiSiteId} src={umamiSrc} />
-      )
-    }
+    {umamiSiteId && umamiSrc && <script
+      is:inline
+      defer
+      data-website-id={umamiSiteId}
+      src={umamiSrc}
+    ></script>}
   </head>
   <body>
     <SkipLink />
