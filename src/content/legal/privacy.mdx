@@ -3,7 +3,7 @@ title: Privacy
 effective: 2026-04-21
 ---
 
-LumaSync is designed to be **privacy-quiet by default**. The desktop app does not send usage, crash, or analytics data to any server. The website you are reading right now uses first-party, cookie-free analytics only. This page lays out exactly what is collected, where it lives, and who can see it.
+LumaSync is designed to be **privacy-quiet by default**. The desktop app does not send usage, crash, or analytics data to any server. The website you are reading right now collects no analytics at all. This page lays out exactly what is collected, where it lives, and who can see it.
 
 ## The desktop app
 
@@ -44,11 +44,13 @@ If the app crashes, the operating system may produce a crash report (macOS Diagn
 
 ## This website (`lumasync.app`)
 
-### Umami analytics (first-party, self-hosted)
+### Site analytics: none
 
-Page views, referrers, and a short list of user-agent signals are collected via **Umami**, running on our own server. Umami is cookie-free and does not record personal data by design, so no consent banner is required under GDPR / ePrivacy. Raw IPs are processed only long enough to derive an anonymised hash; no IP ever persists.
+The site currently runs **no analytics**: no page-view counter, no cookies, and no tracking script of any kind is loaded into your browser.
 
-Umami is enabled only when both environment variables (`PUBLIC_UMAMI_SITE_ID` + `PUBLIC_UMAMI_SRC`) are populated at build time. Local development builds do not emit the tracking script.
+What still exists is Cloudflare's own edge traffic data — the aggregate request counters any site behind a CDN has. It carries no per-visitor identifier, and no analytics product reads it.
+
+The source carries a dormant, opt-in integration for [Umami](https://umami.is/), a first-party cookie-free analytics package. The layout emits its tracking script only when both `PUBLIC_UMAMI_SITE_ID` and `PUBLIC_UMAMI_SRC` are populated at build time; neither is set on the production build. This notice will be updated in the same release that turns it on, not after.
 
 ### Third-party requests from the site
 
