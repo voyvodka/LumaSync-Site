@@ -4,6 +4,18 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.42] — 2026-09-21
+
+### Fixed
+
+- **Legacy aliases resolve in one edge 301 instead of two hops.** All thirteen entries in Astro's `redirects` map were taking two hops with a meta-refresh as the final step: Astro renders each entry as an HTML page carrying `http-equiv="refresh"`, and `trailingSlash: 'always'` 308s the slashless request before that page is ever reached — `/quick-start` → 308 → `/quick-start/` → meta-refresh → `/docs/getting-started/first-setup/`. The comment above the map claimed this was prevented and had been wrong for as long as it had been there; it addressed the redirect *target's* trailing slash, while the second hop comes from the *source's* missing one. Measured on all thirteen with a hop counter that follows meta-refresh, which `curl -L` does not. The rules move to `public/_redirects`, where this repo already resolves `/security` in a single hop, and where Cloudflare applies them "regardless of whether or not an asset matches the incoming request" — ahead of both the trailing-slash layer and the asset lookup. The stale comment describing an emission that no longer happens is gone, along with the `"/led-calibration/" has no <html> element` build warning those generated pages produced.
+- **The six docs group hubs have OG cards instead of a 404.** `/docs/getting-started/`, `/docs/hue/`, `/docs/usb-leds/`, `/docs/ambilight/`, `/docs/advanced/` and `/docs/reference/` each advertised an `og:image` that returned 404 — six of the forty URLs in the sitemap sharing a card that renders blank everywhere it is posted. `SEO.astro`'s `derivedOgPath()` strips the slashes off the pathname, so `/docs/hue/` asks for `/og/docs/hue.png`; the generator keyed every individual doc, every comparison page and both top-level hubs, but never the six group hubs in between, and a missing key produces a request-time 404 rather than a build error. The entries are now derived from `DOC_GROUPS` so a seventh group cannot reintroduce the gap, and `GROUP_LEDE` moved into `src/lib/content.ts` so the card and the page it fronts read from one source rather than two copies. `dist/og/` goes from 34 cards to 40, matching the sitemap exactly.
+- **`X-Markdown-Tokens` no longer reports `0` on a HEAD request.** `passThrough()` computed the estimate from `await response.text()` unconditionally, and on a bodyless HEAD response that resolves to an empty string — so the header went out as a confident zero. That is the worst possible wrong value: an agent probes with HEAD precisely to size the fetch before making it, which is the only reason the header exists, and zero says the document is empty rather than "no estimate available". The GET path is untouched and its verified numbers do not move; only the bodyless case falls back to the declared `Content-Length`, and with neither a body nor a length it now sends no estimate at all.
+
+### Changed
+
+- **`Last-Modified` reflects this release.** The middleware constant is bumped alongside the deploy, as the release checklist requires.
+
 ## [1.1.41] — 2026-09-21
 
 ### Fixed
