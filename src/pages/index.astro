@@ -4,8 +4,11 @@ import { articleSchema, faqPageSchema, itemListSchema, softwareAppSchema } from 
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
 
 const title = 'LumaSync';
+// Kept under ~158 characters: past that the snippet is truncated in the
+// results page, and everything after the cut is copy nobody reads. The
+// positioning that used to sit in the tail now leads.
 const description =
-  'LumaSync mirrors your screen to WS2812B / SK6812 RGBW LED strips over USB, WLED boards over Wi-Fi, and Philips Hue Entertainment areas — all from one source. Local-only, brand-agnostic, MIT-licensed.';
+  'Local-only, MIT-licensed ambilight: mirror your screen to WS2812B LED strips over USB, WLED boards over Wi-Fi, or Philips Hue Entertainment areas.';
 
 const repo = 'https://github.com/voyvodka/LumaSync';
 
