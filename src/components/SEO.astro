@@ -9,8 +9,16 @@ interface Props {
 
 const { title, description, canonical, ogImage, noindex } = Astro.props;
 
-const siteTitle = title === 'LumaSync' ? title : `${title} · LumaSync`;
-const ogAltText = title === 'LumaSync' ? 'LumaSync' : `${title} — LumaSync`;
+// Every page gets the brand appended except the homepage, which carries a
+// complete title of its own. Keyed on the route rather than on the title
+// string: the old `title === 'LumaSync'` test meant the homepage title could
+// never be anything but the bare brand name without doubling it, which is how
+// it stayed eight characters long. Comparison pages legitimately contain
+// "LumaSync" in their own titles and must keep the suffix, so a substring
+// test would be wrong here.
+const isHome = Astro.url.pathname === '/';
+const siteTitle = isHome ? title : `${title} · LumaSync`;
+const ogAltText = isHome ? 'LumaSync' : `${title} — LumaSync`;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 
 // Derive the OG path from the current URL. Matches the keys in
