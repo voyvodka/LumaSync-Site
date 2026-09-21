@@ -3,7 +3,7 @@ title: Telemetry
 description: What LumaSync measures locally — capture FPS, send FPS, queue health — where the numbers live on disk, and why none of them leave your machine.
 group: reference
 order: 30
-updated: 2026-08-15
+updated: 2026-09-21
 ---
 
 ## Zero network telemetry
@@ -108,25 +108,22 @@ These are OS-level artifacts. To help debug a crash, attach the relevant file to
 
 ## Anonymous metrics?
 
-The **app** collects nothing online. The **website** you are reading uses [Umami](https://umami.is/) — self-hosted on our own server, cookie-free, and GDPR-compatible without a consent banner.
+The **app** collects nothing online, and the **website** you are reading collects nothing either. There is no analytics script on this site — no page-view counter, no cookies, no custom event tracking. Nothing is loaded into your browser to measure the visit.
 
-What Umami records for each page view:
+What still exists is Cloudflare's own edge traffic data: the aggregate request counters any site behind a CDN has. It carries no per-visitor identifier, and no analytics product reads it.
 
-- URL path + HTTP referrer (where the visitor came from)
-- Country (derived from a daily-rotating salted IP hash; no raw IP ever persists and there is no city-level geolocation)
-- Browser, OS, and device type — bucketed from the User-Agent string
-- A small, explicit list of custom events: `download` (per OS), `outbound` (leaving to GitHub / Releases / Discussions / Discord), and `compare-cta` (comparison page call-to-action click). The full taxonomy lives in the site's action-plan document.
-
-What Umami does **not** record — by deliberate design, not by accident:
+Specifically **not** present on this site:
 
 - No cookies. No cross-site tracking. No device fingerprinting.
-- No raw IP address beyond the daily hash above.
-- No city-level or finer geolocation.
 - **No search queries.** The Cmd+K search modal is Pagefind and runs entirely in your browser; the string you type there never leaves your machine.
 - No heatmap, session replay, scroll tracking, or mouse-movement capture (no Hotjar / Clarity / FullStory / LogRocket / equivalent).
 - No email, name, or account identifier — the site has no accounts.
 
-The tracking script is served from our own `umami.lumasync.app` subdomain. It is not loaded from any third-party CDN. The desktop app (the thing you install) ignores the website entirely and does not talk to Umami.
+### The dormant Umami integration
+
+The site's source carries an opt-in integration for [Umami](https://umami.is/), a first-party cookie-free analytics package, along with `data-umami-event` attributes on the download buttons, the outbound footer links, and the comparison-page call-to-action. None of it does anything today: the layout emits a tracking script only when both `PUBLIC_UMAMI_SITE_ID` and `PUBLIC_UMAMI_SRC` are set at build time, and neither is set on the production build.
+
+If that ever changes, this page and the [privacy notice](/privacy/) get updated in the same release — before the script ships, not after.
 
 See [Privacy](/privacy/) for the short-form site privacy statement.
 
