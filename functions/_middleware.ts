@@ -85,16 +85,27 @@ async function passThrough(response: Response): Promise<Response> {
   }
 
   if (isMarkdown && !headers.has('X-Markdown-Tokens')) {
-    // Read the body so we can count. The .md payloads are ≤ ~20 KB each
-    // so buffering them on the edge is a non-issue.
-    const body = await response.text();
     // Rough heuristic: ~4 chars per token for English-dominant prose.
-    headers.set('X-Markdown-Tokens', String(Math.ceil(body.length / 4)));
-    return new Response(body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers,
-    });
+    if (response.body) {
+      // Read the body so we can count. The .md payloads are ≤ ~20 KB each
+      // so buffering them on the edge is a non-issue.
+      const body = await response.text();
+      headers.set('X-Markdown-Tokens', String(Math.ceil(body.length / 4)));
+      return new Response(body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
+    }
+    // A HEAD response has no body, so `response.text()` resolved to an empty
+    // string and this header went out as a confident `0` — the one value an
+    // agent sizing a fetch before making it must not be handed. Fall back to
+    // the length the origin declared, and when there is none, send no
+    // estimate at all: a missing advisory header is honest, a zero is not.
+    const declared = Number(headers.get('Content-Length'));
+    if (Number.isFinite(declared) && declared > 0) {
+      headers.set('X-Markdown-Tokens', String(Math.ceil(declared / 4)));
+    }
   }
 
   return new Response(response.body, {
