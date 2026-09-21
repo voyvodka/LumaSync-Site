@@ -41,7 +41,7 @@ Scan **what you are about to commit**, not the working tree. A tree-wide `grep -
 
 ```bash
 git diff HEAD                     # read every line — this is the actual gate
-D() { git diff HEAD -- . ':(exclude)pnpm-lock.yaml' | grep -E '^\+'; }
+D() { git diff HEAD -- . ':(exclude)bun.lock' | grep -E '^\+'; }
 
 # Private analytics and dashboard figures (gitleaks has no rule for these)
 D | grep -inE "GSC|[0-9]+ indexed|LCP P[0-9]+|unique visitor|cache hit ratio|[0-9.]+k requests|(Bing|ClaudeBot|Googlebot|PerplexityBot|ChatGPT-User) [0-9]+"
@@ -59,16 +59,16 @@ CI runs `gitleaks detect` over the **full history**, so a credential committed a
 
 ## What CI actually gates
 
-`ci.yml` runs seven checks; only the first is commonly remembered. Run `pnpm lint && pnpm check && pnpm build` locally before pushing, and expect the rest to bite in CI:
+`ci.yml` runs seven checks; only the first is commonly remembered. Run `bun run lint && bun run check && bun run build` locally before pushing, and expect the rest to bite in CI:
 
 | Gate | Fails on |
 | --- | --- |
-| `prettier --check` | any unformatted file — run `pnpm format` first |
+| `prettier --check` | any unformatted file — run `bun run format` first |
 | `astro check` | TypeScript or content-schema (zod) errors |
-| `pnpm build` | build failure, including the Pagefind index step |
+| `bun run build` | build failure, including the Pagefind index step |
 | Lighthouse CI | **accessibility below 0.95 is a hard fail**; performance / best-practices / SEO only warn |
 | License audit | GPL\* / AGPL\* / SSPL / unknown licence entering **prod** deps (LGPL and WTFPL are allowed) |
-| `pnpm audit --prod` | a new high-severity CVE in the shipped tree — the usual fix is a `pnpm.overrides` floor |
+| `bun audit` | a new high-severity CVE anywhere in the tree, dev dependencies included (Bun has no `--prod` audit) — the usual fix is an `overrides` floor; a dev-only advisory with no fix gets `--ignore=<GHSA>` |
 | gitleaks | a credential anywhere in history |
 
 CodeQL runs as a separate workflow.
@@ -99,14 +99,15 @@ Cutting a release:
 1. Bump `LAST_MODIFIED` in `functions/_middleware.ts` to now (`date -u "+%a, %d %b %Y %H:%M:%S GMT"`). It is a hardcoded constant serving the global `Last-Modified` header; a stale value costs freshness signal with answer engines.
 2. Set `updated:` in the frontmatter of every MDX file whose content changed, to the date it changed. It feeds JSON-LD `dateModified`. Leave `effective:` on the privacy notice alone unless the policy itself changed — correcting a description is not amending a policy.
 3. Write the `[x.y.z]` CHANGELOG section: one bullet per change, each opening with a bolded one-line claim followed by the reasoning and the evidence. Long bullets are the house style — the section is reused verbatim as the GitHub Release body, so write it to be read there.
-4. `pnpm format`, commit, wait for CI, annotated tag, push the tag, `gh release create --notes-file`.
+4. `bun run format`, commit, wait for CI, annotated tag, push the tag, `gh release create --notes-file`.
 5. **Publishing the release is the deploy.** Verify by content afterwards (see below).
 
 Before a release that touches URLs, sweep all eight trailing-slash surfaces — header, footer, body links, JSON-LD schemas, href helpers, the redirect table in `astro.config.mjs`, `llms.txt`, and MDX content. `trailingSlash: 'always'` is load-bearing: a mismatch puts every sitemap entry behind a 308 and stalls indexing.
 
 ## Build + deploy
 
-- `pnpm build` from a clean `unset PUBLIC_SITE_STAGE` env. Never set `PUBLIC_SITE_STAGE=beta` for production — it forces `noindex` sitewide. There is no staging environment; the conditional blocks referencing it are deliberate safety nets, not dead code.
+- Always `bun run <script>`, never the bare shorthand for `build`: `bun build` is Bun's own bundler, not the package script, and silently produces nothing useful. Bun is the package manager only — Astro, Pagefind and lhci still run on Node (`.nvmrc`).
+- `bun run build` from a clean `unset PUBLIC_SITE_STAGE` env. Never set `PUBLIC_SITE_STAGE=beta` for production — it forces `noindex` sitewide. There is no staging environment; the conditional blocks referencing it are deliberate safety nets, not dead code.
 - Deploy is release-gated: `deploy.yml` fires on `release: [published]` and `workflow_dispatch` only. **Pushing to `main` ships nothing** — a merged content PR stays dark until a version is tagged and released. This gap once left corrected documentation unpublished for five days.
 - Ad-hoc redeploy of current `main` without a version bump: `gh workflow run deploy.yml`.
 - Manual fallback: `npx wrangler pages deploy dist --project-name=lumasync-site --branch=main --commit-dirty=true`. Run from this directory — never let `npx wrangler` fall back to a parent-directory config.

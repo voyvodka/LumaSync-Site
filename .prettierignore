@@ -1,7 +1,7 @@
 dist
 .astro
 node_modules
-pnpm-lock.yaml
+bun.lock
 vendor
 public/pagefind
 public/og

@@ -15,14 +15,14 @@ Marketing site, docs, and blog for [**LumaSync**](https://github.com/voyvodka/Lu
 
 ## Develop
 
-Requires Node 22.12+ and pnpm (pinned via `packageManager` in `package.json`).
+Requires Node 22.12+ and Bun (pinned via `packageManager` in `package.json`). Bun is the package manager only; the build itself runs on Node.
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:4321
-pnpm lint       # prettier --check
-pnpm check      # astro check (type-check + content schema)
-pnpm build      # astro build + pagefind index
+bun install
+bun run dev     # http://localhost:4321
+bun run lint    # prettier --check
+bun run check    # astro check (type-check + content schema)
+bun run build    # astro build + pagefind index
 ```
 
 ## Deploy

@@ -10,19 +10,19 @@ Thanks for wanting to help. This repo is **only the LumaSync marketing site and 
 
 ## Local setup
 
-Requires Node 22+ and pnpm (pinned via `packageManager` in `package.json`).
+Requires Node 22+ and Bun (pinned via `packageManager` in `package.json`).
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:4321
+bun install
+bun run dev     # http://localhost:4321
 ```
 
 Before pushing, run all three gates locally — CI will fail if any does:
 
 ```bash
-pnpm lint       # prettier --check
-pnpm check      # astro check
-pnpm build      # full production build + pagefind index
+bun run lint    # prettier --check
+bun run check    # astro check
+bun run build    # full production build + pagefind index
 ```
 
 ## Content conventions
@@ -30,7 +30,7 @@ pnpm build      # full production build + pagefind index
 - MDX files live under `src/content/<collection>/`. Each collection has a schema in `src/content/config.ts` — keep frontmatter consistent with existing entries.
 - `description` ≤ 160 characters (SEO + OG card fit).
 - Version strings in copy: use `{LATEST_VERSION}` / `{LATEST_VERSION_DATE}` imports from `src/lib/version`, never hard-code. They resolve at build time from the vendored LumaSync changelog.
-- Drafts: set `draft: true` in frontmatter. Drafts are excluded from production builds; preview them locally via `pnpm dev`.
+- Drafts: set `draft: true` in frontmatter. Drafts are excluded from production builds; preview them locally via `bun run dev`.
 - Don't claim features that aren't shipped. Cross-check [`vendor/lumasync/CHANGELOG.md`](vendor/lumasync/CHANGELOG.md).
 
 ## Commit messages
