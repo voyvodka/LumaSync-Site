@@ -4,6 +4,22 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.43] — 2026-09-21
+
+### Fixed
+
+- **The homepage has a title longer than its own brand name.** `<title>` was `LumaSync` — eight characters, no category term, nothing for a non-brand query to match, and short enough to be a standing invitation for Google to write its own title instead. It now reads `LumaSync — Ambilight for Philips Hue, WLED and WS2812B`: 54 characters, brand first so the brand query still reads cleanly, then the category term the site already uses for itself throughout, then the three sinks the app drives. "Philips Hue" earns its place on measured demand rather than on taste — `hue entertainment area` and `philips hue entertainment area` are the site's highest-impression non-brand queries, and the homepage carried no text matching either. Nothing in the new title is a new claim. `SEO.astro`'s suffix rule moved from a `title === 'LumaSync'` string test to a route check: that test was really asking "is this the homepage", which is why the homepage title could never be anything but the bare brand without doubling into `… · LumaSync`. A substring test would have been wrong — comparison pages carry "LumaSync" in their own titles and keep the suffix.
+- **The homepage description fits the snippet.** It was 201 characters against a display limit around 155–160, so `Local-only, brand-agnostic, MIT-licensed` — the positioning, and the part a reader most needs — was cut on every result. The rewritten 146-character version leads with it. `Philips Hue Entertainment areas` is kept in full rather than shortened: that exact phrase is a query the site already receives impressions for, and trading a keyword match for four characters is a bad trade.
+- **`/sitemap.xml` answers instead of 404ing.** Nothing was broken — Astro's sitemap integration names the index `sitemap-index.xml`, robots.txt points at it, and Search Console has it submitted and reading successfully. But crawlers and audit tools probe the conventional path by habit. It now forwards with a 301 from `public/_redirects` rather than duplicating the file, so there stays one sitemap with one generator.
+
+### Changed
+
+- **`Last-Modified` reflects this release.**
+
+### Not changed, deliberately
+
+- A GEO audit scores the site's AI-bot posture as three critical failures — `GPTBot`, `CCBot` and `Bytespider` blocked. All three are **training** crawlers, and the tooling's claim that blocking `GPTBot` costs ChatGPT search visibility is wrong per OpenAI's own bot documentation: that is `OAI-SearchBot`'s job. The live `robots.txt` allows every retrieval crawler — `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Claude-User` — so citation visibility is intact and the score is low by choice. Recorded here so the next audit does not read it as a regression and "fix" it.
+
 ## [1.1.42] — 2026-09-21
 
 ### Fixed
