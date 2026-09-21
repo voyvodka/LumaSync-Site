@@ -8,3 +8,46 @@
 # so manual /security probes don't 404.
 /security   /.well-known/security.txt  301
 /security/  /.well-known/security.txt  301
+
+# Legacy slugs and search-intent aliases. These lived in astro.config.mjs's
+# `redirects` map until 2026-09-21, where Astro rendered each one as an HTML
+# page carrying a meta-refresh. That shape cost two hops, not one: the
+# slashless request first took a 308 from `trailingSlash: 'always'`, and only
+# the resulting `/alias/` page fired the refresh. Measured on all thirteen.
+#
+# Cloudflare Pages applies this file "regardless of whether or not an asset
+# matches the incoming request", so an edge rule lands ahead of both the
+# trailing-slash layer and the asset lookup — one 301, no HTML, no refresh.
+# Both shapes of each source are listed because a rule matches one exact path.
+
+# Renamed pages.
+/docs/advanced/scenes-and-presets    /docs/advanced/scenes/          301
+/docs/advanced/scenes-and-presets/   /docs/advanced/scenes/          301
+/docs/usb-leds/adalight-protocol     /docs/usb-leds/serial-protocol/ 301
+/docs/usb-leds/adalight-protocol/    /docs/usb-leds/serial-protocol/ 301
+
+# Search-intent aliases — users (and Gemini AI Overview) type "lumasync quick
+# start" / "lumasync led calibration" but the canonical slugs are first-setup
+# and usb-leds/calibration.
+/quick-start                         /docs/getting-started/first-setup/ 301
+/quick-start/                        /docs/getting-started/first-setup/ 301
+/docs/getting-started/quick-start    /docs/getting-started/first-setup/ 301
+/docs/getting-started/quick-start/   /docs/getting-started/first-setup/ 301
+/led-calibration                     /docs/usb-leds/calibration/        301
+/led-calibration/                    /docs/usb-leds/calibration/        301
+/docs/concepts/led-calibration       /docs/usb-leds/calibration/        301
+/docs/concepts/led-calibration/      /docs/usb-leds/calibration/        301
+/hue-pairing                         /docs/hue/pairing/                 301
+/hue-pairing/                        /docs/hue/pairing/                 301
+/hue-entertainment                   /docs/hue/entertainment-area/      301
+/hue-entertainment/                  /docs/hue/entertainment-area/      301
+/usb-setup                           /docs/usb-leds/controllers/        301
+/usb-setup/                          /docs/usb-leds/controllers/        301
+/serialport                          /docs/usb-leds/serial-protocol/    301
+/serialport/                         /docs/usb-leds/serial-protocol/    301
+/screens                             /docs/ambilight/screen-capture/    301
+/screens/                            /docs/ambilight/screen-capture/    301
+/multi-monitor                       /docs/advanced/multi-display/      301
+/multi-monitor/                      /docs/advanced/multi-display/      301
+/compare-tools                       /compare/                          301
+/compare-tools/                      /compare/                          301
