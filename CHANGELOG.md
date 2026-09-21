@@ -4,6 +4,19 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.41] — 2026-09-21
+
+### Fixed
+
+- **The site stopped claiming analytics it does not run.** The privacy notice, the [telemetry reference](https://lumasync.app/docs/reference/telemetry/) and `llms.txt` all described lumasync.app as collecting aggregate page metrics through self-hosted Umami at `umami.lumasync.app` — down to a field-by-field list of what was recorded per page view. None of it was running. The subdomain is NXDOMAIN, the Pages production environment sets neither `PUBLIC_UMAMI_SITE_ID` nor `PUBLIC_UMAMI_SRC`, so the layout's guard has never been true in production, and the served HTML carries no tracking script of any kind; the site's own CSP (`script-src 'self'`, `connect-src 'self'`) would have blocked the script from that origin regardless. All three surfaces now say the site collects nothing, name Cloudflare's edge traffic data as the only record of a visit, and describe the Umami wiring accurately — present in the source, dormant, gated on two build variables production does not set. `effective:` on the privacy notice is unchanged: the policy did not change, its description of the site was wrong.
+- **Every external footer link carries `rel="noopener noreferrer"`, not just the tracked ones.** The attribute was gated on `link.umamiTarget`, so a link's reverse-tabnabbing and `Referer`-leak protection depended on whether someone had remembered to tag it for analytics. The condition now reads the URL itself.
+- **`fflate` is floored at 0.7.5, closing [GHSA-px8p-9vwx-vf98](https://github.com/advisories/GHSA-px8p-9vwx-vf98).** Satori pulled 0.7.3 transitively — twice — into the shipped tree, where `unzipSync` can spin forever on a malformed ZIP64 archive. Rated moderate, so it sat under the CI audit gate's high threshold and never failed a build; `pnpm audit --prod` now reports no known vulnerabilities at all. The override is capped below 0.8.0 on purpose: an open-ended floor resolves to 0.8.3, which changes how `@shuding/opentype.js` decodes the bundled WOFF fonts and turns **every OG image on the site into rows of tofu boxes** — while the build exits 0, warns about nothing, and writes 28 valid 1200×630 PNGs. Caught by decoding the PNG pixel data and diffing it against a pre-change build.
+
+### Changed
+
+- **Dependencies moved to latest stable, with three deliberate exceptions.** Astro 7.2.2 → 7.3.3, `@astrojs/mdx` 7.0.5 → 8.0.1, `@astrojs/sitemap` 3.7.3 → 3.7.4, Satori 0.29.0 → 0.33.4, `marked` 18.0.9 → 18.0.13, DOMPurify 3.4.13 → 3.4.15, `isomorphic-dompurify` 3.22.0 → 4.3.0, Prettier 3.9.6 → 3.9.8, and `pnpm/action-setup` 6.0.10 → 6.1.0 in both workflows. Held back: **TypeScript stays on 6.x** because `astro check` refuses to run against the 7.x native compiler, which does not yet expose the programmatic API the language server drives — upgrading turns a CI gate into a hard failure with no diagnostics. **`prettier-plugin-astro` stays on 0.14.1** because 1.0.1 does not converge; formatting `src/pages/index.astro` four times in a row produces four different files, so `prettier --check` can never pass against it. **`@astrojs/language-server` is pinned to 2.16.13** through `pnpm.overrides` because 2.17.0 mis-parses the multi-line `set:html` expression in `Schema.astro` and reports five phantom syntax errors on a file `astro build` compiles without complaint.
+- **The build output was verified unchanged across the upgrade.** Every emitted file is byte-identical to a pre-upgrade build except the three Pagefind core scripts, which `stamp-pagefind.mjs` rewrites on each build by design, and the sitemap's `lastmod` values, which derive from source-file mtimes.
+
 ## [1.1.40] — 2026-08-20
 
 ### Fixed
