@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { getCollection } from 'astro:content';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
-import { listDocs, DOC_GROUP_LABELS } from '../../lib/content';
+import { listDocs, DOC_GROUPS, DOC_GROUP_LABELS, GROUP_LEDE } from '../../lib/content';
 
 // Dynamic OG generator per .thinking/02-website.md § #6.
 //
@@ -112,10 +112,15 @@ const statics: Array<{ id: string; entry: OgEntry }> = [
       category: 'Legal',
     },
   },
-  // Listing/hub index pages. SEO.astro's derivedOgPath() maps `/docs/` ->
-  // `docs` and `/compare/` -> `compare`, so these keys must exist or the
-  // hub pages' og:image 404s (the per-slug docs/compare cards are keyed
-  // separately above via the docs/compare maps).
+  // Listing/hub index pages. SEO.astro's derivedOgPath() strips the slashes
+  // off the pathname, so `/docs/` asks for `docs` and `/compare/` for
+  // `compare`. A hub with no key here serves a 404 for its og:image, which
+  // renders as a blank social card rather than as any kind of build error.
+  //
+  // The six `/docs/<group>/` hubs used to be exactly that: keys nobody had
+  // added, 404ing since the group pages shipped. They are derived from
+  // DOC_GROUPS below instead of listed, so adding a seventh group cannot
+  // bring the gap back.
   {
     id: 'docs',
     entry: {
@@ -134,8 +139,17 @@ const statics: Array<{ id: string; entry: OgEntry }> = [
   },
 ];
 
+const docGroups = DOC_GROUPS.map((group) => ({
+  id: `docs/${group}`,
+  entry: {
+    title: DOC_GROUP_LABELS[group],
+    description: GROUP_LEDE[group].lede,
+    category: `Docs · ${DOC_GROUP_LABELS[group]}`,
+  },
+}));
+
 const pages: Record<string, OgEntry> = Object.fromEntries(
-  [...statics, ...docs, ...compare].map(({ id, entry }) => [id, entry]),
+  [...statics, ...docGroups, ...docs, ...compare].map(({ id, entry }) => [id, entry]),
 );
 
 // ─── Template ─────────────────────────────────
