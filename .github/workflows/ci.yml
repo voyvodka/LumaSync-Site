@@ -23,15 +23,18 @@ jobs:
 
       # Third-party Actions pinned to commit SHAs to defeat tag repointing
       # (supply-chain). Dependabot keeps the version comments current.
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      # Bun is the package manager only; Astro, Pagefind and lhci still run on
+      # Node, so setup-node stays.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
 
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: License audit (fail on strict copyleft in prod deps)
         # MIT-licensed project can't ship strict copyleft in its
@@ -43,7 +46,7 @@ jobs:
         # satisfied. WTFPL is permissive despite the name and is also
         # allowed. Dev deps are excluded — tooling copyleft is fine.
         run: |
-          LICENSES=$(pnpm licenses list --prod --long --json 2>&1)
+          LICENSES=$(bun pm licenses --prod --json 2>&1)
           echo "$LICENSES" | grep -oE '"license":\s*"[^"]*"' | sort -u | head -30
           if echo "$LICENSES" | grep -iE '"license":\s*"(A?GPL-[^"]*|SSPL[^"]*|UNKNOWN|UNLICENSED)"'; then
             echo "::error::Strict copyleft or unknown license found in production dependencies."
@@ -51,23 +54,22 @@ jobs:
           fi
 
       # The license audit above is compliance, not vulnerability scanning.
-      # This gates on published CVEs in the SHIPPED dependency tree only
-      # (--prod) at the high+ threshold, so a build-time-only advisory
-      # (e.g. the transitive `yaml` dev dependency) doesn't fail a PR while
-      # a high-severity CVE introduced into prod deps does.
-      - name: Dependency audit (fail on high-severity prod CVEs)
-        run: pnpm audit --prod --audit-level=high
+      # `bun audit` has no --prod flag, so this gates on high+ CVEs across
+      # the whole tree, dev dependencies included. A dev-only advisory with
+      # no fix yet is waived with --ignore=<GHSA id>, not by dropping the gate.
+      - name: Dependency audit (fail on high-severity CVEs)
+        run: bun audit --audit-level=high
 
       - name: Lint (prettier --check)
-        run: pnpm lint
+        run: bun run lint
 
       # Astro + TypeScript + zod content schema check. Runs before build
       # so type regressions fail fast without waiting for the full bundle.
       - name: Type check (astro check)
-        run: pnpm check
+        run: bun run check
 
       - name: Build
-        run: pnpm build
+        run: bun run build
 
       # Enforces the a11y budget from .thinking/02-website.md § #14.
       # accessibility >= 0.95 is hard-fail; perf/best-practices/seo are warn.
@@ -80,7 +82,7 @@ jobs:
       # lighthouserc.json once lhci ships a build bundling Lighthouse >= 13.3.0
       # (0.15.1 still bundles 12.6.x, which has no such category).
       - name: Lighthouse CI
-        run: pnpm dlx @lhci/cli@0.15.1 autorun
+        run: bunx @lhci/cli@0.15.1 autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
