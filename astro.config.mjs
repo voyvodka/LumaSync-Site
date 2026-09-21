@@ -69,30 +69,11 @@ export default defineConfig({
   // so Google doesn't index the redirect form (which was previously
   // blocking sub-page indexing).
   trailingSlash: 'always',
-  // Legacy URL → new slug. Keeps old references (external blogs, cached
-  // search results) from 404-ing after the scenes-and-presets → scenes
-  // rename. Astro emits a small meta-refresh HTML at the old path.
-  redirects: {
-    '/docs/advanced/scenes-and-presets': '/docs/advanced/scenes/',
-    '/docs/usb-leds/adalight-protocol': '/docs/usb-leds/serial-protocol/',
-    // Search-intent aliases — users (and Gemini AI Overview) type
-    // "lumasync quick start" / "lumasync led calibration" but the
-    // canonical slugs are first-setup / usb-leds/calibration.
-    // Targets carry the trailing slash to match `trailingSlash: 'always'`
-    // — without it, the meta-refresh hits a 308 and Googlebot sees a
-    // 2-hop chain (surfaced as GSC "Redirect error").
-    '/quick-start': '/docs/getting-started/first-setup/',
-    '/docs/getting-started/quick-start': '/docs/getting-started/first-setup/',
-    '/led-calibration': '/docs/usb-leds/calibration/',
-    '/docs/concepts/led-calibration': '/docs/usb-leds/calibration/',
-    '/hue-pairing': '/docs/hue/pairing/',
-    '/hue-entertainment': '/docs/hue/entertainment-area/',
-    '/usb-setup': '/docs/usb-leds/controllers/',
-    '/serialport': '/docs/usb-leds/serial-protocol/',
-    '/screens': '/docs/ambilight/screen-capture/',
-    '/multi-monitor': '/docs/advanced/multi-display/',
-    '/compare-tools': '/compare/',
-  },
+  // Aliases and legacy slugs live in `public/_redirects`, not here. Astro's
+  // `redirects` map renders each entry as an HTML page with a meta-refresh,
+  // which costs a second hop once `trailingSlash: 'always'` has already 308'd
+  // the slashless request. The edge rules resolve in one 301 — verified with
+  // the hop-count probe, not assumed.
   integrations: [
     mdx(),
     sitemap({
