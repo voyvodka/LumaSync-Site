@@ -4,6 +4,29 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.45] — 2026-09-25
+
+### Fixed
+
+- **Wayland is described the way the app actually behaves.** Four surfaces — the screen-capture, multi-display and install docs and the homepage Linux card — said Wayland sessions capture through XWayland, and the screen-capture page presented the portal dialog as a defined fallback. The app's capture source says otherwise: xcap detects a Wayland session itself and falls through to PipeWire / `xdg-desktop-portal`, a path LumaSync neither blocks nor tests. The performance page already said so; the other four now agree with it — Wayland is not a supported capture path, use an X11 session.
+- **`llms.txt` no longer names a config file the app does not write.** Its config-reference entry still pointed at `~/.config/lumasync/app.json`, the claim v1.1.40 withdrew from the docs but missed in the hand-written file answer engines read first. It now names `shell-state.json`, matching the reference page.
+- **`robots.txt` enforces its own `ai-train=no`.** `ClaudeBot` sat under the retrieval heading and was allowed, but Anthropic documents it as the crawler that collects content for training; citation in Claude runs through `Claude-SearchBot` and `Claude-User`. `Applebot-Extended` was allowed too, and Apple documents it as the opt-out from training its foundation models, one that leaves Apple search inclusion untouched. Both are now disallowed, `Claude-SearchBot` is allowed by name, and the retired `anthropic-ai` token — which looked like coverage and controlled nothing — is gone.
+- **`robots.txt` passes Lighthouse's validity audit.** The `Content-Usage` (IETF AIPREF) line was reported as an unknown directive, which failed the `robots-txt` audit and held the SEO category below 100 on both form factors. The drafts are unratified and no crawler is known to read the line, so it was costing a score for a declaration with no effect. `Content-Signal` passes the audit and stays.
+- **`/favicon.ico` exists.** It returned 404 to every browser and client that probes the conventional path, and left browsers without SVG favicon support (Safari before 26) on the PNG fallback at best. It is now packed at build time from the pixel-hinted 16/32/48 brand SVGs and linked alongside the SVG.
+- **The search button's accessible name contains its visible label.** Lighthouse's label-in-name audit flagged `aria-label="Open search"` against the visible `⌘K`.
+
+### Changed
+
+- **Homepage screenshots are served at the size they are displayed.** Every screenshot shipped as one 1850px file while rendering at 348–578px on desktop and the viewport width on mobile; Lighthouse counted 130 KiB (mobile) to 183 KiB (desktop) of avoidable bytes, the hero — the LCP element — among them. The sources moved to `src/assets/` and render through `astro:assets` with 480–1600w WebP srcsets and PNG fallbacks. They land under `/_astro/` with content-hashed names, so the existing immutable cache rule covers them and the `/media/*` rule went with the directory.
+- **Descriptions fit the snippet.** Five page descriptions and two docs-group ledes ran past 160 characters; each was trimmed without changing what it says.
+- **`mask-icon` is gone** — Safari's pinned-tab icon, undocumented by Apple for years.
+- **`Last-Modified` reflects this release.**
+
+### Not changed, deliberately
+
+- **Critical CSS is not inlined.** Lighthouse lists the two stylesheets as render-blocking. Astro inlines by `vite.build.assetsInlineLimit`, and raising it far enough to cover the homepage stylesheet would also base64 the smaller font subsets into CSS and defeat their preloads.
+- **Best Practices is held below 100 by a script this repository does not ship.** Both deprecation warnings come from `/cdn-cgi/challenge-platform/scripts/jsd/main.js`, injected at the edge by Cloudflare's JavaScript Detections, which Bot Fight Mode enables and does not allow switching off. It is a zone setting, not code; a local build without it scores 100.
+
 ## [1.1.44] — 2026-09-21
 
 ### Changed
