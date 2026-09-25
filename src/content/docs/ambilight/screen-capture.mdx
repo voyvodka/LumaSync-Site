@@ -3,7 +3,7 @@ title: Screen capture
 description: How LumaSync reads your screen, the OS permissions each platform asks for, and why the macOS prompt arrives on first launch.
 group: ambilight
 order: 10
-updated: 2026-05-05
+updated: 2026-09-25
 ---
 
 The ambilight pipeline samples your screen every frame, reduces it to a small colour grid, and pushes that grid to USB LEDs and Hue Entertainment Areas. This page covers the **capture** step — what OS permissions are required, and what to do when they're missing.
@@ -47,9 +47,7 @@ A **hardware-accelerated downscale scaffold** landed in v1.5.0 — the frame bui
 From v1.5.0, LumaSync ships native Linux X11 capture via [xcap](https://github.com/nashaofu/xcap) — same daily-driver path as macOS / Windows, no portal dialogs, no per-session prompts. The AppImage / deb / rpm bundle the X11 dependencies (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
 
 - **X11 sessions**: capture works without prompts. Good.
-- **Wayland sessions**: LumaSync runs under XWayland for capture. Native Wayland portals (`xdg-desktop-portal-screenshot`, PipeWire) trigger a portal dialog per session and aren't currently a default code path; the XWayland fallback is what most setups will hit.
-
-If you're on a Wayland-only compositor where XWayland isn't installed, the AppImage will fall back to portal-based capture and surface the per-session dialog — that's the OS-side guardrail, not a LumaSync setting.
+- **Wayland sessions**: not a supported capture path. On a Wayland session the capture library detects it and falls through to PipeWire / `xdg-desktop-portal` on its own. LumaSync does not block that path, but it is untested — it may surface the portal's permission dialog, and whether it captures at all is not something we can promise. Log in to an X11 session for dependable capture.
 
 ## Multiple displays
 
