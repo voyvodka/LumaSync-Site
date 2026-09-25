@@ -37,11 +37,11 @@ export const GROUP_LEDE: Record<DocGroup, { lede: string; keywords: string }> = 
     keywords: 'Philips Hue, Hue bridge, Entertainment Area, DTLS, pairing, setup',
   },
   'usb-leds': {
-    lede: 'Connect a CH340 or FT232 USB-serial controller, calibrate your WS2812B LED strip layout, and pick the right serial protocol — LumaSync v1 frame or Adalight profile.',
+    lede: 'Connect a CH340 or FT232 USB-serial controller, calibrate your WS2812B strip layout, and pick the serial protocol — LumaSync v1 frame or Adalight profile.',
     keywords: 'WS2812B, USB-serial, CH340, FT232, LED calibration, Adalight, controller',
   },
   ambilight: {
-    lede: 'Configure screen capture (handle macOS / Windows / Linux screen-recording permissions), tune ambilight performance (latency, FPS), and adjust colour per channel.',
+    lede: 'Configure screen capture and its macOS / Windows / Linux permissions, tune ambilight performance (latency, FPS), and adjust colour per channel.',
     keywords:
       'ambilight, screen capture, screen recording, latency, FPS, performance, tuning, colour',
   },

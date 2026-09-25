@@ -4,7 +4,7 @@
   Source:     https://github.com/voyvodka/LumaSync
 
 /* SITE */
-  Last update: 2026-05-29
+  Last update: 2026-09-25
   Language:    English
   Doctype:     HTML5
   IDE:         VS Code
@@ -13,6 +13,7 @@
   Framework:   Astro
   Search:      Pagefind
   Fonts:       IBM Plex Sans, IBM Plex Mono, Instrument Serif
+  Images:      astro:assets (sharp)
   OG images:   Satori + resvg
   Deploy:      Cloudflare Pages
 
