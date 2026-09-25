@@ -4,6 +4,19 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.46] — 2026-09-25
+
+### Fixed
+
+- **The ambient-mode callout shows ambient mode.** Its image was a byte-identical copy of the full-mode screenshot — the app in **Solid** mode, no capture running — under a section headed "Real-time screen capture". It is now a crop of the edge-signal panel from the real hero screenshot: Ambilight active, the capture-to-strip preview with per-edge LED counts, the app's own Δ/Σ reading, and the smoothing, saturation and black-border controls. v1.1.45's move to responsive images surfaced the duplicate, because both files hashed to the same output.
+- **No invented telemetry over the screenshot.** A static `Δ 12 ms · Σ 60 fps` pill sat on top of that image as page markup. The panel underneath now carries the app's real reading, so the overlay went rather than contradict it.
+- **The install page names the libraries the AppImage actually ships.** It said the AppImage bundles `libxcb`, `libxrandr`, `libpipewire` and `libdbus`. Listing the v1.5.4 AppImage shows no `libpipewire` at all, and the binary links `libxcb.so.1` from the system rather than a bundled copy; GTK 3, WebKitGTK 4.1, `libudev` and `libdbus` are bundled. The sentence now says exactly that.
+- **Image alt text describes the image.** The ambient and full-mode screenshots had alts naming things their images did not show.
+
+### Changed
+
+- **`Last-Modified` reflects this release.**
+
 ## [1.1.45] — 2026-09-25
 
 ### Fixed
