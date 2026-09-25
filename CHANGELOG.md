@@ -4,6 +4,17 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.48] — 2026-09-25
+
+### Fixed
+
+- **The homepage roadmap no longer promises Wayland capture for v1.6.** It listed Wayland screen capture via `xdg-desktop-portal` under "v1.6 — queued". The shipped app's own source (v1.5.4) says Wayland hardening lands in v2.0, and the app's newest line deliberately names no release for it at all, because two of its own documents had promised different versions. The item now says no release is committed, the way the OpenRGB item already carries its own track. The Wayland descriptions on the screen-capture, install, multi-display and performance pages were checked against the pinned source and already matched it.
+- **The screen-capture page names the libraries the Linux packages actually carry.** It still said the AppImage, deb and rpm bundle `libxcb`, `libxrandr`, `libpipewire` and `libdbus` — the sentence v1.1.46 corrected on the install page after listing the v1.5.4 AppImage, left standing on its sibling page. It now says the AppImage bundles GTK 3, WebKitGTK 4.1, `libudev` and `libdbus` and uses the system `libxcb`, and points at the install page.
+
+### Changed
+
+- **`Last-Modified` reflects this release.**
+
 ## [1.1.47] — 2026-09-25
 
 ### Fixed
