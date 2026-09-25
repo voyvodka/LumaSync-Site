@@ -4,6 +4,21 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.47] — 2026-09-25
+
+### Fixed
+
+- **Structured-data dates are full datetimes.** Google's Rich Results Test flagged the homepage `Article` with four non-critical issues: `datePublished` and `dateModified` were invalid datetime values with no timezone. Both were bare `YYYY-MM-DD`, and the comparison pages emitted the same shape. The schema builders now pin a date-only input to UTC midnight (`2026-08-10T00:00:00Z`) and pass full timestamps through untouched, so every page is covered from one place.
+- **The `SoftwareApplication` node's `@id` carries the trailing slash.** It was `/download#software` on a site that canonicalises to `/download/` — the JSON-LD surface of the trailing-slash rule.
+
+### Changed
+
+- **`Last-Modified` reflects this release.**
+
+### Not changed, deliberately
+
+- **No `aggregateRating`.** The Rich Results Test lists it as a missing optional field on `SoftwareApplication`. There are no user ratings to cite, and a self-authored rating is not something to put in markup.
+
 ## [1.1.46] — 2026-09-25
 
 ### Fixed
