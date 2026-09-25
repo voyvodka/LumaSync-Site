@@ -3,7 +3,7 @@ title: Working with multiple displays
 description: Which display LumaSync captures from, how to change it, and the one-capture-source constraint that shapes everything else.
 group: advanced
 order: 30
-updated: 2026-08-15
+updated: 2026-09-25
 ---
 
 import { LATEST_VERSION } from '../../../lib/version';
@@ -34,7 +34,7 @@ When you plug or unplug an external monitor mid-session:
 
 - **Windows and macOS** emit display-changed events that LumaSync subscribes to; the dropdown updates within ~500 ms and the current selection falls back to primary if the previously-selected display disappeared.
 - **Linux (X11)** uses the **xcap** backend (added in v1.5.0) and listens for RandR events; the dropdown updates within ~500 ms when monitors are plugged or unplugged. If it looks stale, reopen Settings → Display to trigger a rebuild.
-- **Linux (Wayland)** sessions fall back to XWayland for capture; portals don't expose a hot-plug event stream — you'll see the new display listed on the next ambilight session restart.
+- **Linux (Wayland)** is not a supported capture path (see [Screen capture](/docs/ambilight/screen-capture/)), so hot-plug there is untested. Use an X11 session.
 
 ## Calibration overlay
 

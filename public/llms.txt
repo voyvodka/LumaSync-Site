@@ -32,7 +32,7 @@ Canonical brand surfaces: lumasync.app (this site), github.com/voyvodka/LumaSync
 - [USB LED controllers](https://lumasync.app/docs/usb-leds/controllers/): WS2812B + SK6812 RGBW chips, Adalight protocol, calibration, troubleshooting
 - [WLED bridge](https://lumasync.app/docs/usb-leds/wled/): drive ESP32 / ESP8266 boards over Wi-Fi via DDP — discovery, pairing, IP guards
 - [Ambilight tuning](https://lumasync.app/docs/ambilight/tuning/): screen capture (macOS SCDisplay, Windows DXGI, Linux X11/xcap), performance, scenes and presets
-- [Configuration file](https://lumasync.app/docs/reference/config-file/): ~/.config/lumasync/app.json reference (credentials live in the OS keychain, not this file)
+- [Configuration file](https://lumasync.app/docs/reference/config-file/): `shell-state.json` in the app data directory — location per OS, schema, reset (credentials live in the OS keychain, not this file)
 
 ## Comparisons
 
