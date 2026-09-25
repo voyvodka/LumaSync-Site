@@ -232,16 +232,10 @@ const schemas = [
         formats={['webp']}
         widths={screenshotWidths}
         sizes={calloutSizes}
-        alt="LumaSync ambient mode with the edge-signal preview and live telemetry overlay."
+        alt="LumaSync's Ambilight edge-signal panel: the live capture-to-strip preview with per-edge LED counts, Δ/Σ telemetry, and the smoothing, saturation and black-border controls."
         loading="lazy"
         decoding="async"
       />
-      <div class="telemetry-pill" aria-hidden="true">
-        <span class="pill-eyebrow">Live</span>
-        <span><strong>Δ</strong> 12 ms</span>
-        <span class="pill-sep"></span>
-        <span><strong>Σ</strong> 60 fps</span>
-      </div>
     </figure>
   </section>
 
@@ -296,7 +290,7 @@ const schemas = [
         formats={['webp']}
         widths={screenshotWidths}
         sizes={fullModeSizes}
-        alt="LumaSync full mode — main window with sidebar and Lights section open."
+        alt="LumaSync full mode — the main window on the Lights tab with Solid colour selected, brightness, scene presets and the outputs panel."
         pictureAttributes={{ class: 'dual-full' }}
         loading="lazy"
         decoding="async"
@@ -841,45 +835,6 @@ const schemas = [
 
   .callout-visual.dual .hero-placeholder.full {
     flex: 1;
-  }
-
-  .telemetry-pill {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.75rem;
-    background: rgba(10, 11, 14, 0.7);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-pill);
-    font-family: var(--font-mono);
-    font-size: var(--fs-xs);
-    color: var(--text-primary);
-    backdrop-filter: blur(8px);
-  }
-
-  .telemetry-pill strong {
-    color: var(--accent);
-    font-weight: 500;
-    margin-right: 0.125rem;
-  }
-
-  .telemetry-pill .pill-eyebrow {
-    padding: 0.0625rem 0.375rem;
-    background: var(--accent);
-    color: var(--text-inverse);
-    border-radius: var(--radius-sm);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-  }
-
-  .pill-sep {
-    width: 1px;
-    height: 0.75rem;
-    background: var(--border-strong);
   }
 
   /* ─── Platforms ───────────────────────────────────────── */

@@ -10,7 +10,7 @@ import { LATEST_VERSION_BARE } from '../../../lib/version';
 
 ## System requirements
 
-- **macOS 12.3+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE, XFCE). On Linux you also need GTK 3, WebKitGTK 4.1, and `libudev`; the AppImage bundles X11 capture deps (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
+- **macOS 12.3+**, **Windows 10+**, or a mainstream Linux desktop (GNOME, KDE, XFCE). On Linux the `.deb` / `.rpm` need GTK 3, WebKitGTK 4.1, and `libudev`; the AppImage bundles those itself and uses the system `libxcb`, which any X11 desktop already has.
 - **At least one supported hardware target**, otherwise the app runs but nothing lights up:
   - A **Philips Hue Bridge** (gen 2 or newer, including the 2025 **Bridge Pro** from v1.5.4) with one or more Entertainment Areas configured in the Hue app, **or**
   - A **WS2812B / SK6812 RGBW LED strip** driven by a supported USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) running [LumaSync v1 firmware](/docs/usb-leds/serial-protocol/) or the opt-in Adalight profile, **or**
