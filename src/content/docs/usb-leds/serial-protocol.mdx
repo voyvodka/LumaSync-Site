@@ -1,9 +1,9 @@
 ---
 title: Serial protocol
-description: The LumaSync v1 serial frame format sent over USB to drive WS2812B and SK6812 RGBW strips — 0xAA 0x55 header, LE LED count, gamma-corrected RGB(W), XOR checksum, 115200 baud.
+description: 'The LumaSync v1 serial frame sent over USB to WS2812B and SK6812 RGBW strips: 0xAA 0x55 header, LE LED count, gamma-corrected RGB(W), XOR checksum, 115200 baud.'
 group: usb-leds
 order: 20
-updated: 2026-05-05
+updated: 2026-09-25
 ---
 
 LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a 115200-baud link. This page is the wire-level reference — useful if you're flashing firmware onto a microcontroller, writing your own controller, or debugging why a kit isn't lighting up.
