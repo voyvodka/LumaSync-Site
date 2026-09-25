@@ -1,7 +1,20 @@
 ---
+import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { articleSchema, faqPageSchema, itemListSchema, softwareAppSchema } from '../lib/seo';
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
+import ambientModePreview from '../assets/media/ambient-mode-preview.png';
+import compactMode from '../assets/media/compact-mode.png';
+import fullMode from '../assets/media/full-mode.png';
+import heroLightsSection from '../assets/media/hero-lights-section.png';
+import roomMapEditor from '../assets/media/room-map-editor.png';
+
+// Rendered widths come from the layout: .hero's 1.1fr column and .callout's
+// half column inside the 72rem container, stacked full-width below 900px.
+const screenshotWidths = [480, 800, 1200, 1600];
+const heroSizes = '(max-width: 900px) calc(100vw - 2.5rem), 578px';
+const calloutSizes = '(max-width: 900px) calc(100vw - 2.5rem), 552px';
+const fullModeSizes = '(max-width: 900px) calc(100vw - 2.5rem), 348px';
 
 // Brand first so the brand query still reads cleanly, then the category term
 // and the three sinks. Under 60 characters, which is roughly where the results
@@ -133,18 +146,16 @@ const schemas = [
     </div>
 
     <figure class="hero-visual">
-      <picture>
-        <source srcset="/media/hero-lights-section.webp" type="image/webp" />
-        <img
-          src="/media/hero-lights-section.png"
-          width="1850"
-          height="1460"
-          alt="LumaSync's full-mode Lights section showing Ambilight active, scene presets, the live edge-signal preview, and the Δ/Σ telemetry pill."
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
-        />
-      </picture>
+      <Picture
+        src={heroLightsSection}
+        formats={['webp']}
+        widths={screenshotWidths}
+        sizes={heroSizes}
+        alt="LumaSync's full-mode Lights section showing Ambilight active, scene presets, the live edge-signal preview, and the Δ/Σ telemetry pill."
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
     </figure>
   </section>
 
@@ -216,17 +227,15 @@ const schemas = [
       <a class="inline-cta" href="/docs/ambilight/performance/">Read about performance →</a>
     </div>
     <figure class="callout-visual">
-      <picture>
-        <source srcset="/media/ambient-mode-preview.webp" type="image/webp" />
-        <img
-          src="/media/ambient-mode-preview.png"
-          width="1850"
-          height="1460"
-          alt="LumaSync ambient mode with the edge-signal preview and live telemetry overlay."
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
+      <Picture
+        src={ambientModePreview}
+        formats={['webp']}
+        widths={screenshotWidths}
+        sizes={calloutSizes}
+        alt="LumaSync ambient mode with the edge-signal preview and live telemetry overlay."
+        loading="lazy"
+        decoding="async"
+      />
       <div class="telemetry-pill" aria-hidden="true">
         <span class="pill-eyebrow">Live</span>
         <span><strong>Δ</strong> 12 ms</span>
@@ -239,17 +248,15 @@ const schemas = [
   {/* ─── Room map editor ───────────────────────────────────── */}
   <section class="callout reverse">
     <figure class="callout-visual">
-      <picture>
-        <source srcset="/media/room-map-editor.webp" type="image/webp" />
-        <img
-          src="/media/room-map-editor.png"
-          width="1850"
-          height="1460"
-          alt="LumaSync's room map editor canvas with a TV anchor, furniture objects, a USB strip, and Hue channel overlays."
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
+      <Picture
+        src={roomMapEditor}
+        formats={['webp']}
+        widths={screenshotWidths}
+        sizes={calloutSizes}
+        alt="LumaSync's room map editor canvas with a TV anchor, furniture objects, a USB strip, and Hue channel overlays."
+        loading="lazy"
+        decoding="async"
+      />
     </figure>
     <div class="callout-copy">
       <p class="section-eyebrow">Room map editor</p>
@@ -274,28 +281,26 @@ const schemas = [
       <a class="inline-cta" href="/docs/getting-started/first-setup/">First-setup walkthrough →</a>
     </div>
     <figure class="callout-visual dual">
-      <picture class="dual-compact">
-        <source srcset="/media/compact-mode.webp" type="image/webp" />
-        <img
-          src="/media/compact-mode.png"
-          width="640"
-          height="960"
-          alt="LumaSync compact mode — narrow window with mode tiles and scene picker."
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-      <picture class="dual-full">
-        <source srcset="/media/full-mode.webp" type="image/webp" />
-        <img
-          src="/media/full-mode.png"
-          width="1850"
-          height="1460"
-          alt="LumaSync full mode — main window with sidebar and Lights section open."
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
+      <Picture
+        src={compactMode}
+        formats={['webp']}
+        widths={[240, 384, 640]}
+        sizes="12rem"
+        alt="LumaSync compact mode — narrow window with mode tiles and scene picker."
+        pictureAttributes={{ class: 'dual-compact' }}
+        loading="lazy"
+        decoding="async"
+      />
+      <Picture
+        src={fullMode}
+        formats={['webp']}
+        widths={screenshotWidths}
+        sizes={fullModeSizes}
+        alt="LumaSync full mode — main window with sidebar and Lights section open."
+        pictureAttributes={{ class: 'dual-full' }}
+        loading="lazy"
+        decoding="async"
+      />
     </figure>
   </section>
 
