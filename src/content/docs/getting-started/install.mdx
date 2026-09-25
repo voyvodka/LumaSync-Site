@@ -3,7 +3,7 @@ title: Install
 description: Install LumaSync on macOS, Windows, or Linux — including the first-launch security warning each platform shows, and the exact steps to clear it.
 group: getting-started
 order: 10
-updated: 2026-08-11
+updated: 2026-09-25
 ---
 
 import { LATEST_VERSION_BARE } from '../../../lib/version';
@@ -59,7 +59,7 @@ sudo apt install ./lumasync_{LATEST_VERSION_BARE}_amd64.deb
 sudo rpm -i lumasync-{LATEST_VERSION_BARE}.x86_64.rpm
 ```
 
-Screen capture uses **xcap** for native X11 sampling — Wayland sessions need the X11 fallback (XWayland) for now. Tray behaviour varies by desktop environment: GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma and XFCE work out of the box.
+Screen capture uses **xcap** for native X11 sampling. Wayland is not a supported capture path yet, so log in to an X11 session. Tray behaviour varies by desktop environment: GNOME requires a third-party extension like **AppIndicator Support** to show the LumaSync tray icon; KDE Plasma and XFCE work out of the box.
 
 ## Verification
 
