@@ -44,7 +44,7 @@ A **hardware-accelerated downscale scaffold** landed in v1.5.0 — the frame bui
 
 ## Linux — X11 via xcap
 
-From v1.5.0, LumaSync ships native Linux X11 capture via [xcap](https://github.com/nashaofu/xcap) — same daily-driver path as macOS / Windows, no portal dialogs, no per-session prompts. The AppImage / deb / rpm bundle the X11 dependencies (`libxcb`, `libxrandr`, `libpipewire`, `libdbus`).
+From v1.5.0, LumaSync ships native Linux X11 capture via [xcap](https://github.com/nashaofu/xcap) — same daily-driver path as macOS / Windows, no portal dialogs, no per-session prompts. The AppImage bundles GTK 3, WebKitGTK 4.1, `libudev` and `libdbus` and uses the system `libxcb`; the `.deb` / `.rpm` take those from the system instead — see [Install](/docs/getting-started/install/#linux).
 
 - **X11 sessions**: capture works without prompts. Good.
 - **Wayland sessions**: not a supported capture path. On a Wayland session the capture library detects it and falls through to PipeWire / `xdg-desktop-portal` on its own. LumaSync does not block that path, but it is untested — it may surface the portal's permission dialog, and whether it captures at all is not something we can promise. Log in to an X11 session for dependable capture.
