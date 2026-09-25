@@ -15,6 +15,14 @@ function abs(path: string): string {
   return new URL(path, SITE_URL).toString();
 }
 
+// Google's Rich Results Test rejects a bare YYYY-MM-DD on Article dates as an
+// invalid datetime with no timezone. Date-only inputs are pinned to UTC midnight.
+function isoDateTime(value: string): string;
+function isoDateTime(value: string | undefined): string | undefined;
+function isoDateTime(value: string | undefined): string | undefined {
+  return value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00Z` : value;
+}
+
 export interface OrganizationSchema {
   '@context': 'https://schema.org';
   '@type': 'Organization';
@@ -129,14 +137,14 @@ export function softwareAppSchema(input: SoftwareAppInput) {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    '@id': `${SITE_URL}/download#software`,
+    '@id': `${SITE_URL}/download/#software`,
     name: input.name,
     description: input.description,
     applicationCategory: 'MultimediaApplication',
     operatingSystem: input.operatingSystems,
     softwareVersion: input.version,
     downloadUrl: abs(input.downloadUrl),
-    datePublished: input.datePublished,
+    datePublished: isoDateTime(input.datePublished),
     publisher: { '@id': `${SITE_URL}/#organization` },
     offers: {
       '@type': 'Offer',
@@ -161,7 +169,7 @@ export function techArticleSchema(input: TechArticleInput) {
     headline: input.title,
     description: input.description,
     url: abs(input.url),
-    dateModified: input.dateModified,
+    dateModified: isoDateTime(input.dateModified),
     articleSection: input.section,
     mainEntityOfPage: { '@type': 'WebPage', '@id': abs(input.url) },
     publisher: { '@id': `${SITE_URL}/#organization` },
@@ -195,8 +203,8 @@ export function articleSchema(input: ArticleInput) {
     headline: input.title,
     description: input.description,
     url: abs(input.url),
-    dateModified: input.dateModified,
-    datePublished: input.datePublished ?? input.dateModified,
+    dateModified: isoDateTime(input.dateModified),
+    datePublished: isoDateTime(input.datePublished ?? input.dateModified),
     ...(input.image && { image: abs(input.image) }),
     mainEntityOfPage: { '@type': 'WebPage', '@id': abs(input.url) },
     publisher: { '@id': `${SITE_URL}/#organization` },
