@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import EffectRoomFigure from '../components/figures/EffectRoomFigure.astro';
 import { articleSchema, faqPageSchema, itemListSchema, softwareAppSchema } from '../lib/seo';
 import { LATEST_VERSION, LATEST_VERSION_DATE } from '../lib/version';
 import ambientModePreview from '../assets/media/ambient-mode-preview.png';
@@ -213,6 +214,21 @@ const schemas = [
         <a href="/docs/getting-started/first-setup/">First-setup walkthrough →</a>
       </article>
     </div>
+  </section>
+
+  {/* ─── Effect mode ───────────────────────────────────────── */}
+  <section class="effects">
+    <div class="effects-copy">
+      <p class="section-eyebrow">Effect mode</p>
+      <h2 class="section-title">Sixteen effects, coloured where each light stands.</h2>
+      <p class="callout-body">
+        Wave, aurora, ocean, plasma, candle, sunrise and ten more, over eleven palettes or up to
+        three colours of your own. Every LED of the strip and every Hue light gets a place in the
+        room — from your room map, or from the TV wall and the bridge's own layout without one — and
+        the effect is worked out at each place, so one wave crosses the TV and the lamps as one.
+      </p>
+    </div>
+    <EffectRoomFigure />
   </section>
 
   {/* ─── Ambient mode preview ──────────────────────────────── */}
@@ -550,6 +566,7 @@ const schemas = [
   /* ─── Shared ────────────────────────────────────────────── */
   .hero,
   .features,
+  .effects,
   .callout,
   .platforms,
   .trust,
@@ -786,6 +803,16 @@ const schemas = [
 
   .callout.reverse {
     /* same grid; child order visually reversed on desktop */
+  }
+
+  .effects {
+    padding-block: 4rem;
+    display: grid;
+    gap: 2rem;
+  }
+
+  .effects-copy {
+    max-width: 40rem;
   }
 
   .callout-copy {

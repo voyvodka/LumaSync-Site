@@ -1,0 +1,119 @@
+---
+import '../../lib/iso/iso.css';
+import { figureHtml } from '../../lib/figures/effect-room/art.mjs';
+import { INITIAL } from '../../lib/figures/effect-room/state.mjs';
+
+const html = figureHtml(INITIAL);
+---
+
+<div class="iso effect-room" data-effect-room data-pagefind-ignore>
+  <Fragment set:html={html} />
+</div>
+
+<script>
+  import { mount } from '../../lib/figures/effect-room/live.mjs';
+
+  document.querySelectorAll<HTMLElement>('[data-effect-room]').forEach((root) => mount(root));
+</script>
+
+<style is:global>
+  .effect-room.iso {
+    --iso-page: var(--surface-0);
+    --iso-card: var(--surface-1);
+    --iso-text: var(--text-secondary);
+    --iso-strong: var(--text-primary);
+    --iso-muted: var(--text-muted);
+    --iso-face: #171a1f;
+    --iso-top: #181b20;
+    --iso-shade-0: #0b0d10;
+    --iso-shade-1: #0e1013;
+    --iso-shade-2: #111317;
+    --iso-shade-3: #14171b;
+    --iso-lit-top: #23272e;
+    --iso-lit-shade: #1a1d23;
+    --iso-hi: #d5dbe3;
+    --iso-mid: #6b727d;
+    --iso-lo: #3e444d;
+    --iso-faint: #272c34;
+    --iso-halo: #030405;
+    --iso-dot: var(--text-primary);
+    --iso-mono: var(--font-mono);
+    --ef-screen: #050608;
+    --ef-floor: #15171b;
+    --ef-rug: #1c1f25;
+  }
+
+  .effect-room .iso-figure {
+    margin: 0;
+  }
+
+  .effect-room .iso-plate {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+  }
+
+  .effect-room .ef-floor > .iso-fill {
+    fill: var(--ef-floor);
+  }
+
+  .effect-room .ef-rug > .iso-top {
+    fill: var(--ef-rug);
+  }
+
+  .effect-room .ef-cells {
+    opacity: 0.86;
+  }
+
+  .effect-room .ef-cell {
+    stroke: none;
+  }
+
+  .effect-room .ef-bead {
+    fill: var(--led);
+    stroke: color-mix(in srgb, var(--led) 45%, white);
+    stroke-width: 0.7px;
+  }
+
+  .effect-room .ef-frame {
+    fill: none;
+    stroke: var(--iso-mid);
+    stroke-width: var(--iso-weight);
+  }
+
+  .effect-room .ef-mark {
+    fill: none;
+    stroke: var(--iso-lit);
+    stroke-width: 0.9px;
+  }
+
+  .effect-room .ef-screen {
+    fill: var(--ef-screen);
+    stroke: var(--iso-lo);
+    stroke-width: var(--iso-weight);
+  }
+
+  .effect-room .ef-glow > .iso-fill {
+    fill: var(--lamp);
+  }
+
+  .effect-room .ef-glow > .iso-top {
+    fill: color-mix(in srgb, var(--lamp) 78%, white);
+  }
+
+  .effect-room .ef-glow > .iso-shade[data-shade='0'] {
+    fill: color-mix(in srgb, var(--lamp) 55%, black);
+  }
+
+  .effect-room .ef-glow > .iso-shade[data-shade='1'] {
+    fill: color-mix(in srgb, var(--lamp) 66%, black);
+  }
+
+  .effect-room .ef-glow > .iso-shade[data-shade='2'] {
+    fill: color-mix(in srgb, var(--lamp) 78%, black);
+  }
+
+  .effect-room .ef-glow > .iso-shade[data-shade='3'] {
+    fill: color-mix(in srgb, var(--lamp) 90%, black);
+  }
+</style>
