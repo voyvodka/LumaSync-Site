@@ -1,0 +1,123 @@
+---
+import '../../lib/iso/iso.css';
+import { figureHtml } from '../../lib/figures/serial-frame/art.mjs';
+
+const html = figureHtml();
+---
+
+<div class="iso serial-frame" data-serial-frame data-pagefind-ignore>
+  <Fragment set:html={html} />
+</div>
+
+<script>
+  import { mount } from '../../lib/figures/serial-frame/live.mjs';
+
+  document.querySelectorAll<HTMLElement>('[data-serial-frame]').forEach((root) => mount(root));
+</script>
+
+<style is:global>
+  .serial-frame.iso {
+    --iso-page: var(--surface-0);
+    --iso-card: var(--surface-1);
+    --iso-text: var(--text-secondary);
+    --iso-strong: var(--text-primary);
+    --iso-muted: var(--text-muted);
+    --iso-face: #171a1f;
+    --iso-top: #181b20;
+    --iso-shade-0: #0b0d10;
+    --iso-shade-1: #0e1013;
+    --iso-shade-2: #111317;
+    --iso-shade-3: #14171b;
+    --iso-lit-top: #23272e;
+    --iso-lit-shade: #1a1d23;
+    --iso-hi: #d5dbe3;
+    --iso-mid: #6b727d;
+    --iso-lo: #3e444d;
+    --iso-faint: #272c34;
+    --iso-halo: #030405;
+    --iso-dot: var(--text-primary);
+    --iso-mono: var(--font-mono);
+    --sf-void: #050608;
+    --sf-paper: #1f232a;
+    --sf-pin-top: #343a44;
+  }
+
+  .serial-frame .iso-figure {
+    margin: 1.75rem 0 2rem;
+  }
+
+  .serial-frame .iso-plate {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+  }
+
+  .serial-frame .sf-tape > .iso-top {
+    fill: var(--sf-paper);
+  }
+
+  .serial-frame .sf-void {
+    fill: var(--sf-void);
+    stroke: none;
+  }
+
+  .serial-frame .sf-hole,
+  .serial-frame .sf-feed {
+    fill: var(--sf-void);
+    stroke: var(--iso-lo);
+    stroke-width: var(--iso-weight);
+  }
+
+  .serial-frame .sf-hole[data-tone='hi'] {
+    fill: color-mix(in srgb, var(--iso-hi) 16%, var(--sf-void));
+    stroke: var(--iso-hi);
+  }
+
+  .serial-frame .sf-hole[data-tone='red'] {
+    fill: color-mix(in srgb, var(--iso-red) 30%, var(--sf-void));
+    stroke: var(--iso-red);
+  }
+
+  .serial-frame .sf-hole[data-tone='green'] {
+    fill: color-mix(in srgb, var(--iso-green) 30%, var(--sf-void));
+    stroke: var(--iso-green);
+  }
+
+  .serial-frame .sf-hole[data-tone='blue'] {
+    fill: color-mix(in srgb, var(--iso-blue) 30%, var(--sf-void));
+    stroke: var(--iso-blue);
+  }
+
+  .serial-frame .sf-cable path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .serial-frame .sf-cable-skin {
+    stroke: var(--iso-mid);
+    stroke-width: 2.4px;
+  }
+
+  .serial-frame .sf-cable-core {
+    stroke: var(--iso-shade-3);
+    stroke-width: 1.2px;
+  }
+
+  .serial-frame [data-pin][data-down] {
+    visibility: hidden;
+  }
+
+  .serial-frame [data-pin] > .iso-top {
+    fill: var(--sf-pin-top);
+  }
+
+  .serial-frame .sf-lens {
+    stroke: var(--iso-lo);
+    stroke-width: var(--iso-weight);
+  }
+
+  .serial-frame .sf-chip[data-on] .iso-edge {
+    stroke: var(--iso-hi);
+  }
+</style>

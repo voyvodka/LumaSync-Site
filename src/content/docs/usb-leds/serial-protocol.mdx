@@ -6,6 +6,8 @@ order: 20
 updated: 2026-09-25
 ---
 
+import SerialFrameFigure from '../../../components/figures/SerialFrameFigure.astro';
+
 LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a 115200-baud link. This page is the wire-level reference — useful if you're flashing firmware onto a microcontroller, writing your own controller, or debugging why a kit isn't lighting up.
 
 ## LumaSync v1 frame, with an Adalight fallback
@@ -26,6 +28,8 @@ Header:   0xAA 0x55                (2 bytes, magic)
 Payload:  pixel data                (LED_COUNT × 3 bytes, R G B)
 Trailer:  XOR_CHECKSUM              (1 byte, XOR of every preceding byte)
 ```
+
+<SerialFrameFigure />
 
 For a 120-LED strip: 5 bytes header + 360 bytes RGB + 1 byte checksum = 366 bytes per frame. At 115200 baud with 8-N-1 framing the link carries 11,520 bytes a second, so that frame takes about 32 ms on the wire.
 
