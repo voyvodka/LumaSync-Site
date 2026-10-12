@@ -1,6 +1,6 @@
 ---
 title: Serial protocol
-description: 'The LumaSync v1 serial frame sent over USB to WS2812B and SK6812 RGBW strips: 0xAA 0x55 header, LE LED count, gamma-corrected RGB(W), XOR checksum, 115200 baud.'
+description: 'The LumaSync v1 serial frame over USB at 115200 baud: 0xAA 0x55 magic, a brightness byte, little-endian LED count, gamma-corrected RGB, XOR checksum.'
 group: usb-leds
 order: 20
 updated: 2026-09-25
@@ -12,7 +12,7 @@ LumaSync's USB pipeline uses a **LumaSync-specific serial frame** over a 115200-
 
 LumaSync's default USB framing is **not** Adalight-compatible: different magic bytes, different length encoding, different checksum. A controller running unmodified [Adalight firmware](https://learn.adafruit.com/adalight-diy-ambient-tv-lighting) will **not** respond to an unconfigured LumaSync install.
 
-From **v1.4**, the Device panel exposes a **Firmware profile** toggle (LumaSync v1 · Adalight). Switch to **Adalight** and LumaSync emits the legacy `Ada` header framing byte-for-byte; the setting persists per device so you don't need to reconfigure it on every session. Keep the default **LumaSync v1** profile for controllers running the reference firmware below.
+From **v1.4**, the **Lights** page has a **Firmware Profile** choice (LumaSync v1 · Adalight). Switch to **Adalight** and LumaSync emits the legacy `Ada` header framing byte-for-byte; the choice is saved, so it survives a restart. Keep the default **LumaSync v1** profile for firmware that reads the frame below.
 
 ## Wire format (v1)
 
@@ -20,26 +20,30 @@ Each frame is:
 
 ```
 Header:   0xAA 0x55                (2 bytes, magic)
+          BRIGHTNESS                (1 byte, 0–255)
           LED_COUNT_LO              (1 byte, low byte of LED count)
           LED_COUNT_HI              (1 byte, high byte of LED count — little-endian u16)
-Payload:  pixel data                (LED_COUNT × 3 or × 4 bytes — see "Chip type" below)
+Payload:  pixel data                (LED_COUNT × 3 bytes, R G B)
 Trailer:  XOR_CHECKSUM              (1 byte, XOR of every preceding byte)
 ```
 
-For a 120-LED WS2812B strip: 4 bytes header + 360 bytes RGB + 1 byte checksum = 365 bytes per frame. SK6812 RGBW at 120 LEDs is 4 + 480 + 1 = 485 bytes. At 20 Hz that's ~7.3 KB/s and ~9.7 KB/s respectively, comfortably under 115200 baud's ~11.5 KB/s usable budget.
+For a 120-LED strip: 5 bytes header + 360 bytes RGB + 1 byte checksum = 366 bytes per frame. At 115200 baud with 8-N-1 framing the link carries 11,520 bytes a second, so that frame takes about 32 ms on the wire.
 
-### Chip type — RGB vs RGBW
+### Brightness
 
-LumaSync's host-side encoder switches per controller based on the **Strip chip** selector under Settings → Device:
+The third byte carries LumaSync's brightness setting as `floor(brightness × 255)`: 255 at full, 204 at 80 %. The colour bytes are **not** scaled by it, so the firmware is expected to apply the brightness itself. Adalight framing has no brightness byte; with the Adalight profile selected, LumaSync locks its brightness controls and the strip runs at whatever brightness the firmware sets.
 
-- **WS2812B (RGB)**: 3 bytes per LED, in order `R G B`.
-- **SK6812 RGBW**: 4 bytes per LED, in order `R G B W`. The white channel is derived host-side as `W = min(R, G, B)` so the achromatic component lights the dedicated white LED while the RGB triple keeps the chromatic component pure. The firmware passes the bytes through unchanged.
+### Pixels and the LED Chip Type setting
 
-The chip-type selection is persisted per controller and the value flows into the encoder before the frame is built — there is no separate wire-level tag for chip type, so the firmware is expected to know which physical strip it drives.
+Each LED takes three bytes, in the order `R G B`.
+
+The **Devices** page has an **LED Chip Type** setting — **WS2812B (3-byte RGB)** or **SK6812 RGBW (4-byte)**. The choice is saved, but it does not change the stream: every frame carries 3-byte RGB pixels, whichever chip is selected. There is no wire-level tag for the chip type either, so the firmware is expected to know which physical strip it drives.
 
 ### Gamma correction
 
-Pixel triplets / quadruplets are **pre-gamma-corrected** on the host side (Rec. 709 gamma 2.2). Firmware should not apply additional gamma. If your LEDs look crushed at low values or blown out at high values, double-check the firmware isn't re-gamma-ing on top.
+Pixel bytes are **gamma-corrected on the host** with a 2.2 power curve: each channel value `v` goes out as `round((v / 255)^2.2 × 255)`, so a mid-grey 128 is sent as 56. Firmware should not apply additional gamma. If your LEDs look crushed at low values or blown out at high values, double-check the firmware isn't re-gamma-ing on top.
+
+On the LumaSync v1 path the curve is fixed: the **Gamma Red**, **Gamma Green** and **Gamma Blue** sliders in the colour-correction panel only change it under the Adalight profile. White-point (Kelvin) and saturation apply on both.
 
 ### Byte order
 
@@ -47,41 +51,46 @@ LED count is **little-endian u16** (LSB first). Adalight uses big-endian and enc
 
 ## Baud rate
 
-**115200**, hard-coded in LumaSync. Don't raise it — the WS2812B strip itself is the bottleneck, not the serial link.
+**115200**, hard-coded in LumaSync: the port is always opened at that rate, so the firmware has to use it too. Its 11,520 bytes a second are what limit the frame rate (see [Frame rate](#frame-rate)).
 
 ## The handshake
 
-When you click **Health check** in Settings → Device, LumaSync:
+**Run Health Check** on a connected USB controller in **Devices** walks through four steps:
 
-1. Opens the serial port at 115200-8-N-1.
-2. Waits ~2 seconds for the controller to finish its reset (Arduino-class boards auto-reset on serial open).
-3. Sends a minimal zero-LED-count LumaSync v1 frame — magic + length + correct checksum + no payload.
-4. Reads the serial line briefly. A LumaSync v1 firmware replies with `0xA5`; legacy Adalight firmware stays silent; a completely mismatched firmware surfaces as an errored read.
-5. Reports `DEVICE_READY` on the ack, `DEVICE_MANUAL_REQUIRED` on silence or error.
+1. **Port visibility** — the selected port is in the system's serial-port list.
+2. **Port support** — it is a USB serial adapter on LumaSync's supported list (see [USB controllers](/docs/usb-leds/controllers/)).
+3. **Connect and verify** — LumaSync opens the port at 115200 baud, then waits 2 seconds for the controller to finish its reset (Arduino-class boards auto-reset on serial open).
+4. **Firmware handshake** — LumaSync sends a 5-byte PING, `AA 55 10 00 EF` (magic, opcode `0x10`, payload length 0, XOR), and waits up to 2 seconds for a 7-byte PONG: `AA 55 11`, the firmware version as a little-endian u16 (`0x0104` is 1.4), a profile byte (`0x01` LumaSync v1, `0x02` Adalight) and an XOR of the six bytes before it.
 
-`DEVICE_MANUAL_REQUIRED` is not fatal: LumaSync streams frames anyway and assumes the firmware cooperates. If the strip lights up, you're fine.
+The handshake step reports one of three codes:
+
+| Code | Meaning |
+| --- | --- |
+| `SERIAL_HEALTH_OK` | A valid PONG came back; the firmware version, profile and round-trip time are shown |
+| `SERIAL_HEALTH_HANDSHAKE_TIMEOUT` | No complete reply within 2 seconds |
+| `SERIAL_HEALTH_PROTOCOL_ERROR` | A reply came back, but its magic, opcode, checksum or profile byte was wrong |
+
+Adalight firmware has no PING/PONG, so with the Adalight profile a failed handshake is expected. A failed handshake is not fatal anyway: LumaSync streams frames whenever the port is connected and assumes the firmware cooperates. If the strip lights up, you're fine.
 
 ## Frame rate
 
-LumaSync pushes up to **30 frames per second** on the USB path by default. The serial link can handle it for strips up to ~300 LEDs; longer strips need a lower rate to avoid buffering. The telemetry pill on the Device panel shows the actual push rate.
-
-## Firmware implementations
-
-- **Companion firmware sketch** — a reference Arduino/PlatformIO sketch that implements this exact frame format will ship alongside the app once the companion hardware repo is published. Tracked in the project roadmap.
-- **Porting from Adalight** — the core loop is similar; what changes is the magic bytes (`Ada` → `0xAA 0x55`), the length encoding (BE `n−1` → LE `n`), the handshake ack, and dropping any brightness-byte or RGBW extensions Adalight variants may have added.
-- **Adalight profile (v1.4+, opt-in)** — if you already have Adalight firmware flashed (common on "ambilight USB kit" marketplace purchases), enable the Adalight profile under Settings → Device instead of reflashing. LumaSync emits Adalight framing byte-for-byte; the rest of the pipeline is unchanged.
-
-## USB output: per-LED sampling
-
-From **v1.4**, each LED samples its own edge region of the screen, anchored to your room map's `LedCalibrationConfig` (edge counts, start anchor, direction, bottom gap). The strip's colour is no longer a single RGB triplet extended across every LED — every pixel is computed from the matching screen zone.
-
-The 115200 baud ceiling constrains the frame rate, and LumaSync adapts dynamically:
+LumaSync paces USB frames from your LED count so that each frame fits the 115200-baud budget, between 10 and 60 frames per second:
 
 - **60 LEDs** → ~60 FPS
 - **120 LEDs** → ~30 FPS
 - **200 LEDs** → ~19 FPS
 
-No configuration is needed; LumaSync picks the rate that fits inside the baud budget given your LED count. The telemetry pill on the Device panel reports the actual push rate.
+No configuration is needed. When capture and sending take longer than that interval, LumaSync slows down instead of queueing frames. While Ambilight runs, the **Capture → Strip** readout on the **Lights** page shows the actual rate.
+
+## USB output: per-LED sampling
+
+From **v1.4**, each LED samples its own edge region of the screen, anchored to the LED layout you set in **LED Setup** (edge counts, start anchor, direction, bottom gap). The strip's colour is no longer a single RGB triplet extended across every LED — every pixel is computed from the matching screen zone.
+
+## Firmware implementations
+
+- **No reference firmware is published.** To work with the default profile, a sketch reads the frame above — wait for `AA 55`, read the brightness and the little-endian count, then `count × 3` colour bytes, and check the XOR — and answers the health check's PING with a PONG.
+- **Porting from Adalight** — the core loop is similar; what changes is the magic bytes (`Ada` → `0xAA 0x55`), the brightness byte that follows them, the length encoding (BE `n−1` → LE `n`), the checksum (Adalight's `hi ^ lo ^ 0x55` over the length → one XOR over the whole frame, at the end), and answering the PING.
+- **Adalight profile (v1.4+, opt-in)** — if you already have Adalight firmware flashed (common on "ambilight USB kit" marketplace purchases), choose the Adalight profile on the **Lights** page instead of reflashing. LumaSync emits Adalight framing byte-for-byte, colour corrections included, with no brightness byte.
 
 ## Why not raw APA102 / SPI?
 

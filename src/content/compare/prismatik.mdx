@@ -48,8 +48,8 @@ Short version: **Prismatik is the right answer only if you physically own Lightp
 
 Coming from **Prismatik to LumaSync**:
 
-- If you're using a generic CH340/FT232 USB kit, the **strip and controller board are reusable**. Either reflash the microcontroller to the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol/), or enable the v1.4+ **Adalight profile** in Settings → Device and keep the existing Adalight firmware. Then stop Prismatik, disconnect its USB port, start LumaSync, run the device health check. See [USB controllers](/docs/usb-leds/controllers/).
-- If you're using actual **Lightpack hardware**: LumaSync does not recognise the Lightpack VID:PID, so it has to be connected via the custom port path. With the **Adalight profile** enabled in Settings → Device (shipped in v1.4), LumaSync emits Prismatik-compatible framing, but the auto-detect convenience is still Prismatik-only. Keep Prismatik if that matters.
+- If you're using a generic CH340/FT232 USB kit, the **strip and controller board are reusable**. Either reflash the microcontroller to the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol/), or choose the v1.4+ **Adalight profile** on the **Lights** page and keep the existing Adalight firmware. Then stop Prismatik so it releases the port, start LumaSync, and connect the controller on the **Devices** page. See [USB controllers](/docs/usb-leds/controllers/).
+- If you're using actual **Lightpack hardware**: LumaSync connects only to USB serial adapters on [its list](/docs/usb-leds/controllers/), and Lightpack isn't one of them, so keep Prismatik for it.
 - Your edge counts and calibration settings don't auto-import. Re-enter them in [Calibration](/docs/usb-leds/calibration/).
 
 Coming from **LumaSync to Prismatik**:

@@ -39,11 +39,11 @@ On success the bridge username and PSK land in your **OS keychain** (macOS Keych
 
 ### Connect a USB controller
 
-Plug your USB-serial controller (CH340, CH341, FT232, PL2303, or CP2104) into a USB port. Settings → **Device**.
+Plug your USB-serial controller (CH340, CH341, FT232, PL2303, CP2102 / CP2104, or an Arduino Uno) into a USB port and open **Devices**.
 
-1. LumaSync auto-detects supported controllers and rejects non-USB serial endpoints (Bluetooth, PCI, Unknown) up-front with `PORT_UNSUPPORTED`. If your chip doesn't appear, check the full list in [USB controllers](/docs/usb-leds/controllers/).
-2. Pick the port from the dropdown, then pick the **chip type** — WS2812B (RGB) or SK6812 RGBW. The host-side encoder derives the white channel as `W = min(R, G, B)` for SK6812.
-3. Click **Health check** — LumaSync sends a PING/PONG handshake at 115200 baud and confirms the strip is responsive. The result shows up next to the port entry within a couple of seconds.
+1. Supported controllers appear under **Supported controllers**. Anything else — non-USB serial endpoints (Bluetooth, PCI, Unknown) and USB adapters that aren't on the list — shows under **Other serial ports**, and **Connect** refuses it with `PORT_UNSUPPORTED`. If your chip doesn't appear, check the full list in [USB controllers](/docs/usb-leds/controllers/).
+2. Pick the port and click **Connect**.
+3. Optionally click **Run Health Check**. LumaSync checks the port, opens it at 115200 baud and sends a PING/PONG handshake, which passes only with firmware that answers it — Adalight firmware doesn't. LumaSync streams to the strip either way; see [the handshake](/docs/usb-leds/serial-protocol/#the-handshake).
 
 ### Connect a WLED board
 

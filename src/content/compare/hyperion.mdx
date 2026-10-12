@@ -53,7 +53,7 @@ Short version: **Hyperion is the right answer if you're fine running a Raspberry
 
 Coming from **Hyperion to LumaSync**:
 
-- Your USB hardware (CH340/FT232 + WS2812B) is reusable, but the controller firmware needs to speak the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol/) by default — Hyperion's `adalight` output driver is **not** wire-compatible with v1. Either reflash the microcontroller with LumaSync v1 firmware, or enable the v1.4+ Adalight-profile toggle (Settings → Device) and reuse the existing Adalight firmware unchanged. See [USB controllers](/docs/usb-leds/controllers/).
+- Your USB hardware (CH340/FT232 + WS2812B) is reusable, but the controller firmware needs to speak the [LumaSync v1 serial frame](/docs/usb-leds/serial-protocol/) by default — Hyperion's `adalight` output driver is **not** wire-compatible with v1. Either flash firmware that reads the v1 frame (no reference firmware is published), or choose the v1.4+ Adalight profile on the **Lights** page and reuse the existing Adalight firmware unchanged. See [USB controllers](/docs/usb-leds/controllers/).
 - Your Hue setup moves cleanly — the Hue Bridge is stateful, so your Entertainment Area and bulb positions remain. Pair LumaSync, pick the area. [Pairing walkthrough](/docs/hue/pairing/).
 - Your Hyperion layout config (edge counts, corner ownership) doesn't auto-import. Re-enter it in [Calibration](/docs/usb-leds/calibration/) — takes ~2 minutes with the test pattern open.
 

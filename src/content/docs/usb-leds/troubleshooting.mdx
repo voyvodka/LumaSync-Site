@@ -8,7 +8,7 @@ updated: 2026-06-25
 
 ## Port doesn't show up
 
-**Symptom**: Plug in the controller, Settings → Device → dropdown is empty.
+**Symptom**: You plug in the controller, but the port list on the **Devices** page stays empty.
 
 1. **Driver not installed** — CH340 / CH341 on Windows sometimes need a manual driver from WCH's website. Install, reboot, check again.
 2. **Linux permissions** — your user may not be in the `dialout` group: `sudo usermod -aG dialout $USER`, log out, log back in.
@@ -24,31 +24,30 @@ From v1.5.2, LumaSync rejects non-USB serial endpoints up-front rather than lett
 - `/dev/cu.Bluetooth-Incoming-Port` and other Bluetooth virtual ports on macOS — they enumerate as serial but don't go anywhere.
 - Motherboard / PCI / Unknown-class serial ports listed by the OS but not actually connected to a USB endpoint.
 
-The fix is straightforward: pick the actual USB controller from the dropdown. The auto-detected list is filtered to USB endpoints only, so this error only appears when you've manually pasted a non-USB path.
+- A USB adapter whose VID:PID is not on LumaSync's list — see [USB controllers](/docs/usb-leds/controllers/).
+
+Pick your controller under **Supported controllers** instead. Everything under **Other serial ports** is refused, and there is no manual override.
 
 ## Health check fails
 
-**Symptom**: Port connects, health check returns a non-healthy `SerialHealthCode` or `DEVICE_MANUAL_REQUIRED`.
+**Symptom**: The port connects, but **Run Health Check** reports a failed step.
 
-From v1.4, LumaSync sends a **PING/PONG opcode exchange** during the handshake and reports a structured `SerialHealthReport` back to the UI. The coded statuses you may see:
+The health check runs four steps — **Port visibility**, **Port support**, **Connect and verify**, **Firmware handshake** — and the last one sends a PING and waits for a PONG ([the bytes](/docs/usb-leds/serial-protocol/#the-handshake)). The handshake codes you may see:
 
-| `SerialHealthCode` | What it means |
+| Code | What it means |
 | --- | --- |
-| `HEALTHY` | PING acknowledged, frame acks arriving — green pill, streaming armed |
-| `HANDSHAKE_TIMEOUT` | Controller didn't reply to the zero-LED frame within ~2 s — wrong firmware/profile |
-| `PING_TIMEOUT` | Handshake passed but runtime PING never acked — likely a flaky cable or USB hub |
-| `BAUD_MISMATCH` | Reply arrived but bytes were garbage — baud rate not 115200 |
-| `DEVICE_BUSY` | Port opened by another process (Arduino IDE, screen, vendor utility) |
-| `DEVICE_MANUAL_REQUIRED` | Unrecognised firmware but the port is writable — opt in and LumaSync streams blind |
+| `SERIAL_HEALTH_OK` | The firmware answered; its version, profile and round-trip time are shown |
+| `SERIAL_HEALTH_HANDSHAKE_TIMEOUT` | No complete reply within 2 seconds |
+| `SERIAL_HEALTH_PROTOCOL_ERROR` | A reply came back, but its magic, opcode, checksum or profile byte was wrong |
 
 Common causes and what to do:
 
-- **Wrong baud rate** (→ `BAUD_MISMATCH`) — LumaSync v1 firmware must run at 115200. Other rates are rejected.
-- **Wrong firmware / wrong profile** (→ `HANDSHAKE_TIMEOUT`) — a controller flashed with Adalight firmware won't answer a LumaSync v1 handshake. Either flip the **Firmware profile** toggle to **Adalight** in Settings → Device (v1.4+), or reflash with LumaSync v1 firmware. CircuitPython / MicroPython boards with custom protocols stay on `DEVICE_MANUAL_REQUIRED`.
-- **Serial port already owned** (→ `DEVICE_BUSY`) — close other serial monitors (Arduino IDE, screen, minicom, vendor utilities).
-- **Flaky cable or USB hub** (→ `PING_TIMEOUT`) — swap the cable, try a powered hub, or plug straight into a back-panel USB port.
+- **Firmware without the handshake** (→ `SERIAL_HEALTH_HANDSHAKE_TIMEOUT` or `SERIAL_HEALTH_PROTOCOL_ERROR`) — Adalight firmware, and any sketch that doesn't implement the PONG, can't pass this step. That is expected with Adalight; choose **Adalight** under **Firmware Profile** on the **Lights** page (v1.4+) so the frames match the firmware.
+- **Firmware at another baud rate** — LumaSync always opens the port at 115200, so a sketch set to anything else can't answer.
+- **Serial port held by another program** — the **Connect and verify** step fails to open it. Close other serial monitors (Arduino IDE, screen, minicom, vendor utilities).
+- **Flaky cable or USB hub** — swap the cable, try a powered hub, or plug straight into a back-panel USB port.
 
-You can continue in `DEVICE_MANUAL_REQUIRED`; LumaSync streams frames and assumes the firmware cooperates. If the strip lights up, you're fine.
+A failed handshake doesn't stop the lights: LumaSync streams frames whenever the port is connected and assumes the firmware cooperates. If the strip lights up, you're fine.
 
 ## LEDs flicker or freeze
 
@@ -62,7 +61,7 @@ You can continue in `DEVICE_MANUAL_REQUIRED`; LumaSync streams frames and assume
 
 **Symptom**: LEDs light up but colours are clearly wrong — red shows as blue, or everything is slightly off-hue.
 
-- **RGB vs GRB ordering mismatch**. WS2812B is actually GRB internally; LumaSync handles the conversion, but some firmware does it too, resulting in a double-conversion. Configure your firmware to pass RGB through unmodified, or reflash with LumaSync v1 firmware (which expects pre-gamma-corrected RGB from the host).
+- **RGB vs GRB ordering mismatch**. WS2812B is GRB internally, but LumaSync sends each LED as `R G B`, so the firmware's strip driver has to reorder the bytes. If red and green look swapped, set the firmware's colour order to GRB. The bytes also arrive gamma-corrected, so the firmware shouldn't apply gamma again.
 - **White balance on the strip doesn't match your content**. Warm-white WS2812B strips have a red-tinted LED that bleeds into warm greys. There's no fix at the protocol level — this is a strip choice. Swap to a cool-white strip or accept the tint.
 
 ## Only part of the strip lights up

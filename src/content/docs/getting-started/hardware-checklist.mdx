@@ -14,11 +14,11 @@ LumaSync is a controller, not a store. You bring the lights; we drive them. This
 
 ### 1 · Addressable strip
 
-- **Protocol**: WS2812B (3-channel RGB) or SK6812 RGBW (4-channel — host-side encoder derives the white channel as `W = min(R, G, B)`). Non-addressable RGB strips will **not** work; LumaSync needs per-pixel control.
+- **Protocol**: an addressable strip such as WS2812B. LumaSync sends three colour bytes (RGB) per LED, so an SK6812 RGBW strip needs firmware that drives its white channel itself. Non-addressable RGB strips will **not** work; LumaSync needs per-pixel control.
 - **Density**: 30 LEDs/m works for most TV behind-screen setups. 60 LEDs/m looks smoother but draws ~twice the current and costs more.
 - **Length**: measure your screen perimeter plus ~10 cm slack at each corner. A 55″ TV is roughly 3.8 m; a 65″ is roughly 4.6 m.
 
-The chip type is selectable in Settings → Device per controller, so a WS2812B strip on one port and an SK6812 RGBW strip on another both work simultaneously.
+The **LED Chip Type** setting on the **Devices** page is saved but doesn't change what LumaSync sends — see [USB controllers](/docs/usb-leds/controllers/).
 
 ### 2 · USB-to-serial controller
 
@@ -31,11 +31,13 @@ Any of the supported chipsets:
 | **FTDI FT232R** | `0403:6001` | More expensive, fewer driver headaches on macOS. |
 | **FTDI FT232H** | `0403:6014` | High-speed FTDI variant; identical to FT232R from LumaSync's perspective at 115200 baud. |
 | **Prolific PL2303** | `067B:2303` | Common on legacy Arduino-clone boards. |
-| **Silicon Labs CP2104** | `10C4:EA60` | Compact, low-power. Frequently shipped on ESP32 dev kits when the ESP isn't routing serial directly. |
+| **Silicon Labs CP2102** | `10C4:EA60` | Frequently shipped on ESP32 and ESP8266 dev kits. |
+| **Silicon Labs CP2104** | `10C4:EA70` | Compact, low-power. Frequently shipped on ESP32 dev kits when the ESP isn't routing serial directly. |
+| **Arduino Uno** | `2341:0043`, `2341:0001` | Genuine Uno boards, R3 and the earlier USB ID. |
 
-Non-USB endpoints (Bluetooth, PCI, Unknown) are rejected up-front with `PORT_UNSUPPORTED` so you can't accidentally pair against `/dev/cu.Bluetooth-Incoming-Port` or similar.
+Anything else — non-USB endpoints (Bluetooth, PCI, Unknown) and USB adapters with other VID:PIDs — is refused with `PORT_UNSUPPORTED`, so you can't accidentally pair against `/dev/cu.Bluetooth-Incoming-Port` or similar.
 
-The controller must run **LumaSync v1 firmware at 115200 baud** — see the [Serial protocol](/docs/usb-leds/serial-protocol/) page for the wire spec. Most "ambilight USB kit" marketplace products ship pre-flashed with Adalight firmware. From v1.4, LumaSync includes an **opt-in Adalight encoder profile** — either enable it in Settings → Device, or reflash the controller with LumaSync v1 firmware. Leave the baud rate at 115200 either way.
+The controller's firmware must read the **LumaSync v1 frame at 115200 baud** — see the [Serial protocol](/docs/usb-leds/serial-protocol/) page for the wire spec; no reference firmware is published. Most "ambilight USB kit" marketplace products ship pre-flashed with Adalight firmware. From v1.4, LumaSync includes an **opt-in Adalight encoder profile** — either choose it under **Firmware Profile** on the **Lights** page, or flash firmware that reads the v1 frame. Leave the baud rate at 115200 either way.
 
 ### 3 · 5 V power supply
 
