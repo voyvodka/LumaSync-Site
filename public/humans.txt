@@ -1,10 +1,11 @@
 /* TEAM */
-  Maintainer: voyvodka
+  Maintainer: Samet Özkan (voyvodka)
+  Site:       https://www.sametozkan.com.tr/
   GitHub:     https://github.com/voyvodka
   Source:     https://github.com/voyvodka/LumaSync
 
 /* SITE */
-  Last update: 2026-09-25
+  Last update: 2026-10-14
   Language:    English
   Doctype:     HTML5
   IDE:         VS Code
