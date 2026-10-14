@@ -4,6 +4,24 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [1.1.49] — 2026-10-14
+
+### Changed
+
+- **The footer names the person behind LumaSync.** The bottom line now ends with "Made by Samet Özkan", linking to the author's site with `rel="author"`, next to the existing copyright line, which still reads voyvodka. `humans.txt` names the maintainer and links the same site.
+
+### SEO
+
+- **The Organization schema's founder is the author, not just a handle.** `founder` now carries the author's name, `voyvodka` as `alternateName`, the site URL, LinkedIn beside GitHub in `sameAs`, and the same `@id` the author's site uses for its Person, so the two sites describe one person rather than two.
+
+### Security
+
+- **Three high-severity advisories in transitive dependencies are cleared.** `overrides` floors for `sharp`, `http-cache-semantics` and `source-map-js` lift the copies pulled in through `astro`, `@tailwindcss/vite` and `isomorphic-dompurify` past GHSA-wq5f-xc86-pv6w, GHSA-ch52-4w7c-c8xp and GHSA-68fv-2mgg-jv7q, so the high-severity audit gate passes again.
+
+### Build
+
+- **Bun 1.4.3.** `packageManager` moves from 1.4.2 to the current stable release; CI and deploy read it through `bun-version-file`, and the lockfile installs unchanged.
+
 ## [1.1.48] — 2026-09-25
 
 ### Fixed
