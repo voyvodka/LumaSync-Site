@@ -31,7 +31,7 @@ bun run build    # full production build + pagefind index
 - `description` ≤ 160 characters (SEO + OG card fit).
 - Version strings in copy: use `{LATEST_VERSION}` / `{LATEST_VERSION_DATE}` imports from `src/lib/version`, never hard-code. They resolve at build time from the vendored LumaSync changelog.
 - Drafts: set `draft: true` in frontmatter. Drafts are excluded from production builds; preview them locally via `bun run dev`.
-- Don't claim features that aren't shipped. Cross-check [`vendor/lumasync/CHANGELOG.md`](vendor/lumasync/CHANGELOG.md).
+- Don't claim features that aren't shipped. Verify behaviour against the app source in `vendor/lumasync`, not its changelog: the changelog says what changed, only the code says what a feature does now.
 
 ## Commit messages
 
