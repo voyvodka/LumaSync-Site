@@ -10,6 +10,14 @@ The site follows [Semantic Versioning](https://semver.org/) at its own cadence; 
 
 - **A dismissible note at the top of every page points to Palmye, a travel eSIM from LumaSync's maker.** It is a plain `nofollow` link with the logo served from this site; × hides it and the choice stays in the browser's local storage. The privacy page, license page and README say so.
 
+### Security
+
+- **Seven high-severity advisories and one critical advisory in dependencies are cleared.** `dompurify` moves to 3.4.17 (GHSA-cg2g-xh64-v4q7, GHSA-mrv2-3pqr-j5jr); `undici` resolves to 8.12.3 through the in-range updates (GHSA-xjj6-f33q-929c, GHSA-4w7w-5xrc-9h26, GHSA-2m5v-pch6-74hx, GHSA-qrxm-fqhp-jwvm); new `overrides` floors for `vite` and `zod` close GHSA-587h-7wmj-h5pm and GHSA-mrhx-c7xc-m3w5.
+
+### Build
+
+- **Dependencies updated within their ranges.** Astro 7.4.5, `@astrojs/mdx` 8.1.2, Pagefind 1.6.0, `marked` 18.1.3, `satori` 0.33.5, `@astrojs/check` 0.9.12, `isomorphic-dompurify` 4.6.0 and Prettier 3.9.10.
+
 ## [1.1.49] — 2026-10-14
 
 ### Changed
