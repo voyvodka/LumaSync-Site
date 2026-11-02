@@ -10,6 +10,10 @@ The site follows [Semantic Versioning](https://semver.org/) at its own cadence; 
 
 - **A dismissible note at the top of every page points to Palmye, a travel eSIM from LumaSync's maker.** It is a plain `nofollow` link with the logo served from this site; × hides it and the choice stays in the browser's local storage. The privacy page, license page and README say so.
 
+### Build
+
+- **`satori` 0.63.2.** Social preview images are re-rendered; title letter spacing shifts slightly.
+
 ## [1.1.50] — 2026-11-02
 
 ### Security
