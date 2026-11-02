@@ -149,90 +149,82 @@ const schemas = [
         On macOS and updating from 1.5.2? That build could crash on launch on Macs without Xcode
         installed — the current release fixes it. Just download and reinstall.
       </p>
-      {
-        release && (
-          <div class="release-meta">
+      {release && (
+        <div class="release-meta">
+          <a
+            href={release.html_url}
+            class="version-pill"
+            rel="noopener noreferrer"
+            title="View release on GitHub"
+          >
+            {release.tag_name}
+          </a>
+          {publishedDate && <span class="meta">Released {publishedDate}</span>}
+          {checksumAsset && (
             <a
-              href={release.html_url}
-              class="version-pill"
+              href={checksumAsset.browser_download_url}
+              class="meta link"
               rel="noopener noreferrer"
-              title="View release on GitHub"
             >
-              {release.tag_name}
+              Checksums
             </a>
-            {publishedDate && <span class="meta">Released {publishedDate}</span>}
-            {checksumAsset && (
-              <a
-                href={checksumAsset.browser_download_url}
-                class="meta link"
-                rel="noopener noreferrer"
-              >
-                Checksums
-              </a>
-            )}
-          </div>
-        )
-      }
+          )}
+        </div>
+      )}
     </header>
 
-    {
-      fetchError && (
-        <div class="banner banner-warn" role="status">
-          <strong>Release metadata unavailable at build time.</strong> Head to the{' '}
-          <a href={RELEASES_PAGE} rel="noopener noreferrer">
-            Releases page
-          </a>{' '}
-          on GitHub. (Reason: {fetchError})
-        </div>
-      )
-    }
+    {fetchError && (
+      <div class="banner banner-warn" role="status">
+        <strong>Release metadata unavailable at build time.</strong> Head to the{' '}
+        <a href={RELEASES_PAGE} rel="noopener noreferrer">
+          Releases page
+        </a>{' '}
+        on GitHub. (Reason: {fetchError})
+      </div>
+    )}
 
-    {
-      release && !anyAsset && (
-        <div class="banner" role="status">
-          <strong>{release.tag_name}</strong> is tagged but has no installer assets yet — see the{' '}
-          <a href={release.html_url} rel="noopener noreferrer">
-            release page
-          </a>{' '}
-          for source archives, or wait for the signed binaries to land.
-        </div>
-      )
-    }
+    {release && !anyAsset && (
+      <div class="banner" role="status">
+        <strong>{release.tag_name}</strong> is tagged but has no installer assets yet — see the{' '}
+        <a href={release.html_url} rel="noopener noreferrer">
+          release page
+        </a>{' '}
+        for source archives, or wait for the signed binaries to land.
+      </div>
+    )}
 
     <div class="grid">
-      {
-        osAssets.map(({ os, umami, label, note, asset }) => {
-          const href = asset?.browser_download_url ?? RELEASES_PAGE;
-          const size = asset ? formatBytes(asset.size) : null;
-          const disabled = !asset;
-          return (
-            <a
-              class:list={['card', `card-${os}`, disabled && 'card-disabled']}
-              href={disabled ? undefined : href}
-              rel={disabled ? undefined : 'noopener noreferrer'}
-              data-os={os}
-              data-umami-event="download"
-              data-umami-event-os={umami}
-              aria-disabled={disabled ? 'true' : undefined}
-              title={disabled ? 'No release available for this platform yet' : undefined}
-            >
-              <span class="detected-pill" aria-hidden="true">
-                Detected
-              </span>
-              <h2>{label}</h2>
-              <p class="note">{note}</p>
-              {asset ? (
-                <p class="filename">
-                  <code>{asset.name}</code>
-                  <span class="size">{size}</span>
-                </p>
-              ) : (
-                <p class="filename pending">Pending — track on GitHub</p>
-              )}
-            </a>
-          );
-        })
-      }
+      {osAssets.map(({ os, umami, label, note, asset }) => {
+        const href = asset?.browser_download_url ?? RELEASES_PAGE;
+        const size = asset ? formatBytes(asset.size) : null;
+        const disabled = !asset;
+        return (
+          <a
+            class:list={['card', `card-${os}`, disabled && 'card-disabled']}
+            href={disabled ? undefined : href}
+            rel={disabled ? undefined : 'noopener noreferrer'}
+            data-os={os}
+            data-umami-event="download"
+            data-umami-event-os={umami}
+            aria-disabled={disabled ? 'true' : undefined}
+            title={disabled ? 'No release available for this platform yet' : undefined}
+          >
+            <span class="detected-pill" aria-hidden="true">
+              Detected
+            </span>
+            <h2>{label}</h2>
+            <p class="note">{note}</p>
+            {asset ? (
+              <p class="filename">
+                <code>{asset.name}</code>
+                <span class="size">{size}</span>
+              </p>
+            ) : (
+              <p class="filename pending">Pending — track on GitHub</p>
+            )}
+          </a>
+        );
+      })}
     </div>
 
     <aside class="verify">
@@ -250,9 +242,10 @@ const schemas = [
 
     <p class="all-releases">
       Need an older version or a specific asset?{' '}
-      <a href={`https://github.com/${REPO}/releases`} rel="noopener noreferrer"
-        >Browse all releases on GitHub</a
-      >.
+      <a href={`https://github.com/${REPO}/releases`} rel="noopener noreferrer">
+        Browse all releases on GitHub
+      </a>
+      .
     </p>
   </section>
 </BaseLayout>

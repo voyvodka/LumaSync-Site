@@ -58,37 +58,32 @@ function oneLiner(slug: string): string {
       </p>
       <p class="sublede">
         LumaSync sits at the intersection of USB LED controllers and Philips Hue streaming. This
-        guide positions it against the four most common ambilight alternatives: <strong
-          >Philips Hue Sync Box</strong
-        > (HDMI passthrough hardware), <strong>Hyperion</strong> (RPi-first stack),{' '}
-        <strong>WLED</strong> (ESP32 firmware), and <strong>Prismatik</strong> (legacy Lightpack driver).
-        Pick your starting point below.
+        guide positions it against the four most common ambilight alternatives:{' '}
+        <strong>Philips Hue Sync Box</strong> (HDMI passthrough hardware), <strong>Hyperion</strong>{' '}
+        (RPi-first stack), <strong>WLED</strong> (ESP32 firmware), and <strong>Prismatik</strong>{' '}
+        (legacy Lightpack driver). Pick your starting point below.
       </p>
     </header>
 
     <ul role="list" class="grid">
-      {
-        entries.map((entry) => {
-          const slug = entry.id.replace(/\.mdx$/, '');
-          return (
-            <li>
-              <a href={compareHref(entry)}>
-                <p class="kicker">LumaSync vs {entry.data.competitor}</p>
-                <h2 class="title">{entry.data.title}</h2>
-                <p class="oneliner">{oneLiner(slug)}</p>
-                <p class="read-more">Read comparison →</p>
-              </a>
-            </li>
-          );
-        })
-      }
+      {entries.map((entry) => {
+        const slug = entry.id.replace(/\.mdx$/, '');
+        return (
+          <li>
+            <a href={compareHref(entry)}>
+              <p class="kicker">LumaSync vs {entry.data.competitor}</p>
+              <h2 class="title">{entry.data.title}</h2>
+              <p class="oneliner">{oneLiner(slug)}</p>
+              <p class="read-more">Read comparison →</p>
+            </a>
+          </li>
+        );
+      })}
     </ul>
 
-    {
-      entries.length === 0 && (
-        <p class="empty">Comparison pages ship with the Week 4 content push per the action plan.</p>
-      )
-    }
+    {entries.length === 0 && (
+      <p class="empty">Comparison pages ship with the Week 4 content push per the action plan.</p>
+    )}
   </section>
 </BaseLayout>
 
