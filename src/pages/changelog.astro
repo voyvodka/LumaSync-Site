@@ -47,29 +47,28 @@ try {
       <h1 class="page-title">Changelog</h1>
       <p class="lede">
         Sourced from{' '}
-        <a href={`${repo}/blob/main/CHANGELOG.md`} rel="noopener noreferrer"
-          ><code>voyvodka/LumaSync</code></a
-        >
-        {' '}at the pinned submodule ref. This page redeploys when the submodule is bumped — see <a
-          href={`${repo}/releases`}
-          rel="noopener noreferrer">Releases</a
-        > for signed binaries.
+        <a href={`${repo}/blob/main/CHANGELOG.md`} rel="noopener noreferrer">
+          <code>voyvodka/LumaSync</code>
+        </a>{' '}
+        at the pinned submodule ref. This page redeploys when the submodule is bumped — see{' '}
+        <a href={`${repo}/releases`} rel="noopener noreferrer">
+          Releases
+        </a>{' '}
+        for signed binaries.
       </p>
     </header>
 
-    {
-      html ? (
-        <div class="changelog-body" set:html={html} />
-      ) : (
-        <div class="missing">
-          <p>
-            <strong>Changelog not available at build time.</strong> The{' '}
-            <code>vendor/lumasync/</code> submodule is not initialised in this checkout. Run{' '}
-            <code>git submodule update --init --recursive</code> and rebuild.
-          </p>
-        </div>
-      )
-    }
+    {html ? (
+      <div class="changelog-body" set:html={html} />
+    ) : (
+      <div class="missing">
+        <p>
+          <strong>Changelog not available at build time.</strong> The <code>vendor/lumasync/</code>{' '}
+          submodule is not initialised in this checkout. Run{' '}
+          <code>git submodule update --init --recursive</code> and rebuild.
+        </p>
+      </div>
+    )}
   </article>
 </BaseLayout>
 
