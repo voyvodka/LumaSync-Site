@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" role="img" aria-label="Palmye">
+  <title>Palmye</title>
+  <g transform="translate(2 6) scale(.4)">
+  <defs>
+    <clipPath id="palmye-logo-dark-upper-left" clipPathUnits="userSpaceOnUse"><path d="M18 50 C132 39 224 100 215 206 Q214.8 208.1 212.8 208.3 C110 218 31 164 15.5 53 Q15.2 50.3 18 50 Z"/></clipPath>
+    <clipPath id="palmye-logo-dark-upper-right" clipPathUnits="userSpaceOnUse"><path d="M400.8 12.5 Q403.5 12.2 403.8 15 C416 131 339 222 234.9 208.4 Q232.4 208.1 232.1 205.6 C218 105 285 26 400.8 12.5 Z"/></clipPath>
+    <clipPath id="palmye-logo-dark-lower-left" clipPathUnits="userSpaceOnUse"><path d="M27 407.5 Q24.3 407.6 24.4 405 C19 300 87 220 199.5 227 Q201.7 227.1 202.2 229.3 C218 330 143 396 27 407.5 Z"/></clipPath>
+    <clipPath id="palmye-logo-dark-lower-right" clipPathUnits="userSpaceOnUse"><path d="M222.7 227.2 C319 221 391 291 401.9 391.5 Q402.2 394.3 399.4 394.1 C293 390 214 314 220.3 229.7 Q220.4 227.4 222.7 227.2 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#palmye-logo-dark-upper-left)">
+    <path fill="#24C7A1" d="M0 0 H420 V420 H0 Z"/>
+    <path fill="#AAEBD0" d="M100 209 C114 163 144 131 204 99 L250 90 V240 H85 Z"/>
+  </g>
+  <g clip-path="url(#palmye-logo-dark-upper-right)">
+    <path fill="#24C7A1" d="M0 0 H420 V420 H0 Z"/>
+    <path fill="#AAEBD0" d="M220 228 C233 169 286 131 350 143 C372 145 397 151 425 163 V240 H220 Z"/>
+  </g>
+  <g clip-path="url(#palmye-logo-dark-lower-left)">
+    <path fill="#24C7A1" d="M0 0 H420 V420 H0 Z"/>
+    <path fill="#AAEBD0" d="M127 415 C97 325 119 246 208 224 L238 213 V430 H127 Z"/>
+  </g>
+  <g clip-path="url(#palmye-logo-dark-lower-right)">
+    <path fill="#24C7A1" d="M0 0 H420 V420 H0 Z"/>
+    <path fill="#AAEBD0" d="M190 200 H380 V263 C346 302 307 326 253 335 L190 362 Z"/>
+  </g>
+  </g>
+  <g transform="translate(192 13)" fill="#F6F3EC" fill-rule="evenodd">
+    <path d="M11 48 H25 V55.5 C31.5 49.9 40.3 46.5 49.7 46.5 C70.7 46.5 87 62.3 87 82.5 C87 102.7 70.7 118.5 49.7 118.5 C40.3 118.5 31.5 115.1 25 109.5 V147 H11 Z M73.3 82.5 C73.3 94.9264 62.9578 105 50.2 105 C37.4422 105 27.1 94.9264 27.1 82.5 C27.1 70.0736 37.4422 60 50.2 60 C62.9578 60 73.3 70.0736 73.3 82.5 Z"/>
+    <path d="M155 48 H169 V117 H155 V109.5 C148.5 115.1 139.7 118.5 130.3 118.5 C110 118.5 94 102.7 94 82.5 C94 62.3 110 46.5 130.3 46.5 C139.7 46.5 148.5 49.9 155 55.5 Z M154.1 82.5 C154.1 94.9264 143.7578 105 131 105 C118.2422 105 107.9 94.9264 107.9 82.5 C107.9 70.0736 118.2422 60 131 60 C143.7578 60 154.1 70.0736 154.1 82.5 Z"/>
+    <path d="M182 13 H196 V117 H182 Z"/>
+    <path d="M209 48 H223 V54 C228 49 234 46.5 241.5 46.5 C251.5 46.5 259.5 50.8 265 58.5 C271 50.8 278.5 46.5 287.5 46.5 C307 46.5 320 58.5 320 78 V117 H306 V79 C306 66.8 299.5 60 289 60 C278.5 60 272 66.8 272 79 V117 H258 V79 C258 66.8 251.5 60 241 60 C230.5 60 223 67.3 223 79 V117 H209 Z"/>
+    <path d="M321 48 H337 L359 98.5 L381.5 48 H396 L352.5 147 H337 L351 115 Z"/>
+    <path d="M466 88 H409.3 C411.5 98.1 419.8 105 430.5 105 C438.3 105 444.9 101.4 449.8 95.6 L462 101.7 C455.2 112.1 444.4 118.5 430.5 118.5 C409.7 118.5 394 102.7 394 82.5 C394 62.3 409.7 46.5 430.5 46.5 C451.5 46.5 466 61.8 466 82.5 Z M409.5 76 H451 C448.3 66.5 440.9 60 430.5 60 C420.7 60 412.5 66.3 409.5 76 Z"/>
+  </g>
+</svg>
