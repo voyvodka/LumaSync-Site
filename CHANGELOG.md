@@ -4,7 +4,7 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
-## [Unreleased]
+## [1.1.50] — 2026-11-02
 
 ### Added
 
@@ -12,11 +12,18 @@ The site follows [Semantic Versioning](https://semver.org/) at its own cadence; 
 
 ### Security
 
-- **Seven high-severity advisories and one critical advisory in dependencies are cleared.** `dompurify` moves to 3.4.17 (GHSA-cg2g-xh64-v4q7, GHSA-mrv2-3pqr-j5jr); `undici` resolves to 8.12.3 through the in-range updates (GHSA-xjj6-f33q-929c, GHSA-4w7w-5xrc-9h26, GHSA-2m5v-pch6-74hx, GHSA-qrxm-fqhp-jwvm); new `overrides` floors for `vite` and `zod` close GHSA-587h-7wmj-h5pm and GHSA-mrhx-c7xc-m3w5.
+- **One critical and seven high-severity dependency advisories are cleared.** `dompurify` 3.4.17 (GHSA-cg2g-xh64-v4q7, GHSA-mrv2-3pqr-j5jr) and `undici` 8.12.3 (GHSA-xjj6-f33q-929c, GHSA-4w7w-5xrc-9h26, GHSA-2m5v-pch6-74hx, GHSA-qrxm-fqhp-jwvm) arrive through in-range updates; new `overrides` floors for `vite` and `zod` close GHSA-587h-7wmj-h5pm and GHSA-mrhx-c7xc-m3w5.
 
 ### Build
 
 - **Dependencies updated within their ranges.** Astro 7.4.5, `@astrojs/mdx` 8.1.2, Pagefind 1.6.0, `marked` 18.1.3, `satori` 0.33.5, `@astrojs/check` 0.9.12, `isomorphic-dompurify` 4.6.0 and Prettier 3.9.10.
+- **`prettier-plugin-astro` 1.1.2.** Astro files are reformatted to its output; the built pages are unchanged.
+- **The deploy workflow uses `cloudflare/wrangler-action` 4.1.3.**
+
+### Docs
+
+- **`CONTRIBUTING.md` asks for feature claims to be checked against the app source, not its changelog.**
+- **Older changelog entries are shortened to what changed.**
 
 ## [1.1.49] — 2026-10-14
 
