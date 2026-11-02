@@ -4,7 +4,7 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
-## [Unreleased]
+## [1.2.1] — 2026-11-02
 
 ### Fixed
 
