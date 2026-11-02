@@ -35,7 +35,14 @@ export interface OrganizationSchema {
   keywords: string;
   url: string;
   logo: { '@type': 'ImageObject'; url: string; width: number; height: number };
-  founder: { '@type': 'Person'; name: string; sameAs: string[] };
+  founder: {
+    '@type': 'Person';
+    '@id': string;
+    name: string;
+    alternateName: string;
+    url: string;
+    sameAs: string[];
+  };
   sameAs: string[];
 }
 
@@ -64,10 +71,15 @@ export function organizationSchema(): OrganizationSchema {
       width: 320,
       height: 80,
     },
+    // Same @id as the Person on the author's own site, so both pages describe
+    // one entity rather than two people.
     founder: {
       '@type': 'Person',
-      name: 'voyvodka',
-      sameAs: ['https://github.com/voyvodka'],
+      '@id': 'https://www.sametozkan.com.tr/#person',
+      name: 'Samet Özkan',
+      alternateName: 'voyvodka',
+      url: 'https://www.sametozkan.com.tr/',
+      sameAs: ['https://github.com/voyvodka', 'https://www.linkedin.com/in/samet-ozkan'],
     },
     sameAs: [REPO_URL, 'https://github.com/voyvodka', `${REPO_URL}/releases`],
   };

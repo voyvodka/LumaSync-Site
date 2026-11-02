@@ -81,7 +81,12 @@ const columns: Array<{ label: string; links: FooterLink[] }> = [
     </div>
 
     <div class="bottom">
-      <p>© {year} voyvodka · MIT licensed</p>
+      <p>
+        © {year} voyvodka · MIT licensed · Made by <a
+          href="https://www.sametozkan.com.tr/"
+          rel="author">Samet Özkan</a
+        >
+      </p>
       <p class="built-with">Built with Tauri 2 + React 19</p>
     </div>
   </Container>
@@ -168,6 +173,15 @@ const columns: Array<{ label: string; links: FooterLink[] }> = [
 
   .bottom p {
     margin: 0;
+  }
+
+  .bottom a {
+    text-underline-offset: 0.2em;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .bottom a:hover {
+    color: var(--text-primary);
   }
 
   .built-with {
