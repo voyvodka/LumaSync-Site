@@ -11,14 +11,16 @@
 # reload. For self-hosted webfonts that round-trip is visible as a
 # brief font-swap flicker (FOUT) on page reload.
 #
-# Same treatment for the Satori-generated OG images under /og/, which
-# are build-time-immutable per page slug.
+# The Satori-generated OG images under /og/ are NOT fingerprinted: the
+# URL is the page slug, so a renderer or copy change keeps the same URL.
+# They must revalidate (ETag → 304) instead of being cached as immutable,
+# or the edge and social crawlers keep serving the old image for a year.
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
 /og/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
 # RFC 8288 Link headers for agent discovery — points crawlers and AI
 # agents at the canonical site map and the markdown entry point. The
