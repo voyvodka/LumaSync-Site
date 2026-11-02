@@ -35,6 +35,7 @@ Required repo secrets for CI: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
 - **Code** (Astro components, layouts, CI, styling) — [MIT](./LICENSE)
 - **Content** (MDX under `src/content/`, docs, comparisons, blog) — CC BY 4.0
+- **Palmye logo** (`src/assets/brand/palmye-logo-dark.svg`) — Palmye's brand asset, not covered by either license
 
 See [`/license`](https://lumasync.app/license) for the public-facing summary and [`LICENSE`](./LICENSE) for the full text.
 

@@ -56,6 +56,8 @@ The source carries a dormant, opt-in integration for [Umami](https://umami.is/),
 
 The site does not embed third-party analytics, fonts, scripts, or trackers. Fonts are served from the site's own `public/` folder (bundled via `@fontsource`), not Google Fonts. No Facebook pixel, no Twitter widget, no YouTube embed unless explicitly called out.
 
+Every page carries a short note at the top linking to Palmye, a travel eSIM built by LumaSync's maker. It is a plain link: the logo is served from this site, nothing is sent to Palmye unless you click it, and Palmye's own privacy policy applies once you do. Dismissing the note with × stores one flag in your browser's local storage so it stays hidden; it never leaves your browser.
+
 The **`/download`** page fetches release metadata from `api.github.com` at build time (server-side, during deploy). Visitors do not make that request.
 
 ### Comparison pages
