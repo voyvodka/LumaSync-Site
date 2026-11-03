@@ -4,15 +4,6 @@ import palmyeLogo from '../assets/brand/palmye-logo-dark.svg';
 const href = 'https://palmye.com/s/lumasync';
 ---
 
-<script is:inline>
-  // Runs before the bar is parsed so a dismissed bar never paints (no layout shift).
-  try {
-    if (localStorage.getItem('maker-note-v1') === 'dismissed') {
-      document.documentElement.setAttribute('data-maker-note', 'off');
-    }
-  } catch {}
-</script>
-
 <div class="maker-note" data-maker-note-bar data-pagefind-ignore>
   <a class="maker-note-link" href={href} rel="nofollow noopener">
     <span class="lead lead-long">Traveling soon? LumaSync's maker also builds</span>
@@ -24,44 +15,9 @@ const href = 'https://palmye.com/s/lumasync';
       →
     </span>
   </a>
-  <button
-    type="button"
-    class="maker-note-close"
-    data-maker-note-close
-    aria-label="Dismiss this note"
-    title="Dismiss"
-  >
-    <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true">
-      <path
-        d="M5 5l10 10M15 5L5 15"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-        fill="none"
-      ></path>
-    </svg>
-  </button>
 </div>
 
-<script is:inline>
-  (() => {
-    const bar = document.querySelector('[data-maker-note-bar]');
-    const close = bar && bar.querySelector('[data-maker-note-close]');
-    if (!close) return;
-    close.addEventListener('click', () => {
-      document.documentElement.setAttribute('data-maker-note', 'off');
-      try {
-        localStorage.setItem('maker-note-v1', 'dismissed');
-      } catch {}
-    });
-  })();
-</script>
-
 <style>
-  :global(html[data-maker-note='off']) .maker-note {
-    display: none;
-  }
-
   .maker-note {
     --logo-h: 18px;
     --logo-mt: 1px;
@@ -73,12 +29,6 @@ const href = 'https://palmye.com/s/lumasync';
     border-bottom: 1px solid var(--border);
     font-size: var(--fs-sm);
     line-height: 1.25;
-  }
-
-  /* Mirrors the close button so the link sits centred on the viewport. */
-  .maker-note::before {
-    content: '';
-    flex: 0 0 32px;
   }
 
   .maker-note-link {
@@ -118,40 +68,11 @@ const href = 'https://palmye.com/s/lumasync';
     display: none;
   }
 
-  .maker-note-close {
-    flex: 0 0 32px;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 0;
-    border-radius: var(--radius-sm);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: color var(--duration-fast) var(--ease-out);
-  }
-
-  .maker-note-close:hover {
-    color: var(--text-primary);
-  }
-
-  .maker-note-close:focus-visible {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: -2px;
-  }
-
   @media (max-width: 860px) {
     .maker-note {
       --logo-h: 16px;
       --logo-mt: 2px;
       font-size: var(--fs-xs);
-    }
-
-    .maker-note::before {
-      display: none;
     }
 
     .maker-note-link {

@@ -4,6 +4,12 @@ This is the changelog for the **marketing/docs site** at lumasync.app. The LumaS
 
 The site follows [Semantic Versioning](https://semver.org/) at its own cadence; bumping the LumaSync app submodule does not require bumping the site version.
 
+## [Unreleased]
+
+### Changed
+
+- **The note at the top of every page can no longer be dismissed.** The × button is gone and the site stores nothing in the browser for it; a note hidden earlier shows again.
+
 ## [1.2.1] — 2026-11-02
 
 ### Fixed
